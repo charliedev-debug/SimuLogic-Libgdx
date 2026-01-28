@@ -16,6 +16,7 @@ class COr(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("OR-DARK")
+        type = CTypes.OR
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.gateWidth, CDefaults.gateHeight)

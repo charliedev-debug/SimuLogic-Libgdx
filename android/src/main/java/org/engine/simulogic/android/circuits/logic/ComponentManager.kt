@@ -1,5 +1,8 @@
 package org.engine.simulogic.android.circuits.logic
 
+import android.content.Context
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -12,11 +15,13 @@ import org.engine.simulogic.android.circuits.components.latches.CLatch
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
+import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
+import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class ComponentManager(private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
+class ComponentManager(private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
     fun insertAND(){
        gestureListener.rectPointer.getPosition().also {position->
@@ -82,5 +87,19 @@ class ComponentManager(private val connection:Connection, private  val scene: Pl
         gestureListener.rectPointer.getPosition().also {position->
             connection.insertNode(ListNode(CSevenSegmentDisplay(position.x,position.y,scene)))
         }
+    }
+
+    fun insertCLabel(text:String){
+        gestureListener.rectPointer.getPosition().also { position->
+            connection.insertNode(ListNode(CLabel(assetManager.get("RobotoMono-SemiBold.ttf"),text,position.x, position.y, scene )))
+        }
+    }
+
+    fun save(){
+        DataTransferObject().writeData(connection)
+    }
+
+    fun read(){
+        DataTransferObject().readData(connection, scene)
     }
 }

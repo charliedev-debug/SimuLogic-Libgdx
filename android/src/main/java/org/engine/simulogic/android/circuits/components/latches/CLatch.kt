@@ -19,6 +19,7 @@ class CLatch(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("D-LATCH")
+        type = CTypes.LATCH
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.latchWidth, CDefaults.latchHeight)

@@ -11,7 +11,7 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-open class CSignal(x: Float, y: Float, val type: CTypes, val signalIndex: Int, private val scene: PlayGroundScene) :
+open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, private val scene: PlayGroundScene) :
     CNode() {
     var parent: Entity? = null
 
@@ -33,6 +33,7 @@ open class CSignal(x: Float, y: Float, val type: CTypes, val signalIndex: Int, p
             setPosition(x - CDefaults.signalIconRadius / 2f, y - CDefaults.signalIconRadius / 2f)
             rotation = 0f
         }
+        this.type = type
     }
 
     override fun setSize(width: Float, height: Float) {

@@ -17,6 +17,10 @@ class Connection : Iterable<ListNode>, IUpdate {
         }
     }
 
+    operator fun get(index:Int):ListNode{
+        return nodes[index]
+    }
+
     fun insertNode(node:ListNode){
         synchronized(nodes) {
             nodes.add(node)

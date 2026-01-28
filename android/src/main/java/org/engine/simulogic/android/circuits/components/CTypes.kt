@@ -10,6 +10,7 @@ enum class CTypes {
     CLOCK,
     LATCH,
     WIRE,
+    RANDOM,
     LED,
     SIGNAL_IN,
     SIGNAL_OUT,
@@ -17,5 +18,7 @@ enum class CTypes {
     Q_SIGNAL_OUT,
     E_SIGNAL_IN,
     SIGNAL_RANGE_POINT,
+    SEVEN_SEGMENT_DISPLAY,
+    LINE_MARKER,
     NONE
 }

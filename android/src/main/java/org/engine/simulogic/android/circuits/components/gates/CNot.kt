@@ -18,6 +18,7 @@ class CNot(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("NOT-DARK")
+        type = CTypes.NOT
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.gateWidth, CDefaults.gateHeight)

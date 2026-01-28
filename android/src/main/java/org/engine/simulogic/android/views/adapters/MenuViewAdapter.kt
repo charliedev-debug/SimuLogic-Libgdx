@@ -9,7 +9,7 @@ import org.engine.simulogic.R
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 
 class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
-    private val dataList = mutableListOf<MenuItem>()
+    private val dataList = mutableListOf<MenuAdapterItem>()
     var listener:IMenuAdapterListener? = null
     var selectedMode = 0
     inner class MenuViewHolder(item:View):RecyclerView.ViewHolder(item){
@@ -36,11 +36,11 @@ class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
         }
     }
 
-    fun insert(item: MenuItem){
+    fun insert(item: MenuAdapterItem){
         dataList.add(item)
     }
     fun insert(title:String,isMode:Boolean,res:Int){
-        insert(MenuItem(title, isMode, res))
+        insert(MenuAdapterItem(title, isMode, res))
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         val  view = LayoutInflater.from(parent.context).inflate(R.layout.menu_item_simulation,parent,false)

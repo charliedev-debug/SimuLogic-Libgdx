@@ -67,13 +67,14 @@ class SimulationLoop(private val fpsListener:IFpsListener) : ApplicationAdapter(
 
         scene = PlayGroundScene(spriteBatch = batch, camera = camera, assetManager = assetManager)
 
-        connection.insertNode(ListNode(CAnd(200f,200f,scene)))
-        connection.insertNode(ListNode(CAnd(400f,300f,scene)))
+        //connection.insertNode(ListNode(CAnd(200f,200f,scene)))
+      //  connection.insertNode(ListNode(CAnd(400f,300f,scene)))
         gestureListener = MotionGestureListener(camera, connection,collisionDetector,scene)
         connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
-        componentManager = ComponentManager(connection, scene, gestureListener)
+        componentManager = ComponentManager(connection, assetManager, scene, gestureListener)
+        componentManager.read()
         InputMultiplexer().apply {
             addProcessor(GestureDetector(gestureListener))
             Gdx.input.inputProcessor = this
@@ -90,7 +91,6 @@ class SimulationLoop(private val fpsListener:IFpsListener) : ApplicationAdapter(
         scene.draw()
         fpsCounter.update(fpsListener)
     }
-
 
     override fun dispose() {
         batch.dispose()

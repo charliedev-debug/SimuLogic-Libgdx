@@ -19,6 +19,7 @@ class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("RANDOM")
+        type = CTypes.RANDOM
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.randomWidth, CDefaults.randomHeight)

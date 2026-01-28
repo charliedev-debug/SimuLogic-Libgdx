@@ -22,6 +22,7 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
           val spriteRegion = textureAtlas.findRegion("SEVEN-SEGMENT-BACKGROUND")
           val width = CDefaults.segmentDisplayWidth * 7f
           val height = CDefaults.segmentDisplayHeight * 7f
+          type = CTypes.SEVEN_SEGMENT_DISPLAY
           sprite = Sprite(spriteRegion).apply {
               setOrigin(x , y)
               setSize(width, height)

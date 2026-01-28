@@ -18,6 +18,7 @@ import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.MenuViewAdapter
 import org.engine.simulogic.android.views.adapters.ComponentItem
+import org.engine.simulogic.android.views.adapters.MenuAdapterItem
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
 import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
@@ -29,6 +30,7 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
     private lateinit var textFps:TextView
     private val menuViewModel:MenuViewModel by viewModels()
     private val bottomSheetViewModel:BottomSheetViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          setContentView(R.layout.activity_simulation)
@@ -38,13 +40,19 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
             textFps = findViewById(R.id.fps_text)
         setSupportActionBar(toolBar)
-        toolBar.setOnMenuItemClickListener(object: Toolbar.OnMenuItemClickListener {
-            override fun onMenuItemClick(item: MenuItem?): Boolean {
-                drawerLayout.openDrawer(Gravity.RIGHT)
-                return true
+        toolBar.setOnMenuItemClickListener { item ->
+            when (item.title) {
+                "Save" -> {
+                    menuViewModel.onModeChanged(MenuAdapterItem(title = "Save", isMode = false, 0))
+                }
+
+                "Drawer" -> {
+                    drawerLayout.openDrawer(Gravity.RIGHT)
+                }
             }
 
-        })
+            true
+        }
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
             layoutManager = LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
         }
@@ -68,7 +76,7 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
         menuRecyclerView.adapter = menuAdapter
 
         menuAdapter.listener = object:IMenuAdapterListener{
-            override fun onClickListener(item: org.engine.simulogic.android.views.adapters.MenuItem) {
+            override fun onClickListener(item: MenuAdapterItem) {
                    menuViewModel.onModeChanged(item)
             }
         }

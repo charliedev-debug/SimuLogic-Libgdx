@@ -17,30 +17,6 @@ class LineMarker(val from: ListNode, val to: ListNode,
                  var signalFrom: Int, val signalTo:Int, val index:Int = 0):Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
-
-    /*fun initialize(scene: PlayGroundScene) {
-        val pFrom = signalFrom.getPosition()
-        val pTo = signalTo.getPosition()
-        val distanceX = pTo.x - pFrom.x
-        val distanceY = pTo.y - pFrom.y
-        val maxDistanceBetweenX = distanceX / CDefaults.linePointCountX
-        val maxDistanceBetweenY = distanceY / CDefaults.linePointCountY
-        var lastX = pFrom.x
-        for (i in 0..CDefaults.linePointCountX) {
-            val x = pFrom.x + maxDistanceBetweenX * i
-            val y = pFrom.y
-            lastX = x
-            signals.add(CSignal(x, y,CTypes.SIGNAL_IN, i, scene).apply { parent = this@LineMarker})
-        }
-
-        for (i in CDefaults.linePointCountY downTo 0) {
-            val y = pFrom.y + maxDistanceBetweenY * i
-            val x = lastX
-            signals.add(CSignal(x, y, CTypes.SIGNAL_IN,i, scene).apply { parent = this@LineMarker })
-        }
-
-        createMarker(scene)
-    }*/
     fun initialize(scene: PlayGroundScene) {
         val signalFrom = from.value.signals[signalFrom]
         val signalTo = to.value.signals[signalTo]
@@ -51,19 +27,19 @@ class LineMarker(val from: ListNode, val to: ListNode,
         val maxDistanceBetweenX = distanceX / CDefaults.linePointCountX
         val maxDistanceBetweenY = distanceY / CDefaults.linePointCountY
         var lastX = pFrom.x
+        var signalIndex = 0
         for (i in 0..CDefaults.linePointCountX) {
             val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
             lastX = x
-            signals.add(CSignal(x, y,CTypes.SIGNAL_IN, i, scene).apply { parent = this@LineMarker})
+            signals.add(CSignal(x, y,CTypes.SIGNAL_IN, signalIndex++, scene).apply { parent = this@LineMarker})
         }
 
         for (i in CDefaults.linePointCountY downTo 0) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = lastX
-            signals.add(CSignal(x, y, CTypes.SIGNAL_IN,i, scene).apply { parent = this@LineMarker })
+            signals.add(CSignal(x, y, CTypes.SIGNAL_IN,signalIndex++, scene).apply { parent = this@LineMarker })
         }
-
 
         createMarker(scene)
     }

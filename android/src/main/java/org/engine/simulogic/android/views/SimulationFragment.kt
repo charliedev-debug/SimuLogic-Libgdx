@@ -9,6 +9,8 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.views.dialogs.LabelDialog
+import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
@@ -63,6 +65,9 @@ class SimulationFragment(private val fpsListener:IFpsListener) : AndroidFragment
                   }
                   "Delete"->{
                       simulationLoop.gestureListener.delete()
+                  }
+                  "Save"->{
+                      simulationLoop.componentManager.save()
                   }
               }
           }
@@ -133,6 +138,18 @@ class SimulationFragment(private val fpsListener:IFpsListener) : AndroidFragment
               }
               ComponentBottomSheet.SS_DISPLAY_COMPONENT->{
                   simulationLoop.componentManager.insertSevenSegmentDisplay()
+              }
+              ComponentBottomSheet.TEXT_COMPONENT ->{
+                  LabelDialog(requireContext(), object : IDialogLabelListener{
+                      override fun onCompleted(text: String) {
+                          simulationLoop.componentManager.insertCLabel(text)
+                      }
+
+                      override fun onCancelled() {
+
+                      }
+
+                  }).show()
               }
           }}
       return initializeForView(simulationLoop,configuration)

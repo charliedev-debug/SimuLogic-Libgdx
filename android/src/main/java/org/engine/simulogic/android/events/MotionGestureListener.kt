@@ -24,7 +24,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class MotionGestureListener(private val camera:OrthographicCamera, private  val connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
-    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,connection,scene)
+    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene)
     val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
     private var touch = Vector3(0f, 0f, 0f)
     private val commandHistory = CommandHistory()
@@ -80,7 +80,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     }
 
     fun cut(){
-
+        dataContainer.mode = DataContainer.CUT
         if(collisionDetector.mode == RANGED_SELECTION_MODE){
             sendRangeItemsToDataContainer()
         }else {
@@ -91,7 +91,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     }
 
     fun copy(){
-        dataContainer.mode = DataContainer.CUT
+        dataContainer.mode = DataContainer.COPY
         if(collisionDetector.mode == RANGED_SELECTION_MODE){
             sendRangeItemsToDataContainer()
         }else {

@@ -18,6 +18,7 @@ class CClock(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("CLOCK")
+        type = CTypes.CLOCK
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.clockWidth, CDefaults.clockHeight)
