@@ -36,12 +36,10 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
     }
 
     override fun update() {
-
         // this helps when resolving for collisions
         sprite.setOrigin(position.x , position.y)
         sprite.setSize(layout.width, layout.height)
         sprite.setOriginCenter()
-        sprite.color = Color(0f,0f,0.0f,1f)
         sprite.setPosition(position.x,position.y)
     }
 

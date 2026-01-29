@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/background_dark"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="5dp"
+        android:text=""
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/premium"
+        android:layout_alignParentEnd="true"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"
+        android:src="@drawable/vip_icon"/>
+</LinearLayout>

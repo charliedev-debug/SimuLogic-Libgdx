@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.App.CardStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/background_dark</item>
+        <item name="elevationOverlayEnabled">true</item>
+        <item name="elevationOverlayColor">@color/white</item>
+        <item name="android:outlineSpotShadowColor">@color/white</item>
+        <item name="android:outlineAmbientShadowColor">@color/white</item>
+        <item name="android:colorFocusedHighlight">@color/white</item>
+    </style>
+    <style name="customButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/dusty_lavender</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="rippleColor">@color/white</item>
+    </style>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorControlHighlight">@color/white</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="materialCardViewStyle"> @style/Widget.App.CardStyle</item>
+    </style>
+</resources>
