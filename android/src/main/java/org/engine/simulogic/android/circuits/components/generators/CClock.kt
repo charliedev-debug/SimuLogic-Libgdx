@@ -11,7 +11,7 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CClock(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
     init {
@@ -120,7 +120,7 @@ class CClock(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CClock(getPosition().x,getPosition().y, scene )
+        return CClock(getPosition().x,getPosition().y,freq, scene )
     }
 
 }

@@ -20,5 +20,6 @@ enum class CTypes {
     SIGNAL_RANGE_POINT,
     SEVEN_SEGMENT_DISPLAY,
     LINE_MARKER,
+    LABEL,
     NONE
 }

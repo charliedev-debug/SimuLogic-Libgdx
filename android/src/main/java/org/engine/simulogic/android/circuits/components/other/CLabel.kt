@@ -23,7 +23,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         layout.setText(font,text)
-        type = CTypes.AND
+        type = CTypes.LABEL
         sprite = Sprite(spriteRegion)
         scene.getLayerById(layerId.name).also {  layer->
             layer.attachChild(this)

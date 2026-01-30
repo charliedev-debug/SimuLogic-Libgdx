@@ -73,8 +73,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions,private val fpsL
         connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
-        componentManager = ComponentManager(projectOptions,connection, assetManager, scene, gestureListener)
-       // componentManager.readProject()
+        componentManager = ComponentManager(projectOptions,assetManager.get("RobotoMono-SemiBold.ttf"),connection, assetManager, scene, gestureListener)
         InputMultiplexer().apply {
             addProcessor(GestureDetector(gestureListener))
             Gdx.input.inputProcessor = this

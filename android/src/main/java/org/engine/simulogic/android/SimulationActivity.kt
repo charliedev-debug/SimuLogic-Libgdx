@@ -32,6 +32,9 @@ import org.engine.simulogic.android.views.models.MenuViewModel
 class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApplication.Callbacks {
 
     private lateinit var textFps: TextView
+    private lateinit var textLatency:TextView
+    private lateinit var projectTitle:TextView
+    private lateinit var projectDescription:TextView
     private val menuViewModel: MenuViewModel by viewModels()
     private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
 
@@ -43,6 +46,9 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
         textFps = findViewById(R.id.fps_text)
+        textLatency = findViewById(R.id.latency)
+        projectTitle = findViewById(R.id.project_title)
+        projectDescription = findViewById(R.id.project_description)
         setSupportActionBar(toolBar)
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
@@ -107,6 +113,9 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
             finish()
         }
 
+        projectTitle.text = projectOptions?.title
+        projectDescription.text = projectOptions?.description
+
         supportFragmentManager.beginTransaction()
             .add(R.id.simulation_fragment, SimulationFragment(projectOptions!!,this)).commit()
     }
@@ -115,6 +124,7 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
     override fun onFPSUpdate(fps: Int) {
         runOnUiThread {
             textFps.text = "FPS: $fps"
+            textLatency.text = "Latency:${((1f/ fps) * 1000).toInt()} ms"
         }
     }
 

@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -20,7 +21,7 @@ import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class ComponentManager(private val projectOptions: ProjectOptions, private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
+class ComponentManager(private val projectOptions: ProjectOptions,private val font: BitmapFont, private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
 
     init {
@@ -69,9 +70,9 @@ class ComponentManager(private val projectOptions: ProjectOptions, private val c
             connection.insertNode(ListNode(CXnor(position.x,position.y,scene)))
         }
     }
-    fun insertCClock(){
+    fun insertCClock(freq:Float){
         gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CClock(position.x,position.y,scene)))
+            connection.insertNode(ListNode(CClock(position.x,position.y,freq,scene)))
         }
     }
     fun insertCLatch(){
@@ -111,7 +112,7 @@ class ComponentManager(private val projectOptions: ProjectOptions, private val c
     }
 
     fun readProject(){
-        DataTransferObject().readData(projectOptions,connection, scene)
+        DataTransferObject().readData(projectOptions,connection,font, scene)
     }
 
     fun createProject(){

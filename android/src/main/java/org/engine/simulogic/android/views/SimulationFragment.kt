@@ -99,28 +99,28 @@ class SimulationFragment(private val projectOptions:ProjectOptions,private val f
                   simulationLoop.componentManager.insertNOT()
               }
               ComponentBottomSheet.CLOCK_COMPONENT_1HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_5HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/5f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_10HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/10f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_20HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/20f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_30HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/30f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_40HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/40f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_60HZ->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/60f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_CUSTOM->{
-                  simulationLoop.componentManager.insertCClock()
+                  simulationLoop.componentManager.insertCClock(1f/60f)
               }
               ComponentBottomSheet.D_LATCH_COMPONENT->{
                   simulationLoop.componentManager.insertCLatch()
