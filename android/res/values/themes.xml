@@ -19,10 +19,12 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:colorControlHighlight">@color/white</item>
-        <item name="colorPrimary">@color/background3</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
         <item name="android:windowBackground">@color/background_dark</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardStyle</item>
+        <item name="rippleColor">@color/white</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

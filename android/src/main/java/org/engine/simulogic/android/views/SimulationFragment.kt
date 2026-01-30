@@ -67,7 +67,7 @@ class SimulationFragment(private val fpsListener:IFpsListener) : AndroidFragment
                       simulationLoop.gestureListener.delete()
                   }
                   "Save"->{
-                      simulationLoop.componentManager.save()
+                      simulationLoop.componentManager.saveProject()
                   }
               }
           }

@@ -94,17 +94,30 @@
 
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/delete"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    app:tint="@color/delete_color"
-                    android:shadowColor="@color/white"
-                    android:textColor="@color/white"
-                    android:textSize="10dp"
-                    android:textStyle="bold"
-                    app:srcCompat="@drawable/trash_bin"
-                    android:visibility="gone" />
+                <LinearLayout
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/delete"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="10dp"
+                        app:tint="@color/delete_color"
+                        app:srcCompat="@drawable/trash_bin"
+                        android:visibility="gone" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/share"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        app:tint="@color/dividerColor"
+                        app:srcCompat="@drawable/share"
+                        android:visibility="visible" />
+
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>

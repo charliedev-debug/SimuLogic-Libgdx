@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -67,14 +66,14 @@ class SimulationLoop(private val fpsListener:IFpsListener) : ApplicationAdapter(
 
         scene = PlayGroundScene(spriteBatch = batch, camera = camera, assetManager = assetManager)
 
-        //connection.insertNode(ListNode(CAnd(200f,200f,scene)))
-      //  connection.insertNode(ListNode(CAnd(400f,300f,scene)))
+        connection.insertNode(ListNode(CAnd(200f,200f,scene)))
+        connection.insertNode(ListNode(CAnd(400f,300f,scene)))
         gestureListener = MotionGestureListener(camera, connection,collisionDetector,scene)
         connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
         componentManager = ComponentManager(connection, assetManager, scene, gestureListener)
-        componentManager.read()
+       // componentManager.readProject()
         InputMultiplexer().apply {
             addProcessor(GestureDetector(gestureListener))
             Gdx.input.inputProcessor = this

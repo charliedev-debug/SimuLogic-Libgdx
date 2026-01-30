@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
+import org.engine.simulogic.android.SimulationActivity
 import org.engine.simulogic.android.ui.adapters.ProjectOptionsAdapter
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
 import org.engine.simulogic.android.ui.models.ProjectOption
@@ -63,11 +64,11 @@ class HomeFragment : Fragment() {
                     "Create Project"->{
                         CreateProjectDialog(context!!,object:CreateProjectDialog.OnCreateProjectClickListener{
                             override fun success(title:String) {
-                              /*  Intent(context,MainActivity::class.java).apply {
+                                Intent(context,SimulationActivity::class.java).apply {
                                     putExtra("projectTitle",title)
                                     putExtra("LoadState",false)
                                     startActivity(this)
-                                }*/
+                                }
                             }
 
                             override fun failure(msg:String) {

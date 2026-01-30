@@ -1,8 +1,6 @@
 package org.engine.simulogic.android.circuits.logic
 
-import android.content.Context
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -95,11 +93,15 @@ class ComponentManager(private val connection:Connection, private val assetManag
         }
     }
 
-    fun save(){
+    fun saveProject(){
         DataTransferObject().writeData(connection)
     }
 
-    fun read(){
+    fun readProject(){
         DataTransferObject().readData(connection, scene)
+    }
+
+    fun createProject(path:String){
+
     }
 }
