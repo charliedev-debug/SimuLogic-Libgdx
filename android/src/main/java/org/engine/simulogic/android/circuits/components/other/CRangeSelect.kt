@@ -16,10 +16,11 @@ import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CRangeSelect(x:Float, y:Float,connection: Connection, private val scene: PlayGroundScene)  : CNode() {
+class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scene: PlayGroundScene)  : CNode() {
 
     private val pointSize = 30f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()
+    var collisionDetector = CollisionDetector(connection)
     init {
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")

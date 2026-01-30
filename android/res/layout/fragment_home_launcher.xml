@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_dark"
     android:orientation="vertical"
-    tools:context=".android.ui.home.HomeFragment">
+    tools:context=".android.ui.fragments.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -36,23 +36,39 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+            <RelativeLayout
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_alignParentStart="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_margin="2dp"
+                        android:src="@drawable/recent"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:text="Recent Projects" />
+                </LinearLayout>
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/refresh"
+                    android:layout_alignParentEnd="true"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_margin="2dp"
-                    android:src="@drawable/recent"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:text="Recent Projects" />
-            </LinearLayout>
+                    app:tint="@color/dividerColor"
+                    android:src="@drawable/refresh"/>
+            </RelativeLayout>
+
 
             <RelativeLayout
                 android:layout_width="match_parent"

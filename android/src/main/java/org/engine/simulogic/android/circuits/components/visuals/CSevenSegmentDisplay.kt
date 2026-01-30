@@ -11,6 +11,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.other.CRect
+import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.sign
@@ -163,5 +164,9 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
             }
         }
         return null
+    }
+
+    override fun clone(): CSevenSegmentDisplay {
+        return CSevenSegmentDisplay(getPosition().x, getPosition().y , scene)
     }
 }

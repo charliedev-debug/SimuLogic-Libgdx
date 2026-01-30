@@ -1,4 +1,4 @@
-package org.engine.simulogic.android.ui.slideshow
+package org.engine.simulogic.android.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
 
-class SlideshowFragment : Fragment() {
+class OpenProjectFragment : Fragment() {
 
   @SuppressLint("SetTextI18n")
   override fun onCreateView(
@@ -20,17 +20,18 @@ class SlideshowFragment : Fragment() {
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-      val root  = inflater.inflate(R.layout.fragment_manage_projects,container, false)
+
+      val root = inflater.inflate(R.layout.fragment_open_project, container, false)
       val projectListRecyclerView = root.findViewById<RecyclerView>(R.id.project_list)
       val emptyProjectListAlert = root.findViewById<TextView>(R.id.empty_project_list_alert)
       val projectItemCount = root.findViewById<TextView>(R.id.project_count)
       val projectListAdapter = RecentAdapter().apply {
-          add("Adder","system/io/files","This is an implementation of a 4bit adder", 0L, canDelete = true)
-          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor", 0L, canDelete = true)
-          add("Divider","system/io/files","This is an implementation of a 4bit Divider",0L, canDelete = true)
-          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD", 0L, canDelete = true)
-          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier", 0L, canDelete = true)
-          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer", 0L, canDelete = true)
+          add("Adder","system/io/files","This is an implementation of a 4bit adder", 0L)
+          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor",0L)
+          add("Divider","system/io/files","This is an implementation of a 4bit Divider",0L)
+          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD",0L)
+          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier",0L)
+          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer",0L)
       }
 
       projectListRecyclerView.apply {
@@ -42,7 +43,4 @@ class SlideshowFragment : Fragment() {
     return root
   }
 
-override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

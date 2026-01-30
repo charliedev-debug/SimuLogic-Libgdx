@@ -52,6 +52,7 @@ class CollisionDetector(private val connection: Connection) {
                 rangeSelect.rangeItems.add(CollisionItem(node,node.value))
             }
         }
+
     }
 
     fun contains(entity: CNode):CollisionItem?{

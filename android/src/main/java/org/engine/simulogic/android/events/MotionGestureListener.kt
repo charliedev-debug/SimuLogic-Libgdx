@@ -9,6 +9,7 @@ import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.other.CPointer
+import org.engine.simulogic.android.circuits.components.other.CRangePoint
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
@@ -126,7 +127,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
 
 
     override fun update() {
-
+        rangeSelect.connection.update()
     }
 
     private fun sendRangeItemsToDataContainer(){
@@ -159,7 +160,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
         }
 
         if (collisionDetector.mode == RANGED_SELECTION_MODE){
-            collisionDetector.containsRanged(rangeSelect)
+            rangeSelect.collisionDetector.contains(rectPointer)
         }
 
         return false
@@ -189,8 +190,8 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
                 camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
             }
         }else if(collisionDetector.mode == RANGED_SELECTION_MODE){
-            if (collisionDetector.isNotEmpty()) {
-                collisionDetector.selectedItems.forEach {
+            if (rangeSelect.collisionDetector.isNotEmpty()) {
+                rangeSelect.collisionDetector.selectedItems.forEach {
                     it.subject.also { subject ->
                         commandHistory.execute(MoveCommand().apply {
                             node = ListNode(subject)
@@ -198,9 +199,11 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
                             oldPosition.set(subject.getPosition())
                         })
                         subject.updatePosition(touch.x, touch.y)
+                        rangeSelect.update()
                     }
                 }
                 collisionDetector.containsRanged(rangeSelect)
+
             } else {
                 camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
             }

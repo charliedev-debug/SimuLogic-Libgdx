@@ -15,7 +15,7 @@ import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float, scene: PlayGroundScene, private  val layerId: LayerEnums = LayerEnums.GRID_LAYER_LABELS):CNode() {
+open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float, private val scene: PlayGroundScene, private  val layerId: LayerEnums = LayerEnums.GRID_LAYER_LABELS):CNode() {
     private val position = Vector2(x,y)
     private val layout = GlyphLayout()
     var color = Color.WHITE
@@ -86,5 +86,8 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
         return position
     }
 
+    override fun clone(): CLabel{
+        return CLabel(font,text,position.x, position.y, scene, layerId)
+    }
 
 }

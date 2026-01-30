@@ -1,4 +1,4 @@
-package org.engine.simulogic.android.ui.home
+package org.engine.simulogic.android.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
