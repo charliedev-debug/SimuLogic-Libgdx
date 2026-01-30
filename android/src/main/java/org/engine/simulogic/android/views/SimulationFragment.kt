@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import org.engine.simulogic.android.SimulationLoop
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
@@ -15,7 +16,7 @@ import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
-class SimulationFragment(private val fpsListener:IFpsListener) : AndroidFragmentApplication() {
+class SimulationFragment(private val projectOptions:ProjectOptions,private val fpsListener:IFpsListener) : AndroidFragmentApplication() {
    private val menuViewModel: MenuViewModel by activityViewModels()
    private val bottomSheetViewModel: BottomSheetViewModel by activityViewModels()
   override fun onCreateView(
@@ -26,7 +27,7 @@ class SimulationFragment(private val fpsListener:IFpsListener) : AndroidFragment
       val configuration = AndroidApplicationConfiguration()
       configuration.useImmersiveMode = true // Recommended, but not required.
       configuration.useGL30 = true
-      val simulationLoop = SimulationLoop(fpsListener)
+      val simulationLoop = SimulationLoop(projectOptions, fpsListener)
       menuViewModel.message.observe(viewLifecycleOwner){item->
           if(simulationLoop.isReady) {
               when(item.title){

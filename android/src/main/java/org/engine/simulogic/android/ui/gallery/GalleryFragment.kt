@@ -26,12 +26,12 @@ class GalleryFragment : Fragment() {
       val emptyProjectListAlert = root.findViewById<TextView>(R.id.empty_project_list_alert)
       val projectItemCount = root.findViewById<TextView>(R.id.project_count)
       val projectListAdapter = RecentAdapter().apply {
-          add("Adder","system/io/files","This is an implementation of a 4bit adder")
-          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor")
-          add("Divider","system/io/files","This is an implementation of a 4bit Divider")
-          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD")
-          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier")
-          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer")
+          add("Adder","system/io/files","This is an implementation of a 4bit adder", 0L)
+          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor",0L)
+          add("Divider","system/io/files","This is an implementation of a 4bit Divider",0L)
+          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD",0L)
+          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier",0L)
+          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer",0L)
       }
 
       projectListRecyclerView.apply {

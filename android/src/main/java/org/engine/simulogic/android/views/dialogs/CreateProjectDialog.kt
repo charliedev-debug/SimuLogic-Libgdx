@@ -20,8 +20,7 @@ class CreateProjectDialog(context:Context,private val listener:OnCreateProjectCl
         val editTextDescr = view.findViewById<TextInputEditText>(R.id.description)
         create.setOnClickListener {
             try {
-                // ProjectCreate.create(context,editTextFileName.text.toString(),editTextDescr.text.toString())
-                listener.success(editTextFileName.text.toString())
+                listener.success(editTextFileName.text.toString(), editTextDescr.text.toString())
                 dismiss()
             }catch (exp:FileAlreadyExistsException){
                 listener.failure(exp.reason.toString())
@@ -47,7 +46,7 @@ class CreateProjectDialog(context:Context,private val listener:OnCreateProjectCl
 
 
     interface OnCreateProjectClickListener{
-        fun success(title:String)
+        fun success(title:String, description:String)
         fun failure(msg:String)
         fun cancel()
     }

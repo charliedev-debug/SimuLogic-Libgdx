@@ -1,5 +1,7 @@
 package org.engine.simulogic.android
+
 import android.annotation.SuppressLint
+import android.os.Build
 import org.engine.simulogic.R
 import android.os.Bundle
 import android.view.Gravity
@@ -7,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +17,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.MenuViewAdapter
@@ -25,20 +29,20 @@ import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
-class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApplication.Callbacks{
+class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApplication.Callbacks {
 
-    private lateinit var textFps:TextView
-    private val menuViewModel:MenuViewModel by viewModels()
-    private val bottomSheetViewModel:BottomSheetViewModel by viewModels()
+    private lateinit var textFps: TextView
+    private val menuViewModel: MenuViewModel by viewModels()
+    private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-         setContentView(R.layout.activity_simulation)
+        setContentView(R.layout.activity_simulation)
 
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
-            textFps = findViewById(R.id.fps_text)
+        textFps = findViewById(R.id.fps_text)
         setSupportActionBar(toolBar)
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
@@ -54,7 +58,8 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
             true
         }
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
-            layoutManager = LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =
+                LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         val menuAdapter = MenuViewAdapter().apply {
@@ -62,7 +67,7 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
             insert("Touch", true, R.drawable.touch)
             insert("Interact", true, R.drawable.interact)
             insert("Sel-Touch", true, R.drawable.selection)
-            insert("Sel-Range",true, R.drawable.select_rect)
+            insert("Sel-Range", true, R.drawable.select_rect)
             insert("Connect", true, R.drawable.connector)
             insert("Undo", false, R.drawable.undo)
             insert("Redo", false, R.drawable.redo)
@@ -75,31 +80,44 @@ class SimulationActivity : AppCompatActivity(), IFpsListener, AndroidFragmentApp
 
         menuRecyclerView.adapter = menuAdapter
 
-        menuAdapter.listener = object:IMenuAdapterListener{
+        menuAdapter.listener = object : IMenuAdapterListener {
             override fun onClickListener(item: MenuAdapterItem) {
-                   menuViewModel.onModeChanged(item)
+                menuViewModel.onModeChanged(item)
             }
         }
-        val bottomSheet = ComponentBottomSheet(object: IComponentAdapterListener {
+        val bottomSheet = ComponentBottomSheet(object : IComponentAdapterListener {
             override fun onClickComponent(item: ComponentItem) {
                 bottomSheetViewModel.onComponentTriggered(item)
             }
 
         })
         bottomSheetButton.setOnClickListener {
-            if(!bottomSheet.isVisible) {
+            if (!bottomSheet.isVisible) {
                 bottomSheet.show(supportFragmentManager, "COMPONENTS")
             }
         }
-        supportFragmentManager.beginTransaction().add(R.id.simulation_fragment,SimulationFragment(this)).commit()
+
+        val projectOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("options", ProjectOptions::class.java)
+        } else {
+            intent.getSerializableExtra("options") as ProjectOptions
+        }
+
+        if(projectOptions == null){
+            finish()
+        }
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.simulation_fragment, SimulationFragment(projectOptions!!,this)).commit()
     }
 
     @SuppressLint("SetTextI18n")
     override fun onFPSUpdate(fps: Int) {
-        runOnUiThread{
+        runOnUiThread {
             textFps.text = "FPS: $fps"
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.simulation, menu)

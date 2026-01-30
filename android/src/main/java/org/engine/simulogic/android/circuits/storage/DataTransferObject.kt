@@ -23,6 +23,8 @@ import java.io.BufferedOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.EOFException
+import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 
@@ -30,12 +32,19 @@ class DataTransferObject {
 
     private val IDENTIFIER = 0xC145FF
     private val VERSION = 1
-    fun writeData(connection: Connection){
-        val file = Gdx.files.local("projects/circuit.bin")
+    fun writeData(projectOptions: ProjectOptions,connection: Connection){
+        val title = "${projectOptions.title}.bin"
+        val description = projectOptions.description
+        val file = Gdx.files.external("projects/$title")
+
        // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(file.write(false))
         stream.writeInt(IDENTIFIER)
         stream.writeInt(VERSION)
+        stream.writeInt(title.length)
+        stream.write(title.toByteArray(Charsets.UTF_8))
+        stream.writeInt(description.length)
+        stream.write(description.toByteArray(Charsets.UTF_8))
         // component size
         stream.writeInt(connection.size())
         // save the components first for easier reading in the future
@@ -73,12 +82,33 @@ class DataTransferObject {
       //  println("File saved ${file.file()?.path} : ${file.file().exists()}")
     }
 
-    fun readData(connection: Connection, scene: PlayGroundScene){
-        val file = Gdx.files.local("projects/circuit.bin")
+    fun createData(projectOptions: ProjectOptions){
+        val title = "${projectOptions.title}.bin"
+        val description = projectOptions.description
+        val file = Gdx.files.external("projects/$title")
+        // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
+        val stream = DataOutputStream(file.write(false))
+        stream.writeInt(IDENTIFIER)
+        stream.writeInt(VERSION)
+        stream.writeInt(title.length)
+        stream.write(title.toByteArray(Charsets.UTF_8))
+        stream.writeInt(description.length)
+        stream.write(description.toByteArray(Charsets.UTF_8))
+        stream.flush()
+        stream.close()
+    }
+
+    fun readData(projectOptions: ProjectOptions,connection: Connection, scene: PlayGroundScene){
+        val file = Gdx.files.external("projects/${projectOptions.title}")
         val stream = DataInputStream(BufferedInputStream(file.read()))
+        try {
         val identifier = stream.readInt()
         if (identifier != IDENTIFIER) throw IOException("Corrupt or Not a circuit file")
         val version = stream.readInt()
+        val titleLen = stream.readInt()
+        val title = stream.readFully(ByteArray(titleLen))
+        val descrLen = stream.readInt()
+        val description = stream.readFully(ByteArray(descrLen))
         val componentSize = stream.readInt()
         for(i in 0 until  componentSize){
             val typeLength = stream.readInt()
@@ -123,8 +153,6 @@ class DataTransferObject {
                 else -> { throw  IOException("Unknown component exception $type")}
             }
         }
-
-        try {
             while(true){
                 val fromId = stream.readInt()
                 val markerSizeFrom = stream.readInt()
@@ -151,5 +179,50 @@ class DataTransferObject {
         }catch (eof:EOFException){
             eof.printStackTrace()
         }
+    }
+
+    fun existsNoExtension(title:String):Boolean{
+        val file = Gdx.files.external("projects/$${title}.bin")
+        return file.exists()
+    }
+
+    fun exists(title:String):Boolean{
+        val file = Gdx.files.external("projects/$${title}")
+        return file.exists()
+    }
+
+    fun readFileHeader( path: File):ProjectOptions{
+        val inputStream = FileInputStream(path)
+        val stream = DataInputStream(BufferedInputStream(inputStream))
+        try {
+            val identifier = stream.readInt()
+            if (identifier != IDENTIFIER) throw IOException("Corrupt or Not a circuit file")
+            val version = stream.readInt()
+            val titleLen = stream.readInt()
+            val title = ByteArray(titleLen)
+             stream.readFully(title)
+            val descrLen = stream.readInt()
+            val description = ByteArray(descrLen)
+             stream.readFully(description)
+            inputStream.close()
+            stream.close()
+            return ProjectOptions(title.toString(Charsets.UTF_8),description.toString(Charsets.UTF_8), path.lastModified(),ProjectOptions.OPEN)
+        }catch (eof:EOFException){
+            eof.printStackTrace()
+        }
+        inputStream.close()
+        stream.close()
+        return ProjectOptions("none","none",0L,ProjectOptions.OPEN)
+    }
+
+    fun listProjects(context: Context):List<ProjectOptions>{
+        val files = mutableListOf<ProjectOptions>()
+        val data = File(context.getExternalFilesDir(""), "projects").listFiles()
+        data?.forEach {
+            //println(it.path)
+            files.add(readFileHeader(it))
+        }
+        files.sortByDescending { it.lastModified }
+        return files
     }
 }

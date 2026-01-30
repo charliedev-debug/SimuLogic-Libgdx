@@ -16,10 +16,23 @@ import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class ComponentManager(private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
+class ComponentManager(private val projectOptions: ProjectOptions, private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
+
+
+    init {
+        when(projectOptions.mode){
+            ProjectOptions.CREATE->{
+                createProject()
+            }
+            ProjectOptions.OPEN->{
+                readProject()
+            }
+        }
+    }
 
     fun insertAND(){
        gestureListener.rectPointer.getPosition().also {position->
@@ -94,14 +107,14 @@ class ComponentManager(private val connection:Connection, private val assetManag
     }
 
     fun saveProject(){
-        DataTransferObject().writeData(connection)
+        DataTransferObject().writeData(projectOptions,connection)
     }
 
     fun readProject(){
-        DataTransferObject().readData(connection, scene)
+        DataTransferObject().readData(projectOptions,connection, scene)
     }
 
-    fun createProject(path:String){
-
+    fun createProject(){
+        DataTransferObject().createData(projectOptions)
     }
 }

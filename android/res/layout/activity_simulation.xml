@@ -168,11 +168,6 @@
                     android:checked="true"/>
             </LinearLayout>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Grid Style"/>
-
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

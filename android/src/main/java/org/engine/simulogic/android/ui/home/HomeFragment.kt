@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.SimulationActivity
+import org.engine.simulogic.android.circuits.storage.DataTransferObject
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.ui.adapters.ProjectOptionsAdapter
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
 import org.engine.simulogic.android.ui.models.ProjectOption
@@ -63,10 +65,9 @@ class HomeFragment : Fragment() {
                 when(option.title){
                     "Create Project"->{
                         CreateProjectDialog(context!!,object:CreateProjectDialog.OnCreateProjectClickListener{
-                            override fun success(title:String) {
+                            override fun success(title:String, description:String) {
                                 Intent(context,SimulationActivity::class.java).apply {
-                                    putExtra("projectTitle",title)
-                                    putExtra("LoadState",false)
+                                    putExtra("options",ProjectOptions(title,description,0L,ProjectOptions.CREATE))
                                     startActivity(this)
                                 }
                             }
@@ -110,13 +111,19 @@ class HomeFragment : Fragment() {
         }
 
         val recentProjectAdapter = RecentAdapter().apply {
-            add("Adder","system/io/files","This is an implementation of a 4bit adder")
-            add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor")
-            add("Divider","system/io/files","This is an implementation of a 4bit Divider")
-            add("SegmentDisplay","system/io/files","This is a seven segment display using BCD")
-            add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier")
-            add("Multiplexer","system/io/files", "This is an implementation of a multiplexer")
+          DataTransferObject().listProjects(requireContext()).forEach {
+                add(it.title,"system/io/files",it.description, it.lastModified)
+            }
         }
+
+        recentProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
+            override fun onClick(item: RecentItem) {
+                Intent(context,SimulationActivity::class.java).apply {
+                    putExtra("options",ProjectOptions(item.title,item.description,item.lastModified,ProjectOptions.OPEN))
+                    startActivity(this)
+                }
+            }
+        })
 
         recentProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)
@@ -125,15 +132,11 @@ class HomeFragment : Fragment() {
         }
 
         val sampleProjectAdapter = RecentAdapter().apply {
-            add("Computation","","",RecentItem.VIEW_HEADER,ispremium = true)
-            add("4bitAdder","system/io/files","This is an implementation of a 4bit adder")
-            add("8bitSubtractor","system/io/files", "This is an implementation of a 8bit Subtractor")
-            add("16bitDivider","system/io/files","This is an implementation of a 4bit Divider")
-            add("16bitMultiplier","system/io/files", "This is an implementation of a  16bit multiplier")
-            add("BCDSegmentDisplay","system/io/files","This is a seven segment display using BCD")
-            add("Multiplexing","","", RecentItem.VIEW_HEADER)
-            add("Multiplexer","system/io/files", "This is an implementation of a multiplexer")
-            add("De-multiplexer","system/io/files", "This is an implementation of a De-Multiplexer")
+            add("Computation","","",0,RecentItem.VIEW_HEADER,ispremium = true)
+            add("4bitAdder","system/io/files","This is an implementation of a 4bit adder",0L)
+            add("8bitSubtractor","system/io/files", "This is an implementation of a 8bit Subtractor",0L)
+            add("Multiplexing","","", 0L,RecentItem.VIEW_HEADER)
+            add("Multiplexer","system/io/files", "This is an implementation of a multiplexer",0L)
         }
         sampleProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)

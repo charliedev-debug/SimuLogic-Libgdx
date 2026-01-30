@@ -20,13 +20,14 @@ import org.engine.simulogic.android.circuits.logic.ComponentManager
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ConnectionManager
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
 import org.engine.simulogic.android.views.interfaces.IFpsListener
 
-class SimulationLoop(private val fpsListener:IFpsListener) : ApplicationAdapter() {
+class SimulationLoop(private val projectOptions: ProjectOptions,private val fpsListener:IFpsListener) : ApplicationAdapter() {
 
     private lateinit var batch: SpriteBatch
     private lateinit var camera:OrthographicCamera
@@ -72,7 +73,7 @@ class SimulationLoop(private val fpsListener:IFpsListener) : ApplicationAdapter(
         connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
-        componentManager = ComponentManager(connection, assetManager, scene, gestureListener)
+        componentManager = ComponentManager(projectOptions,connection, assetManager, scene, gestureListener)
        // componentManager.readProject()
         InputMultiplexer().apply {
             addProcessor(GestureDetector(gestureListener))

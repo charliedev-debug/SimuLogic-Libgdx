@@ -25,12 +25,12 @@ class SlideshowFragment : Fragment() {
       val emptyProjectListAlert = root.findViewById<TextView>(R.id.empty_project_list_alert)
       val projectItemCount = root.findViewById<TextView>(R.id.project_count)
       val projectListAdapter = RecentAdapter().apply {
-          add("Adder","system/io/files","This is an implementation of a 4bit adder", canDelete = true)
-          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor", canDelete = true)
-          add("Divider","system/io/files","This is an implementation of a 4bit Divider", canDelete = true)
-          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD", canDelete = true)
-          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier", canDelete = true)
-          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer", canDelete = true)
+          add("Adder","system/io/files","This is an implementation of a 4bit adder", 0L, canDelete = true)
+          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor", 0L, canDelete = true)
+          add("Divider","system/io/files","This is an implementation of a 4bit Divider",0L, canDelete = true)
+          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD", 0L, canDelete = true)
+          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier", 0L, canDelete = true)
+          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer", 0L, canDelete = true)
       }
 
       projectListRecyclerView.apply {

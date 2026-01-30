@@ -13,6 +13,7 @@ import org.engine.simulogic.android.ui.models.RecentItem
 class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
     private val dataList = mutableListOf<RecentItem>()
+    private val listeners = mutableListOf<OnItemClickListener>()
     inner class RecentViewHolder(view: View) : RecyclerView.ViewHolder(view){
 
         fun initView(position:Int){
@@ -22,6 +23,11 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                     itemView.findViewById<TextView>(R.id.project_title).text = item.title
                     itemView.findViewById<TextView>(R.id.project_description).text = item.description
                     itemView.findViewById<ImageView>(R.id.delete).visibility = if(item.enableDelete) View.VISIBLE else View.INVISIBLE
+                    itemView.setOnClickListener {
+                        listeners.forEach {
+                            it.onClick(item)
+                        }
+                    }
                 }
 
                 RecentItem.VIEW_HEADER->{
@@ -36,12 +42,18 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
         }
     }
 
-    fun add(title:String, path:String,description:String,type:Int = RecentItem.VIEW_ITEM,ispremium:Boolean = false, canDelete:Boolean = false){
-        dataList.add(RecentItem(title, path,description, type,ispremium,canDelete))
+    fun addListener(listener:OnItemClickListener){
+        listeners.add(listener)
     }
+
+    fun add(title:String, path:String,description:String,lastModified:Long, type:Int = RecentItem.VIEW_ITEM,ispremium:Boolean = false, canDelete:Boolean = false){
+        dataList.add(RecentItem(title, path,description,lastModified, type,ispremium,canDelete))
+    }
+
     override fun getItemViewType(position: Int): Int {
         return dataList[position].type
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentViewHolder {
 
         val view:View = when(viewType){
@@ -62,5 +74,9 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
     override fun onBindViewHolder(holder: RecentViewHolder, position: Int) {
         holder.initView(position)
+    }
+
+    interface OnItemClickListener{
+        fun onClick(item:RecentItem)
     }
 }
