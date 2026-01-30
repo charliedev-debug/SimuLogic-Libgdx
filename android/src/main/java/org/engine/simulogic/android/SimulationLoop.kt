@@ -27,13 +27,13 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
 import org.engine.simulogic.android.views.interfaces.IFpsListener
 
-class SimulationLoop(private val projectOptions: ProjectOptions,private val fpsListener:IFpsListener) : ApplicationAdapter() {
+class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAdapter() {
 
     private lateinit var batch: SpriteBatch
     private lateinit var camera:OrthographicCamera
     lateinit var gestureListener: MotionGestureListener
     lateinit var componentManager:ComponentManager
-    private var fpsCounter = FpsCounter()
+    var fpsCounter = FpsCounter()
     private val assetManager = AssetManager()
     private val connection = Connection()
     private val collisionDetector = CollisionDetector(connection)
@@ -67,8 +67,8 @@ class SimulationLoop(private val projectOptions: ProjectOptions,private val fpsL
 
         scene = PlayGroundScene(spriteBatch = batch, camera = camera, assetManager = assetManager)
 
-        connection.insertNode(ListNode(CAnd(200f,200f,scene)))
-        connection.insertNode(ListNode(CAnd(400f,300f,scene)))
+       // connection.insertNode(ListNode(CAnd(200f,200f,scene)))
+       // connection.insertNode(ListNode(CAnd(400f,300f,scene)))
         gestureListener = MotionGestureListener(camera, connection,collisionDetector,scene)
         connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
@@ -88,7 +88,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions,private val fpsL
         connectionManager.resolveConnection()
         scene.update()
         scene.draw()
-        fpsCounter.update(fpsListener)
+        fpsCounter.update()
     }
 
     override fun dispose() {

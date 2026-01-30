@@ -1,17 +1,17 @@
 package org.engine.simulogic.android.utilities
 
 import com.badlogic.gdx.Gdx
-import org.engine.simulogic.android.views.interfaces.IFpsListener
 
 class FpsCounter {
     private var elapsedTime = 0f
     private var frames = 0
-    fun update(fpsListener:IFpsListener? = null){
+    private var frameCounter = 0
+    fun update(){
           elapsedTime+= Gdx.graphics.deltaTime
-          frames++
+        frameCounter++
         if (elapsedTime >= 1f) {
-            fpsListener?.onFPSUpdate(frames)
-            frames = 0
+            frames = frameCounter
+            frameCounter = 0
             elapsedTime = 0f
         }
     }

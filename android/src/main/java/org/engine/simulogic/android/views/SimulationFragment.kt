@@ -16,9 +16,10 @@ import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
-class SimulationFragment(private val projectOptions:ProjectOptions,private val fpsListener:IFpsListener) : AndroidFragmentApplication() {
+class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFragmentApplication() {
    private val menuViewModel: MenuViewModel by activityViewModels()
    private val bottomSheetViewModel: BottomSheetViewModel by activityViewModels()
+    lateinit var simulationLoop: SimulationLoop
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -27,7 +28,7 @@ class SimulationFragment(private val projectOptions:ProjectOptions,private val f
       val configuration = AndroidApplicationConfiguration()
       configuration.useImmersiveMode = true // Recommended, but not required.
       configuration.useGL30 = true
-      val simulationLoop = SimulationLoop(projectOptions, fpsListener)
+      simulationLoop = SimulationLoop(projectOptions)
       menuViewModel.message.observe(viewLifecycleOwner){item->
           if(simulationLoop.isReady) {
               when(item.title){

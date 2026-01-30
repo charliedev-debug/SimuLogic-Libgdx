@@ -36,6 +36,13 @@ class DataTransferObject {
 
     private val IDENTIFIER = 0xC145FF
     private val VERSION = 1
+
+    companion object {
+        fun deleteFile(context: Context, title:String) {
+            File(context.getExternalFilesDir(""), "projects/$title").delete()
+        }
+    }
+
     fun writeData(projectOptions: ProjectOptions, connection: Connection) {
         val title = projectOptions.title
         val description = projectOptions.description

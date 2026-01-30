@@ -33,6 +33,7 @@ class LabelDialog(context: Context, private val listener:IDialogLabelListener) :
         super.onStart()
         val width: Int = context.resources.getDimensionPixelSize(R.dimen.popup_width)
         window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        window?.setBackgroundDrawableResource(R.color.transparent)
         //  window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 }

@@ -35,6 +35,18 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         }
     }
 
+    fun size():Int{
+        return connection.size()
+    }
+
+    fun connectionSize():Int{
+        var counter = 0
+        connection.forEach {
+            counter += it.getLineMarkerChildren().size
+        }
+        return counter
+    }
+
     fun insertAND(){
        gestureListener.rectPointer.getPosition().also {position->
             connection.insertNode(ListNode(CAnd(position.x,position.y,scene)))
