@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.ui.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
+import org.engine.simulogic.android.SimulationActivity
+import org.engine.simulogic.android.circuits.storage.DataTransferObject
+import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
+import org.engine.simulogic.android.ui.models.RecentItem
+import org.engine.simulogic.android.views.dialogs.DeleteProjectDialog
+import java.io.File
 
 class ManageProjectsFragment : Fragment() {
 
@@ -25,13 +32,38 @@ class ManageProjectsFragment : Fragment() {
       val emptyProjectListAlert = root.findViewById<TextView>(R.id.empty_project_list_alert)
       val projectItemCount = root.findViewById<TextView>(R.id.project_count)
       val projectListAdapter = RecentAdapter().apply {
-          add("Adder","system/io/files","This is an implementation of a 4bit adder", 0L, canDelete = true)
-          add("Subtractor","system/io/files", "This is an implementation of a 8bit Subtractor", 0L, canDelete = true)
-          add("Divider","system/io/files","This is an implementation of a 4bit Divider",0L, canDelete = true)
-          add("SegmentDisplay","system/io/files","This is a seven segment display using BCD", 0L, canDelete = true)
-          add("Multiplier","system/io/files", "This is an implementation of a  16bit multiplier", 0L, canDelete = true)
-          add("Multiplexer","system/io/files", "This is an implementation of a multiplexer", 0L, canDelete = true)
+          DataTransferObject().listProjects(requireContext()).forEach {
+              add(it.title,it.path, it.description, it.lastModified, canDelete = true)
+          }
       }
+
+      projectListAdapter.addListener(object : RecentAdapter.OnItemClickListener{
+          override fun onClick(item: RecentItem) {
+              Intent(context, SimulationActivity::class.java).apply {
+                  putExtra("options",
+                      ProjectOptions(item.title,item.description,item.path,item.lastModified,
+                          ProjectOptions.OPEN)
+                  )
+                  startActivity(this)
+              }
+          }
+
+          override fun onDelete(item: RecentItem, index:Int) {
+              DeleteProjectDialog(requireContext(), item.title,object :DeleteProjectDialog.OnDeleteProjectClickListener{
+                  override fun accept() {
+                      File(item.path).delete()
+                      projectListAdapter.remove(index)
+                      projectListAdapter.notifyItemRemoved(index)
+                  }
+
+                  override fun cancel() {
+
+                  }
+
+              }).show()
+
+          }
+      })
 
       projectListRecyclerView.apply {
           layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)

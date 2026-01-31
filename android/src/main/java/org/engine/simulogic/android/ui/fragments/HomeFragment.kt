@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
                     }
 
                     "Open Project"->{
-                       // findNavController().navigate(R.id.nav_open_project)
+                        findNavController().navigate(R.id.nav_open_project)
                     }
 
                     "Import Project"->{
@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
                     }
 
                     "Manage Project"->{
-                        findNavController().navigate(R.id.nav_slideshow)
+                        findNavController().navigate(R.id.nav_manage_projects)
                     }
                 }
             }
@@ -112,7 +112,7 @@ class HomeFragment : Fragment() {
 
         val recentProjectAdapter = RecentAdapter().apply {
           DataTransferObject().listProjects(requireContext()).forEach {
-                add(it.title,it.description,it.path, it.lastModified)
+                add(it.title,it.path, it.description, it.lastModified)
             }
         }
 
@@ -122,6 +122,10 @@ class HomeFragment : Fragment() {
                     putExtra("options",ProjectOptions(item.title,item.description,item.path,item.lastModified,ProjectOptions.OPEN))
                     startActivity(this)
                 }
+            }
+
+            override fun onDelete(item: RecentItem, index:Int) {
+
             }
         })
 
