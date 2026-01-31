@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
 import com.google.android.material.textfield.TextInputEditText
 import org.engine.simulogic.R
+import org.engine.simulogic.android.circuits.storage.DataTransferObject
+import java.io.File
 
 class CreateProjectDialog(context:Context,private val listener:OnCreateProjectClickListener) : Dialog(context) {
 
@@ -20,7 +22,10 @@ class CreateProjectDialog(context:Context,private val listener:OnCreateProjectCl
         val editTextDescr = view.findViewById<TextInputEditText>(R.id.description)
         create.setOnClickListener {
             try {
-                listener.success(editTextFileName.text.toString(), editTextDescr.text.toString())
+                listener.success(
+                    editTextFileName.text.toString(),
+                    editTextDescr.text.toString()
+                )
                 dismiss()
             }catch (exp:FileAlreadyExistsException){
                 listener.failure(exp.reason.toString())

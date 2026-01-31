@@ -52,8 +52,6 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
-
-
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
@@ -137,8 +135,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             drawerLayout.closeDrawer(Gravity.RIGHT)
             EditProjectDialog(this, projectOptions,object:EditProjectDialog.OnEditProjectClickListener{
                 override fun success(title: String, description: String) {
-                    projectOptions.title = "${title}.bin"
+                    projectOptions.title = title
                     projectOptions.description = description
+                    projectTitle.text = projectOptions.title
+                    projectDescription.text = projectOptions.description
                     simulationFragment.simulationLoop.componentManager.saveProject()
                     DataTransferObject.deleteFile(this@SimulationActivity,oldFile)
                 }

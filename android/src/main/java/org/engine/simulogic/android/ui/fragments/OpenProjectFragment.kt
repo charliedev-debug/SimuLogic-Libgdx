@@ -16,6 +16,7 @@ import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
 import org.engine.simulogic.android.ui.models.RecentItem
+import java.io.File
 
 class OpenProjectFragment : Fragment() {
 
@@ -41,7 +42,7 @@ class OpenProjectFragment : Fragment() {
           override fun onClick(item: RecentItem) {
               Intent(context, SimulationActivity::class.java).apply {
                   putExtra("options",
-                      ProjectOptions(item.title,item.description,item.path,item.lastModified,
+                      ProjectOptions(File(item.path).name, item.title,item.description,item.path,item.lastModified,
                           ProjectOptions.OPEN)
                   )
                   startActivity(this)

@@ -1,7 +1,10 @@
 package org.engine.simulogic.android.circuits.storage
 
 import android.content.Context
+import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CTypes
@@ -31,6 +34,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.security.MessageDigest
+import java.util.UUID
 
 class DataTransferObject {
 
@@ -41,13 +47,21 @@ class DataTransferObject {
         fun deleteFile(context: Context, title:String) {
             File(context.getExternalFilesDir(""), "projects/$title").delete()
         }
+        fun randomFileName(extension: String = "bin"): String {
+            val randomString = UUID.randomUUID().toString()
+            val digest = MessageDigest.getInstance("SHA-256")
+            val hashBytes = digest.digest(randomString.toByteArray())
+            val hexString = hashBytes.joinToString("") { "%02x".format(it) }
+            return "$hexString.$extension"
+        }
     }
+
 
     fun writeData(projectOptions: ProjectOptions, connection: Connection) {
         val title = projectOptions.title
         val description = projectOptions.description
-        val file = Gdx.files.external("projects/$title")
-        val temp = Gdx.files.external("projects/$title.temp")
+        val file = Gdx.files.external("projects/${projectOptions.fileName}")
+        val temp = Gdx.files.external("projects/${projectOptions.fileName}.temp")
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(temp.write(false))
         stream.writeInt(IDENTIFIER)
@@ -103,9 +117,9 @@ class DataTransferObject {
     }
 
     fun createData(projectOptions: ProjectOptions) {
-        val title = "${projectOptions.title}.bin"
+        val title = projectOptions.title
         val description = projectOptions.description
-        val file = Gdx.files.external("projects/$title")
+        val file = Gdx.files.external("projects/${projectOptions.fileName}")
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(file.write(false))
         stream.writeInt(IDENTIFIER)
@@ -124,8 +138,7 @@ class DataTransferObject {
         font: BitmapFont,
         scene: PlayGroundScene
     ) {
-
-        val file = Gdx.files.external("projects/${projectOptions.title}")
+        val file = Gdx.files.external("projects/${projectOptions.fileName}")
        // println("${projectOptions.title} = ${file.file().path}")
         val stream = DataInputStream(BufferedInputStream(file.read()))
         try {
@@ -266,7 +279,27 @@ class DataTransferObject {
         return file.exists()
     }
 
-    fun readFileHeader(path: File): ProjectOptions {
+    fun exists(context:Context,title: String): Boolean {
+        val file = File(context.getExternalFilesDir(""), "projects/${title}")
+        return file.exists()
+    }
+
+    fun importProject(context: Context, uri: Uri):ProjectOptions?{
+        val file = File(context.getExternalFilesDir(""),"projects/${randomFileName()}")
+        val outputStream = FileOutputStream(file)
+        context.contentResolver?.openInputStream(uri).use { inputStream ->
+            inputStream?.copyTo(outputStream)
+        }
+        outputStream.close()
+        try {
+            return readFileHeader(file)
+        }catch (io:IOException){
+            file.delete()
+        }
+        return null
+    }
+
+    private fun readFileHeader(path: File): ProjectOptions {
         val inputStream = FileInputStream(path)
         val stream = DataInputStream(BufferedInputStream(inputStream))
         try {
@@ -282,6 +315,7 @@ class DataTransferObject {
             inputStream.close()
             stream.close()
             return ProjectOptions(
+                path.name,
                 title.toString(Charsets.UTF_8),
                 description.toString(Charsets.UTF_8),
                 path.path,
@@ -293,15 +327,22 @@ class DataTransferObject {
         }
         inputStream.close()
         stream.close()
-        return ProjectOptions("none", "none",path.path, 0L, ProjectOptions.OPEN)
+        return ProjectOptions("none","none", "none",path.path, 0L, ProjectOptions.OPEN)
     }
+
 
     fun listProjects(context: Context): List<ProjectOptions> {
         val files = mutableListOf<ProjectOptions>()
         val data = File(context.getExternalFilesDir(""), "projects").listFiles()
         data?.forEach {
             //println(it.path)
-            files.add(readFileHeader(it))
+            try {
+                readFileHeader(it).also { options->
+                    files.add(options)
+                }
+            }catch (io:Exception){
+                //ignore the file and continue
+            }
         }
         files.sortByDescending { it.lastModified }
         return files

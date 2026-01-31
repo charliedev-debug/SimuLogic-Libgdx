@@ -41,7 +41,7 @@ class ManageProjectsFragment : Fragment() {
           override fun onClick(item: RecentItem) {
               Intent(context, SimulationActivity::class.java).apply {
                   putExtra("options",
-                      ProjectOptions(item.title,item.description,item.path,item.lastModified,
+                      ProjectOptions(File(item.path).name,item.title,item.description,item.path,item.lastModified,
                           ProjectOptions.OPEN)
                   )
                   startActivity(this)

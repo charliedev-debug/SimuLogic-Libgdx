@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.ui.models.RecentItem
+import org.engine.simulogic.android.utilities.ConvertUtils
 import org.engine.simulogic.android.utilities.ShareFileHelper
 import java.io.File
 import java.text.SimpleDateFormat
@@ -31,6 +32,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                     itemView.findViewById<TextView>(R.id.project_title).text = title
                     itemView.findViewById<TextView>(R.id.project_description).text = item.description
                     itemView.findViewById<TextView>(R.id.date_created).text = SimpleDateFormat.getInstance().format(date.apply { time = File(item.path).lastModified() })
+                    itemView.findViewById<TextView>(R.id.file_size).text = ConvertUtils.kb2FitMemorySize(File(item.path).length(),2)
                     itemView.findViewById<ImageView>(R.id.delete).apply {
                         visibility = if(item.enableDelete) View.VISIBLE else View.INVISIBLE
                         setOnClickListener {
@@ -68,6 +70,10 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         return dataList[position].type
+    }
+
+    fun clear(){
+        dataList.clear()
     }
 
     fun remove(position: Int){

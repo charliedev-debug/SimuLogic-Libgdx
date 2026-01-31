@@ -44,7 +44,7 @@
             android:paddingBottom="10dp"
             android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/create"
+                android:id="@+id/edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

@@ -25,11 +25,14 @@ import org.engine.simulogic.android.ui.models.ProjectOption
 import org.engine.simulogic.android.ui.models.RecentItem
 import org.engine.simulogic.android.views.GridSpacingItemDecoration
 import org.engine.simulogic.android.views.dialogs.CreateProjectDialog
+import org.engine.simulogic.android.views.dialogs.ErrorDialog
 import java.io.File
+import java.io.IOException
 
 class HomeFragment : Fragment() {
 
 
+    private lateinit var recentProjectAdapter: RecentAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,17 +51,20 @@ class HomeFragment : Fragment() {
         }
         val importProjectActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result->
             if(result.resultCode == Activity.RESULT_OK && result.data != null){
-
-                result.data?.data?.apply {
-                    val name: String = File(this.path).name
-                    val outDir = File(requireContext().
-                    getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS),"SimuLogic")
-                  //  FileUtility.importProject(context,this, outDir, name)
+                result.data?.data?.also { uri->
+                    DataTransferObject().importProject(requireContext(),uri).also { projectOptions ->
+                        projectOptions?.apply {
+                            recentProjectAdapter.add(title, path, description, 0L)
+                            recentProjectAdapter.notifyItemInserted(recentProjectAdapter.itemCount + 1)
+                        }
+                        if(projectOptions == null){
+                            ErrorDialog(requireContext(),"Corrupted file or incorrect binary file imported!").show()
+                        }
+                    }
                 }
                 //copy content to working folder
                 Toast.makeText(context,"Results returned!", Toast.LENGTH_SHORT).show()
             }
-
         }
         projectOptionAdapter.listener = object : ProjectOptionsAdapter.OnOptionClickListener{
             override fun onClick(option: ProjectOption) {
@@ -67,7 +73,9 @@ class HomeFragment : Fragment() {
                         CreateProjectDialog(context!!,object:CreateProjectDialog.OnCreateProjectClickListener{
                             override fun success(title:String, description:String) {
                                 Intent(context,SimulationActivity::class.java).apply {
-                                    putExtra("options",ProjectOptions(title,description,"",0L,ProjectOptions.CREATE))
+                                    putExtra("options",ProjectOptions(DataTransferObject.randomFileName(),
+                                        title,
+                                        description,"",0L,ProjectOptions.CREATE))
                                     startActivity(this)
                                 }
                             }
@@ -92,7 +100,7 @@ class HomeFragment : Fragment() {
                             type = "* / *" // Required for some reason
                             putExtra(
                                 Intent.EXTRA_MIME_TYPES,
-                                arrayOf("application/x-zip-compressed", "application/octet-stream", "application/zip")
+                                arrayOf("application/octet-stream")
                             )
                             importProjectActivityLauncher.launch(Intent.createChooser(this,"Select Project To Import"))
                         }
@@ -110,16 +118,12 @@ class HomeFragment : Fragment() {
             adapter = projectOptionAdapter
         }
 
-        val recentProjectAdapter = RecentAdapter().apply {
-          DataTransferObject().listProjects(requireContext()).forEach {
-                add(it.title,it.path, it.description, it.lastModified)
-            }
-        }
+         recentProjectAdapter = RecentAdapter()
 
         recentProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
             override fun onClick(item: RecentItem) {
                 Intent(context,SimulationActivity::class.java).apply {
-                    putExtra("options",ProjectOptions(item.title,item.description,item.path,item.lastModified,ProjectOptions.OPEN))
+                    putExtra("options",ProjectOptions(File(item.path).name, item.title,item.description,item.path,item.lastModified,ProjectOptions.OPEN))
                     startActivity(this)
                 }
             }
@@ -150,4 +154,15 @@ class HomeFragment : Fragment() {
         return root
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        recentProjectAdapter.apply {
+            clear()
+            DataTransferObject().listProjects(requireContext()).forEach {
+                add(it.title,it.path, it.description, it.lastModified)
+            }
+            notifyItemRangeChanged(0, recentProjectAdapter.itemCount)
+        }
+    }
 }

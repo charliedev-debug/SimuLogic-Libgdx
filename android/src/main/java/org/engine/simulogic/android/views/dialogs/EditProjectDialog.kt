@@ -16,20 +16,15 @@ class EditProjectDialog(context:Context, private val projectOptions: ProjectOpti
         super.onCreate(savedInstanceState)
         val view = layoutInflater.inflate(R.layout.edit_project_dialog_layout,null)
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
-        val create = view.findViewById<AppCompatButton>(R.id.create)
+        val create = view.findViewById<AppCompatButton>(R.id.edit)
         val editTextFileName = view.findViewById<TextInputEditText>(R.id.fileName)
         val editTextDescr = view.findViewById<TextInputEditText>(R.id.description)
         // ignore the extension
-        editTextFileName.setText(projectOptions.title.substring(0, projectOptions.title.indexOf(".")))
+        editTextFileName.setText(projectOptions.title)
         editTextDescr.setText(projectOptions.description)
         create.setOnClickListener {
-            try {
-                listener.success(editTextFileName.text.toString(), editTextDescr.text.toString())
+               listener.success(editTextFileName.text.toString(), editTextDescr.text.toString())
                 dismiss()
-            }catch (exp:FileAlreadyExistsException){
-                listener.failure(exp.reason.toString())
-                editTextFileName.error = exp.reason
-            }
         }
 
         cancel.setOnClickListener {
