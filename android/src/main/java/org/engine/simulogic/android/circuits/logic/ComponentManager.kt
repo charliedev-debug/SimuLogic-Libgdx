@@ -21,7 +21,7 @@ import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class ComponentManager(private val projectOptions: ProjectOptions,private val font: BitmapFont, private val connection:Connection, private val assetManager: AssetManager, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
+class ComponentManager(private val projectOptions: ProjectOptions,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
 
     init {
@@ -115,8 +115,24 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
 
     fun insertCLabel(text:String){
         gestureListener.rectPointer.getPosition().also { position->
-            connection.insertNode(ListNode(CLabel(assetManager.get("RobotoMono-SemiBold.ttf"),text,position.x, position.y, scene )))
+            connection.insertNode(ListNode(CLabel(font,text,position.x, position.y, scene )))
         }
+    }
+
+    fun hideGridLabels(){
+        gestureListener.gridDecorator?.toggleLabels()
+    }
+
+    fun toggleGrid(){
+        gestureListener.gridDecorator?.toggleGrid()
+    }
+
+    fun setStyleA(){
+        gestureListener.gridDecorator?.showLabelHeader()
+    }
+
+    fun setStyleB(){
+        gestureListener.gridDecorator?.hideLabelHeader()
     }
 
     fun saveProject(){

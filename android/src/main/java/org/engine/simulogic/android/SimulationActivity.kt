@@ -9,6 +9,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.RadioGroup.OnCheckedChangeListener
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -19,6 +22,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -58,6 +62,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val componentCountTextView = findViewById<TextView>(R.id.components_count)
         val connectionCountTextView = findViewById<TextView>(R.id.connection_count)
         val projectMetaDataEditButton = findViewById<AppCompatButton>(R.id.project_meta_data_edit)
+        val gridLabelEnabledSwitch = findViewById<SwitchMaterial>(R.id.label_enabled)
+        val gridEnabledSwitch = findViewById<SwitchMaterial>(R.id.grid_enabled)
+        val gridStyleRadioButton = findViewById<RadioGroup>(R.id.grid_styles)
+
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
         projectTitle = findViewById(R.id.project_title)
@@ -128,6 +136,22 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             if (!bottomSheet.isVisible) {
                 bottomSheet.show(supportFragmentManager, "COMPONENTS")
             }
+        }
+
+        gridLabelEnabledSwitch.setOnClickListener {
+            simulationFragment.simulationLoop.componentManager.hideGridLabels()
+        }
+
+        gridEnabledSwitch.setOnClickListener {
+            simulationFragment.simulationLoop.componentManager.toggleGrid()
+        }
+
+        gridStyleRadioButton.setOnCheckedChangeListener { _, id ->
+               if(id == R.id.grid_style_a){
+                   simulationFragment.simulationLoop.componentManager.setStyleA()
+               }else{
+                   simulationFragment.simulationLoop.componentManager.setStyleB()
+               }
         }
 
         projectMetaDataEditButton.setOnClickListener {

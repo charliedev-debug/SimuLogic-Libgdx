@@ -222,6 +222,7 @@
                     android:layout_marginRight="5dp"
                     android:text="Grid Visible"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/grid_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:textColorPrimary"
@@ -238,6 +239,7 @@
                     android:layout_marginRight="5dp"
                     android:text="Label Enabled"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/label_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="?android:textColorPrimary"
@@ -245,39 +247,24 @@
             </LinearLayout>
 
             <RadioGroup
+                android:id="@+id/grid_styles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:text="Style A"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/grid_style_a"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?android:textColorSecondary"
+                    android:text="Style A"
                     android:checked="true"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="Style B"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/grid_style_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?android:textColorSecondary"
+                    android:text="Style B"
                     android:checked="false"/>
-                </LinearLayout>
             </RadioGroup>
 
             <View
