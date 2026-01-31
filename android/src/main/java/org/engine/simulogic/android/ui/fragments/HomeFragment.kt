@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
                         CreateProjectDialog(context!!,object:CreateProjectDialog.OnCreateProjectClickListener{
                             override fun success(title:String, description:String) {
                                 Intent(context,SimulationActivity::class.java).apply {
-                                    putExtra("options",ProjectOptions(title,description,0L,ProjectOptions.CREATE))
+                                    putExtra("options",ProjectOptions(title,description,"",0L,ProjectOptions.CREATE))
                                     startActivity(this)
                                 }
                             }
@@ -112,14 +112,14 @@ class HomeFragment : Fragment() {
 
         val recentProjectAdapter = RecentAdapter().apply {
           DataTransferObject().listProjects(requireContext()).forEach {
-                add(it.title,"system/io/files",it.description, it.lastModified)
+                add(it.title,it.description,it.path, it.lastModified)
             }
         }
 
         recentProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
             override fun onClick(item: RecentItem) {
                 Intent(context,SimulationActivity::class.java).apply {
-                    putExtra("options",ProjectOptions(item.title,item.description,item.lastModified,ProjectOptions.OPEN))
+                    putExtra("options",ProjectOptions(item.title,item.description,item.path,item.lastModified,ProjectOptions.OPEN))
                     startActivity(this)
                 }
             }

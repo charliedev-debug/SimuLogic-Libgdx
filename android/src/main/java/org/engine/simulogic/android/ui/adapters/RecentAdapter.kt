@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.ui.models.RecentItem
+import org.engine.simulogic.android.utilities.ShareFileHelper
 
 class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
@@ -27,6 +28,9 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                         listeners.forEach {
                             it.onClick(item)
                         }
+                    }
+                    itemView.findViewById<ImageView>(R.id.share).setOnClickListener {
+                        ShareFileHelper.share(item.path, item.title, itemView.context)
                     }
                 }
 

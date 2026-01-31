@@ -284,6 +284,7 @@ class DataTransferObject {
             return ProjectOptions(
                 title.toString(Charsets.UTF_8),
                 description.toString(Charsets.UTF_8),
+                path.path,
                 path.lastModified(),
                 ProjectOptions.OPEN
             )
@@ -292,7 +293,7 @@ class DataTransferObject {
         }
         inputStream.close()
         stream.close()
-        return ProjectOptions("none", "none", 0L, ProjectOptions.OPEN)
+        return ProjectOptions("none", "none",path.path, 0L, ProjectOptions.OPEN)
     }
 
     fun listProjects(context: Context): List<ProjectOptions> {
