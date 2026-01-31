@@ -1,7 +1,10 @@
 package org.engine.simulogic.android.circuits.components.lines
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
+import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_ACTIVE
+import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_INACTIVE
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
@@ -89,24 +92,31 @@ class LineMarker(val from: ListNode, val to: ListNode,
             val offsetY = prev.y - next.y
             // ignore the first and the last elements since we can't modify them directly since it's the source
             if(i != 0 ) {
-                if (abs(offsetX) <= 5f) {
+                if (abs(offsetX) <= 10f) {
                     prevSignal.updatePosition(next.x, prev.y)
-                } else if (abs(offsetY) <= 7f) {
+                } else if (abs(offsetY) <= 10f) {
                     prevSignal.updatePosition(prev.x, next.y)
                 }
             }
             // snap to the parent source node
             else{
-                if (abs(offsetX) <= 5f) {
+                if (abs(offsetX) <= 10f) {
                     nextSignal.updatePosition(prev.x, next.y)
-                } else if (abs(offsetY) <= 7f) {
+                } else if (abs(offsetY) <= 10f) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
             }
+            lines[i].color = (if(nextSignal.selected || prevSignal.selected) LINE_MARKER_ACTIVE else LINE_MARKER_INACTIVE)
             lines[i].updatePosition(prev.x,prev.y,next.x,next.y)
         }
+
     }
 
+    override fun updateColor(color: Color) {
+        lines.forEach {
+            it.color = color
+        }
+    }
     override fun contains(x: Float, y: Float): CNode? {
         return null
     }

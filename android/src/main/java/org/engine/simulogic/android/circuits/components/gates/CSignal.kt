@@ -1,10 +1,7 @@
 package org.engine.simulogic.android.circuits.components.gates
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
@@ -14,7 +11,6 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, private val scene: PlayGroundScene) :
     CNode() {
     var parent: Entity? = null
-
     init {
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = when (type) {
@@ -56,6 +52,7 @@ open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, priv
 
     override fun update() {
         updateColor(if(selected) CDefaults.INPUT_SELECTED_COLOR else CDefaults.INPUT_UNSELECTED_COLOR)
+
     }
 
     override fun clone(): CSignal {
