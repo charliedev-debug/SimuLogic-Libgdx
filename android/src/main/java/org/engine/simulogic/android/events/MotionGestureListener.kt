@@ -7,9 +7,10 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CPointer
-import org.engine.simulogic.android.circuits.components.other.CRangePoint
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
@@ -17,7 +18,7 @@ import org.engine.simulogic.android.circuits.tools.CommandHistory
 import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.CutTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
-import org.engine.simulogic.android.circuits.tools.DeleteTool
+import org.engine.simulogic.android.circuits.tools.DeleteLineTool
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -32,7 +33,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     private val dataContainer = DataContainer()
     private val cutTool = CutTool(dataContainer, commandHistory)
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
-    private val deleteTool = DeleteTool(dataContainer,connection,scene, commandHistory)
+    private val deleteLineTool = DeleteLineTool(dataContainer, connection, scene, commandHistory)
     private val modeBuffer = mutableListOf<Int>()
     var gridDecorator:GridDecorator? = null
     companion object {
@@ -107,10 +108,18 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
             sendRangeItemsToDataContainer()
         }else {
             collisionDetector.selectedItems.forEach { item ->
-                dataContainer.insert(item.caller)
+                // it must be a line
+                if(item.subject is CSignal && item.subject.parent is LineMarker){
+                    dataContainer.insert(ListNode(item.subject))
+                }
+                // deletes the whole component
+                else {
+                    dataContainer.insert(item.caller)
+                }
             }
         }
-        deleteTool.execute()
+        //deleteTool.execute()
+        deleteLineTool.execute()
         collisionDetector.reset()
     }
 
@@ -122,7 +131,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
         }
         dataContainer.clear()
         collisionDetector.reset()
-        println("Data Size: ${connection.size()}")
+      //  println("Data Size: ${connection.size()}")
     }
 
 

@@ -17,8 +17,10 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class LineMarker(val from: ListNode, val to: ListNode,
-                 var signalFrom: Int, val signalTo:Int, val index:Int = 0):Entity(), ICollidable,
+class LineMarker(val scene: PlayGroundScene,
+    val from: ListNode, val to: ListNode,
+    var signalFrom: Int, val signalTo: Int, var index: Int = 0
+) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
     fun initialize(scene: PlayGroundScene) {
@@ -36,19 +38,51 @@ class LineMarker(val from: ListNode, val to: ListNode,
             val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
             lastX = x
-            signals.add(CSignal(x, y,CTypes.SIGNAL_IN, signalIndex++, scene).apply { parent = this@LineMarker})
+            signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
+                parent = this@LineMarker
+            })
         }
 
         for (i in CDefaults.linePointCountY downTo 0) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = lastX
-            signals.add(CSignal(x, y, CTypes.SIGNAL_IN,signalIndex++, scene).apply { parent = this@LineMarker })
+            signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
+                parent = this@LineMarker
+            })
         }
 
         createMarker(scene)
     }
+
+     override fun detachSelf(){
+         lines.forEach {
+             it.detachSelf()
+         }
+         signals.forEach {
+             it.detachSelf()
+         }
+         from.removeMarker(this)
+    }
+
+    override fun attachSelf() {
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+            lines.forEach {
+                it.isRemoved = false
+                layer.attachChild(it)
+            }
+        }
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
+            signals.forEach {
+                it.isRemoved = false
+                layer.attachChild(it)
+            }
+        }
+
+        from.insertChildUnmarked(to,this)
+    }
+
     private fun createMarker(scene: PlayGroundScene) {
-        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer->
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
             for (i in 0 until signals.size - 1) {
                 val prev = signals[i].getPosition()
                 val next = signals[i + 1].getPosition()
@@ -58,14 +92,15 @@ class LineMarker(val from: ListNode, val to: ListNode,
                         prev.y,
                         next.x,
                         next.y,
-                        CDefaults.lineWeight).also { line ->
+                        CDefaults.lineWeight
+                    ).also { line ->
                         layer.attachChild(line)
                     })
             }
         }
-        scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer->
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
             // to prevent collisions during touch don't attach the first and the last point
-            for(i in 1 until signals.size - 1){
+            for (i in 1 until signals.size - 1) {
                 layer.attachChild(signals[i])
             }
         }
@@ -75,15 +110,16 @@ class LineMarker(val from: ListNode, val to: ListNode,
         val signalFrom = from.value.signals[signalFrom]
         val signalTo = to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
-        val pTo =   signalTo.getPosition()
+        val pTo = signalTo.getPosition()
         // the first and last marker come from the origin node
         if (signals.isNotEmpty()) {
             signals[0].updatePosition(pFrom.x, pFrom.y)
             signals[signals.size - 1].updatePosition(pTo.x, pTo.y)
         }
-        for (i in 1 until signals.size - 1){
+        for (i in 1 until signals.size - 1) {
             signals[i].update()
         }
+        var markerActive = false
         for (i in 0 until signals.size - 1) {
             val prevSignal = signals[i]
             val nextSignal = signals[i + 1]
@@ -92,7 +128,7 @@ class LineMarker(val from: ListNode, val to: ListNode,
             val offsetX = prev.x - next.x
             val offsetY = prev.y - next.y
             // ignore the first and the last elements since we can't modify them directly since it's the source
-            if(i != 0 ) {
+            if (i != 0) {
                 if (abs(offsetX) <= 10f) {
                     prevSignal.updatePosition(next.x, prev.y)
                 } else if (abs(offsetY) <= 10f) {
@@ -100,22 +136,22 @@ class LineMarker(val from: ListNode, val to: ListNode,
                 }
             }
             // snap to the parent source node
-            else{
+            else {
                 if (abs(offsetX) <= 10f) {
                     nextSignal.updatePosition(prev.x, next.y)
                 } else if (abs(offsetY) <= 10f) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
             }
-
-            if(signalFrom.value == CNode.SIGNAL_ACTIVE){
-                lines[i].color = SIGNAL_ACTIVE_COLOR
-            }else {
-                lines[i].color =if (nextSignal.selected || prevSignal.selected) LINE_MARKER_ACTIVE else LINE_MARKER_INACTIVE
+            lines[i].also { line->
+                line.color = if(signalFrom.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
+                line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
-            lines[i].updatePosition(prev.x,prev.y,next.x,next.y)
+            markerActive = markerActive || nextSignal.selected || prevSignal.selected
         }
-
+        if (markerActive) {
+            updateColor(LINE_MARKER_ACTIVE)
+        }
     }
 
     override fun updateColor(color: Color) {
@@ -123,14 +159,15 @@ class LineMarker(val from: ListNode, val to: ListNode,
             it.color = color
         }
     }
+
     override fun contains(x: Float, y: Float): CNode? {
         return null
     }
 
     override fun contains(entity: CNode): CNode? {
-        for(i in 1 until signals.size - 1){
+        for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(entity)
-            if(obj != null){
+            if (obj != null) {
                 return obj
             }
         }
@@ -138,17 +175,23 @@ class LineMarker(val from: ListNode, val to: ListNode,
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        for(i in 1 until signals.size - 1){
+        for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(rect)
-            if(obj != null){
+            if (obj != null) {
                 return obj
             }
         }
         return null
     }
 
-    fun clone(from: ListNode, to: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene):LineMarker{
-        return LineMarker(from, to, signalFrom, signalTo,index).also {it.initialize(scene)}
+    fun clone(
+        from: ListNode,
+        to: ListNode,
+        signalFrom: Int,
+        signalTo: Int,
+        scene: PlayGroundScene
+    ): LineMarker {
+        return LineMarker(scene,from, to, signalFrom, signalTo, index).also { it.initialize(scene) }
     }
 
 }

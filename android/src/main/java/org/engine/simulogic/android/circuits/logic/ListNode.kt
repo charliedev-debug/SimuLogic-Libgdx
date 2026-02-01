@@ -16,13 +16,35 @@ class ListNode(val value : CNode,
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene) {
         next.add(child)
         child.parent.add(this)
-        lineMarkersChildren.add(LineMarker(this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) })
+        lineMarkersChildren.add(LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) })
     }
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
         next.add(child)
         child.parent.add(this)
         lineMarkersChildren.add(marker)
+    }
+
+    fun removeMarker(marker: LineMarker){
+        next.removeIf { it == marker.from }
+        lineMarkersChildren.remove(marker)
+    }
+
+    fun insertMarker(marker: LineMarker){
+        next.add(marker.from)
+        lineMarkersChildren.add(marker.apply { index = next.size - 1 })
+    }
+
+    fun detachSelf(){
+        lineMarkersChildren.forEach {
+            it.detachSelf()
+        }
+        next.clear()
+        value.detachSelf()
+    }
+
+    fun attachSelf(){
+        value.attachSelf()
     }
 
     override fun contains(x: Float, y: Float): CNode? {

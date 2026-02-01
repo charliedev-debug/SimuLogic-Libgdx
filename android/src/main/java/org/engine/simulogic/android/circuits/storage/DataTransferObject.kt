@@ -253,7 +253,7 @@ class DataTransferObject {
                     val signalFromIndex = stream.readInt()
                     val signalToIndex = stream.readInt()
                     val signalSize = stream.readInt()
-                    LineMarker(
+                    LineMarker(scene,
                         connection[fromId],
                         connection[toId],
                         signalFromIndex,
