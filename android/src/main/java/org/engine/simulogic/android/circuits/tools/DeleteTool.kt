@@ -5,9 +5,9 @@ import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class DeleteLineTool (private val dataContainer: DataContainer, private val connection: Connection,
-                      private val scene: PlayGroundScene,
-                      private val commandHistory: CommandHistory) {
+class DeleteTool (private val dataContainer: DataContainer, private val connection: Connection,
+                  private val scene: PlayGroundScene,
+                  private val commandHistory: CommandHistory) {
 
     fun execute(){
         val deleteComponent = DeleteCommand(scene, connection)

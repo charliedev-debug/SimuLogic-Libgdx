@@ -113,6 +113,12 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
         }
     }
 
+    fun reset(){
+        rangeItems.forEach {
+            it.subject.selected = false
+            it.caller.value.selected = false
+        }
+    }
     override fun update() {
         val signalTopLeft = signals[0] as CRangePoint
         val signalTopRight = signals[1] as CRangePoint

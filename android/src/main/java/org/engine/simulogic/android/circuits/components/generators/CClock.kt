@@ -94,6 +94,10 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
             it.update()
         }
         signals[0].value = value
+    }
+
+    override fun execute() {
+        super.execute()
         timer.update()
     }
 

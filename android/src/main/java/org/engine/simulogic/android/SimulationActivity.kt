@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,13 +46,14 @@ import org.engine.simulogic.android.views.models.MenuViewModel
 class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callbacks {
 
     private lateinit var textFps: TextView
-    private lateinit var textLatency:TextView
-    private lateinit var projectTitle:TextView
-    private lateinit var projectDescription:TextView
+    private lateinit var textLatency: TextView
+    private lateinit var projectTitle: TextView
+    private lateinit var projectDescription: TextView
     private val menuViewModel: MenuViewModel by viewModels()
     private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
-    private lateinit var jobStateRoutine :Job
+    private lateinit var jobStateRoutine: Job
     private lateinit var simulationFragment: SimulationFragment
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +67,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val gridLabelEnabledSwitch = findViewById<SwitchMaterial>(R.id.label_enabled)
         val gridEnabledSwitch = findViewById<SwitchMaterial>(R.id.grid_enabled)
         val gridStyleRadioButton = findViewById<RadioGroup>(R.id.grid_styles)
+        val simulationToggleButton = findViewById<AppCompatToggleButton>(R.id.simulation_toggle)
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
@@ -79,11 +82,11 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             intent.getSerializableExtra("options") as ProjectOptions
         }
 
-        if(projectOptions == null){
+        if (projectOptions == null) {
             finish()
         }
 
-        simulationFragment =  SimulationFragment(projectOptions!!)
+        simulationFragment = SimulationFragment(projectOptions!!)
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
@@ -147,65 +150,75 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         gridStyleRadioButton.setOnCheckedChangeListener { _, id ->
-               if(id == R.id.grid_style_a){
-                   simulationFragment.simulationLoop.componentManager.setStyleA()
-               }else{
-                   simulationFragment.simulationLoop.componentManager.setStyleB()
-               }
+            if (id == R.id.grid_style_a) {
+                simulationFragment.simulationLoop.componentManager.setStyleA()
+            } else {
+                simulationFragment.simulationLoop.componentManager.setStyleB()
+            }
+        }
+
+        simulationToggleButton.setOnClickListener {
+            simulationFragment.simulationLoop.componentManager.toggleExecutionState()
         }
 
         projectMetaDataEditButton.setOnClickListener {
             val oldFile = projectOptions.title
             drawerLayout.closeDrawer(Gravity.RIGHT)
-            EditProjectDialog(this, projectOptions,object:EditProjectDialog.OnEditProjectClickListener{
-                override fun success(title: String, description: String) {
-                    projectOptions.title = title
-                    projectOptions.description = description
-                    projectTitle.text = projectOptions.title
-                    projectDescription.text = projectOptions.description
-                    simulationFragment.simulationLoop.componentManager.saveProject()
-                    DataTransferObject.deleteFile(this@SimulationActivity,oldFile)
-                }
+            EditProjectDialog(
+                this,
+                projectOptions,
+                object : EditProjectDialog.OnEditProjectClickListener {
+                    override fun success(title: String, description: String) {
+                        projectOptions.title = title
+                        projectOptions.description = description
+                        projectTitle.text = projectOptions.title
+                        projectDescription.text = projectOptions.description
+                        simulationFragment.simulationLoop.componentManager.saveProject()
+                        DataTransferObject.deleteFile(this@SimulationActivity, oldFile)
+                    }
 
-                override fun failure(msg: String) {
+                    override fun failure(msg: String) {
 
-                }
+                    }
 
-                override fun cancel() {
+                    override fun cancel() {
 
-                }
+                    }
 
-            }).show()
+                }).show()
         }
 
 
         projectTitle.text = projectOptions.title
         projectDescription.text = projectOptions.description
 
-       val scope = CoroutineScope(Dispatchers.Default)
+        val scope = CoroutineScope(Dispatchers.Default)
 
-       jobStateRoutine = scope.launch {
-           while (true){
-               launch(Dispatchers.Main) {
-                   simulationFragment.simulationLoop.also { simulationLoop ->
-                       val fpsCounter = simulationLoop.fpsCounter
-                       textFps.text = "FPS: ${fpsCounter.getFps()} fps"
-                       textLatency.text = "Latency:${((1f/ fpsCounter.getFps()) * 1000).toInt()} ms"
-                       if(simulationLoop.isReady) {
-                           simulationLoop.componentManager.also { componentManager ->
-                               componentCountTextView.text = "Components: ${componentManager.size()}"
-                               connectionCountTextView.text = "Connections: ${componentManager.connectionSize()}"
-                           }
-                       }
-                   }
+        jobStateRoutine = scope.launch {
+            while (true) {
+                launch(Dispatchers.Main) {
+                    simulationFragment.simulationLoop.also { simulationLoop ->
+                        val fpsCounter = simulationLoop.fpsCounter
+                        textFps.text = "FPS: ${fpsCounter.getFps()} fps"
+                        textLatency.text =
+                            "Latency:${((1f / fpsCounter.getFps()) * 1000).toInt()} ms"
+                        if (simulationLoop.isReady) {
+                            simulationLoop.componentManager.also { componentManager ->
+                                componentCountTextView.text =
+                                    "Components: ${componentManager.size()}"
+                                connectionCountTextView.text =
+                                    "Connections: ${componentManager.connectionSize()}"
+                            }
+                        }
+                    }
 
-               }
-               delay(5000L)
-           }
+                }
+                delay(5000L)
+            }
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.simulation_fragment,simulationFragment).commit()
+            .add(R.id.simulation_fragment, simulationFragment).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

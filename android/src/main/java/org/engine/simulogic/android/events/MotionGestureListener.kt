@@ -18,7 +18,7 @@ import org.engine.simulogic.android.circuits.tools.CommandHistory
 import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.CutTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
-import org.engine.simulogic.android.circuits.tools.DeleteLineTool
+import org.engine.simulogic.android.circuits.tools.DeleteTool
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -33,8 +33,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     private val dataContainer = DataContainer()
     private val cutTool = CutTool(dataContainer, commandHistory)
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
-    private val deleteLineTool = DeleteLineTool(dataContainer, connection, scene, commandHistory)
-    private val modeBuffer = mutableListOf<Int>()
+    private val deleteTool = DeleteTool(dataContainer, connection, scene, commandHistory)
     var gridDecorator:GridDecorator? = null
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
@@ -59,10 +58,14 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
         collisionDetector.mode = mode
         collisionDetector.reset()
         if(mode == RANGED_SELECTION_MODE){
+            rangeSelect.collisionDetector.reset()
             rangeSelect.updatePosition(rectPointer.getPosition())
+            collisionDetector.containsRanged(rangeSelect)
             rangeSelect.adjustView()
             rangeSelect.isVisible = true
         }else{
+            collisionDetector.reset()
+            rangeSelect.reset()
             rangeSelect.isVisible = false
         }
     }
@@ -118,8 +121,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
                 }
             }
         }
-        //deleteTool.execute()
-        deleteLineTool.execute()
+        deleteTool.execute()
         collisionDetector.reset()
     }
 

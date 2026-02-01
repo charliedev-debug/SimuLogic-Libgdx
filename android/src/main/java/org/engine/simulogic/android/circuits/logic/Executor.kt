@@ -5,7 +5,9 @@ import java.util.LinkedList
 import java.util.Queue
 
 class Executor(private val connection:Connection):IExecutable {
+    var isActive = true
     override fun execute(){
+        if(!isActive) return
         synchronized(connection.executionPoints) {
             if(connection.executionPoints.isEmpty()) return
             val executableNodes: Queue<ListNode> = LinkedList()
