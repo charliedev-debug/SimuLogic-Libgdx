@@ -8,6 +8,7 @@ import androidx.core.net.toUri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CTypes
+import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
 import org.engine.simulogic.android.circuits.components.gates.CNor
@@ -88,6 +89,8 @@ class DataTransferObject {
                 stream.write(component.text.toByteArray(Charsets.UTF_8))
             } else if (component is CClock) {
                 stream.writeFloat(component.freq)
+            }else if (component is CPower){
+                stream.writeInt(component.value)
             }
         }
         connection.forEach { listNode ->
@@ -167,6 +170,8 @@ class DataTransferObject {
                 labelText?.let {
                     stream.readFully(labelText)
                 }
+                // power generator signal value
+                val powerValue = if(type == CTypes.POWER) stream.readInt() else 0
                 when (type) {
                     CTypes.AND -> {
                         connection.insertNode(ListNode(CAnd(x, y, scene)))
@@ -201,7 +206,7 @@ class DataTransferObject {
                     }
 
                     CTypes.CLOCK -> {
-                        connection.insertNode(ListNode(CClock(x, y, freq, scene)))
+                        connection.insertExecutionPoint(ListNode(CClock(x, y, freq, scene)))
                     }
 
                     CTypes.RANDOM -> {
@@ -228,6 +233,10 @@ class DataTransferObject {
                                 )
                             )
                         )
+                    }
+
+                    CTypes.POWER ->{
+                        connection.insertExecutionPoint(ListNode(CPower(powerValue,x, y , scene)))
                     }
 
                     else -> {

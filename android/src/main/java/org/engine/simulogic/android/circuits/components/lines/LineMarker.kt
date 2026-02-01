@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_ACTIVE
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_INACTIVE
+import org.engine.simulogic.android.circuits.components.CDefaults.Companion.SIGNAL_ACTIVE_COLOR
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
@@ -106,7 +107,12 @@ class LineMarker(val from: ListNode, val to: ListNode,
                     nextSignal.updatePosition(next.x, prev.y)
                 }
             }
-            lines[i].color = (if(nextSignal.selected || prevSignal.selected) LINE_MARKER_ACTIVE else LINE_MARKER_INACTIVE)
+
+            if(signalFrom.value == CNode.SIGNAL_ACTIVE){
+                lines[i].color = SIGNAL_ACTIVE_COLOR
+            }else {
+                lines[i].color =if (nextSignal.selected || prevSignal.selected) LINE_MARKER_ACTIVE else LINE_MARKER_INACTIVE
+            }
             lines[i].updatePosition(prev.x,prev.y,next.x,next.y)
         }
 
@@ -140,7 +146,6 @@ class LineMarker(val from: ListNode, val to: ListNode,
         }
         return null
     }
-
 
     fun clone(from: ListNode, to: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene):LineMarker{
         return LineMarker(from, to, signalFrom, signalTo,index).also {it.initialize(scene)}

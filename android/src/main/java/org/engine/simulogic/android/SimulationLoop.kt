@@ -19,6 +19,7 @@ import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.logic.ComponentManager
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ConnectionManager
+import org.engine.simulogic.android.circuits.logic.Executor
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.CollisionDetector
@@ -40,6 +41,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAd
     private lateinit var connectionManager : ConnectionManager
     private lateinit var scene:PlayGroundScene
     private lateinit var gridDecorator: GridDecorator
+    private lateinit var executor: Executor
     var isReady = false
     companion object {
          const val CAMERA_WIDTH = 720f
@@ -78,6 +80,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAd
             addProcessor(GestureDetector(gestureListener))
             Gdx.input.inputProcessor = this
         }
+        executor = Executor(connection)
         isReady = true
     }
 
@@ -89,6 +92,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAd
         scene.update()
         scene.draw()
         fpsCounter.update()
+        executor.execute()
     }
 
     override fun dispose() {

@@ -9,7 +9,7 @@ import java.util.LinkedList
 class Connection : Iterable<ListNode>, IUpdate {
 
     private var nodes: MutableList<ListNode> =Collections.synchronizedList(LinkedList())
-    private var executionPoints:MutableList<ListNode> = Collections.synchronizedList(LinkedList())
+    var executionPoints:MutableList<ListNode> = Collections.synchronizedList(LinkedList())
     fun insertExecutionPoint(node:ListNode){
         synchronized(nodes) {
             nodes.add(node)

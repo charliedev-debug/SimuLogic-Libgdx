@@ -48,6 +48,10 @@ class CLed(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
         }
     }
 
+    override fun execute() {
+        //unused
+    }
+
 
     override fun attachSelf() {
         super.attachSelf()
@@ -73,7 +77,11 @@ class CLed(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun update() {
-        updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+        if(selected){
+            updateColor(CDefaults.GATE_SELECTED_COLOR)
+        }else{
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.LED_INACTIVE_COLOR)
+        }
         signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
         getChildAt(0).getPosition()?.also { outputPosition ->
             lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)

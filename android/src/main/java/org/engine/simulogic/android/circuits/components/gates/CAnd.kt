@@ -58,6 +58,12 @@ class CAnd(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
         }
     }
 
+    override fun execute() {
+        val output = signals[0]
+        val inputA = signals[1]
+        val inputB = signals[2]
+        output.value = inputA.value.and(inputB.value)
+    }
 
     override fun attachSelf() {
         super.attachSelf()
@@ -83,7 +89,11 @@ class CAnd(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun update() {
-        updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+        if(selected){
+            updateColor(CDefaults.GATE_SELECTED_COLOR)
+        }else{
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+        }
         signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
         signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f)
         signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f )

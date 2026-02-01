@@ -26,6 +26,8 @@ class CDefaults {
         val INPUT_UNSELECTED_COLOR = Color.WHITE
         val LINE_MARKER_ACTIVE = Color(136f/255f, 218f/255f, 248f/255f,1f)
         val LINE_MARKER_INACTIVE = Color(1f,1f,1f,1f)
+        val SIGNAL_ACTIVE_COLOR = Color(76f/255f, 175f/255f, 80f/255f,1f)
+        val LED_INACTIVE_COLOR = Color(73f/255f, 73f/255f, 73f/255f, 1f)
         val GRID_WIDTH = 50f
         val GRID_HEIGHT = 50f
         val GRID_LINE_COLOR_B = Color(0.411f,0.411f,0.411f ,1f)

@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import org.engine.simulogic.android.SimulationLoop
+import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.views.dialogs.LabelDialog
@@ -130,10 +131,10 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                   simulationLoop.componentManager.insertCLed()
               }
               ComponentBottomSheet.POWER_ON_COMPONENT->{
-                  simulationLoop.componentManager.insertCPower()
+                  simulationLoop.componentManager.insertCPower(CNode.SIGNAL_ACTIVE)
               }
               ComponentBottomSheet.POWER_OFF_COMPONENT->{
-                  simulationLoop.componentManager.insertCPower()
+                  simulationLoop.componentManager.insertCPower(CNode.SIGNAL_INACTIVE)
               }
               ComponentBottomSheet.RANDOM_COMPONENT->{
                   simulationLoop.componentManager.insertCRandom()

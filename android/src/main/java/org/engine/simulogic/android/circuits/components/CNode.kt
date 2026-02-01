@@ -8,15 +8,18 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
+import org.engine.simulogic.android.circuits.components.interfaces.IExecutable
 import org.engine.simulogic.android.scene.Entity
 
-open class CNode : Entity(), ICollidable{
+open class CNode : Entity(), ICollidable,IExecutable{
     protected lateinit var sprite : Sprite
     companion object{
         val INPUT_SIGNAL_INDEX = 0
         val OUTPUT_SIGNAL_A = 1
         val OUTPUT_SIGNAL_B = 2
         val OUTPUT_SIGNAL_C = 3
+        val SIGNAL_ACTIVE = 1
+        val SIGNAL_INACTIVE = 0
     }
     private val centerPosition = Vector2()
     override fun updatePosition(x: Float, y: Float) {
@@ -76,5 +79,11 @@ open class CNode : Entity(), ICollidable{
         }
         return null
     }
+
+    open fun toggleAction(){
+
+    }
+
+    override fun execute() {}
 
 }

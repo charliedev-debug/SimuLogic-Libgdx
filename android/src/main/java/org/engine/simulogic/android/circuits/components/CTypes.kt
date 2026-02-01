@@ -21,5 +21,6 @@ enum class CTypes {
     SEVEN_SEGMENT_DISPLAY,
     LINE_MARKER,
     LABEL,
+    POWER,
     NONE
 }

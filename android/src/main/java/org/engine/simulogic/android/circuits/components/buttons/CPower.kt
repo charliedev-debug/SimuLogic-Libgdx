@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.components.buttons
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -11,13 +12,19 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CPower(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+    private lateinit var regionPowerOn:TextureAtlas.AtlasRegion
+    private lateinit var regionPowerOff:TextureAtlas.AtlasRegion
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
-        val spriteRegion = textureAtlas.findRegion("POWER-OFF")
+         regionPowerOn = textureAtlas.findRegion("POWER-ON")
+         regionPowerOff = textureAtlas.findRegion("POWER-OFF")
+        val spriteRegion = if(signalValue == SIGNAL_ACTIVE) regionPowerOn else  regionPowerOff
+        value = signalValue
+        type = CTypes.POWER
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.clockWidth, CDefaults.clockHeight)
@@ -45,8 +52,18 @@ class CPower(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
                 layer.attachChild(it)
             }
         }
+        signals[0].value = value
     }
 
+    override fun execute() {
+        // save this value for save state
+        value = signals[0].value
+    }
+
+    override fun toggleAction() {
+        signals[0].value = (signals[0].value+ 1) % 2
+        sprite.setRegion(if(signals[0].value == SIGNAL_ACTIVE) regionPowerOn else  regionPowerOff)
+    }
 
     override fun attachSelf() {
         super.attachSelf()
@@ -119,7 +136,9 @@ class CPower(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CPower(getPosition().x,getPosition().y, scene )
+        return CPower(value,getPosition().x,getPosition().y, scene )
     }
+
+
 
 }

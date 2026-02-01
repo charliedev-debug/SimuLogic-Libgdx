@@ -84,7 +84,7 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     }
     fun insertCClock(freq:Float){
         gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CClock(position.x,position.y,freq,scene)))
+            connection.insertExecutionPoint(ListNode(CClock(position.x,position.y,freq,scene)))
         }
     }
     fun insertCLatch(){
@@ -97,9 +97,9 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             connection.insertNode(ListNode(CLed(position.x,position.y,scene)))
         }
     }
-    fun insertCPower(){
+    fun insertCPower(signalValue:Int){
         gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CPower(position.x,position.y,scene)))
+            connection.insertExecutionPoint(ListNode(CPower(signalValue,position.x,position.y,scene)))
         }
     }
     fun insertCRandom(){

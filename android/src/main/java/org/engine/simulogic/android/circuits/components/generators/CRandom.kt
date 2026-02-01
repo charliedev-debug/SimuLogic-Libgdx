@@ -78,8 +78,16 @@ class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
         signals.forEach { it.detachSelf() }
     }
 
+    override fun execute() {
+        signals[0].value = 0
+    }
+
     override fun update() {
-        updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+        if(selected){
+            updateColor(CDefaults.GATE_SELECTED_COLOR)
+        }else{
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+        }
         signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
         signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
         getChildAt(0).getPosition()?.also { outputPosition ->

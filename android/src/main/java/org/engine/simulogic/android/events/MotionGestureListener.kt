@@ -155,12 +155,18 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
         touch.set(x,y, 0f)
         camera.unproject(touch)
         rectPointer.updatePosition(touch.x, touch.y)
-        collisionDetector.contains(rectPointer)?.also { collisionItem ->
-            collisionItem.subject.selected = collisionItem.subject.selected.not()
-        }
+        if(collisionDetector.mode == INTERACT_MODE){
+            collisionDetector.contains(rectPointer)?.also { collisionItem ->
+                collisionItem.subject.toggleAction()
+            }
+        }else {
+            collisionDetector.contains(rectPointer)?.also { collisionItem ->
+                collisionItem.subject.selected = collisionItem.subject.selected.not()
+            }
 
-        if (collisionDetector.mode == RANGED_SELECTION_MODE){
-            rangeSelect.collisionDetector.contains(rectPointer)
+            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
+                rangeSelect.collisionDetector.contains(rectPointer)
+            }
         }
 
         return false
