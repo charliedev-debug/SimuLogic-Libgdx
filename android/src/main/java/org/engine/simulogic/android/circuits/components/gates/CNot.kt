@@ -80,7 +80,7 @@ class CNot(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     override fun execute() {
         val output = signals[0]
         val inputA = signals[1]
-        output.value = inputA.value.inv()
+        output.value = (inputA.value + 1) % 2
     }
 
     override fun update() {

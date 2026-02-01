@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CRect (x:Float, y:Float, width:Float, height:Float, color: Color, private val scene: PlayGroundScene) : CNode(){
+class CRect (x:Float, y:Float, width:Float, height:Float, var color: Color, private val scene: PlayGroundScene) : CNode(){
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)

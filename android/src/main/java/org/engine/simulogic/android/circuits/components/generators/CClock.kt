@@ -10,10 +10,18 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import org.engine.simulogic.android.utilities.Timer
 
 class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+
+    private val timer = Timer(freq, object :Timer.ITimerListener{
+        override fun onTick() {
+            value = (value + 1) % 2
+        }
+    })
+
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
@@ -73,7 +81,11 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
     }
 
     override fun update() {
-        updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+        if(selected){
+            updateColor(CDefaults.GATE_SELECTED_COLOR)
+        }else{
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+        }
         signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
         getChildAt(0).getPosition()?.also { outputPosition ->
             lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
@@ -81,6 +93,8 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
         data.forEach {
             it.update()
         }
+        signals[0].value = value
+        timer.update()
     }
 
     override fun contains(entity: CNode): CNode? {

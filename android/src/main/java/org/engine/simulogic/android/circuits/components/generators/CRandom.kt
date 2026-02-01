@@ -11,10 +11,13 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
@@ -79,7 +82,8 @@ class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun execute() {
-        signals[0].value = 0
+        // perform bitwise & with a random seed and the input value, we only return a true value if the input value is true
+        signals[0].value = (Random.nextInt(100..1000).and(1)).and(signals[1].value)
     }
 
     override fun update() {

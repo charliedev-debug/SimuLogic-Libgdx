@@ -18,6 +18,7 @@ import kotlin.math.sign
 
 class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene) : CNode(){
     private val segmentList = mutableListOf<CRect>()
+    private val segColorOff = Color(51/255f, 51/255f, 51/255f, 1f)
       init {
           val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
           val spriteRegion = textureAtlas.findRegion("SEVEN-SEGMENT-BACKGROUND")
@@ -32,7 +33,7 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
               setPosition(x - width / 2f,y - height / 2f)
           }
 
-          val segColorOff = Color(51/255f, 51/255f, 51/255f, 1f)
+
           segmentList.add(CRect(x, y,width - CDefaults.segmentDisplayWidth * 3f, CDefaults.segmentDisplayWidth, segColorOff, scene))
           segmentList.add(CRect(x, y,width - CDefaults.segmentDisplayWidth * 3f, CDefaults.segmentDisplayWidth, segColorOff, scene))
           segmentList.add(CRect(x, y,width - CDefaults.segmentDisplayWidth * 3f, CDefaults.segmentDisplayWidth, segColorOff, scene))
@@ -95,42 +96,49 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
          segmentList[0].also { segment->
              segment.updatePosition(x  , y + height / 2f - segHeight / 2f )
              signals[0].updatePosition(x, y + height/2f + segHeight)
+             segment.updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
          }
 
         // center segment
         segmentList[1].also { segment->
             segment.updatePosition(x  , y - segHeight / 2f + segHeight / 2f)
             signals[1].updatePosition(x - width / 2f - segWidth, y - segHeight / 2f + segHeight / 2f)
+            segment.updateColor(if(signals[1].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
 
         // bottom segment
         segmentList[2].also { segment->
             segment.updatePosition(x  , y - height / 2f + segHeight / 2f)
             signals[2].updatePosition(x, y - height / 2f - segHeight )
+            segment.updateColor(if(signals[2].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
 
         // top left segment
         segmentList[3].also { segment->
             segment.updatePosition(x - width /2f + segWidth /2f + offset , y + width / 2f - segHeight / 2f)
             signals[3].updatePosition(x - width /2f - segWidth  , y + width / 2f - segHeight / 2f)
+            segment.updateColor(if(signals[3].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
 
         // top right segment
         segmentList[4].also { segment->
             segment.updatePosition(x + width /2f - segWidth /2f - offset , y + width / 2f - segHeight / 2f)
             signals[4].updatePosition(x + width /2f + segWidth  , y + width / 2f - segHeight / 2f)
+            segment.updateColor(if(signals[4].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
 
         // bottom left segment
         segmentList[5].also { segment->
             segment.updatePosition(x - width /2f + segWidth /2f  + offset, y - width / 2f + segHeight / 2f)
             signals[5].updatePosition(x - width /2f - segWidth, y - width / 2f + segHeight / 2f)
+            segment.updateColor(if(signals[5].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
 
         // bottom right segment
         segmentList[6].also { segment->
             segment.updatePosition(x + width /2f - segWidth /2f - offset , y - width / 2f + segHeight / 2f)
             signals[6].updatePosition(x + width /2f + segWidth , y - width / 2f + segHeight / 2f)
+            segment.updateColor(if(signals[6].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
         }
     }
 

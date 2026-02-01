@@ -2,6 +2,7 @@ package org.engine.simulogic.android.events
 
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.gates.CSignal
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CRangePoint
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
@@ -67,7 +68,7 @@ class CollisionDetector(private val connection: Connection) {
             val collidedObject = node.contains(entity)
             if(collidedObject != null && node.value.isVisible){
                 // for connections only return touch events for input and output signals
-                if(mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal) {
+                if(mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && collidedObject.parent !is LineMarker) {
                     return CollisionItem(node, collidedObject).also {item->
                         selectedItems.add(item)
                     }

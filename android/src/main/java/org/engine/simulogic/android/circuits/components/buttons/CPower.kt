@@ -15,8 +15,8 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-    private lateinit var regionPowerOn:TextureAtlas.AtlasRegion
-    private lateinit var regionPowerOff:TextureAtlas.AtlasRegion
+    private var regionPowerOn:TextureAtlas.AtlasRegion
+    private var regionPowerOff:TextureAtlas.AtlasRegion
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
