@@ -6,14 +6,9 @@ import org.engine.simulogic.R
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.RadioGroup.OnCheckedChangeListener
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +33,6 @@ import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
 import org.engine.simulogic.android.views.dialogs.EditProjectDialog
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
-import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
@@ -68,6 +62,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val gridEnabledSwitch = findViewById<SwitchMaterial>(R.id.grid_enabled)
         val gridStyleRadioButton = findViewById<RadioGroup>(R.id.grid_styles)
         val simulationToggleButton = findViewById<AppCompatToggleButton>(R.id.simulation_toggle)
+        val simulationToolbarEnabledSwitch = findViewById<SwitchMaterial>(R.id.top_bar_enabled)
+        val simulationMenuBarEnabledSwitch = findViewById<SwitchMaterial>(R.id.menu_bar_enabled)
+        val drawerLayoutButtonMinimized = findViewById<AppCompatButton>(R.id.drawer_minimized)
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
@@ -157,8 +154,30 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             }
         }
 
+        drawerLayoutButtonMinimized.setOnClickListener {
+            drawerLayout.openDrawer(Gravity.RIGHT)
+        }
+
         simulationToggleButton.setOnClickListener {
             simulationFragment.simulationLoop.componentManager.toggleExecutionState()
+        }
+
+        simulationToolbarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                toolBar.visibility = View.VISIBLE
+                drawerLayoutButtonMinimized.visibility = View.GONE
+            }else{
+                toolBar.visibility = View.GONE
+                drawerLayoutButtonMinimized.visibility = View.VISIBLE
+            }
+        }
+
+        simulationMenuBarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                menuRecyclerView.visibility = View.VISIBLE
+            }else{
+                menuRecyclerView.visibility = View.GONE
+            }
         }
 
         projectMetaDataEditButton.setOnClickListener {
