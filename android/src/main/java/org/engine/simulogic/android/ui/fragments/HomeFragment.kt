@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
 
 
     private lateinit var recentProjectAdapter: RecentAdapter
+    private lateinit var recentProjectAlert:TextView
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,7 +43,7 @@ class HomeFragment : Fragment() {
         val projectOptionRecyclerView = root.findViewById<RecyclerView>(R.id.project_operations)
         val recentProjectRecyclerView = root.findViewById<RecyclerView>(R.id.recent_projects)
         val sampleProjectRecyclerView = root.findViewById<RecyclerView>(R.id.sample_projects)
-        val recentProjectAlert = root.findViewById<TextView>(R.id.recent_project_alert)
+            recentProjectAlert = root.findViewById<TextView>(R.id.recent_project_alert)
         val projectOptionAdapter = ProjectOptionsAdapter().apply {
             add("Create Project", R.drawable.new_project)
             add("Open Project",R.drawable.open_project)
@@ -62,8 +63,7 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-                //copy content to working folder
-                Toast.makeText(context,"Results returned!", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(context,"Results returned!", Toast.LENGTH_SHORT).show()
             }
         }
         projectOptionAdapter.listener = object : ProjectOptionsAdapter.OnOptionClickListener{
@@ -136,7 +136,11 @@ class HomeFragment : Fragment() {
         recentProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)
             adapter = recentProjectAdapter
-            recentProjectAlert.visibility = View.GONE
+            if(recentProjectAdapter.isEmpty()){
+                recentProjectAlert.visibility = View.VISIBLE
+            }else {
+                recentProjectAlert.visibility = View.GONE
+            }
         }
 
         val sampleProjectAdapter = RecentAdapter().apply {
@@ -161,6 +165,11 @@ class HomeFragment : Fragment() {
             clear()
             DataTransferObject().listProjects(requireContext()).forEach {
                 add(it.title,it.path, it.description, it.lastModified)
+            }
+            if(recentProjectAdapter.isEmpty()){
+                recentProjectAlert.visibility = View.VISIBLE
+            }else {
+                recentProjectAlert.visibility = View.GONE
             }
             notifyItemRangeChanged(0, recentProjectAdapter.itemCount)
         }

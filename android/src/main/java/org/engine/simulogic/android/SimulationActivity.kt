@@ -13,6 +13,7 @@ import androidx.activity.viewModels
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,7 +65,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val simulationToggleButton = findViewById<AppCompatToggleButton>(R.id.simulation_toggle)
         val simulationToolbarEnabledSwitch = findViewById<SwitchMaterial>(R.id.top_bar_enabled)
         val simulationMenuBarEnabledSwitch = findViewById<SwitchMaterial>(R.id.menu_bar_enabled)
-        val drawerLayoutButtonMinimized = findViewById<AppCompatButton>(R.id.drawer_minimized)
+        val drawerLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.drawer_minimized)
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)

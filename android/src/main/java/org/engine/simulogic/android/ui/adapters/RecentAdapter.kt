@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.ui.models.RecentItem
@@ -33,7 +34,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                     itemView.findViewById<TextView>(R.id.project_description).text = item.description
                     itemView.findViewById<TextView>(R.id.date_created).text = SimpleDateFormat.getInstance().format(date.apply { time = File(item.path).lastModified() })
                     itemView.findViewById<TextView>(R.id.file_size).text = ConvertUtils.kb2FitMemorySize(File(item.path).length(),2)
-                    itemView.findViewById<ImageView>(R.id.delete).apply {
+                    itemView.findViewById<AppCompatImageButton>(R.id.delete).apply {
                         visibility = if(item.enableDelete) View.VISIBLE else View.INVISIBLE
                         setOnClickListener {
                             listeners.forEach { it.onDelete(item,position) }
@@ -44,7 +45,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                             it.onClick(item)
                         }
                     }
-                    itemView.findViewById<ImageView>(R.id.share).setOnClickListener {
+                    itemView.findViewById<AppCompatImageButton>(R.id.share).setOnClickListener {
                         ShareFileHelper.share(File(item.path), item.title, itemView.context)
                     }
                 }
@@ -78,6 +79,10 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
     fun remove(position: Int){
         dataList.removeAt(position)
+    }
+
+    fun isEmpty():Boolean{
+        return dataList.isEmpty()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentViewHolder {

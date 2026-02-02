@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="android.SimulationActivity">
+
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:theme="@style/AppBarOverlay">
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width = "match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
-            app:popupTheme="@style/PopupOverlay"
-            android:layout_height = "?attr/actionBarSize" />
+            app:popupTheme="@style/PopupOverlay" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menu_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/app_bar_shape"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:background="@drawable/app_bar_shape"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-  </com.google.android.material.appbar.AppBarLayout>
+            android:scrollbarAlwaysDrawHorizontalTrack="true" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-  <include layout="@layout/content_simulation"/>
+    <include layout="@layout/content_simulation" />
 
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-  android:id="@+id/component_bottom_sheet"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_gravity="bottom|end"
-  android:layout_marginEnd="@dimen/fab_margin"
-  android:layout_marginBottom="16dp"
-  app:tint="@color/white"
-  android:src="@drawable/components" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/component_bottom_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/components"
+        app:tint="@color/white" />
 
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
