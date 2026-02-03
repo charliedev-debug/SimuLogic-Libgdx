@@ -16,6 +16,7 @@ import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
+import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
@@ -137,6 +138,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
 
     fun toggleExecutionState(){
         executor.isActive = !executor.isActive
+    }
+
+    fun toggleAutoSave(){
+        AutoSave.instance.enabled = true
     }
 
     fun saveProject(){

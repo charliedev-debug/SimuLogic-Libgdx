@@ -14,6 +14,7 @@ import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.tools.CommandHistory
 import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.CutTool
@@ -23,7 +24,7 @@ import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 
-class MotionGestureListener(private val camera:OrthographicCamera, private  val connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
+class MotionGestureListener(private val camera:OrthographicCamera, connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene)
@@ -250,10 +251,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     }
 
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
-        touch.set(x,y, 0f)
-        camera.unproject(touch)
-
-        println("move finished!")
+        AutoSave.dataChanged = true
         return false
     }
 

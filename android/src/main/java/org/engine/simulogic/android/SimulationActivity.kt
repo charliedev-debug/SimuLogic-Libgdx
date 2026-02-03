@@ -66,6 +66,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val simulationToolbarEnabledSwitch = findViewById<SwitchMaterial>(R.id.top_bar_enabled)
         val simulationMenuBarEnabledSwitch = findViewById<SwitchMaterial>(R.id.menu_bar_enabled)
         val drawerLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.drawer_minimized)
+        val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
@@ -155,6 +156,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             } else {
                 simulationFragment.simulationLoop.componentManager.setStyleB()
             }
+        }
+        autoSaveEnabledSwitch.setOnClickListener {
+            simulationFragment.simulationLoop.componentManager.toggleAutoSave()
         }
 
         drawerLayoutButtonMinimized.setOnClickListener {

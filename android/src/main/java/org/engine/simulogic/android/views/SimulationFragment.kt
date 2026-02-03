@@ -12,6 +12,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 import org.engine.simulogic.android.views.interfaces.IFpsListener
@@ -132,7 +133,21 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                   simulationLoop.componentManager.insertCClock(1f/60f)
               }
               ComponentBottomSheet.CLOCK_COMPONENT_CUSTOM->{
-                  simulationLoop.componentManager.insertCClock(1f/60f)
+                  CustomClockDialog(requireContext(), projectOptions, object : CustomClockDialog.OnEditProjectClickListener{
+                      override fun success(freq: Float) {
+                          simulationLoop.componentManager.insertCClock(1f/60f)
+                      }
+
+                      override fun failure(msg: String) {
+                          //unused
+                      }
+
+                      override fun cancel() {
+                         //ignore
+                      }
+
+                  }).show()
+
               }
               ComponentBottomSheet.D_LATCH_COMPONENT->{
                   simulationLoop.componentManager.insertCLatch()
@@ -165,6 +180,7 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                   }).show()
               }
           }}
+
       return initializeForView(simulationLoop,configuration)
   }
 

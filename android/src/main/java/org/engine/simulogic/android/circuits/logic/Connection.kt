@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.logic
 
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
+import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 import java.util.LinkedList
@@ -14,6 +15,7 @@ class Connection : Iterable<ListNode>, IUpdate {
         synchronized(nodes) {
             nodes.add(node)
             executionPoints.add(node)
+            AutoSave.dataChanged = true
         }
     }
 
@@ -24,12 +26,14 @@ class Connection : Iterable<ListNode>, IUpdate {
     fun insertNode(node:ListNode){
         synchronized(nodes) {
             nodes.add(node)
+            AutoSave.dataChanged = true
         }
     }
 
     fun removeNode(node:ListNode){
         synchronized(nodes){
             nodes.remove(node)
+            AutoSave.dataChanged = true
         }
     }
 
