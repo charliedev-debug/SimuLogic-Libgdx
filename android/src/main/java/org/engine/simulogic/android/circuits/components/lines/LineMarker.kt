@@ -18,11 +18,13 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
 class LineMarker(val scene: PlayGroundScene,
-    val from: ListNode, val to: ListNode,
-    var signalFrom: Int, val signalTo: Int, var index: Int = 0
+                 val from: ListNode, val to: ListNode,
+                 var signalFrom: Int, val signalTo: Int, var index: Int = 0,
+                 val linePointCountX: Int = CDefaults.linePointCountX, val linePointCountY: Int = CDefaults.linePointCountY
 ) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
+
     fun initialize(scene: PlayGroundScene) {
         val signalFrom = from.value.signals[signalFrom]
         val signalTo = to.value.signals[signalTo]
@@ -30,11 +32,11 @@ class LineMarker(val scene: PlayGroundScene,
         val pTo = signalTo.getPosition()
         val distanceX = pTo.x - pFrom.x
         val distanceY = pTo.y - pFrom.y
-        val maxDistanceBetweenX = distanceX / CDefaults.linePointCountX
-        val maxDistanceBetweenY = distanceY / CDefaults.linePointCountY
+        val maxDistanceBetweenX = distanceX / linePointCountX
+        val maxDistanceBetweenY = distanceY / linePointCountY
         var lastX = pFrom.x
         var signalIndex = 0
-        for (i in 0..CDefaults.linePointCountX) {
+        for (i in 0 ..  linePointCountX) {
             val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
             lastX = x
@@ -43,7 +45,7 @@ class LineMarker(val scene: PlayGroundScene,
             })
         }
 
-        for (i in CDefaults.linePointCountY downTo 0) {
+        for (i in linePointCountY downTo   0) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = lastX
             signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
@@ -119,30 +121,50 @@ class LineMarker(val scene: PlayGroundScene,
         for (i in 1 until signals.size - 1) {
             signals[i].update()
         }
+
+        //snap align
+        var index = 0
+        while(index < signals.size - 1){
+            val prevSignal = signals[index]
+            val nextSignal = signals[index + 1]
+            val prev = prevSignal.getPosition()
+            val next = nextSignal.getPosition()
+            val offsetX = prev.x - next.x
+            val offsetY = prev.y - next.y
+            val distanceFromPrevX = abs(pFrom.x - prev.x)
+            val distanceFromPrevY = abs(pFrom.y - prev.y)
+            val distanceToPrevX = abs(pTo.x - prev.x)
+            val distanceToPrevY = abs(pTo.y - prev.y)
+            // ignore the first and the last elements since we can't modify them directly since it's the source
+            if(distanceFromPrevX < distanceToPrevX || index == 0){
+                if (abs(offsetX) <= 10f) {
+                    nextSignal.updatePosition(prev.x, next.y)
+                }
+            }else if(distanceFromPrevX > distanceToPrevX){
+                if (abs(offsetX) <= 10f) {
+                    prevSignal.updatePosition(next.x, prev.y)
+                }
+            }
+
+            if(distanceFromPrevY < distanceToPrevY || index == 0){
+                if (abs(offsetY) <= 10f) {
+                    nextSignal.updatePosition(next.x, prev.y)
+                }
+            }else if(distanceFromPrevY > distanceToPrevY){
+                if (abs(offsetY) <= 10f) {
+                    prevSignal.updatePosition(prev.x, next.y)
+                }
+            }
+            index++
+        }
+
+        // mark lines and set coordinates
         var markerActive = false
         for (i in 0 until signals.size - 1) {
             val prevSignal = signals[i]
             val nextSignal = signals[i + 1]
             val prev = prevSignal.getPosition()
             val next = nextSignal.getPosition()
-            val offsetX = prev.x - next.x
-            val offsetY = prev.y - next.y
-            // ignore the first and the last elements since we can't modify them directly since it's the source
-            if (i != 0) {
-                if (abs(offsetX) <= 10f) {
-                    prevSignal.updatePosition(next.x, prev.y)
-                } else if (abs(offsetY) <= 10f) {
-                    prevSignal.updatePosition(prev.x, next.y)
-                }
-            }
-            // snap to the parent source node
-            else {
-                if (abs(offsetX) <= 10f) {
-                    nextSignal.updatePosition(prev.x, next.y)
-                } else if (abs(offsetY) <= 10f) {
-                    nextSignal.updatePosition(next.x, prev.y)
-                }
-            }
             lines[i].also { line->
                 line.color = if(signalFrom.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
@@ -191,7 +213,7 @@ class LineMarker(val scene: PlayGroundScene,
         signalTo: Int,
         scene: PlayGroundScene
     ): LineMarker {
-        return LineMarker(scene,from, to, signalFrom, signalTo, index).also { it.initialize(scene) }
+        return LineMarker(scene,from, to, signalFrom, signalTo, index, linePointCountX, linePointCountY).also { it.initialize(scene) }
     }
 
 }

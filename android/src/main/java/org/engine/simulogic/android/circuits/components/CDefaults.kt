@@ -17,8 +17,8 @@ class CDefaults {
         val randomHeight = 60f
         val segmentDisplayWidth = 14f
         val segmentDisplayHeight = 24f
-        val linePointCountX = 3
-        val linePointCountY = 2
+        var linePointCountX = 3
+        var linePointCountY = 2
         val lineWeight = 3f
         val GATE_SELECTED_COLOR = Color.RED
         val GATE_UNSELECTED_COLOR = Color.WHITE
@@ -34,5 +34,10 @@ class CDefaults {
         val GRID_LINE_COLOR_A = Color(0.711f,0.711f,0.711f ,1f)
         val RANGED_ICON_RADIUS = 30f
         val RANGED_LINE_COLOR = Color.RED
+
+        fun setLinePointCount(x:Int, y:Int){
+            linePointCountX = x
+            linePointCountY = y
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.os.Environment
 import androidx.core.net.toUri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
@@ -105,6 +106,8 @@ class DataTransferObject {
                 stream.writeInt(marker.signalFrom)
                 stream.writeInt(marker.signalTo)
                 stream.writeInt(marker.signals.size)
+                stream.writeInt(marker.linePointCountX)
+                stream.writeInt(marker.linePointCountY)
                 marker.signals.forEach { signal ->
                     stream.writeInt(signal.signalIndex)
                     stream.writeFloat(signal.getPosition().x)
@@ -253,12 +256,16 @@ class DataTransferObject {
                     val signalFromIndex = stream.readInt()
                     val signalToIndex = stream.readInt()
                     val signalSize = stream.readInt()
+                    val linePointCountX = stream.readInt()
+                    val linePointCountY = stream.readInt()
                     LineMarker(scene,
                         connection[fromId],
                         connection[toId],
                         signalFromIndex,
                         signalToIndex,
-                        index
+                        index,
+                        linePointCountX,
+                        linePointCountY
                     ).also { marker ->
                         marker.initialize(scene)
                         for (j in 0 until signalSize) {

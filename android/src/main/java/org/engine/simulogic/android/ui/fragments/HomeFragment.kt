@@ -127,7 +127,6 @@ class HomeFragment : Fragment() {
                     startActivity(this)
                 }
             }
-
             override fun onDelete(item: RecentItem, index:Int) {
 
             }

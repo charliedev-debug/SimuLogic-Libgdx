@@ -88,7 +88,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
-                    menuViewModel.onModeChanged(MenuAdapterItem(title = "Save", isMode = false, 0))
+                    menuViewModel.onModeChanged(MenuAdapterItem(id= "Save",title = "Save", isMode = false, 0))
                 }
 
                 "Drawer" -> {
@@ -105,18 +105,20 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         val menuAdapter = MenuViewAdapter().apply {
-            insert("Origin", false, R.drawable.origin)
-            insert("Touch", true, R.drawable.touch)
-            insert("Interact", true, R.drawable.interact)
-            insert("Sel-Touch", true, R.drawable.selection)
-            insert("Sel-Range", true, R.drawable.select_rect)
-            insert("Connect", true, R.drawable.connector)
-            insert("Undo", false, R.drawable.undo)
-            insert("Redo", false, R.drawable.redo)
-            insert("Cut", false, R.drawable.cut)
-            insert("Copy", false, R.drawable.copy)
-            insert("Paste", false, R.drawable.paste)
-            insert("Delete", false, R.drawable.delete)
+            insert("Origin","Origin", false, R.drawable.origin)
+            insert("Touch","Touch", true, R.drawable.touch)
+            insert("Interact","Interact", true, R.drawable.interact)
+            insert("Sel-Touch","Sel-Touch", true, R.drawable.selection)
+            insert("Sel-Range","Sel-Range", true, R.drawable.select_rect)
+            insert("Connect2","Connect", true, R.drawable.connect_2_node)
+            insert("Connect4","Connect", true, R.drawable.connect_4_node)
+            insert("Connect6","Connect", true, R.drawable.connect_6_node)
+            insert("Undo","Undo", false, R.drawable.undo)
+            insert("Redo","Redo", false, R.drawable.redo)
+            insert("Cut","Cut", false, R.drawable.cut)
+            insert("Copy","Copy", false, R.drawable.copy)
+            insert("Paste","Paste", false, R.drawable.paste)
+            insert("Delete","Delete", false, R.drawable.delete)
             selectedMode = 1
         }
 

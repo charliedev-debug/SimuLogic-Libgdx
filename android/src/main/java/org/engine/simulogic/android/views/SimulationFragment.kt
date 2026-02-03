@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import org.engine.simulogic.android.SimulationLoop
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
@@ -32,7 +33,7 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
       simulationLoop = SimulationLoop(projectOptions)
       menuViewModel.message.observe(viewLifecycleOwner){item->
           if(simulationLoop.isReady) {
-              when(item.title){
+              when(item.id){
                   "Origin"->{
                       simulationLoop.gestureListener.origin()
                   }
@@ -48,7 +49,16 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                   "Sel-Range"->{
                       simulationLoop.gestureListener.setMode(MotionGestureListener.RANGED_SELECTION_MODE)
                   }
-                  "Connect"->{
+                  "Connect2"->{
+                      CDefaults.setLinePointCount(1,1)
+                      simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
+                  }
+                  "Connect4"->{
+                      CDefaults.setLinePointCount(2,2)
+                      simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
+                  }
+                  "Connect6"->{
+                      CDefaults.setLinePointCount(3,3)
                       simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
                   }
                   "Redo"->{
