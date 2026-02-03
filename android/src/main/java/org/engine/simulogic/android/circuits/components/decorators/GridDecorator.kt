@@ -99,8 +99,8 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                         lineHeader.color = labelHeaderColor
                         lineHeader.lineWidth = 1f * camera.zoom
                         lineLayer.attachChild(lineHeader)
-                        lineHeader.isVisible = labelHeaderVisible
-                        isVisible = labelsVisible && gridVisible
+                        lineHeader.isVisible = labelHeaderVisible && gridVisible
+                        isVisible = labelsVisible
                 })
             }
 
@@ -124,8 +124,8 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                     lineHeader.color = labelHeaderColor
                     lineHeader.lineWidth = 1f * camera.zoom
                     lineLayer.attachChild(lineHeader)
-                    lineHeader.isVisible = labelHeaderVisible
-                    isVisible = labelsVisible && gridVisible
+                    lineHeader.isVisible = labelHeaderVisible && gridVisible
+                    isVisible = labelsVisible
                 })
             }
             lastZoom = camera.zoom
@@ -154,7 +154,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             it.updatePosition(it.getPosition().x, originY + viewPortHeight - labelOffsetY)
             it.lineHeader.updatePosition(it.getPosition().x, it.getPosition().y, it.getPosition().x, originY)
             it.lineHeader.isVisible = labelHeaderVisible && gridVisible
-            it.isVisible = labelsVisible && gridVisible
+            it.isVisible = labelsVisible
         }
         val lastLabelX = labelsX[labelsX.size - 1]
         val firstLabelX = labelsX[0]
@@ -193,7 +193,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             it.updatePosition(originX + labelOffsetX , it.getPosition().y)
             it.lineHeader.updatePosition(it.getPosition().x, it.getPosition().y, endX, it.getPosition().y)
             it.lineHeader.isVisible = labelHeaderVisible && gridVisible
-            it.isVisible = labelsVisible && gridVisible
+            it.isVisible = labelsVisible
         }
         val lastLabelY = labelsY[labelsY.size - 1]
         val firstLabelY = labelsY[0]
