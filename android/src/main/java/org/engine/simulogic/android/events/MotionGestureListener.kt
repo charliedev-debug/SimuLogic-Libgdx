@@ -34,6 +34,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     private val cutTool = CutTool(dataContainer, commandHistory)
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
     private val deleteTool = DeleteTool(dataContainer, connection, scene, commandHistory)
+    private var moveCommand = MoveCommand()
     var gridDecorator:GridDecorator? = null
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
@@ -173,6 +174,8 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
         }else {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
+                // this might be moved in the future
+                moveCommand.oldPosition.set(touch.x, touch.y)
             }
 
             if (collisionDetector.mode == RANGED_SELECTION_MODE) {
@@ -195,11 +198,10 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
             if (collisionDetector.isNotEmpty()) {
                 collisionDetector.selectedItems.forEach {
                     it.subject.also { subject ->
-                        commandHistory.execute(MoveCommand().apply {
+                        moveCommand.apply {
                             node = ListNode(subject)
-                            newPosition.set(touch.x, touch.y)
-                            oldPosition.set(subject.getPosition())
-                        })
+                            newPosition.set(touch.x,touch.y)
+                        }
                         subject.updatePosition(touch.x, touch.y)
                     }
                 }
@@ -239,11 +241,19 @@ class MotionGestureListener(private val camera:OrthographicCamera, private  val 
     }
 
     override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean {
-        //camera.position.add(velocityX, velocityY, 0f)
+        if(collisionDetector.mode == TOUCH_MODE){
+            commandHistory.execute(moveCommand)
+            // replace the old command to facilitate a new component or point
+            moveCommand = MoveCommand()
+        }
         return false
     }
 
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
+        touch.set(x,y, 0f)
+        camera.unproject(touch)
+
+        println("move finished!")
         return false
     }
 
