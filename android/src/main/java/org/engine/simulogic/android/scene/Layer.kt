@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 open class Layer(val layerId:String) : Entity(){
     override fun draw(spriteBatch: SpriteBatch) {
-        data.forEach{entity ->
-            if(entity.isVisible) {
-                entity.draw(spriteBatch)
+        synchronized(data) {
+            data.forEach { entity ->
+                if (entity.isVisible) {
+                    entity.draw(spriteBatch)
+                }
             }
         }
     }

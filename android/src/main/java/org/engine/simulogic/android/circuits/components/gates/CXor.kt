@@ -149,7 +149,7 @@ class CXor(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CAnd(getPosition().x,getPosition().y, scene )
+        return CXor(getPosition().x,getPosition().y, scene )
     }
 
 }

@@ -6,6 +6,7 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -17,22 +18,26 @@ class ListNode(val value : CNode,
         next.add(child)
         child.parent.add(this)
         lineMarkersChildren.add(LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) })
+        AutoSave.dataChanged = true
     }
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
         next.add(child)
         child.parent.add(this)
         lineMarkersChildren.add(marker)
+        AutoSave.dataChanged = true
     }
 
     fun removeMarker(marker: LineMarker){
         next.removeIf { it == marker.from }
         lineMarkersChildren.remove(marker)
+        AutoSave.dataChanged = true
     }
 
     fun insertMarker(marker: LineMarker){
         next.add(marker.from)
         lineMarkersChildren.add(marker.apply { index = next.size - 1 })
+        AutoSave.dataChanged = true
     }
 
     fun detachSelf(){
