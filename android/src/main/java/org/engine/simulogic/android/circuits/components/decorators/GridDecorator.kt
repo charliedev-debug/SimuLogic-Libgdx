@@ -35,12 +35,12 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         }
     }
 
-    fun toggleLabels(){
-        labelsVisible = !labelsVisible
+    fun toggleLabels(value:Boolean){
+        labelsVisible = value
     }
 
-    fun toggleGrid(){
-        gridVisible = !gridVisible
+    fun toggleGrid(value: Boolean){
+        gridVisible = value
     }
 
     fun showLabelHeader(){

@@ -1,6 +1,7 @@
 package org.engine.simulogic.android
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import org.engine.simulogic.R
 import android.os.Bundle
@@ -16,6 +17,14 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
@@ -23,11 +32,15 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
+import org.engine.simulogic.android.circuits.storage.UserSettings
+import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.MenuViewAdapter
@@ -39,7 +52,7 @@ import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
-
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callbacks {
 
     private lateinit var textFps: TextView
@@ -50,7 +63,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
     private lateinit var jobStateRoutine: Job
     private lateinit var simulationFragment: SimulationFragment
-
+    private val userSettings = UserSettings()
+    private val simulationOptions = SimulationOptions()
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +83,26 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val simulationMenuBarEnabledSwitch = findViewById<SwitchMaterial>(R.id.menu_bar_enabled)
         val drawerLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.drawer_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
+        CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
+
+            userSettings.getDataBoolean(this@SimulationActivity,UserSettings.GRID_ENABLED).asLiveData().observe(this@SimulationActivity){
+                gridEnabledSwitch.isChecked = it
+                simulationOptions.showGrid = it
+            }
+            userSettings.getDataBoolean(this@SimulationActivity,UserSettings.GRID_LABEL_ENABLED).asLiveData().observe(this@SimulationActivity){
+                gridLabelEnabledSwitch.isChecked = it
+                simulationOptions.showGridLabel = it
+            }
+
+            userSettings.getDataBoolean(this@SimulationActivity, UserSettings.TOOLBAR_ENABLED).asLiveData().observe(this@SimulationActivity){
+                simulationToolbarEnabledSwitch.isChecked = it
+                simulationOptions.showTopBar = it
+            }
+            userSettings.getDataBoolean(this@SimulationActivity, UserSettings.AUTO_SAVE_ENABLED).asLiveData().observe(this@SimulationActivity){
+                autoSaveEnabledSwitch.isChecked = it
+                simulationOptions.autoSaveEnabled = it
+            }
+        }
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
@@ -87,7 +121,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             finish()
         }
 
-        simulationFragment = SimulationFragment(projectOptions!!)
+        simulationFragment = SimulationFragment(projectOptions!!, simulationOptions)
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
@@ -171,12 +205,18 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             }
         }
 
-        gridLabelEnabledSwitch.setOnClickListener {
-            simulationFragment.simulationLoop.componentManager.hideGridLabels()
+        gridLabelEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            CoroutineScope(Dispatchers.Main).launch {
+                userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.GRID_LABEL_ENABLED, isChecked)
+                simulationOptions.showGridLabel = isChecked
+            }
         }
 
-        gridEnabledSwitch.setOnClickListener {
-            simulationFragment.simulationLoop.componentManager.toggleGrid()
+        gridEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            CoroutineScope(Dispatchers.Main).launch {
+                userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.GRID_ENABLED,isChecked)
+                simulationOptions.showGrid = isChecked
+            }
         }
 
         gridStyleRadioButton.setOnCheckedChangeListener { _, id ->
@@ -186,8 +226,12 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 simulationFragment.simulationLoop.componentManager.setStyleB()
             }
         }
-        autoSaveEnabledSwitch.setOnClickListener {
-            simulationFragment.simulationLoop.componentManager.toggleAutoSave()
+
+        autoSaveEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            CoroutineScope(Dispatchers.Main).launch {
+                userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.AUTO_SAVE_ENABLED,isChecked)
+                simulationOptions.autoSaveEnabled = isChecked
+            }
         }
 
         drawerLayoutButtonMinimized.setOnClickListener {
@@ -195,7 +239,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         simulationToggleButton.setOnClickListener {
-            simulationFragment.simulationLoop.componentManager.toggleExecutionState()
+            simulationOptions.executionEnabled = simulationToggleButton.isChecked
         }
 
         simulationToolbarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -205,6 +249,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             } else {
                 toolBar.visibility = View.GONE
                 drawerLayoutButtonMinimized.visibility = View.VISIBLE
+            }
+            CoroutineScope(Dispatchers.Main).launch {
+                userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.TOOLBAR_ENABLED,isChecked)
+                simulationOptions.showTopBar = isChecked
             }
         }
 

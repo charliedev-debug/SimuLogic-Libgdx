@@ -120,28 +120,12 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
         }
     }
 
-    fun hideGridLabels(){
-        gestureListener.gridDecorator?.toggleLabels()
-    }
-
-    fun toggleGrid(){
-        gestureListener.gridDecorator?.toggleGrid()
-    }
-
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
     }
 
     fun setStyleB(){
         gestureListener.gridDecorator?.hideLabelHeader()
-    }
-
-    fun toggleExecutionState(){
-        executor.isActive = !executor.isActive
-    }
-
-    fun toggleAutoSave(){
-        AutoSave.instance.enabled = !AutoSave.instance.enabled
     }
 
     fun saveProject(){

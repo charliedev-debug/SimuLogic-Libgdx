@@ -25,10 +25,11 @@ import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
 
-class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAdapter(){
+class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions) : ApplicationAdapter(){
 
     private lateinit var batch: SpriteBatch
     private lateinit var camera:OrthographicCamera
@@ -104,6 +105,11 @@ class SimulationLoop(private val projectOptions: ProjectOptions) : ApplicationAd
         fpsCounter.update()
         executor.execute()
         AutoSave.instance.run()
+
+        gridDecorator.toggleGrid(simulationOptions.showGrid)
+        gridDecorator.toggleLabels(simulationOptions.showGridLabel)
+        AutoSave.instance.enabled = simulationOptions.autoSaveEnabled
+        executor.isActive = simulationOptions.executionEnabled
     }
 
     override fun dispose() {

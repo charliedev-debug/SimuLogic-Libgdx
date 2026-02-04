@@ -13,6 +13,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
@@ -20,7 +21,7 @@ import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
-class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFragmentApplication() {
+class SimulationFragment(private val projectOptions:ProjectOptions, private val simulationOptions: SimulationOptions) : AndroidFragmentApplication() {
    private val menuViewModel: MenuViewModel by activityViewModels()
    private val bottomSheetViewModel: BottomSheetViewModel by activityViewModels()
     lateinit var simulationLoop: SimulationLoop
@@ -32,7 +33,7 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
       val configuration = AndroidApplicationConfiguration()
       configuration.useImmersiveMode = true // Recommended, but not required.
       configuration.useGL30 = true
-      simulationLoop = SimulationLoop(projectOptions)
+      simulationLoop = SimulationLoop(projectOptions, simulationOptions)
       menuViewModel.message.observe(viewLifecycleOwner){item->
           if(simulationLoop.isReady) {
               when(item.id){
