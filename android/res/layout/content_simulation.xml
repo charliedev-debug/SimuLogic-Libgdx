@@ -34,6 +34,7 @@
             android:layout_centerVertical="true"
             android:backgroundTint="@color/white"
             android:background="@drawable/toggle_simulation_state"
+            android:checked="true"
             android:layout_width="16dp"
             android:layout_height="16dp"/>
         <androidx.appcompat.widget.AppCompatImageButton
