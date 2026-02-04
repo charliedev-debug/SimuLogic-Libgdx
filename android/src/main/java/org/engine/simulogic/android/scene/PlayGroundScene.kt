@@ -49,9 +49,9 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                 }
                 if (entity.isVisible) {
                     if (entity is LayerLines) {
-                        entity.draw(shapeRenderer)
+                        entity.draw(shapeRenderer,camera)
                     } else
-                        entity.draw(spriteBatch)
+                        entity.draw(spriteBatch,camera)
                 }
                 //TODO("look ahead to see if there is a line layer before flushing")
                 if (entity is LayerLines) {

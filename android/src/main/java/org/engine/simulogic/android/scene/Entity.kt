@@ -90,6 +90,8 @@ abstract class Entity {
     open fun draw(){}
     open fun draw(spriteBatch: SpriteBatch){}
     open fun draw(shapeRenderer: ShapeRenderer){}
+    open fun draw(spriteBatch: SpriteBatch, camera: OrthographicCamera){}
+    open fun draw(shapeRenderer: ShapeRenderer, camera: OrthographicCamera){}
     open fun clone():Entity?{return null}
 
 

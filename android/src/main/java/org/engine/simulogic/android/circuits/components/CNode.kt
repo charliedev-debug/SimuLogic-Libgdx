@@ -84,6 +84,14 @@ open class CNode : Entity(), ICollidable,IExecutable{
 
     }
 
+    fun getWidth():Float{
+        return sprite.width
+    }
+
+    fun getHeight():Float{
+        return sprite.height
+    }
+
     override fun execute() {}
 
 }
