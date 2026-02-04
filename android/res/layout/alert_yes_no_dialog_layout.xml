@@ -13,47 +13,51 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingLeft="2dp"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/white"
             android:paddingBottom="10dp"
+            android:textColor="@color/delete_color"
             android:textStyle="bold"
             android:textSize="20dp"
-            android:text="SAVING DATA..."
+            android:text="Alert!"
             />
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/gray"/>
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_horizontal"
             android:textSize="13dp"
-            android:text="Processing please wait!"
+            android:text="message"
             android:padding="10dp" />
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:indicatorColor="?attr/colorPrimary"
-            android:layout_gravity="center" />
+            android:paddingBottom="10dp"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="YES"
+                style="@style/customButtonStyle"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="NO"
+                style="@style/customButtonStyle"/>
+        </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/delete_color"
-            android:textStyle="bold"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:text="cancel"
-            style="@style/customButtonStyle"/>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -141,7 +141,7 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
     }
 
     fun toggleAutoSave(){
-        AutoSave.instance.enabled = true
+        AutoSave.instance.enabled = !AutoSave.instance.enabled
     }
 
     fun saveProject(){

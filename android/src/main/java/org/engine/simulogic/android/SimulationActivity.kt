@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.views.ComponentBottomSheet
@@ -32,6 +33,7 @@ import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.MenuViewAdapter
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
+import org.engine.simulogic.android.views.dialogs.AlertDialog
 import org.engine.simulogic.android.views.dialogs.EditProjectDialog
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
@@ -89,7 +91,14 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
-                    menuViewModel.onModeChanged(MenuAdapterItem(id= "Save",title = "Save", isMode = false, 0))
+                    menuViewModel.onModeChanged(
+                        MenuAdapterItem(
+                            id = "Save",
+                            title = "Save",
+                            isMode = false,
+                            0
+                        )
+                    )
                 }
 
                 "Drawer" -> {
@@ -100,26 +109,46 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             true
         }
 
+        toolBar.setNavigationOnClickListener {
+            if (AutoSave.dataChanged) {
+                AlertDialog(
+                    this,
+                    "Exit without saving data?",
+                    object : AlertDialog.OnAlertListener {
+                        override fun accept() {
+                            finish()
+                        }
+
+                        override fun cancel() {
+                            //ignore
+                        }
+
+                    }).show()
+            } else {
+                finish()
+            }
+        }
+
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
             layoutManager =
                 LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         val menuAdapter = MenuViewAdapter().apply {
-            insert("Origin","Origin", false, R.drawable.origin)
-            insert("Touch","Touch", true, R.drawable.touch)
-            insert("Interact","Interact", true, R.drawable.interact)
-            insert("Sel-Touch","Sel-Touch", true, R.drawable.selection)
-            insert("Sel-Range","Sel-Range", true, R.drawable.select_rect)
-            insert("Connect2","Connect", true, R.drawable.connect_2_node)
-            insert("Connect4","Connect", true, R.drawable.connect_4_node)
-            insert("Connect6","Connect", true, R.drawable.connect_6_node)
-            insert("Undo","Undo", false, R.drawable.undo)
-            insert("Redo","Redo", false, R.drawable.redo)
-            insert("Cut","Cut", false, R.drawable.cut)
-            insert("Copy","Copy", false, R.drawable.copy)
-            insert("Paste","Paste", false, R.drawable.paste)
-            insert("Delete","Delete", false, R.drawable.delete)
+            insert("Origin", "Origin", false, R.drawable.origin)
+            insert("Touch", "Touch", true, R.drawable.touch)
+            insert("Interact", "Interact", true, R.drawable.interact)
+            insert("Sel-Touch", "Sel-Touch", true, R.drawable.selection)
+            insert("Sel-Range", "Sel-Range", true, R.drawable.select_rect)
+            insert("Connect2", "Connect", true, R.drawable.connect_2_node)
+            insert("Connect4", "Connect", true, R.drawable.connect_4_node)
+            insert("Connect6", "Connect", true, R.drawable.connect_6_node)
+            insert("Undo", "Undo", false, R.drawable.undo)
+            insert("Redo", "Redo", false, R.drawable.redo)
+            insert("Cut", "Cut", false, R.drawable.cut)
+            insert("Copy", "Copy", false, R.drawable.copy)
+            insert("Paste", "Paste", false, R.drawable.paste)
+            insert("Delete", "Delete", false, R.drawable.delete)
             selectedMode = 1
         }
 
@@ -170,19 +199,19 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         simulationToolbarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 toolBar.visibility = View.VISIBLE
                 drawerLayoutButtonMinimized.visibility = View.GONE
-            }else{
+            } else {
                 toolBar.visibility = View.GONE
                 drawerLayoutButtonMinimized.visibility = View.VISIBLE
             }
         }
 
         simulationMenuBarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked){
+            if (isChecked) {
                 menuRecyclerView.visibility = View.VISIBLE
-            }else{
+            } else {
                 menuRecyclerView.visibility = View.GONE
             }
         }

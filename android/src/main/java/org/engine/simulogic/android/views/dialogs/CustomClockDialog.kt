@@ -42,7 +42,7 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val view = layoutInflater.inflate(R.layout.custom_dialog_layout,null)
+        val view = layoutInflater.inflate(R.layout.custom_clock_dialog_layout,null)
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         val accept = view.findViewById<AppCompatButton>(R.id.accept)
         val clock = view.findViewById<TextInputEditText>(R.id.clock).apply {

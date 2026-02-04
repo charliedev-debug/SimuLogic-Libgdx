@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import org.engine.simulogic.android.SimulationLoop
@@ -12,10 +13,10 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
-import org.engine.simulogic.android.views.interfaces.IFpsListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
@@ -81,7 +82,12 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                       simulationLoop.gestureListener.delete()
                   }
                   "Save"->{
-                      simulationLoop.componentManager.saveProject()
+                      AutoSaveDialog(requireContext(), "SAVING DATA", object :AutoSaveDialog.IDialogLoadingListener{
+                          override fun onCancelled() {
+                              //unused
+                          }
+                      }).show()
+                    //  simulationLoop.componentManager.saveProject()
                   }
               }
           }
@@ -180,6 +186,9 @@ class SimulationFragment(private val projectOptions:ProjectOptions) : AndroidFra
                   }).show()
               }
           }}
+
+
+
 
       return initializeForView(simulationLoop,configuration)
   }
