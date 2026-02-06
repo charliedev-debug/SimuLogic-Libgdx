@@ -33,7 +33,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
 
     override fun draw(spriteBatch: SpriteBatch) {
         font.color = color
-        font.draw(spriteBatch, text, position.x, position.y)
+        font.draw(spriteBatch, text, position.x - layout.width / 2f, position.y - layout.height / 2f)
     }
 
     override fun update() {
@@ -41,7 +41,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
         sprite.setOrigin(position.x , position.y)
         sprite.setSize(layout.width, layout.height)
         sprite.setOriginCenter()
-        sprite.setPosition(position.x,position.y)
+        sprite.setPosition(position.x - layout.width / 2f,position.y - layout.height / 2f)
     }
 
     override fun contains(entity: CNode): CNode? {
