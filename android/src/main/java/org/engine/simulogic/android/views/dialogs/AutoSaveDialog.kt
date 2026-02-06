@@ -17,7 +17,6 @@ class AutoSaveDialog (context: Context, private val title:String, private val li
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val view = layoutInflater.inflate(R.layout.loading_dialog_layout,null)
-        val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         view.findViewById<TextView>(R.id.title).apply { text = title }
         // in case the user disabled auto-save or the application did not save user data
         CoroutineScope(Dispatchers.Default).launch {
@@ -28,10 +27,6 @@ class AutoSaveDialog (context: Context, private val title:String, private val li
                listener.onCancelled()
                 dismiss()
             }
-        }
-        cancel.setOnClickListener {
-            dismiss()
-            listener.onCancelled()
         }
         this.setContentView(view)
         this.setCancelable(false)

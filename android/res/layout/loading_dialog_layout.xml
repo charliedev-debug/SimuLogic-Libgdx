@@ -43,17 +43,6 @@
             app:indicatorColor="?attr/colorPrimary"
             android:layout_gravity="center" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/delete_color"
-            android:textStyle="bold"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:text="cancel"
-            style="@style/customButtonStyle"/>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
