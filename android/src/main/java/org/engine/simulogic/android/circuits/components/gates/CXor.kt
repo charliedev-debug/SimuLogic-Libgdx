@@ -11,30 +11,32 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CXor(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CXor(x:Float, y:Float,rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+    constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("XOR-DARK")
         type = CTypes.XOR
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.gateWidth, CDefaults.gateHeight)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM->{
-                    rotate(270f)
+                    rotation = 270f
                 }
                 ROTATE_TOP->{
-                    rotate(90f)
+                    rotation = 90f
                 }
                 ROTATE_LEFT->{
-                    rotate(180f)
+                    rotation = 180f
                 }
                 ROTATE_RIGHT->{
-                    rotate(0f)
+                    rotation = 0f
                 }
             }
             setPosition(x - CDefaults.gateWidth / 2f,y - CDefaults.gateHeight / 2f)
@@ -211,7 +213,7 @@ class CXor(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CXor(getPosition().x,getPosition().y, scene )
+        return CXor(getPosition().x,getPosition().y,rotationDirection, scene )
     }
 
 }

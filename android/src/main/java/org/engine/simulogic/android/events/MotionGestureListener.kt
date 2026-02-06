@@ -78,6 +78,13 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
         gridDecorator?.refresh = true
     }
 
+    fun rotateRight(){
+        collisionDetector.selectedItems.forEach { item->
+            item.caller.value.rotateRight()
+        }
+        AutoSave.dataChanged = true
+    }
+
     fun undo(){
         commandHistory.undo()
     }

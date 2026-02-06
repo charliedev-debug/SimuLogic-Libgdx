@@ -20,9 +20,10 @@ abstract class Entity {
     var id = 0
     companion object{
         const val ROTATE_RIGHT = 0
-        const val ROTATE_LEFT = 1
-        const val ROTATE_TOP = 2
-        const val ROTATE_BOTTOM = 3
+        const val ROTATE_BOTTOM = 1
+        const val ROTATE_LEFT = 2
+        const val ROTATE_TOP = 3
+
     }
     protected val data: MutableList<Entity> = Collections.synchronizedList(mutableListOf<Entity>())// mutableListOf<Entity>()
     val signals = mutableListOf<CSignal>()

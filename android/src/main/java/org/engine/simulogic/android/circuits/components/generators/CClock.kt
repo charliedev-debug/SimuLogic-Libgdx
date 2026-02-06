@@ -12,10 +12,10 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.Timer
 
-class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayGroundScene) :CNode(){
+class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-
+    constructor(x:Float, y:Float,freq:Float = 1/60f, scene: PlayGroundScene):this(x, y,freq, ROTATE_RIGHT, scene)
     private val timer = Timer(freq, object :Timer.ITimerListener{
         override fun onTick() {
             value = (value + 1) % 2
@@ -27,22 +27,23 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("CLOCK")
         type = CTypes.CLOCK
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.clockWidth, CDefaults.clockHeight)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM->{
-                    rotate(270f)
+                    rotation = 270f
                 }
                 ROTATE_TOP->{
-                    rotate(90f)
+                    rotation = 90f
                 }
                 ROTATE_LEFT->{
-                    rotate(180f)
+                    rotation = 180f
                 }
                 ROTATE_RIGHT->{
-                    rotate(0f)
+                    rotation = 0f
                 }
             }
             setPosition(x - CDefaults.clockWidth / 2f,y - CDefaults.clockHeight / 2f)
@@ -177,7 +178,7 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
     }
 
     override fun clone():CNode {
-        return CClock(getPosition().x,getPosition().y,freq, scene )
+        return CClock(getPosition().x,getPosition().y,freq, rotationDirection, scene )
     }
 
 }

@@ -171,47 +171,47 @@ class DataTransferObject {
                 val powerValue = if(type == CTypes.POWER) stream.readInt() else 0
                 when (type) {
                     CTypes.AND -> {
-                        connection.insertNode(ListNode(CAnd(x, y, scene)))
+                        connection.insertNode(ListNode(CAnd(x, y, rotation, scene)))
                     }
 
                     CTypes.NAND -> {
-                        connection.insertNode(ListNode(CNand(x, y, scene)))
+                        connection.insertNode(ListNode(CNand(x, y, rotation, scene)))
                     }
 
                     CTypes.NOR -> {
-                        connection.insertNode(ListNode(CNor(x, y, scene)))
+                        connection.insertNode(ListNode(CNor(x, y, rotation, scene)))
                     }
 
                     CTypes.NOT -> {
-                        connection.insertNode(ListNode(CNot(x, y, scene)))
+                        connection.insertNode(ListNode(CNot(x, y, rotation, scene)))
                     }
 
                     CTypes.OR -> {
-                        connection.insertNode(ListNode(COr(x, y, scene)))
+                        connection.insertNode(ListNode(COr(x, y, rotation, scene)))
                     }
 
                     CTypes.XNOR -> {
-                        connection.insertNode(ListNode((CXnor(x, y, scene))))
+                        connection.insertNode(ListNode((CXnor(x, y, rotation, scene))))
                     }
 
                     CTypes.XOR -> {
-                        connection.insertNode(ListNode(CXor(x, y, scene)))
+                        connection.insertNode(ListNode(CXor(x, y, rotation, scene)))
                     }
 
                     CTypes.LATCH -> {
-                        connection.insertNode(ListNode(CLatch(x, y, scene)))
+                        connection.insertNode(ListNode(CLatch(x, y, rotation, scene)))
                     }
 
                     CTypes.CLOCK -> {
-                        connection.insertExecutionPoint(ListNode(CClock(x, y, freq, scene)))
+                        connection.insertExecutionPoint(ListNode(CClock(x, y, freq, rotation, scene)))
                     }
 
                     CTypes.RANDOM -> {
-                        connection.insertNode(ListNode(CRandom(x, y, scene)))
+                        connection.insertNode(ListNode(CRandom(x, y,rotation, scene)))
                     }
 
                     CTypes.LED -> {
-                        connection.insertNode(ListNode(CLed(x, y, scene)))
+                        connection.insertNode(ListNode(CLed(x, y, rotation, scene)))
                     }
 
                     CTypes.SEVEN_SEGMENT_DISPLAY -> {

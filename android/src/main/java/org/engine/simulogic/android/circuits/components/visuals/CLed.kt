@@ -11,19 +11,34 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CLed(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CLed(x:Float, y:Float,rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+    constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("BULB-ON")
         type = CTypes.LED
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.ledWidth, CDefaults.ledHeight)
             setOriginCenter()
-            rotation = 0f
+            when(rotationDirection){
+                ROTATE_BOTTOM->{
+                    rotation = 270f
+                }
+                ROTATE_TOP->{
+                    rotation = 90f
+                }
+                ROTATE_LEFT->{
+                    rotation = 180f
+                }
+                ROTATE_RIGHT->{
+                    rotation = 0f
+                }
+            }
             setPosition(x - CDefaults.ledWidth / 2f,y - CDefaults.ledHeight / 2f)
         }
 
@@ -82,9 +97,34 @@ class CLed(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
         }else{
             updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.LED_INACTIVE_COLOR)
         }
-        signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-        getChildAt(0).getPosition()?.also { outputPosition ->
-            lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+        when(rotationDirection){
+            ROTATE_RIGHT->{
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_LEFT->{
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_TOP->{
+                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_BOTTOM->{
+                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
         }
         data.forEach {
             it.update()
@@ -128,7 +168,7 @@ class CLed(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CLed(getPosition().x,getPosition().y, scene )
+        return CLed(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }

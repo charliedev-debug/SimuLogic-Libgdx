@@ -64,6 +64,9 @@ class SimulationFragment(private val projectOptions:ProjectOptions, private val 
                       CDefaults.setLinePointCount(3,3)
                       simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
                   }
+                  "Rotate"->{
+                      simulationLoop.gestureListener.rotateRight()
+                  }
                   "Redo"->{
                       simulationLoop.gestureListener.redo()
                   }

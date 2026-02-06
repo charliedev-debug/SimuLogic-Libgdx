@@ -14,31 +14,32 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.random.Random
 import kotlin.random.nextInt
 
-class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CRandom(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-
+    constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("RANDOM")
         type = CTypes.RANDOM
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.randomWidth, CDefaults.randomHeight)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM->{
-                    rotate(270f)
+                    rotation = 270f
                 }
                 ROTATE_TOP->{
-                    rotate(90f)
+                    rotation = 90f
                 }
                 ROTATE_LEFT->{
-                    rotate(180f)
+                    rotation = 180f
                 }
                 ROTATE_RIGHT->{
-                    rotate(0f)
+                    rotation = 0f
                 }
             }
             setPosition(x - CDefaults.randomWidth / 2f,y - CDefaults.randomHeight / 2f)
@@ -193,7 +194,7 @@ class CRandom(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CRandom(getPosition().x,getPosition().y, scene )
+        return CRandom(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }

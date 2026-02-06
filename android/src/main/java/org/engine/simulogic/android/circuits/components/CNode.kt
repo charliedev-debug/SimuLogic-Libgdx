@@ -27,8 +27,27 @@ open class CNode : Entity(), ICollidable,IExecutable{
             setOrigin(x, y)
             setSize(sprite.width, sprite.height)
             setOriginCenter()
+            when(rotationDirection){
+                ROTATE_BOTTOM->{
+                    rotation = 270f
+                }
+                ROTATE_TOP->{
+                    rotation = 90f
+                }
+                ROTATE_LEFT->{
+                    rotation = 180f
+                }
+                ROTATE_RIGHT->{
+                    rotation = 0f
+                }
+            }
             setPosition(x - sprite.width / 2f, y - sprite.height / 2f)
         }
+    }
+
+    fun rotateRight(){
+        rotationDirection = (rotationDirection + 1) % 4
+        updatePosition(getPosition().x, getPosition().y)
     }
 
     override fun updatePosition(position: Vector2) {

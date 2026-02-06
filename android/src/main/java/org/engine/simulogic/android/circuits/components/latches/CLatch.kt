@@ -12,30 +12,32 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CLatch(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
+    constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("D-LATCH")
         type = CTypes.LATCH
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.latchWidth, CDefaults.latchHeight)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM->{
-                    rotate(270f)
+                    rotation = 270f
                 }
                 ROTATE_TOP->{
-                    rotate(90f)
+                    rotation = 90f
                 }
                 ROTATE_LEFT->{
-                    rotate(180f)
+                    rotation = 180f
                 }
                 ROTATE_RIGHT->{
-                    rotate(0f)
+                    rotation = 0f
                 }
             }
             setPosition(x - CDefaults.latchWidth / 2f,y - CDefaults.latchHeight / 2f)
@@ -213,7 +215,7 @@ class CLatch(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
     }
 
     override fun clone():CNode {
-        return CLatch(getPosition().x,getPosition().y, scene )
+        return CLatch(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }
