@@ -24,8 +24,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 
 class ComponentManager(private val projectOptions: ProjectOptions,private val executor: Executor,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
-
-    init {
+    fun loadProject(){
         when(projectOptions.mode){
             ProjectOptions.CREATE->{
                 createProject()
@@ -132,11 +131,11 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
         DataTransferObject().writeData(projectOptions,connection)
     }
 
-    fun readProject(){
+    private fun readProject(){
         DataTransferObject().readData(projectOptions,connection,font, scene)
     }
 
-    fun createProject(){
+    private fun createProject(){
         DataTransferObject().createData(projectOptions)
     }
 }

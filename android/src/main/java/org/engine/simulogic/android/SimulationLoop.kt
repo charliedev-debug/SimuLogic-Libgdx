@@ -28,14 +28,14 @@ import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
+import org.engine.simulogic.android.views.interfaces.ISimulationListener
 
-class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions) : ApplicationAdapter(){
+class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions, private val listener:ISimulationListener) : ApplicationAdapter(){
 
     private lateinit var batch: SpriteBatch
     private lateinit var camera:OrthographicCamera
     lateinit var gestureListener: MotionGestureListener
     lateinit var componentManager:ComponentManager
-    var fpsCounter = FpsCounter()
     private val assetManager = AssetManager()
     private val connection = Connection()
     private val collisionDetector = CollisionDetector(connection)
@@ -43,6 +43,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     private lateinit var scene:PlayGroundScene
     private lateinit var gridDecorator: GridDecorator
     private lateinit var executor: Executor
+    var fpsCounter = FpsCounter()
     var isReady = false
     companion object {
          const val CAMERA_WIDTH = 720f
@@ -93,6 +94,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         // we loaded the project so we reset this value
         AutoSave.dataChanged = false
         isReady = true
+        listener.onCreate()
     }
 
     override fun render() {

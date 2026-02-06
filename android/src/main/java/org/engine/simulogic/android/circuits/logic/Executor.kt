@@ -17,10 +17,12 @@ class Executor(private val connection:Connection):IExecutable {
             while (executableNodes.isNotEmpty()) {
                 executableNodes.poll()?.also { node ->
                     node.value.execute()
-                    node.getLineMarkerChildren().forEach { marker ->
-                        marker.to.value.signals[marker.signalTo].value =
-                            node.value.signals[marker.signalFrom].value
-                        executableNodes.offer(marker.to)
+                    synchronized(node.getLineMarkerChildren()) {
+                        node.getLineMarkerChildren().forEach { marker ->
+                            marker.to.value.signals[marker.signalTo].value =
+                                node.value.signals[marker.signalFrom].value
+                            executableNodes.offer(marker.to)
+                        }
                     }
                 }
             }

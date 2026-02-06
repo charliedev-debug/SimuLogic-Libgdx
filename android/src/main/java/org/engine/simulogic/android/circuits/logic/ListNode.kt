@@ -9,11 +9,12 @@ import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
+import java.util.Collections
 
 class ListNode(val value : CNode,
                val next: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
-    private val lineMarkersChildren = mutableListOf<LineMarker>()
+    private val lineMarkersChildren = Collections.synchronizedList(mutableListOf<LineMarker>())
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene) {
         next.add(child)
         child.parent.add(this)
