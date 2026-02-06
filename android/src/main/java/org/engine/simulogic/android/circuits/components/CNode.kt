@@ -43,6 +43,7 @@ open class CNode : Entity(), ICollidable,IExecutable{
         data.forEach {
             it.draw(spriteBatch)
         }
+
         sprite.draw(spriteBatch)
     }
 

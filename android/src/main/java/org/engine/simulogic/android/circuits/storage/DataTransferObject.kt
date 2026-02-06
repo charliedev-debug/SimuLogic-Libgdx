@@ -1,13 +1,9 @@
 package org.engine.simulogic.android.circuits.storage
 
 import android.content.Context
-import android.media.MediaScannerConnection
 import android.net.Uri
-import android.os.Environment
-import androidx.core.net.toUri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
@@ -28,7 +24,6 @@ import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.EOFException
@@ -36,7 +31,6 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.security.MessageDigest
 import java.util.UUID
 
@@ -83,7 +77,7 @@ class DataTransferObject {
             stream.writeInt(index)
             stream.writeFloat(component.getPosition().x)
             stream.writeFloat(component.getPosition().y)
-            stream.writeInt(component.rotation)
+            stream.writeInt(component.rotationDirection)
             // save label data
             if (component is CLabel) {
                 stream.writeInt(component.text.length)

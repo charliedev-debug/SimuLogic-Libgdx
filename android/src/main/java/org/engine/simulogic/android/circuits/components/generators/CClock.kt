@@ -31,7 +31,20 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
             setOrigin(x , y)
             setSize(CDefaults.clockWidth, CDefaults.clockHeight)
             setOriginCenter()
-            rotation = 0f
+            when(rotationDirection){
+                ROTATE_BOTTOM->{
+                    rotate(270f)
+                }
+                ROTATE_TOP->{
+                    rotate(90f)
+                }
+                ROTATE_LEFT->{
+                    rotate(180f)
+                }
+                ROTATE_RIGHT->{
+                    rotate(0f)
+                }
+            }
             setPosition(x - CDefaults.clockWidth / 2f,y - CDefaults.clockHeight / 2f)
         }
 
@@ -86,10 +99,36 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, private val scene: PlayG
         }else{
             updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
         }
-        signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-        getChildAt(0).getPosition()?.also { outputPosition ->
-            lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+        when(rotationDirection){
+            ROTATE_RIGHT->{
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_LEFT->{
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_TOP->{
+                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_BOTTOM->{
+                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
         }
+
         data.forEach {
             it.update()
         }

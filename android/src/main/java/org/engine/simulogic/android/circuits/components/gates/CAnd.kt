@@ -2,7 +2,6 @@ package org.engine.simulogic.android.circuits.components.gates
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -23,13 +22,26 @@ class CAnd(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
             setOrigin(x , y)
             setSize(CDefaults.gateWidth, CDefaults.gateHeight)
             setOriginCenter()
-            rotation = 0f
+            when(rotationDirection){
+                ROTATE_BOTTOM->{
+                    rotate(270f)
+                }
+                ROTATE_TOP->{
+                    rotate(90f)
+                }
+                ROTATE_LEFT->{
+                    rotate(180f)
+                }
+                ROTATE_RIGHT->{
+                    rotate(0f)
+                }
+            }
             setPosition(x - CDefaults.gateWidth / 2f,y - CDefaults.gateHeight / 2f)
         }
 
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y + sprite.height / 2f - sprite.height * 0.1875f ,CTypes.SIGNAL_IN, 1, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y - sprite.height / 2f + sprite.height * 0.1875f ,CTypes.SIGNAL_IN, 2, scene))
 
         signals.forEach {
             attachChild(it)
@@ -94,18 +106,69 @@ class CAnd(x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
         }else{
             updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
         }
-        signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-        signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f)
-        signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f )
-        getChildAt(0).getPosition()?.also { outputPosition ->
-            lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+
+        when(rotationDirection){
+            ROTATE_RIGHT->{
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
+                signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+                getChildAt(1).getPosition()?.also { outputPosition ->
+                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+                getChildAt(2).getPosition()?.also { outputPosition ->
+                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+            }
+
+            ROTATE_LEFT->{
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
+                signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+                getChildAt(1).getPosition()?.also { outputPosition ->
+                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+                getChildAt(2).getPosition()?.also { outputPosition ->
+                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+            }
+
+            ROTATE_TOP->{
+                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
+                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+                getChildAt(1).getPosition()?.also { outputPosition ->
+                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(2).getPosition()?.also { outputPosition ->
+                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+            }
+
+            ROTATE_BOTTOM->{
+                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
+                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+                getChildAt(1).getPosition()?.also { outputPosition ->
+                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(2).getPosition()?.also { outputPosition ->
+                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+            }
         }
-        getChildAt(1).getPosition()?.also { outputPosition ->
-            lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-        }
-        getChildAt(2).getPosition()?.also { outputPosition ->
-            lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-        }
+
         data.forEach {
             it.update()
         }

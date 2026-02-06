@@ -177,6 +177,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect2", "Connect", true, R.drawable.connect_2_node)
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
+            insert("Rotate", "Rotate", false, R.drawable.rotate_right)
             insert("Undo", "Undo", false, R.drawable.undo)
             insert("Redo", "Redo", false, R.drawable.redo)
             insert("Cut", "Cut", false, R.drawable.cut)
