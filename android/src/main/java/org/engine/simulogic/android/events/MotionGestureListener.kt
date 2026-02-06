@@ -21,6 +21,7 @@ import org.engine.simulogic.android.circuits.tools.CutTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.circuits.tools.DeleteTool
 import org.engine.simulogic.android.circuits.tools.MoveCommand
+import org.engine.simulogic.android.circuits.tools.RotateCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 
@@ -79,9 +80,16 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
     }
 
     fun rotateRight(){
+        val rotateCommand = RotateCommand()
         collisionDetector.selectedItems.forEach { item->
+            val pRotation = item.caller.value.rotationDirection
             item.caller.value.rotateRight()
+            val nRotation = item.caller.value.rotationDirection
+            RotateCommand.RotateItem(pRotation,nRotation,item.caller.value).also {item->
+                rotateCommand.insert(item)
+            }
         }
+        commandHistory.execute(rotateCommand)
         AutoSave.dataChanged = true
     }
 

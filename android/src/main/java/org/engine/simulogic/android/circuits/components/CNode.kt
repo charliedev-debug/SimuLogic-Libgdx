@@ -50,6 +50,10 @@ open class CNode : Entity(), ICollidable,IExecutable{
         updatePosition(getPosition().x, getPosition().y)
     }
 
+    fun adjustRotation(){
+        updatePosition(getPosition().x, getPosition().y)
+    }
+
     override fun updatePosition(position: Vector2) {
         updatePosition(position.x,position.y)
     }
