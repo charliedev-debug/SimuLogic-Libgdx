@@ -14,7 +14,7 @@ import java.util.Collections
 class ListNode(val value : CNode,
                val next: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
-    private val lineMarkersChildren = Collections.synchronizedList(mutableListOf<LineMarker>())
+    private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene) {
         next.add(child)
         child.parent.add(this)
@@ -30,8 +30,8 @@ class ListNode(val value : CNode,
     }
 
     fun removeMarker(marker: LineMarker){
-        next.removeIf { it == marker.from }
-        lineMarkersChildren.remove(marker)
+         next.removeIf { it == marker.from }
+         lineMarkersChildren.remove(marker)
         AutoSave.dataChanged = true
     }
 
@@ -42,8 +42,14 @@ class ListNode(val value : CNode,
     }
 
     fun detachSelf(){
-        lineMarkersChildren.forEach {
-            it.detachSelf()
+        synchronized(lineMarkersChildren){
+            // use an iterator to prevent concurrent exceptions since we still need to modify this list on another thread
+            lineMarkersChildren.listIterator().also { iterator->
+               while (iterator.hasNext()){
+                   iterator.next().detachSelf()
+                   iterator.remove()
+               }
+           }
         }
         next.clear()
         value.detachSelf()
@@ -58,10 +64,12 @@ class ListNode(val value : CNode,
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        lineMarkersChildren.forEach {lineMarker ->
-            val lineMarkerChild = lineMarker.contains(x, y)
-            if(lineMarkerChild != null){
-                return lineMarkerChild
+        synchronized(lineMarkersChildren) {
+            lineMarkersChildren.forEach { lineMarker ->
+                val lineMarkerChild = lineMarker.contains(x, y)
+                if (lineMarkerChild != null) {
+                    return lineMarkerChild
+                }
             }
         }
         return null
@@ -72,10 +80,12 @@ class ListNode(val value : CNode,
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        lineMarkersChildren.forEach {lineMarker ->
-            val lineMarkerChild = lineMarker.contains(entity)
-            if(lineMarkerChild != null){
-                return lineMarkerChild
+        synchronized(lineMarkersChildren) {
+            lineMarkersChildren.forEach { lineMarker ->
+                val lineMarkerChild = lineMarker.contains(entity)
+                if (lineMarkerChild != null) {
+                    return lineMarkerChild
+                }
             }
         }
         return null
@@ -86,10 +96,12 @@ class ListNode(val value : CNode,
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        lineMarkersChildren.forEach {lineMarker ->
-            val lineMarkerChild = lineMarker.contains(rect)
-            if(lineMarkerChild != null){
-                return lineMarkerChild
+        synchronized(lineMarkersChildren) {
+            lineMarkersChildren.forEach { lineMarker ->
+                val lineMarkerChild = lineMarker.contains(rect)
+                if (lineMarkerChild != null) {
+                    return lineMarkerChild
+                }
             }
         }
         return null
@@ -97,8 +109,10 @@ class ListNode(val value : CNode,
 
     override fun update() {
          value.update()
-        lineMarkersChildren.forEach {lineMarker ->
-            lineMarker.update()
+        synchronized(lineMarkersChildren) {
+            lineMarkersChildren.forEach { lineMarker ->
+                lineMarker.update()
+            }
         }
     }
 

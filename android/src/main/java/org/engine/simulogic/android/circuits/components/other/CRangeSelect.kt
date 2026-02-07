@@ -15,6 +15,7 @@ import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.abs
 
 class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scene: PlayGroundScene)  : CNode() {
 
@@ -139,10 +140,10 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
             }
         }
         // update the range background size and position
-        val width = signalTopLeft.getPosition().x - signalTopRight.getPosition().x
-        val height = signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y
+        val width = abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
+        val height = abs( signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
         sprite.setSize(width, height)
-        updatePosition(signalTopLeft.getPosition().x - width/2f, signalTopLeft.getPosition().y - height / 2f)
+        updatePosition(signalTopLeft.getPosition().x + width/2f, signalTopLeft.getPosition().y - height / 2f)
     }
 
     override fun draw(spriteBatch: SpriteBatch) {

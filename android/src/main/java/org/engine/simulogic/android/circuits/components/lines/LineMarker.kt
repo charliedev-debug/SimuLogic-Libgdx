@@ -63,7 +63,12 @@ class LineMarker(val scene: PlayGroundScene,
          signals.forEach {
              it.detachSelf()
          }
-         from.removeMarker(this)
+    }
+
+    // removes marker for the parent node
+    fun removeSelf(){
+        detachSelf()
+        from.removeMarker(this)
     }
 
     override fun attachSelf() {

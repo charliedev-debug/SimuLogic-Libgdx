@@ -5,10 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.engine.simulogic.R
 
@@ -22,7 +20,6 @@ class LoadingDialog (context: Context, private val title:String, private val lis
         // in case the user disabled auto-save or the application did not save user data
         CoroutineScope(Dispatchers.Default).launch {
             launch(Dispatchers.IO) {
-                delay(3000)
                listener.onLoad()
                 launch(Dispatchers.Main){
                     dismiss()

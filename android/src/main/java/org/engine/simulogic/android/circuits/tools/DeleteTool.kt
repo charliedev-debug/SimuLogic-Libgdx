@@ -16,7 +16,7 @@ class DeleteTool (private val dataContainer: DataContainer, private val connecti
             // it must be a line
             if(node.value is CSignal && node.value.parent is LineMarker){
                 val lineMarker = node.value.parent as LineMarker
-                lineMarker.detachSelf()
+                lineMarker.removeSelf()
                 deleteLine.insert(lineMarker)
             }
             // it must be a component
