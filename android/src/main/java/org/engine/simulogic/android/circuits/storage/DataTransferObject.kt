@@ -5,6 +5,7 @@ import android.net.Uri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CTypes
+import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -86,6 +87,8 @@ class DataTransferObject {
                 stream.writeFloat(component.freq)
             }else if (component is CPower){
                 stream.writeInt(component.value)
+            }else if(component is CDataBus){
+                stream.writeInt(component.size)
             }
         }
         connection.forEach { listNode ->
@@ -169,6 +172,9 @@ class DataTransferObject {
                 }
                 // power generator signal value
                 val powerValue = if(type == CTypes.POWER) stream.readInt() else 0
+
+                // data bus size value
+                val bus_size = if(type == CTypes.DATA_BUS) stream.readInt() else 0
                 when (type) {
                     CTypes.AND -> {
                         connection.insertNode(ListNode(CAnd(x, y, rotation, scene)))
@@ -234,6 +240,10 @@ class DataTransferObject {
 
                     CTypes.POWER ->{
                         connection.insertExecutionPoint(ListNode(CPower(powerValue,x, y , scene)))
+                    }
+
+                    CTypes.DATA_BUS->{
+                        connection.insertNode(ListNode(CDataBus(x,y,bus_size,rotation,scene)))
                     }
 
                     else -> {

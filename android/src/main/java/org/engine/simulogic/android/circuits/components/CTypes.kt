@@ -22,5 +22,6 @@ enum class CTypes {
     LINE_MARKER,
     LABEL,
     POWER,
+    DATA_BUS,
     NONE
 }

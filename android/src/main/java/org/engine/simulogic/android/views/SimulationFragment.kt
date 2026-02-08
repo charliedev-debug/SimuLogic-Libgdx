@@ -16,6 +16,7 @@ import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
+import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.dialogs.LoadingDialog
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
@@ -236,6 +237,17 @@ class SimulationFragment(
 
                 ComponentBottomSheet.RANDOM_COMPONENT -> {
                     simulationLoop.componentManager.insertCRandom()
+                }
+
+                ComponentBottomSheet.DATA_BUS_COMPONENT ->{
+                    CustomDataBusDialog(requireContext(),object:CustomDataBusDialog.OnEditProjectClickListener{
+                        override fun success(size: Int) {
+                            simulationLoop.componentManager.insertCDataBus(size)
+                        }
+                        override fun failure(msg: String) {}
+                        override fun cancel() {}
+                    }).show()
+
                 }
 
                 ComponentBottomSheet.SS_DISPLAY_COMPONENT -> {

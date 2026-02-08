@@ -40,6 +40,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val SS_DISPLAY_COMPONENT = "SS-DISPLAY"
          const val CUSTOM_COMPONENT = "CUSTOM"
          const val BCD_DISPLAY_COMPONENT = "BCD-DISPLAY"
+         const val DATA_BUS_COMPONENT = "DATA-BUS"
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,6 +84,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
+        generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
         val templateAdapter = ComponentViewAdapter()
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)
