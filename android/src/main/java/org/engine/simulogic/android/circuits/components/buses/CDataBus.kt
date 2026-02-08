@@ -106,8 +106,25 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
             val b = signals[i+1]
             updateColor(if(a.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
             updateColor(if(b.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
-            a.updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2 )
-            b.updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f  * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2)
+            when(rotationDirection){
+                ROTATE_RIGHT->{
+                    a.updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2 )
+                    b.updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f  * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2)
+                }
+                ROTATE_LEFT->{
+                    a.updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2 )
+                    b.updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f  * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2)
+                }
+                ROTATE_BOTTOM->{
+                    a.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2 , getPosition().y + sprite.height * 0.8125f )
+                    b.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2, getPosition().y - sprite.height * 0.8125f  )
+                }
+                ROTATE_TOP->{
+                    a.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2 , getPosition().y - sprite.height * 0.8125f )
+                    b.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2, getPosition().y + sprite.height * 0.8125f  )
+                }
+            }
+
             lines[counter].updatePosition(a.getPosition().x,a.getPosition().y, b.getPosition().x, b.getPosition().y)
         }
 
