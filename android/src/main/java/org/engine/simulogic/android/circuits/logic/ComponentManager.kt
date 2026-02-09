@@ -26,6 +26,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 
 class ComponentManager(private val projectOptions: ProjectOptions,private val executor: Executor,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
+    private val snapAlign = SnapAlign()
     fun loadProject(){
         when(projectOptions.mode){
             ProjectOptions.CREATE->{
@@ -51,89 +52,148 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
 
     fun insertAND(){
        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CAnd(position.x,position.y,scene)))
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                connection.insertNode(ListNode(CAnd( coordinates.x,coordinates.y,scene)))
+            }
+
         }
     }
+
     fun insertOR(){
         gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(COr(position.x,position.y,scene)))
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(COr(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
 
     fun insertXOR(){
         gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CXor(position.x,position.y,scene)))
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+            connection.insertNode(ListNode(CXor(coordinates.x,coordinates.y,scene)))
+        }
+    }}
+
+    fun insertNOR() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CNor(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertNOR(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CNor(position.x,position.y,scene)))
+
+    fun insertNOT() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CNot(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertNOT(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CNot(position.x,position.y,scene)))
+    fun insertNAND() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CNand(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertNAND(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CNand(position.x,position.y,scene)))
+    fun insertXNOR() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CXnor(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertXNOR(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CXnor(position.x,position.y,scene)))
+    fun insertCClock(freq:Float) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertExecutionPoint(
+                    ListNode(
+                        CClock(
+                            coordinates.x,
+                            coordinates.y,
+                            freq,
+                            scene
+                        )
+                    )
+                )
+            }
         }
     }
-    fun insertCClock(freq:Float){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertExecutionPoint(ListNode(CClock(position.x,position.y,freq,scene)))
+    fun insertCLatch() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CLatch(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertCLatch(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CLatch(position.x,position.y,scene)))
+    fun insertCLed() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CLed(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertCLed(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CLed(position.x,position.y,scene)))
-        }
-    }
-    fun insertCPower(signalValue:Int){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertExecutionPoint(ListNode(CPower(signalValue,position.x,position.y,scene)))
+    fun insertCPower(signalValue:Int) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertExecutionPoint(
+                    ListNode(
+                        CPower(
+                            signalValue,
+                            coordinates.x,
+                            coordinates.y,
+                            scene
+                        )
+                    )
+                )
+            }
         }
     }
     fun insertCRandom(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CRandom(position.x,position.y,scene)))
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CRandom(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-    fun insertSevenSegmentDisplay(){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CSevenSegmentDisplay(position.x,position.y,scene)))
+    fun insertSevenSegmentDisplay() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CSevenSegmentDisplay(coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-
-    fun insertCLabel(text:String){
-        gestureListener.rectPointer.getPosition().also { position->
-            connection.insertNode(ListNode(CLabel(font,text,position.x, position.y, scene )))
+    fun insertCLabel(text:String) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CLabel(font, text, coordinates.x, coordinates.y, scene)))
+            }
         }
     }
-
-    fun insertCDataBus(size:Int){
-        gestureListener.rectPointer.getPosition().also {position->
-            connection.insertNode(ListNode(CDataBus(position.x,position.y,size,scene)))
+    fun insertCDataBus(size:Int) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CDataBus(coordinates.x, coordinates.y, size, scene)))
+            }
         }
     }
-
-    fun insertCFanOutBus(inputSize:Int, segments:Int){
-        gestureListener.rectPointer.getPosition().also { position->
-            connection.insertNode(ListNode(CFanOutBus(position.x, position.y, inputSize, segments, scene)))
+    fun insertCFanOutBus(inputSize:Int, segments:Int) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(
+                    ListNode(
+                        CFanOutBus(
+                            coordinates.x,
+                            coordinates.y,
+                            inputSize,
+                            segments,
+                            scene
+                        )
+                    )
+                )
+            }
         }
     }
-
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
     }
