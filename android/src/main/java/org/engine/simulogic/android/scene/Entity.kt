@@ -18,6 +18,7 @@ abstract class Entity {
     var isRemoved = false
     var type = CTypes.NONE
     var id = 0
+    var cameraClippingEnabled = true
     companion object{
         const val ROTATE_RIGHT = 0
         const val ROTATE_BOTTOM = 1

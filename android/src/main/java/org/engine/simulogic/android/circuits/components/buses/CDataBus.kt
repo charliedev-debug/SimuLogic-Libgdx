@@ -23,6 +23,7 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
         val spriteRegion = textureAtlas.findRegion("DATA-BUS")
         type = CTypes.DATA_BUS
         this.rotationDirection = rotationDirection
+        this.cameraClippingEnabled = false
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.randomWidth, CDefaults.randomHeight)

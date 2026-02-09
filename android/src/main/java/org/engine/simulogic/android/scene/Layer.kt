@@ -20,8 +20,8 @@ open class Layer(val layerId:String) : Entity(){
                         val pos = entity.getPosition()
                         val width = entity.getWidth()
                         val height = entity.getHeight()
-                        if((pos.x + width * 2)>= topLeft && (pos.x - width * 2) <= topRight &&
-                            (pos.y + height * 2) >= bottomLeft && (pos.y - height) <= bottomRight) {
+                        if(((pos.x + width * 2)>= topLeft && (pos.x - width * 2) <= topRight &&
+                            (pos.y + height * 2) >= bottomLeft && (pos.y - height) <= bottomRight) || !entity.cameraClippingEnabled) {
                             entity.draw(spriteBatch)
                         }
                     }else{

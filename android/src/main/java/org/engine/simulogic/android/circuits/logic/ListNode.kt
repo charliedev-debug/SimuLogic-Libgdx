@@ -59,19 +59,29 @@ class ListNode(val value : CNode,
         value.attachSelf()
     }
 
+    fun clearConnections(){
+        synchronized(lineMarkersChildren){
+            lineMarkersChildren.listIterator().also { iterator->
+                while (iterator.hasNext()){
+                    iterator.next().detachSelf()
+                    iterator.remove()
+                }
+            }
+            next.clear()
+        }
+    }
+
     override fun contains(x: Float, y: Float): CNode? {
         val parenNodeCollision = value.contains(x, y)
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        synchronized(lineMarkersChildren) {
             lineMarkersChildren.forEach { lineMarker ->
                 val lineMarkerChild = lineMarker.contains(x, y)
                 if (lineMarkerChild != null) {
                     return lineMarkerChild
                 }
             }
-        }
         return null
     }
 
@@ -80,14 +90,12 @@ class ListNode(val value : CNode,
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        synchronized(lineMarkersChildren) {
             lineMarkersChildren.forEach { lineMarker ->
                 val lineMarkerChild = lineMarker.contains(entity)
                 if (lineMarkerChild != null) {
                     return lineMarkerChild
                 }
             }
-        }
         return null
     }
 
@@ -96,24 +104,20 @@ class ListNode(val value : CNode,
         if(parenNodeCollision != null){
             return parenNodeCollision
         }
-        synchronized(lineMarkersChildren) {
             lineMarkersChildren.forEach { lineMarker ->
                 val lineMarkerChild = lineMarker.contains(rect)
                 if (lineMarkerChild != null) {
                     return lineMarkerChild
                 }
             }
-        }
         return null
     }
 
     override fun update() {
          value.update()
-        synchronized(lineMarkersChildren) {
             lineMarkersChildren.forEach { lineMarker ->
                 lineMarker.update()
             }
-        }
     }
 
     fun getLineMarkerChildren():List<LineMarker>{

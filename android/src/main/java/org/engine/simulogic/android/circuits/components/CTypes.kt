@@ -23,5 +23,6 @@ enum class CTypes {
     LABEL,
     POWER,
     DATA_BUS,
+    DATA_BUS_FAN_OUT,
     NONE
 }

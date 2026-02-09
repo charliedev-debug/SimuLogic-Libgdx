@@ -10,6 +10,7 @@ class CLine(var x1:Float,var y1:Float,var x2:Float,var y2:Float, var lineWidth:F
     var color = Color.WHITE
     override fun draw(shapeRenderer: ShapeRenderer) {
         shapeRenderer.color = color
+        //shapeRenderer.line(x1,y1,x2,y2,color,color)
         shapeRenderer.rectLine(x1,y1,x2,y2,lineWidth, color, color)
     }
 

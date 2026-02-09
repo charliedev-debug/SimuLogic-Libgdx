@@ -3,6 +3,7 @@ package org.engine.simulogic.android.circuits.logic
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
+import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -124,6 +125,12 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
     fun insertCDataBus(size:Int){
         gestureListener.rectPointer.getPosition().also {position->
             connection.insertNode(ListNode(CDataBus(position.x,position.y,size,scene)))
+        }
+    }
+
+    fun insertCFanOutBus(inputSize:Int, segments:Int){
+        gestureListener.rectPointer.getPosition().also { position->
+            connection.insertNode(ListNode(CFanOutBus(position.x, position.y, inputSize, segments, scene)))
         }
     }
 

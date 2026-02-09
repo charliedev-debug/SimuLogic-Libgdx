@@ -46,7 +46,7 @@ class CustomDataBusDialog  (context: Context, private val listener:OnEditProject
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         val accept = view.findViewById<AppCompatButton>(R.id.accept)
         val pins = view.findViewById<TextInputEditText>(R.id.pins).apply {
-            filters = arrayOf(InputFilterMinMax(1, 32))
+            filters = arrayOf(InputFilterMinMax(1, 64))
         }
         accept.setOnClickListener {
             listener.success(pins.text.toString().toInt())

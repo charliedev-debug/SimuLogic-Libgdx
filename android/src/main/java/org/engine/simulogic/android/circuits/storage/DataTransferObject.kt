@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
+import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
@@ -89,6 +90,9 @@ class DataTransferObject {
                 stream.writeInt(component.value)
             }else if(component is CDataBus){
                 stream.writeInt(component.size)
+            }else if(component is CFanOutBus){
+                stream.writeInt(component.inputSize)
+                stream.writeInt(component.segments)
             }
         }
         connection.forEach { listNode ->
@@ -172,9 +176,11 @@ class DataTransferObject {
                 }
                 // power generator signal value
                 val powerValue = if(type == CTypes.POWER) stream.readInt() else 0
-
                 // data bus size value
                 val bus_size = if(type == CTypes.DATA_BUS) stream.readInt() else 0
+                // data bus fan out
+                val bus_fan_out_input_size = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
+                val bus_fan_out_segments = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
                 when (type) {
                     CTypes.AND -> {
                         connection.insertNode(ListNode(CAnd(x, y, rotation, scene)))
@@ -244,6 +250,10 @@ class DataTransferObject {
 
                     CTypes.DATA_BUS->{
                         connection.insertNode(ListNode(CDataBus(x,y,bus_size,rotation,scene)))
+                    }
+
+                    CTypes.DATA_BUS_FAN_OUT->{
+                        connection.insertNode(ListNode(CFanOutBus(x, y, bus_fan_out_input_size, bus_fan_out_segments, rotation, scene)))
                     }
 
                     else -> {

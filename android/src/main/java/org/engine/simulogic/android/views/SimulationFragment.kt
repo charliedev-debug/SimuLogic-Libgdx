@@ -250,6 +250,10 @@ class SimulationFragment(
 
                 }
 
+                ComponentBottomSheet.DATA_BUS_FAN_OUT_COMPONENT ->{
+                    simulationLoop.componentManager.insertCFanOutBus(4,7)
+                }
+
                 ComponentBottomSheet.SS_DISPLAY_COMPONENT -> {
                     simulationLoop.componentManager.insertSevenSegmentDisplay()
                 }
