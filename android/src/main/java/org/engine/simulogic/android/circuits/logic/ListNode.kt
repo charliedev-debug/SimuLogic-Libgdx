@@ -41,6 +41,34 @@ class ListNode(val value : CNode,
         AutoSave.dataChanged = true
     }
 
+    fun removeConnection(node:ListNode){
+        next.removeIf { it == node }
+        lineMarkersChildren.listIterator().also { iterator->
+            while (iterator.hasNext()){
+                val marker = iterator.next()
+                 if(marker.to == node){
+                     marker.detachSelf()
+                     iterator.remove()
+                 }
+            }
+        }
+    }
+
+    fun removeMarker(node:ListNode):LineMarker?{
+        next.removeIf { it == node }
+        lineMarkersChildren.listIterator().also { iterator->
+            while (iterator.hasNext()){
+                val marker = iterator.next()
+                if(marker.to == node){
+                    marker.detachSelf()
+                    iterator.remove()
+                    return marker
+                }
+            }
+        }
+        return null
+    }
+
     fun detachSelf(){
         synchronized(lineMarkersChildren){
             // use an iterator to prevent concurrent exceptions since we still need to modify this list on another thread

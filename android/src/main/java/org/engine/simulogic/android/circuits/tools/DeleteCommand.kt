@@ -9,10 +9,17 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class DeleteCommand(private val scene: PlayGroundScene, private val connection: Connection) : Command(){
 
     private var data = mutableListOf<DeleteItem>()
-    class DeleteItem(val node: ListNode, val children:MutableList<LineMarker> = mutableListOf())
+    class DeleteItem(val node: ListNode, val children:MutableList<LineMarker> = mutableListOf(), val parent:MutableList<LineMarker> = mutableListOf())
     fun insert(item:DeleteItem):DeleteCommand{
         item.node.getLineMarkerChildren().forEach {
             item.children.add(it)
+        }
+        val iterator = item.node.parent.listIterator()
+        while (iterator.hasNext()){
+            iterator.next().removeMarker(item.node)?.also { parentMarker->
+                item.parent.add(parentMarker)
+            }
+            iterator.remove()
         }
         item.node.detachSelf()
         data.add(item)
@@ -25,6 +32,9 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
             item.children.forEach {
                 it.attachSelf()
             }
+            item.parent.forEach {
+                it.attachSelf()
+            }
             connection.insertNode(item.node)
         }
     }
@@ -33,6 +43,9 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
         data.forEach { item->
             item.node.detachSelf()
             item.children.forEach {
+                it.detachSelf()
+            }
+            item.parent.forEach {
                 it.detachSelf()
             }
             connection.removeNode(item.node)

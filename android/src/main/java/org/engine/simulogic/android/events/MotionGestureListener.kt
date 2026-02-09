@@ -268,15 +268,16 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
     }
 
     override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean {
+
+        return false
+    }
+
+    override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         if(collisionDetector.mode == TOUCH_MODE){
             commandHistory.execute(moveCommand)
             // replace the old command to facilitate a new component or point
             moveCommand = MoveCommand()
         }
-        return false
-    }
-
-    override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         AutoSave.dataChanged = true
         return false
     }

@@ -18,16 +18,16 @@ class DeleteTool (private val dataContainer: DataContainer, private val connecti
                 val lineMarker = node.value.parent as LineMarker
                 lineMarker.removeSelf()
                 deleteLine.insert(lineMarker)
+                commandHistory.execute(deleteLine)
             }
             // it must be a component
             else{
                 connection.removeNode(node)
                 deleteComponent.insert( DeleteCommand.DeleteItem(node))
+                commandHistory.execute(deleteComponent)
             }
 
         }
-        commandHistory.execute(deleteComponent)
-        commandHistory.execute(deleteLine)
         dataContainer.clear()
     }
 }
