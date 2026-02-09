@@ -96,8 +96,14 @@ class CRandom(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGr
     }
 
     override fun execute() {
-        // perform bitwise & with a random seed and the input value, we only return a true value if the input value is true
-        signals[0].value = (Random.nextInt(100..1000).and(1)).and(signals[1].value)
+        val incomingValue = signals[1].value
+        // only do this when the input value changes
+        if(incomingValue != value) {
+            // perform bitwise & with a random seed and the input value, we only return a true value if the input value is true
+            signals[0].value = (Random.nextInt(100..1000).and(1))//.and(incomingValue)
+            value = incomingValue
+        }
+
     }
 
     override fun update() {

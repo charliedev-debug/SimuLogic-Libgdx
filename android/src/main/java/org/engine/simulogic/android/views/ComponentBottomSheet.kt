@@ -41,7 +41,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val CUSTOM_COMPONENT = "CUSTOM"
          const val BCD_DISPLAY_COMPONENT = "BCD-DISPLAY"
          const val DATA_BUS_COMPONENT = "DATA-BUS"
-         const val DATA_BUS_FAN_OUT_COMPONENT = "DATA-BUS-FAN"
+         const val DATA_BUS_FAN_OUT_COMPONENT = "FAN-OUT-BUS"
     }
     override fun onCreateView(
         inflater: LayoutInflater,
