@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
@@ -14,6 +15,7 @@ import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.tools.CommandHistory
 import org.engine.simulogic.android.circuits.tools.CopyTool
@@ -23,6 +25,7 @@ import org.engine.simulogic.android.circuits.tools.DeleteTool
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.circuits.tools.RotateCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.round
 
 
 class MotionGestureListener(private val camera:OrthographicCamera, connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
@@ -37,6 +40,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
     private val deleteTool = DeleteTool(dataContainer, connection, scene, commandHistory)
     private var moveCommand = MoveCommand()
+    private val snapAlign = SnapAlign()
     var gridDecorator:GridDecorator? = null
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
@@ -212,13 +216,20 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
         rectPointer.updatePosition(touch.x, touch.y)
         if(collisionDetector.mode == TOUCH_MODE) {
             if (collisionDetector.isNotEmpty()) {
+                val snapCoordinates = snapAlign.getSnapCoordinates(touch)
                 collisionDetector.selectedItems.forEach {
                     it.subject.also { subject ->
                         moveCommand.apply {
                             node = ListNode(subject)
-                            newPosition.set(touch.x,touch.y)
+                            if(subject is CSignal){
+                                newPosition.set(touch.x, touch.y)
+                                subject.updatePosition(touch.x, touch.y)
+                            }else {
+                                newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                            }
                         }
-                        subject.updatePosition(touch.x, touch.y)
+
                     }
                 }
             } else {

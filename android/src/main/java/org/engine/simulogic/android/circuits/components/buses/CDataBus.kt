@@ -109,20 +109,20 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
             updateColor(if(b.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
             when(rotationDirection){
                 ROTATE_RIGHT->{
-                    a.updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2 )
-                    b.updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f  * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2)
+                    a.updatePosition(getPosition().x + sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2 )
+                    b.updatePosition(getPosition().x - sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2)
                 }
                 ROTATE_LEFT->{
-                    a.updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2 )
-                    b.updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height * 0.8f  * (counter - MAX_POINTS/4) + (sprite.height * 0.8f) / 2)
+                    a.updatePosition(getPosition().x - sprite.width , getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2 )
+                    b.updatePosition(getPosition().x + sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2)
                 }
                 ROTATE_BOTTOM->{
-                    a.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2 , getPosition().y + sprite.height * 0.8125f )
-                    b.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2, getPosition().y - sprite.height * 0.8125f  )
+                    a.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2 , getPosition().y + sprite.height )
+                    b.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2, getPosition().y - sprite.height )
                 }
                 ROTATE_TOP->{
-                    a.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2 , getPosition().y - sprite.height * 0.8125f )
-                    b.updatePosition(getPosition().x + sprite.width * 0.8f * (counter - MAX_POINTS/4) + (sprite.width * 0.8f) / 2, getPosition().y + sprite.height * 0.8125f  )
+                    a.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2 , getPosition().y - sprite.height)
+                    b.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2, getPosition().y + sprite.height)
                 }
             }
 

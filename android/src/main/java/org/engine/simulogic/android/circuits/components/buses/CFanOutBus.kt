@@ -43,7 +43,7 @@ class CFanOutBus(
         this.cameraClippingEnabled = false
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x, y)
-            setSize(CDefaults.randomWidth, CDefaults.randomHeight)
+            setSize(CDefaults.GRID_WIDTH, CDefaults.GRID_HEIGHT)
             setOriginCenter()
             when (rotationDirection) {
                 ROTATE_BOTTOM -> {
@@ -67,7 +67,7 @@ class CFanOutBus(
 
         for (i in 0 until inputSize) {
             CSignal(
-                x - sprite.width * 0.8125f,
+                x - sprite.width,
                 y + sprite.height * (i - inputSize / 2) + sprite.height / 2,
                 CTypes.SIGNAL_IN,
                 i,
@@ -80,7 +80,7 @@ class CFanOutBus(
         }
         for (i in 0 until MAX_POINTS) {
             CSignal(
-                x + sprite.width * 0.8125f,
+                x + sprite.width ,
                 y + sprite.height * (i - MAX_POINTS / 2),
                 CTypes.SIGNAL_OUT,
                 i + inputSize,
@@ -167,7 +167,7 @@ class CFanOutBus(
             inputSignals[i].also { signal ->
                 updateColor(if (signal.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
                 signal.updatePosition(
-                    getPosition().x - sprite.width * 0.8125f,
+                    getPosition().x - sprite.width,
                     getPosition().y + sprite.height * (i - inputSize / 2) + sprite.height / 2
                 )
             }
@@ -177,7 +177,7 @@ class CFanOutBus(
             outputSignals[i].also { signal ->
                 updateColor(if (signal.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
                 signal.updatePosition(
-                    getPosition().x + sprite.width * 0.8125f,
+                    getPosition().x + sprite.width ,
                     getPosition().y + sprite.height * (i - MAX_POINTS / 2)
                 )
             }

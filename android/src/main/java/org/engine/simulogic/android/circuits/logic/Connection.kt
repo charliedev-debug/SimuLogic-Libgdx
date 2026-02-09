@@ -6,6 +6,7 @@ import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 import java.util.LinkedList
+import kotlin.math.abs
 
 class Connection : Iterable<ListNode>, IUpdate {
 
