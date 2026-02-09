@@ -152,7 +152,7 @@ class CFanOutBus(
     }
 
     override fun execute() {
-        for (i in 0 until MAX_POINTS / inputSize step inputSize){
+        for (i in 0 until MAX_POINTS  step inputSize){
             for(j in 0 until  inputSize){
                 val output = outputSignals[i + j]
                 val input = inputSignals[j]
