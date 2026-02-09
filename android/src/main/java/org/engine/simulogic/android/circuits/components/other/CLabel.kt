@@ -23,7 +23,6 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
     init {
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
-        layout.setText(font,text)
         type = CTypes.LABEL
         sprite = Sprite(spriteRegion)
         scene.getLayerById(layerId.name).also {  layer->
@@ -33,7 +32,15 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
 
     override fun draw(spriteBatch: SpriteBatch) {
         font.color = color
-        font.draw(spriteBatch, text, position.x - layout.width / 2f, position.y - layout.height / 2f)
+        layout.setText(font,text)
+        if(text.isNotEmpty()) {
+            font.draw(
+                spriteBatch,
+                text,
+                position.x - layout.width / 2f,
+                position.y - layout.height / 2f
+            )
+        }
     }
 
     override fun update() {
