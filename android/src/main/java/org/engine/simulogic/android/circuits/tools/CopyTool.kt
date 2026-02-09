@@ -7,6 +7,7 @@ import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 class CopyTool(
@@ -15,6 +16,7 @@ class CopyTool(
     private val commandHistory: CommandHistory
 ) {
 
+    private val snapAlign = SnapAlign()
     fun execute(
         originX: Float,
         originY: Float,
@@ -31,9 +33,13 @@ class CopyTool(
         // process all possible clones then create lines for them
         for ( i in 0 until dataContainer.size()){
             val data = dataContainer[i]
+
              data.clone().also { clone->
-                 clone.value.updatePosition(clone.value.getPosition().x - ox + originX,
-                     clone.value.getPosition().y - oy + originY)
+                 snapAlign.getSnapCoordinates(clone.value.getPosition().x - ox + originX,
+                     clone.value.getPosition().y - oy + originY).also { coordinates->
+                     clone.value.updatePosition( coordinates.x, coordinates.y)
+                 }
+
                  when(clone.value){
                      is CClock-> connection.insertExecutionPoint(clone)
                      is CPower-> connection.insertExecutionPoint(clone)
@@ -54,7 +60,10 @@ class CopyTool(
                         lineMarker.signals.forEachIndexed{indexPoint,originPoint->
                             val px = originPoint.getPosition().x - ox
                             val py = originPoint.getPosition().y - oy
-                            lineMarkerClone.signals[indexPoint].updatePosition(originX+px, originY+py)
+                            snapAlign.getSnapCoordinates(originX + px, originY + py).also { coordinates->
+                                lineMarkerClone.signals[indexPoint].updatePosition(coordinates.x, coordinates.y)
+                            }
+
                         }
                         clone.insertChildUnmarked(cloneChild,lineMarkerClone)
                     }

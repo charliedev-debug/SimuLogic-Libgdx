@@ -62,7 +62,7 @@ class CFanOutBus(
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.randomWidth / 2f, y - CDefaults.randomHeight / 2f)
+            setPosition(x - CDefaults.GRID_WIDTH / 2f, y - CDefaults.GRID_HEIGHT / 2f)
         }
 
         for (i in 0 until inputSize) {
@@ -163,9 +163,10 @@ class CFanOutBus(
 
     override fun update() {
 
+        var signalActive = false
         for (i in 0 until inputSignals.size) {
             inputSignals[i].also { signal ->
-                updateColor(if (signal.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+                signalActive = (signal.value == SIGNAL_ACTIVE) || signalActive
                 signal.updatePosition(
                     getPosition().x - sprite.width,
                     getPosition().y + sprite.height * (i - inputSize / 2) + sprite.height / 2
@@ -175,7 +176,7 @@ class CFanOutBus(
 
         for (i in 0 until outputSignals.size) {
             outputSignals[i].also { signal ->
-                updateColor(if (signal.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+                signalActive = (signal.value == SIGNAL_ACTIVE) || signalActive
                 signal.updatePosition(
                     getPosition().x + sprite.width ,
                     getPosition().y + sprite.height * (i - MAX_POINTS / 2)
@@ -202,6 +203,8 @@ class CFanOutBus(
                 b.getPosition().y
             )
         }
+
+        updateColor(if (signalActive) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
         /*for((counter, i) in (0 until MAX_POINTS step 2).withIndex()) {
           val a = signals[i]
           val b = signals[i+1]

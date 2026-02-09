@@ -26,7 +26,7 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
         this.cameraClippingEnabled = false
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.randomWidth, CDefaults.randomHeight)
+            setSize(CDefaults.GRID_WIDTH, CDefaults.GRID_HEIGHT)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM ->{
@@ -42,7 +42,7 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.randomWidth / 2f,y - CDefaults.randomHeight / 2f)
+            setPosition(x - CDefaults.GRID_WIDTH / 2f,y - CDefaults.GRID_HEIGHT / 2f)
         }
         for(i in 0 until MAX_POINTS step  2) {
             signals.add(CSignal(x + sprite.width * 0.8125f, y + sprite.height * (i - MAX_POINTS / 4) , CTypes.SIGNAL_OUT, i, scene))

@@ -9,13 +9,15 @@ import kotlin.math.round
 class SnapAlign {
     private val position = Vector2()
     fun getSnapCoordinates(coordinates:Vector2):Vector2{
-        val snapX = round(coordinates.x / CDefaults.GRID_WIDTH) * CDefaults.GRID_WIDTH
-        val snapY = round(coordinates.y / CDefaults.GRID_HEIGHT) * CDefaults.GRID_HEIGHT
-        return position.set(snapX, snapY)
+        return getSnapCoordinates(coordinates.x, coordinates.y)
     }
     fun getSnapCoordinates(coordinates:Vector3):Vector2{
-        val snapX = round(coordinates.x / CDefaults.GRID_WIDTH) * CDefaults.GRID_WIDTH
-        val snapY = round(coordinates.y / CDefaults.GRID_HEIGHT) * CDefaults.GRID_HEIGHT
+        return getSnapCoordinates(coordinates.x, coordinates.y)
+    }
+    fun getSnapCoordinates(x:Float, y:Float):Vector2{
+        val snapX = round(x / CDefaults.GRID_WIDTH) * CDefaults.GRID_WIDTH
+        val snapY = round(y / CDefaults.GRID_HEIGHT) * CDefaults.GRID_HEIGHT
         return position.set(snapX, snapY)
     }
+
 }
