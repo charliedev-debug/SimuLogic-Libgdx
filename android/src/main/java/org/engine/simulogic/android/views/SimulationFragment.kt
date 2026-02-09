@@ -15,6 +15,7 @@ import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
+import org.engine.simulogic.android.views.dialogs.CustomBroadCastBusDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
@@ -247,11 +248,23 @@ class SimulationFragment(
                         override fun failure(msg: String) {}
                         override fun cancel() {}
                     }).show()
-
                 }
 
                 ComponentBottomSheet.DATA_BUS_FAN_OUT_COMPONENT ->{
-                    simulationLoop.componentManager.insertCFanOutBus(4,7)
+                    CustomBroadCastBusDialog(requireContext(),object :CustomBroadCastBusDialog.OnCreateBusListener{
+                        override fun success(inputs: Int, segments: Int) {
+                            simulationLoop.componentManager.insertCFanOutBus(inputs,segments)
+                        }
+
+                        override fun failure(msg: String) {
+
+                        }
+
+                        override fun cancel() {
+
+                        }
+
+                    }).show()
                 }
 
                 ComponentBottomSheet.SS_DISPLAY_COMPONENT -> {

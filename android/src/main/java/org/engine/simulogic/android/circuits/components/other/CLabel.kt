@@ -43,17 +43,16 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
                 position.x - layout.width / 2f,
                 position.y - layout.height / 2f
             )
-
         }
     }
 
     override fun update() {
         // this helps when resolving for collisions
         sprite.setOrigin(position.x , position.y)
-        sprite.setSize(layout.width *1.1f , layout.height * 2 )
+        sprite.setSize(layout.width * 1.1f , layout.height * 2f )
         sprite.setOriginCenter()
         sprite.color = CDefaults.LABEL_SELECTED_COLOR
-        sprite.setPosition(position.x - sprite.width /2f,position.y - layout.height * 2)
+        sprite.setPosition(position.x - sprite.width /2f,position.y - layout.height * 2f)
     }
 
     override fun contains(entity: CNode): CNode? {
