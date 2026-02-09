@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.logic
 
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
@@ -38,8 +39,8 @@ class Connection : Iterable<ListNode>, IUpdate {
         }
     }
 
-    fun insertConnection(parent:ListNode, child:ListNode, signalFrom: Int, signalTo: Int, scene:PlayGroundScene){
-        parent.insertChild(child, signalFrom, signalTo, scene)
+    fun insertConnection(parent:ListNode, child:ListNode, signalFrom: Int, signalTo: Int, scene:PlayGroundScene):LineMarker{
+        return parent.insertChild(child, signalFrom, signalTo, scene)
     }
 
     override fun update() {

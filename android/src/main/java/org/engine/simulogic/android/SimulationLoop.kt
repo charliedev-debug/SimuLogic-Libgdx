@@ -39,7 +39,6 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     private val assetManager = AssetManager()
     private val connection = Connection()
     private val collisionDetector = CollisionDetector(connection)
-    private lateinit var connectionManager : ConnectionManager
     private lateinit var scene:PlayGroundScene
     private lateinit var gridDecorator: GridDecorator
     private lateinit var executor: Executor
@@ -74,7 +73,6 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
        // connection.insertNode(ListNode(CAnd(200f,200f,scene)))
        // connection.insertNode(ListNode(CAnd(400f,300f,scene)))
         gestureListener = MotionGestureListener(camera, connection,collisionDetector,scene)
-        connectionManager = ConnectionManager(connection, collisionDetector, scene)
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
         executor = Executor(connection)
@@ -101,7 +99,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)
         connection.update()
         gridDecorator.update()
-        connectionManager.resolveConnection()
+        gestureListener.update()
         scene.update()
         scene.draw()
         fpsCounter.update()

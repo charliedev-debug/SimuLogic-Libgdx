@@ -15,11 +15,13 @@ class ListNode(val value : CNode,
                val next: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
     private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
-    fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene) {
+    fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene):LineMarker {
         next.add(child)
         child.parent.add(this)
-        lineMarkersChildren.add(LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) })
+        val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) }
+        lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
+        return marker
     }
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){

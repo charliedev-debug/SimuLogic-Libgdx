@@ -3,6 +3,8 @@ package org.engine.simulogic.android.circuits.logic
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.tools.CommandHistory
+import org.engine.simulogic.android.circuits.tools.ConnectionCommand
 import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
@@ -10,6 +12,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class ConnectionManager(
     private val connection: Connection,
     private val collisionDetector: CollisionDetector,
+    private val commandHistory: CommandHistory,
     private val scene: PlayGroundScene
 ) {
     private val validationMap = mutableMapOf<CTypes, List<CTypes>>()
@@ -52,7 +55,9 @@ class ConnectionManager(
                     a.subject.signalIndex,
                     b.subject.signalIndex,
                     scene
-                )
+                ).also { marker->
+                    commandHistory.execute(ConnectionCommand(marker))
+                }
             } else {
                 connection.insertConnection(
                     b.caller,
@@ -60,7 +65,9 @@ class ConnectionManager(
                     b.subject.signalIndex,
                     a.subject.signalIndex,
                     scene
-                )
+                ).also { marker->
+                    commandHistory.execute(ConnectionCommand(marker))
+                }
             }
 
             collisionDetector.selectedItems.forEach {

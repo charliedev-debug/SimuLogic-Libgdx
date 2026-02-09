@@ -14,6 +14,7 @@ import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
+import org.engine.simulogic.android.circuits.logic.ConnectionManager
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.storage.AutoSave
@@ -39,6 +40,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
     private val cutTool = CutTool(dataContainer, commandHistory)
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
     private val deleteTool = DeleteTool(dataContainer, connection, scene, commandHistory)
+    private val connectionManager = ConnectionManager(connection, collisionDetector,commandHistory,scene)
     private var moveCommand = MoveCommand()
     private val snapAlign = SnapAlign()
     var gridDecorator:GridDecorator? = null
@@ -159,7 +161,8 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
 
 
     override fun update() {
-        rangeSelect.connection.update()
+       // rangeSelect.connection.update()
+        connectionManager.resolveConnection()
     }
 
     private fun sendRangeItemsToDataContainer(){
