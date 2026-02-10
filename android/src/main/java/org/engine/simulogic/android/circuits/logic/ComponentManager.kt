@@ -194,6 +194,11 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
             }
         }
     }
+
+    fun insertGroup(){
+        gestureListener.insertGroup()
+    }
+
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
     }

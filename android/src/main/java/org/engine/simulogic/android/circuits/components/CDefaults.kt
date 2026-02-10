@@ -24,6 +24,8 @@ class CDefaults {
         val GATE_UNSELECTED_COLOR = Color.WHITE
         val INPUT_SELECTED_COLOR = Color.RED
         val INPUT_UNSELECTED_COLOR = Color.WHITE
+        val GROUP_SELECTED_COLOR = Color(1f, 1f, 1f , 0.2f)
+        val GROUP_UNSELECTED_COLOR = Color(1f, 1f, 1f , 0f)
         val LINE_MARKER_ACTIVE = Color(136f/255f, 218f/255f, 248f/255f,1f)
         val LINE_MARKER_INACTIVE = Color(1f,1f,1f,1f)
         val SIGNAL_ACTIVE_COLOR = Color(76f/255f, 175f/255f, 80f/255f,1f)

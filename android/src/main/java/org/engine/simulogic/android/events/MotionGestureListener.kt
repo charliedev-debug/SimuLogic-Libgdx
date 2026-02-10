@@ -11,6 +11,7 @@ import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
@@ -29,7 +30,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.round
 
 
-class MotionGestureListener(private val camera:OrthographicCamera, connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
+class MotionGestureListener(private val camera:OrthographicCamera, private val connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene)
@@ -159,6 +160,26 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
       //  println("Data Size: ${connection.size()}")
     }
 
+    fun insertGroup(){
+       sendRangeItemsToDataContainer()
+        if(dataContainer.isNotEmpty()) {
+            connection.insertNode(
+                ListNode(
+                    CGroup(
+                        rectPointer.getPosition().x,
+                        rectPointer.getPosition().y,
+                        scene
+                    ).also { group->
+                        group.insert(dataContainer,rangeSelect)
+                    }
+                )
+            )
+
+        }
+        setMode(TOUCH_MODE)
+        dataContainer.clear()
+    }
+
 
     override fun update() {
        // rangeSelect.connection.update()
@@ -198,7 +219,10 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
                 // this might be moved in the future
-                moveCommand.oldPosition.set(touch.x, touch.y)
+                snapAlign.getSnapCoordinates(touch).also { coord->
+                    moveCommand.oldPosition.set(coord.x, coord.y)
+                }
+
             }
 
             if (collisionDetector.mode == RANGED_SELECTION_MODE) {
@@ -224,7 +248,9 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
                     it.subject.also { subject ->
                         moveCommand.apply {
                             node = ListNode(subject)
-                            if(subject is CSignal){
+                            if(subject is CGroup){
+                                 subject.translate( touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
+                            }else if(subject is CSignal){
                                 newPosition.set(touch.x, touch.y)
                                 subject.updatePosition(touch.x, touch.y)
                             }else {
@@ -278,6 +304,13 @@ class MotionGestureListener(private val camera:OrthographicCamera, connection: C
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         if(collisionDetector.mode == TOUCH_MODE){
             commandHistory.execute(moveCommand)
+            collisionDetector.selectedItems.forEach {
+                it.subject.also { subject ->
+                    if (subject is CGroup) {
+                        subject.resetPositionBuffers()
+                    }
+                }
+            }
             // replace the old command to facilitate a new component or point
             moveCommand = MoveCommand()
         }

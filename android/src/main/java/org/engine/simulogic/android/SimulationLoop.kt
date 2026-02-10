@@ -102,6 +102,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         gestureListener.update()
         scene.update()
         scene.draw()
+
         fpsCounter.update()
         executor.execute()
         AutoSave.instance.run()

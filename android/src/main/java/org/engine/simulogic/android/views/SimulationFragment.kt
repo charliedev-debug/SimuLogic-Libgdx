@@ -101,6 +101,10 @@ class SimulationFragment(
                         simulationLoop.gestureListener.rotateRight()
                     }
 
+                    "Group" ->{
+                        simulationLoop.componentManager.insertGroup()
+                    }
+
                     "Redo" -> {
                         simulationLoop.gestureListener.redo()
                     }

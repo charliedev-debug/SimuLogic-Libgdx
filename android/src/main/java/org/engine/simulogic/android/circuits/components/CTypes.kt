@@ -24,5 +24,6 @@ enum class CTypes {
     POWER,
     DATA_BUS,
     DATA_BUS_FAN_OUT,
+    GROUP,
     NONE
 }

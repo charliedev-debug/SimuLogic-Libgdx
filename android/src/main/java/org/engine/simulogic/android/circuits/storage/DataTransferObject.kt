@@ -19,6 +19,7 @@ import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.latches.CLatch
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
@@ -70,10 +71,14 @@ class DataTransferObject {
         stream.write(description.toByteArray(Charsets.UTF_8))
         // component size
         stream.writeInt(connection.size())
+        // assign indices first for later processing
+        connection.forEachIndexed { index, listNode ->
+            listNode.value.id = index
+        }
         // save the components first for easier reading in the future
         connection.forEachIndexed { index, listNode ->
             // the id will change after every save
-            val component = listNode.value.apply { id = index }
+            val component = listNode.value
             stream.writeInt(component.type.name.length)
             stream.write(component.type.name.toByteArray(Charsets.UTF_8))
             stream.writeInt(index)
@@ -93,6 +98,13 @@ class DataTransferObject {
             }else if(component is CFanOutBus){
                 stream.writeInt(component.inputSize)
                 stream.writeInt(component.segments)
+            }else if(component is CGroup){
+                stream.writeFloat(component.getWidth())
+                stream.writeFloat(component.getHeight())
+                stream.writeInt(component.dataContainer.size())
+                component.dataContainer.forEach { item->
+                    stream.writeInt(item.value.id)
+                }
             }
         }
         connection.forEach { listNode ->
@@ -148,6 +160,7 @@ class DataTransferObject {
         val file = Gdx.files.external("projects/${projectOptions.fileName}")
        // println("${projectOptions.title} = ${file.file().path}")
         val stream = DataInputStream(BufferedInputStream(file.read()))
+        val groups = mutableListOf<CGroup>()
         try {
             val identifier = stream.readInt()
             if (identifier != IDENTIFIER) throw IOException("Corrupt or Not a circuit file")
@@ -181,6 +194,20 @@ class DataTransferObject {
                 // data bus fan out
                 val bus_fan_out_input_size = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
                 val bus_fan_out_segments = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
+                // load group width, height and all group members
+                val groupWidth = if(type == CTypes.GROUP) stream.readFloat() else 0f
+                val groupHeight = if (type == CTypes.GROUP) stream.readFloat() else 0f
+                val groupMemberIds = if(type == CTypes.GROUP) {
+                    mutableListOf<Int>().also { list->
+                        var dataContainerSize = stream.readInt()
+                        while (dataContainerSize > 0){
+                            list.add(stream.readInt())
+                            dataContainerSize--
+                        }
+                    }
+                }else{
+                    mutableListOf()
+                }
                 when (type) {
                     CTypes.AND -> {
                         connection.insertNode(ListNode(CAnd(x, y, rotation, scene)))
@@ -255,12 +282,24 @@ class DataTransferObject {
                     CTypes.DATA_BUS_FAN_OUT->{
                         connection.insertNode(ListNode(CFanOutBus(x, y, bus_fan_out_input_size, bus_fan_out_segments, rotation, scene)))
                     }
+                    CTypes.GROUP ->{
+                        connection.insertNode(ListNode(CGroup(x , y, scene).also { group->
+                            group.setSize(groupWidth, groupHeight)
+                            group.componentGroupIds.addAll(groupMemberIds)
+                            groups.add(group)
+                        }))
+                    }
 
                     else -> {
                         throw IOException("Unknown component exception $type")
                     }
                 }
             }
+
+            groups.forEach {
+                it.loadFromIds(connection)
+            }
+
             while (true) {
                 val fromId = stream.readInt()
                 val markerSizeFrom = stream.readInt()

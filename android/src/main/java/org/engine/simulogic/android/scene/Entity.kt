@@ -78,6 +78,8 @@ abstract class Entity {
             data.removeIf { it.isRemoved }
         }
     }
+
+    open fun translate(offsetX:Float, offsetY:Float){}
     open fun updatePosition(x:Float, y:Float){}
     open fun updatePosition(position:Vector2){}
     open fun updatePosition(position:Vector3){}

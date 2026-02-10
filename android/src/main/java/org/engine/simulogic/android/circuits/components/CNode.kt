@@ -45,6 +45,10 @@ open class CNode : Entity(), ICollidable,IExecutable{
         }
     }
 
+    override fun setSize(width: Float, height: Float) {
+            sprite.setSize(width, height)
+    }
+
     fun rotateRight(){
         rotationDirection = (rotationDirection + 1) % 4
         updatePosition(getPosition().x, getPosition().y)
