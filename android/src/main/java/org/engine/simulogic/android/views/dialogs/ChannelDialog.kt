@@ -25,8 +25,8 @@ class ChannelDialog (context: Context, private val listener:OnChannelListener) :
             type = if(R.id.type_input == id) 0 else 1
         }
         accept.setOnClickListener {
-            if(!ChannelBuffer.isAvailable(channelId.text.toString())) {
-                listener.success(channelId.text.toString(), 0)
+            if(!ChannelBuffer.isAvailable(channelId.text.toString()) || type == 1) {
+                listener.success(channelId.text.toString(), type)
                 dismiss()
             }else{
                 channelId.error = "The input channel already exists!"
