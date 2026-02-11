@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoa
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.utils.ScreenUtils
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
+import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.ComponentManager
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ConnectionManager
@@ -116,6 +117,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     override fun dispose() {
         batch.dispose()
         assetManager.dispose()
+        ChannelBuffer.clear()
     }
 
 

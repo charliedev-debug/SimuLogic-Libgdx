@@ -18,10 +18,13 @@ import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
+import org.engine.simulogic.android.circuits.components.wireless.CChannel
+import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 class ComponentManager(private val projectOptions: ProjectOptions,private val executor: Executor,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
@@ -202,6 +205,19 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
     fun removeGroup(){
         gestureListener.removeGroup()
     }
+
+    fun insertChannel(id:String, type:Int){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CChannel(coordinates.x, coordinates.y, id,type, Entity.ROTATE_RIGHT, scene).also { channel->
+                    if(channel.channelType == 0){
+                        ChannelBuffer.insert(channel)
+                    }
+                }))
+            }
+        }
+    }
+
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
     }

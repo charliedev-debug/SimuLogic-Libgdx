@@ -25,5 +25,6 @@ enum class CTypes {
     DATA_BUS,
     DATA_BUS_FAN_OUT,
     GROUP,
+    CHANNEL,
     NONE
 }

@@ -42,6 +42,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val BCD_DISPLAY_COMPONENT = "BCD-DISPLAY"
          const val DATA_BUS_COMPONENT = "DATA-BUS"
          const val DATA_BUS_FAN_OUT_COMPONENT = "FAN-OUT-BUS"
+         const val CHANNEL_COMPONENT = "CHANNEL"
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +88,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
+        generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
         generalAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
         val templateAdapter = ComponentViewAdapter()
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)

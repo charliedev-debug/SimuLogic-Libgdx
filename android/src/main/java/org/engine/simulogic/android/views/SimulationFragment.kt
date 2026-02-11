@@ -15,6 +15,7 @@ import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
+import org.engine.simulogic.android.views.dialogs.ChannelDialog
 import org.engine.simulogic.android.views.dialogs.CustomBroadCastBusDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
@@ -262,6 +263,23 @@ class SimulationFragment(
                     CustomBroadCastBusDialog(requireContext(),object :CustomBroadCastBusDialog.OnCreateBusListener{
                         override fun success(inputs: Int, segments: Int) {
                             simulationLoop.componentManager.insertCFanOutBus(inputs,segments)
+                        }
+
+                        override fun failure(msg: String) {
+
+                        }
+
+                        override fun cancel() {
+
+                        }
+
+                    }).show()
+                }
+
+                ComponentBottomSheet.CHANNEL_COMPONENT ->{
+                    ChannelDialog(requireContext(), object :ChannelDialog.OnChannelListener{
+                        override fun success(id: String, type: Int) {
+                            simulationLoop.componentManager.insertChannel(id, type)
                         }
 
                         override fun failure(msg: String) {
