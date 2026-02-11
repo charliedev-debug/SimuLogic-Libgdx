@@ -105,6 +105,10 @@ class SimulationFragment(
                         simulationLoop.componentManager.insertGroup()
                     }
 
+                    "UnGroup" ->{
+                        simulationLoop.componentManager.removeGroup()
+                    }
+
                     "Redo" -> {
                         simulationLoop.gestureListener.redo()
                     }

@@ -180,6 +180,15 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
         dataContainer.clear()
     }
 
+    fun removeGroup(){
+        collisionDetector.selectedItems.forEach { item ->
+            if (item.subject is CGroup){
+                item.caller.detachSelf()
+                connection.removeNode(item.caller)
+            }
+        }
+        collisionDetector.reset()
+    }
 
     override fun update() {
        // rangeSelect.connection.update()

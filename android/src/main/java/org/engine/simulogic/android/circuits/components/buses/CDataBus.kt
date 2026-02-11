@@ -94,7 +94,7 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
     }
 
     override fun execute() {
-        for(i in 0 until MAX_POINTS / 2 step  2){
+        for(i in 0 until MAX_POINTS step  2){
             val output = signals[i]
             val input =  signals[i+ 1]
             output.value = input.value

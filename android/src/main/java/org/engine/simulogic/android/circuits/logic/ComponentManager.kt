@@ -199,6 +199,9 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
         gestureListener.insertGroup()
     }
 
+    fun removeGroup(){
+        gestureListener.removeGroup()
+    }
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
     }
