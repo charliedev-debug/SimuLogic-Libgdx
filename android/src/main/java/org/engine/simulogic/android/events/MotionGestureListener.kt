@@ -298,6 +298,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
+
         return false
     }
 

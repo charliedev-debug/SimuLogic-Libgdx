@@ -15,27 +15,27 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
 
 
     class InputFilterMinMax: InputFilter {
-        private var min:Int = 0
-        private var max:Int = 0
-        constructor(min:Int, max:Int) {
+        private var min:Float = 0f
+        private var max:Float = 0f
+        constructor(min:Float, max:Float) {
             this.min = min
             this.max = max
         }
         constructor(min:String, max:String) {
-            this.min = Integer.parseInt(min)
-            this.max = Integer.parseInt(max)
+            this.min = min.toFloat()
+            this.max = max.toFloat()
         }
         override fun filter(source:CharSequence, start:Int, end:Int, dest: Spanned, dstart:Int, dend:Int): CharSequence? {
             try
             {
-                val input = Integer.parseInt(dest.toString() + source.toString())
+                val input = (dest.toString() + source.toString()).toFloat()
                 if (isInRange(min, max, input))
                     return null
             }
             catch (_:NumberFormatException) {}
             return ""
         }
-        private fun isInRange(a:Int, b:Int, c:Int):Boolean {
+        private fun isInRange(a:Float, b:Float, c:Float):Boolean {
             return if (b > a) c in a..b else c in b..a
         }
     }
@@ -46,7 +46,7 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         val accept = view.findViewById<AppCompatButton>(R.id.accept)
         val clock = view.findViewById<TextInputEditText>(R.id.clock).apply {
-            filters = arrayOf(InputFilterMinMax(1, 60))
+            filters = arrayOf(InputFilterMinMax(0.0f, 60f))
         }
         // ignore the extension
         clock.setText(projectOptions.title)

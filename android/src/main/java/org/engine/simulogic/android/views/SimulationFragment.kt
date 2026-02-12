@@ -214,7 +214,7 @@ class SimulationFragment(
                         projectOptions,
                         object : CustomClockDialog.OnEditProjectClickListener {
                             override fun success(freq: Float) {
-                                simulationLoop.componentManager.insertCClock(1f / 60f)
+                                simulationLoop.componentManager.insertCClock(freq)
                             }
 
                             override fun failure(msg: String) {

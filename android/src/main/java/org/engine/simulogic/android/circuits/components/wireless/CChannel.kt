@@ -18,7 +18,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
         val spriteRegion = textureAtlas.findRegion("CHANNEL")
         type = CTypes.CHANNEL
         this.rotationDirection = rotationDirection
-        if(channelType == 0) {
+        if(channelType == ChannelBuffer.CHANNEL_INPUT) {
             ChannelBuffer.insertInput(this)
         }
         sprite = Sprite(spriteRegion).apply {
@@ -42,7 +42,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
             setPosition(x - CDefaults.ledWidth / 2f,y - CDefaults.ledHeight / 2f)
         }
 
-        signals.add(CSignal(x + sprite.width * 0.8125f, y , if(channelType == 0)  CTypes.SIGNAL_IN else CTypes.SIGNAL_OUT,0, scene))
+        signals.add(CSignal(x + sprite.width * 0.8125f, y , if(channelType == ChannelBuffer.CHANNEL_INPUT)  CTypes.SIGNAL_IN else CTypes.SIGNAL_OUT,0, scene))
         signals.forEach {
             attachChild(it)
         }
@@ -63,7 +63,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
     }
 
     override fun execute() {
-        if(channelType == 1){
+        if(channelType == ChannelBuffer.CHANNEL_OUTPUT){
             ChannelBuffer.getInput(channelId)?.also { input->
                 signals[0].value = input.signals[0].value
             }
@@ -85,7 +85,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
             }
             layer.attachChild(this)
         }
-        if(channelType == 0){
+        if(channelType == ChannelBuffer.CHANNEL_INPUT){
             ChannelBuffer.removeInput(this)
             ChannelBuffer.insertInput(this)
         }
@@ -95,7 +95,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
         super.detachSelf()
         lines.forEach { it.detachSelf() }
         signals.forEach { it.detachSelf() }
-        if(channelType == 0){
+        if(channelType == ChannelBuffer.CHANNEL_INPUT){
             ChannelBuffer.removeInput(this)
         }
     }

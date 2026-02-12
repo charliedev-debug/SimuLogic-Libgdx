@@ -24,6 +24,7 @@ class LayerLines(layerId:String) : Layer(layerId) {
                             ((x2+ 10f) >= topLeft && (x2-10f) <= topRight)||
                             ((y1 + 10f) >= bottomLeft && (y1 - 10f) <= bottomRight)||
                             ((y2 + 10f) >= bottomLeft && (y2 - 10f) <= bottomRight)){
+                            entity.zoomFactor = camera.zoom
                             entity.draw(shapeRenderer)
                         }
                     }else {

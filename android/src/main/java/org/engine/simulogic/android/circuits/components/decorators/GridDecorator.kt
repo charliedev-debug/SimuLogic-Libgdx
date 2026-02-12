@@ -61,12 +61,12 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 15f
         val labelOffsetX = 15f
-        val lineCountX = round(viewPortWidth / spacingX).toInt()
-        val lineCountY = round(viewPortHeight / spacingY).toInt()
+        val lineCountX = round(viewPortWidth / spacingX).toInt() + 2
+        val lineCountY = round(viewPortHeight / spacingY).toInt() + 2
         val originX = camera.position.x - viewPortWidth / 2f
         val originY = camera.position.y - viewPortHeight / 2f
         // prevents flickering
-        val lineWidth = 1f * camera.zoom
+        val lineWidth = 1f
         val endX = originX + viewPortWidth
         val endY = originY + viewPortHeight
 
@@ -97,7 +97,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                         color = labelColor
                         lineHeader.updatePosition(x, getPosition().y, x, 0f )
                         lineHeader.color = labelHeaderColor
-                        lineHeader.lineWidth = 1f * camera.zoom
+                        lineHeader.lineWidth = lineWidth
                         lineLayer.attachChild(lineHeader)
                         lineHeader.isVisible = labelHeaderVisible && gridVisible
                         isVisible = labelsVisible
@@ -122,7 +122,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                     color = labelColor
                     lineHeader.updatePosition(getPosition().x, y, viewPortWidth, y )
                     lineHeader.color = labelHeaderColor
-                    lineHeader.lineWidth = 1f * camera.zoom
+                    lineHeader.lineWidth = lineWidth
                     lineLayer.attachChild(lineHeader)
                     lineHeader.isVisible = labelHeaderVisible && gridVisible
                     isVisible = labelsVisible
@@ -190,7 +190,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
 
         labelsY.sortBy { it.getPosition().y }
         labelsY.forEach {
-            it.updatePosition(originX + labelOffsetX , it.getPosition().y)
+            it.updatePosition(originX + labelOffsetX + it.getWidth() / 4f , it.getPosition().y)
             it.lineHeader.updatePosition(it.getPosition().x, it.getPosition().y, endX, it.getPosition().y)
             it.lineHeader.isVisible = labelHeaderVisible && gridVisible
             it.isVisible = labelsVisible

@@ -18,8 +18,10 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(x ,y)
     private var previousSnapPosition = Vector2()
+    var collidableChildren = true
     private val snapAlign = SnapAlign()
     val componentGroupIds = mutableListOf<Int>()
+
      init {
          val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
          val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
@@ -42,13 +44,18 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
 
     fun insert(inputContainer: DataContainer, range: CRangeSelect){
         inputContainer.insertTo(dataContainer)
+        dataContainer.forEach {node->
+            node.value.collidable = false
+        }
         setSize(range.getWidth(),range.getHeight())
         updatePosition(range.getPosition().x ,range.getPosition().y)
     }
 
     fun loadFromIds(connection:Connection){
         componentGroupIds.forEach {index->
-            dataContainer.insert(connection[index])
+            dataContainer.insert(connection[index].also { node->
+                node.value.collidable = false
+            })
         }
         updatePosition(getPosition().x - getWidth() / 2f,getPosition().y - getHeight() / 2f)
     }
@@ -97,34 +104,40 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
     }
 
     override fun contains(entity: CNode): CNode? {
+        if(collidableChildren) {
+            dataContainer.forEach {
+                it.value.collidable = true
+                val childCollides = it.contains(entity)
+                it.value.collidable = false
+                if (childCollides != null) {
+                    return childCollides
+                }
+            }
+        }
         val parentCollides = super.contains(entity)
         if(parentCollides != null){
             return parentCollides
         }
-        data.forEach {
-            if(it is CNode){
-                val childCollides = it.contains(entity)
-                if(childCollides != null){
-                    return childCollides
-                }
-            }
-        }
+
         return null
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        val parentCollides = super.contains(rect)
-        if(parentCollides != null){
-            return parentCollides
-        }
-        data.forEach {
-            if(it is CNode){
+        if(collidableChildren) {
+            dataContainer.forEach {
+                it.value.collidable = true
                 val childCollides = it.contains(rect)
-                if(childCollides != null){
+                it.value.collidable = false
+                if (childCollides != null) {
                     return childCollides
                 }
             }
         }
+        val parentCollides = super.contains(rect)
+        if(parentCollides != null){
+            return parentCollides
+        }
+
         return null
     }
 

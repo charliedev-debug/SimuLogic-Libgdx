@@ -52,6 +52,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     override fun create() {
         camera = OrthographicCamera()
         camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+        camera.zoom = 1.5f
         batch = SpriteBatch()
 
         assetManager.load("component.atlas", TextureAtlas::class.java)
@@ -63,11 +64,10 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
         val fontParameter = FreeTypeFontLoaderParameter()
             fontParameter.fontFileName = "fonts/RobotoMono-SemiBold.ttf"
-            fontParameter.fontParameters.size = 15
+            fontParameter.fontParameters.size = 25
         assetManager.load("RobotoMono-SemiBold.ttf", BitmapFont::class.java, fontParameter)
 
         assetManager.finishLoading()
-
 
         scene = PlayGroundScene(spriteBatch = batch, camera = camera, assetManager = assetManager)
 

@@ -8,10 +8,11 @@ import org.engine.simulogic.android.scene.Entity
 class CLine(var x1:Float,var y1:Float,var x2:Float,var y2:Float, var lineWidth:Float) : Entity(){
 
     var color = Color.WHITE
+    var zoomFactor = 1f
     override fun draw(shapeRenderer: ShapeRenderer) {
         shapeRenderer.color = color
         //shapeRenderer.line(x1,y1,x2,y2,color,color)
-        shapeRenderer.rectLine(x1,y1,x2,y2,lineWidth, color, color)
+        shapeRenderer.rectLine(x1,y1,x2,y2,lineWidth  * zoomFactor, color, color)
     }
 
     override fun updatePosition(x1: Float, y1: Float, x2: Float, y2: Float) {

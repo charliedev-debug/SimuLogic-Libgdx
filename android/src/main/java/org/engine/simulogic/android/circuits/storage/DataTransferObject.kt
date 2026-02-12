@@ -23,6 +23,8 @@ import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
+import org.engine.simulogic.android.circuits.components.wireless.CChannel
+import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.scene.PlayGroundScene
@@ -43,9 +45,10 @@ class DataTransferObject {
     private val VERSION = 1
 
     companion object {
-        fun deleteFile(context: Context, title:String) {
+        fun deleteFile(context: Context, title: String) {
             File(context.getExternalFilesDir(""), "projects/$title").delete()
         }
+
         fun randomFileName(extension: String = "bin"): String {
             val randomString = UUID.randomUUID().toString()
             val digest = MessageDigest.getInstance("SHA-256")
@@ -91,20 +94,24 @@ class DataTransferObject {
                 stream.write(component.text.toByteArray(Charsets.UTF_8))
             } else if (component is CClock) {
                 stream.writeFloat(component.freq)
-            }else if (component is CPower){
+            } else if (component is CPower) {
                 stream.writeInt(component.value)
-            }else if(component is CDataBus){
+            } else if (component is CDataBus) {
                 stream.writeInt(component.size)
-            }else if(component is CFanOutBus){
+            } else if (component is CFanOutBus) {
                 stream.writeInt(component.inputSize)
                 stream.writeInt(component.segments)
-            }else if(component is CGroup){
+            } else if (component is CGroup) {
                 stream.writeFloat(component.getWidth())
                 stream.writeFloat(component.getHeight())
                 stream.writeInt(component.dataContainer.size())
-                component.dataContainer.forEach { item->
+                component.dataContainer.forEach { item ->
                     stream.writeInt(item.value.id)
                 }
+            } else if (component is CChannel) {
+                stream.writeInt(component.channelId.length)
+                stream.write(component.channelId.toByteArray(Charsets.UTF_8))
+                stream.writeInt(component.channelType)
             }
         }
         connection.forEach { listNode ->
@@ -158,7 +165,7 @@ class DataTransferObject {
         scene: PlayGroundScene
     ) {
         val file = Gdx.files.external("projects/${projectOptions.fileName}")
-       // println("${projectOptions.title} = ${file.file().path}")
+        // println("${projectOptions.title} = ${file.file().path}")
         val stream = DataInputStream(BufferedInputStream(file.read()))
         val groups = mutableListOf<CGroup>()
         try {
@@ -188,26 +195,36 @@ class DataTransferObject {
                     stream.readFully(labelText)
                 }
                 // power generator signal value
-                val powerValue = if(type == CTypes.POWER) stream.readInt() else 0
+                val powerValue = if (type == CTypes.POWER) stream.readInt() else 0
                 // data bus size value
-                val bus_size = if(type == CTypes.DATA_BUS) stream.readInt() else 0
+                val bus_size = if (type == CTypes.DATA_BUS) stream.readInt() else 0
                 // data bus fan out
-                val bus_fan_out_input_size = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
-                val bus_fan_out_segments = if(type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
+                val bus_fan_out_input_size =
+                    if (type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
+                val bus_fan_out_segments =
+                    if (type == CTypes.DATA_BUS_FAN_OUT) stream.readInt() else 0
                 // load group width, height and all group members
-                val groupWidth = if(type == CTypes.GROUP) stream.readFloat() else 0f
+                val groupWidth = if (type == CTypes.GROUP) stream.readFloat() else 0f
                 val groupHeight = if (type == CTypes.GROUP) stream.readFloat() else 0f
-                val groupMemberIds = if(type == CTypes.GROUP) {
-                    mutableListOf<Int>().also { list->
+                val groupMemberIds = if (type == CTypes.GROUP) {
+                    mutableListOf<Int>().also { list ->
                         var dataContainerSize = stream.readInt()
-                        while (dataContainerSize > 0){
+                        while (dataContainerSize > 0) {
                             list.add(stream.readInt())
                             dataContainerSize--
                         }
                     }
-                }else{
+                } else {
                     mutableListOf()
                 }
+
+                // load channel data
+                val channelIdLength = if (type == CTypes.CHANNEL) stream.readInt() else 0
+                val channelIdText = if (type == CTypes.CHANNEL) ByteArray(channelIdLength) else null
+                channelIdText?.let {
+                    stream.readFully(channelIdText)
+                }
+                val channelType = if (type == CTypes.CHANNEL) stream.readInt() else 0
                 when (type) {
                     CTypes.AND -> {
                         connection.insertNode(ListNode(CAnd(x, y, rotation, scene)))
@@ -242,11 +259,21 @@ class DataTransferObject {
                     }
 
                     CTypes.CLOCK -> {
-                        connection.insertExecutionPoint(ListNode(CClock(x, y, freq, rotation, scene)))
+                        connection.insertExecutionPoint(
+                            ListNode(
+                                CClock(
+                                    x,
+                                    y,
+                                    freq,
+                                    rotation,
+                                    scene
+                                )
+                            )
+                        )
                     }
 
                     CTypes.RANDOM -> {
-                        connection.insertNode(ListNode(CRandom(x, y,rotation, scene)))
+                        connection.insertNode(ListNode(CRandom(x, y, rotation, scene)))
                     }
 
                     CTypes.LED -> {
@@ -271,23 +298,65 @@ class DataTransferObject {
                         )
                     }
 
-                    CTypes.POWER ->{
-                        connection.insertExecutionPoint(ListNode(CPower(powerValue,x, y , scene)))
+                    CTypes.POWER -> {
+                        connection.insertExecutionPoint(ListNode(CPower(powerValue, x, y, scene)))
                     }
 
-                    CTypes.DATA_BUS->{
-                        connection.insertNode(ListNode(CDataBus(x,y,bus_size,rotation,scene)))
+                    CTypes.DATA_BUS -> {
+                        connection.insertNode(ListNode(CDataBus(x, y, bus_size, rotation, scene)))
                     }
 
-                    CTypes.DATA_BUS_FAN_OUT->{
-                        connection.insertNode(ListNode(CFanOutBus(x, y, bus_fan_out_input_size, bus_fan_out_segments, rotation, scene)))
+                    CTypes.DATA_BUS_FAN_OUT -> {
+                        connection.insertNode(
+                            ListNode(
+                                CFanOutBus(
+                                    x,
+                                    y,
+                                    bus_fan_out_input_size,
+                                    bus_fan_out_segments,
+                                    rotation,
+                                    scene
+                                )
+                            )
+                        )
                     }
-                    CTypes.GROUP ->{
-                        connection.insertNode(ListNode(CGroup(x , y, scene).also { group->
+
+                    CTypes.GROUP -> {
+                        connection.insertNode(ListNode(CGroup(x, y, scene).also { group ->
                             group.setSize(groupWidth, groupHeight)
                             group.componentGroupIds.addAll(groupMemberIds)
                             groups.add(group)
                         }))
+                    }
+
+                    CTypes.CHANNEL -> {
+                        if (channelType == ChannelBuffer.CHANNEL_OUTPUT) {
+                            connection.insertExecutionPoint(
+                                ListNode(
+                                    CChannel(
+                                        x,
+                                        y,
+                                        "${channelIdText?.toString(Charsets.UTF_8)}",
+                                        channelType,
+                                        rotation,
+                                        scene
+                                    )
+                                )
+                            )
+                        } else {
+                            connection.insertNode(
+                                ListNode(
+                                    CChannel(
+                                        x,
+                                        y,
+                                        "${channelIdText?.toString(Charsets.UTF_8)}",
+                                        channelType,
+                                        rotation,
+                                        scene
+                                    )
+                                )
+                            )
+                        }
                     }
 
                     else -> {
@@ -311,7 +380,8 @@ class DataTransferObject {
                     val signalSize = stream.readInt()
                     val linePointCountX = stream.readInt()
                     val linePointCountY = stream.readInt()
-                    LineMarker(scene,
+                    LineMarker(
+                        scene,
                         connection[fromId],
                         connection[toId],
                         signalFromIndex,
@@ -348,13 +418,13 @@ class DataTransferObject {
         return file.exists()
     }
 
-    fun exists(context:Context,title: String): Boolean {
+    fun exists(context: Context, title: String): Boolean {
         val file = File(context.getExternalFilesDir(""), "projects/${title}")
         return file.exists()
     }
 
-    fun importProject(context: Context, uri: Uri):ProjectOptions?{
-        val file = File(context.getExternalFilesDir(""),"projects/${randomFileName()}")
+    fun importProject(context: Context, uri: Uri): ProjectOptions? {
+        val file = File(context.getExternalFilesDir(""), "projects/${randomFileName()}")
         val outputStream = FileOutputStream(file)
         context.contentResolver?.openInputStream(uri).use { inputStream ->
             inputStream?.copyTo(outputStream)
@@ -362,7 +432,7 @@ class DataTransferObject {
         outputStream.close()
         try {
             return readFileHeader(file)
-        }catch (io:IOException){
+        } catch (io: IOException) {
             file.delete()
         }
         return null
@@ -396,7 +466,7 @@ class DataTransferObject {
         }
         inputStream.close()
         stream.close()
-        return ProjectOptions("none","none", "none",path.path, 0L, ProjectOptions.OPEN)
+        return ProjectOptions("none", "none", "none", path.path, 0L, ProjectOptions.OPEN)
     }
 
 
@@ -406,10 +476,10 @@ class DataTransferObject {
         data?.forEach {
             //println(it.path)
             try {
-                readFileHeader(it).also { options->
+                readFileHeader(it).also { options ->
                     files.add(options)
                 }
-            }catch (io:Exception){
+            } catch (io: Exception) {
                 //ignore the file and continue
             }
         }

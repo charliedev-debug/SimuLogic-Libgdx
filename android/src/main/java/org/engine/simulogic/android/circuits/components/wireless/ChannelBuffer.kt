@@ -2,6 +2,8 @@ package org.engine.simulogic.android.circuits.components.wireless
 
 class ChannelBuffer {
     companion object{
+        const val CHANNEL_INPUT = 0
+        const val CHANNEL_OUTPUT = 1
         private val inputBufferMap = mutableMapOf<String,CChannel>()
         fun insertInput(channel:CChannel){
              inputBufferMap[channel.channelId] = channel
@@ -17,6 +19,9 @@ class ChannelBuffer {
         }
         fun clear(){
             inputBufferMap.clear()
+        }
+        fun size():Int{
+            return inputBufferMap.size
         }
     }
 }

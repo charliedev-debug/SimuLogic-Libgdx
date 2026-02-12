@@ -102,6 +102,7 @@ class ListNode(val value : CNode,
     }
 
     override fun contains(x: Float, y: Float): CNode? {
+        if(!value.collidable) return null
         val parenNodeCollision = value.contains(x, y)
         if(parenNodeCollision != null){
             return parenNodeCollision
@@ -116,6 +117,7 @@ class ListNode(val value : CNode,
     }
 
     override fun contains(entity: CNode): CNode? {
+        if(!value.collidable) return null
         val parenNodeCollision = value.contains(entity)
         if(parenNodeCollision != null){
             return parenNodeCollision
@@ -130,6 +132,7 @@ class ListNode(val value : CNode,
     }
 
     override fun contains(rect: Rectangle): CNode? {
+        if(!value.collidable) return null
         val parenNodeCollision = value.contains(rect)
         if(parenNodeCollision != null){
             return parenNodeCollision
@@ -145,9 +148,10 @@ class ListNode(val value : CNode,
 
     override fun update() {
          value.update()
-            lineMarkersChildren.forEach { lineMarker ->
-                lineMarker.update()
-            }
+        val iterator = lineMarkersChildren.listIterator()
+         while (iterator.hasNext()){
+             iterator.next().update()
+         }
     }
 
     fun getLineMarkerChildren():List<LineMarker>{

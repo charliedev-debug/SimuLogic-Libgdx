@@ -16,6 +16,7 @@ abstract class Entity {
     var selected = false
     var isVisible = true
     var isRemoved = false
+    var collidable = true
     var type = CTypes.NONE
     var id = 0
     var cameraClippingEnabled = true

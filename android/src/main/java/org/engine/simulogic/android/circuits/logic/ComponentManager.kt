@@ -209,7 +209,33 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
     fun insertChannel(id:String, type:Int){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                connection.insertExecutionPoint(ListNode(CChannel(coordinates.x, coordinates.y, id,type, Entity.ROTATE_RIGHT, scene)))
+                if(type == ChannelBuffer.CHANNEL_OUTPUT) {
+                    connection.insertExecutionPoint(
+                        ListNode(
+                            CChannel(
+                                coordinates.x,
+                                coordinates.y,
+                                id,
+                                type,
+                                Entity.ROTATE_RIGHT,
+                                scene
+                            )
+                        )
+                    )
+                }else{
+                    connection.insertNode(
+                        ListNode(
+                            CChannel(
+                                coordinates.x,
+                                coordinates.y,
+                                id,
+                                type,
+                                Entity.ROTATE_RIGHT,
+                                scene
+                            )
+                        )
+                    )
+                }
             }
         }
     }

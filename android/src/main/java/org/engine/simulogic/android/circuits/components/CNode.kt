@@ -88,21 +88,21 @@ open class CNode : Entity(), ICollidable,IExecutable{
     }
 
     override fun contains(x: Float, y: Float): CNode? {
-         if(sprite.boundingRectangle.contains(x, y)){
+         if(sprite.boundingRectangle.contains(x, y) && collidable){
              return this
          }
         return null
     }
 
     override fun contains(entity: CNode): CNode? {
-        if(sprite.boundingRectangle.overlaps(entity.sprite.boundingRectangle)){
+        if(sprite.boundingRectangle.overlaps(entity.sprite.boundingRectangle) && collidable){
             return this
         }
         return null
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        if(sprite.boundingRectangle.overlaps(rect)){
+        if(sprite.boundingRectangle.overlaps(rect) && collidable){
             return this
         }
         return null

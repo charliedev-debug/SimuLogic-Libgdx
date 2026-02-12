@@ -15,8 +15,8 @@ class CDefaults {
         val ledWidth = 60f
         val randomWidth = 60f
         val randomHeight = 60f
-        val segmentDisplayWidth = 14f
-        val segmentDisplayHeight = 24f
+        val segmentDisplayWidth = 42f
+        val segmentDisplayHeight = 72f
         var linePointCountX = 3
         var linePointCountY = 2
         val lineWeight = 3f
