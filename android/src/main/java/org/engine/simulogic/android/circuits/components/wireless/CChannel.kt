@@ -85,12 +85,19 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
             }
             layer.attachChild(this)
         }
+        if(channelType == 0){
+            ChannelBuffer.removeInput(this)
+            ChannelBuffer.insertInput(this)
+        }
     }
 
     override fun detachSelf() {
         super.detachSelf()
         lines.forEach { it.detachSelf() }
         signals.forEach { it.detachSelf() }
+        if(channelType == 0){
+            ChannelBuffer.removeInput(this)
+        }
     }
 
     override fun update() {

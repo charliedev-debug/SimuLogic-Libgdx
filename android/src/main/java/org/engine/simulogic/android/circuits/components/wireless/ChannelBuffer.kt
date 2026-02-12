@@ -9,6 +9,9 @@ class ChannelBuffer {
         fun getInput(channelId: String):CChannel?{
             return inputBufferMap[channelId]
         }
+        fun removeInput(channel:CChannel){
+            inputBufferMap.remove(channel.channelId)
+        }
         fun isAvailable(channelId:String):Boolean{
             return inputBufferMap[channelId] != null
         }
