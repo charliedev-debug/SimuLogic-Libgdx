@@ -33,7 +33,7 @@ import kotlin.math.round
 class MotionGestureListener(private val camera:OrthographicCamera, private val connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
-    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene)
+    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
     val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
     private var touch = Vector3(0f, 0f, 0f)
     private val commandHistory = CommandHistory()
@@ -180,6 +180,7 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
                     CGroup(
                         rectPointer.getPosition().x,
                         rectPointer.getPosition().y,
+                        connection,
                         scene
                     ).also { group->
                         group.insert(dataContainer,rangeSelect)
@@ -272,8 +273,8 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
                             if(subject is CGroup){
                                  subject.translate( touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
                             }else if(subject is CSignal){
-                                newPosition.set(touch.x, touch.y)
-                                subject.updatePosition(touch.x, touch.y)
+                                newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
                             }else {
                                 newPosition.set(snapCoordinates.x, snapCoordinates.y)
                                 subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
@@ -287,14 +288,15 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
             }
         }else if(collisionDetector.mode == RANGED_SELECTION_MODE){
             if (rangeSelect.collisionDetector.isNotEmpty()) {
+                val snapCoordinates = snapAlign.getSnapCoordinates(touch)
                 rangeSelect.collisionDetector.selectedItems.forEach {
                     it.subject.also { subject ->
                         commandHistory.execute(MoveCommand().apply {
                             node = ListNode(subject)
-                            newPosition.set(touch.x, touch.y)
+                            newPosition.set(snapCoordinates.x, snapCoordinates.y)
                             oldPosition.set(subject.getPosition())
                         })
-                        subject.updatePosition(touch.x, touch.y)
+                        subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
                         rangeSelect.update()
                     }
                 }
@@ -310,8 +312,13 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
-
-        return false
+        //double tap to enable and disable groups
+        collisionDetector.selectedItems.forEach {
+            if(it.subject is CGroup){
+                it.subject.collidableChildren = !it.subject.collidableChildren
+            }
+        }
+        return true
     }
 
     override fun longPress(x: Float, y: Float): Boolean {

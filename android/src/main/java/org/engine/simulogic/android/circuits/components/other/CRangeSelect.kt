@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
@@ -17,7 +18,7 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scene: PlayGroundScene)  : CNode() {
+open class CRangeSelect(x:Float, y:Float, val connection: Connection, private val scene: PlayGroundScene, layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
 
     private val pointSize = 30f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()
@@ -76,14 +77,11 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
 
         signals.forEach {
             attachChild(it)
-            connection.insertNode(ListNode(it))
         }
 
-        scene.getLayerById(LayerEnums.SCREEN_LAYER.name).also { layer ->
+        scene.getLayerById(layerId).also { layer ->
             layer.attachChild(this)
         }
-
-        connection.insertNode(ListNode(this))
         isVisible = false
     }
 
@@ -124,8 +122,10 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
         val signalTopLeft = signals[0] as CRangePoint
         val signalTopRight = signals[1] as CRangePoint
         val signalBottomLeft = signals[2] as CRangePoint
+        var updated = false
         signals.forEach {
             (it as CRangePoint).apply {
+                updated= isUpdated || updated
                 if(isUpdated) {
                     childX?.also { child ->
                         child.updatePosition(child.getPosition().x, getPosition().y)
@@ -137,13 +137,19 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
                     }
                     isUpdated = false
                 }
+
             }
         }
-        // update the range background size and position
-        val width = abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
-        val height = abs( signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
-        sprite.setSize(width, height)
-        updatePosition(signalTopLeft.getPosition().x + width/2f, signalTopLeft.getPosition().y - height / 2f)
+        if(updated) {
+            // update the range background size and position
+            val width = abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
+            val height = abs(signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
+            sprite.setSize(width, height)
+            updatePosition(
+                signalTopLeft.getPosition().x + width / 2f,
+                signalTopLeft.getPosition().y - height / 2f
+            )
+        }
     }
 
     override fun draw(spriteBatch: SpriteBatch) {
@@ -152,5 +158,40 @@ class CRangeSelect(x:Float, y:Float,val connection: Connection, private val scen
                 it.draw(spriteBatch)
             }
     }
+
+    override fun contains(entity: CNode): CNode? {
+        data.forEach {
+            if(it is CNode){
+                val childCollides = it.contains(entity)
+                if(childCollides != null){
+                    return childCollides
+                }
+            }
+        }
+        val parentCollides = super.contains(entity)
+        if(parentCollides != null){
+            return parentCollides
+        }
+
+        return null
+    }
+
+    override fun contains(rect: Rectangle): CNode? {
+        data.forEach {
+            if(it is CNode){
+                val childCollides = it.contains(rect)
+                if(childCollides != null){
+                    return childCollides
+                }
+            }
+        }
+        val parentCollides = super.contains(rect)
+        if(parentCollides != null){
+            return parentCollides
+        }
+
+        return null
+    }
+
 
 }

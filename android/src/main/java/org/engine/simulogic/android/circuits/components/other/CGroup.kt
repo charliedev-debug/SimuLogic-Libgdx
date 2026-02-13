@@ -13,8 +13,10 @@ import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.abs
+import kotlin.math.min
 
-class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
+class CGroup(x:Float, y:Float, connection:Connection,  scene: PlayGroundScene): CRangeSelect(x, y, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(x ,y)
     private var previousSnapPosition = Vector2()
@@ -23,23 +25,15 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
     val componentGroupIds = mutableListOf<Int>()
 
      init {
-         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
-         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
          type = CTypes.GROUP
-         this.rotationDirection = ROTATE_RIGHT
-         sprite = Sprite(spriteRegion).apply {
-             setOrigin(x , y)
-             setSize(CDefaults.gateWidth, CDefaults.gateHeight)
-             setOriginCenter()
-             color = CDefaults.GROUP_SELECTED_COLOR
-             setPosition(x ,y)
-         }
-
-         previousPosition.set(getPosition().x - x, getPosition().y - y)
+         sprite.color  = CDefaults.GROUP_SELECTED_COLOR
+         previousPosition.set(getPosition().x, getPosition().y )
 
          scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
              layer.attachChild(this)
          }
+         isVisible = true
+         adjustView()
      }
 
     fun insert(inputContainer: DataContainer, range: CRangeSelect){
@@ -49,6 +43,7 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
         }
         setSize(range.getWidth(),range.getHeight())
         updatePosition(range.getPosition().x ,range.getPosition().y)
+        adjustView()
     }
 
     fun loadFromIds(connection:Connection){
@@ -57,7 +52,9 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
                 node.value.collidable = false
             })
         }
-        updatePosition(getPosition().x - getWidth() / 2f,getPosition().y - getHeight() / 2f)
+        previousPosition.setZero()
+        updatePosition(getPosition().x - getWidth() / 2f ,getPosition().y - getHeight() / 2f )
+        adjustView()
     }
 
     override fun translate(offsetX: Float, offsetY: Float) {
@@ -69,6 +66,7 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
             previousSnapPosition.set(position)
             updateGroup(position.x, position.y)
         }
+        adjustView()
     }
 
     private fun updateGroup(offsetX: Float, offsetY: Float){
@@ -91,7 +89,20 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
             }
             previousPosition.set(0f, 0f)
         }
+    }
 
+    override fun detachSelf() {
+        super.detachSelf()
+        dataContainer.forEach {node->
+            node.value.collidable = true
+        }
+    }
+
+    override fun attachSelf() {
+        super.attachSelf()
+        dataContainer.forEach {node->
+            node.value.collidable = false
+        }
     }
 
     fun resetPositionBuffers(){
@@ -100,6 +111,39 @@ class CGroup(x:Float, y:Float,  scene: PlayGroundScene): CNode() {
     }
 
     override fun update() {
+        val signalTopLeft = signals[0] as CRangePoint
+        val signalTopRight = signals[1] as CRangePoint
+        val signalBottomLeft = signals[2] as CRangePoint
+        val signalWidth = signalTopLeft.getWidth()
+        val signalHeight = signalTopLeft.getHeight()
+        var updated = false
+        signals.forEach {
+            (it as CRangePoint).apply {
+                updated= isUpdated || updated
+                if(isUpdated) {
+                    childX?.also { child ->
+                        child.updatePosition(child.getPosition().x, getPosition().y)
+                        child.isUpdated = false
+                    }
+                    childY?.also { child ->
+                        child.updatePosition(getPosition().x, child.getPosition().y)
+                        child.isUpdated = false
+                    }
+                    isUpdated = false
+                }
+
+            }
+        }
+        if(updated) {
+            // update the range background size and position
+            val width =  abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
+            val height = abs(signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
+            sprite.setSize(width, height)
+            updatePosition(
+                signalTopLeft.getPosition().x + width / 2f,
+                signalTopLeft.getPosition().y - height / 2f
+            )
+        }
          updateColor(if(selected) CDefaults.GROUP_SELECTED_COLOR else CDefaults.GROUP_UNSELECTED_COLOR)
     }
 

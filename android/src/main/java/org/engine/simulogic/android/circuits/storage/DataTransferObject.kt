@@ -334,7 +334,7 @@ class DataTransferObject {
                     }
 
                     CTypes.GROUP -> {
-                        connection.insertNode(ListNode(CGroup(x, y, scene).also { group ->
+                        connection.insertNode(ListNode(CGroup(x, y, connection, scene).also { group ->
                             group.setSize(groupWidth, groupHeight)
                             group.componentGroupIds.addAll(groupMemberIds)
                             groups.add(group)
