@@ -23,6 +23,7 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
     private val pointSize = 30f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()
     var collisionDetector = CollisionDetector(connection)
+    var enableDragMotion = false
     init {
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
@@ -168,9 +169,11 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
                 }
             }
         }
-        val parentCollides = super.contains(entity)
-        if(parentCollides != null){
-            return parentCollides
+        if(enableDragMotion) {
+            val parentCollides = super.contains(entity)
+            if (parentCollides != null) {
+                return parentCollides
+            }
         }
 
         return null
@@ -185,9 +188,11 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
                 }
             }
         }
-        val parentCollides = super.contains(rect)
-        if(parentCollides != null){
-            return parentCollides
+        if(enableDragMotion) {
+            val parentCollides = super.contains(rect)
+            if (parentCollides != null) {
+                return parentCollides
+            }
         }
 
         return null

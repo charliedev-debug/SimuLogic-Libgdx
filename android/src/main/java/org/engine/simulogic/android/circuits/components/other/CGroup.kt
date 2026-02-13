@@ -12,7 +12,7 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CGroup(private val initialX:Float, private val initialY:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
+class CGroup(val initialX:Float, private val initialY:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX ,initialY)
     private var previousSnapPosition = Vector2()
@@ -29,6 +29,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, connection:
              layer.attachChild(this)
          }
          isVisible = true
+         enableDragMotion = true
          adjustView()
      }
 
@@ -173,7 +174,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, connection:
                 }
             }
         }
-        val parentCollides = super.contains(rect)
+       val parentCollides = super.contains(rect)
         if(parentCollides != null){
             return parentCollides
         }
