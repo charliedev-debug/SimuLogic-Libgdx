@@ -249,11 +249,11 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
     }
 
     fun saveProject(){
-        DataTransferObject().writeData(projectOptions,connection)
+        DataTransferObject().writeData(projectOptions, gestureListener, connection)
     }
 
     private fun readProject(){
-        DataTransferObject().readData(projectOptions,connection,font, scene)
+        DataTransferObject().readData(projectOptions,gestureListener,connection,font, scene)
     }
 
     private fun createProject(){

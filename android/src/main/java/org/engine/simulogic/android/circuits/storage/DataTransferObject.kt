@@ -27,6 +27,7 @@ import org.engine.simulogic.android.circuits.components.wireless.CChannel
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.io.BufferedInputStream
 import java.io.DataInputStream
@@ -59,7 +60,7 @@ class DataTransferObject {
     }
 
 
-    fun writeData(projectOptions: ProjectOptions, connection: Connection) {
+    fun writeData(projectOptions: ProjectOptions,gestureListener:MotionGestureListener, connection: Connection) {
         val title = projectOptions.title
         val description = projectOptions.description
         val file = Gdx.files.external("projects/${projectOptions.fileName}")
@@ -72,6 +73,10 @@ class DataTransferObject {
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(description.length)
         stream.write(description.toByteArray(Charsets.UTF_8))
+        // save camera state
+        stream.writeFloat(gestureListener.rectPointer.getPosition().x)
+        stream.writeFloat(gestureListener.rectPointer.getPosition().y)
+        stream.writeFloat(gestureListener.zoomValue())
         // component size
         stream.writeInt(connection.size())
         // assign indices first for later processing
@@ -160,6 +165,7 @@ class DataTransferObject {
 
     fun readData(
         projectOptions: ProjectOptions,
+        gestureListener: MotionGestureListener,
         connection: Connection,
         font: BitmapFont,
         scene: PlayGroundScene
@@ -176,6 +182,12 @@ class DataTransferObject {
             val title = stream.readFully(ByteArray(titleLen))
             val descrLen = stream.readInt()
             val description = stream.readFully(ByteArray(descrLen))
+            // load camera state
+            val cameraX = stream.readFloat()
+            val cameraY = stream.readFloat()
+            val cameraZoom = stream.readFloat()
+            gestureListener.setCameraPosition(cameraX, cameraY)
+            gestureListener.setCameraZoom(cameraZoom)
             val componentSize = stream.readInt()
             for (i in 0 until componentSize) {
                 val typeLength = stream.readInt()

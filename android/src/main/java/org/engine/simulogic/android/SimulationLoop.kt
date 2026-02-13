@@ -77,7 +77,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
         gestureListener.gridDecorator = gridDecorator
         executor = Executor(connection)
-        AutoSave.initialize(projectOptions, connection)
+        AutoSave.initialize(projectOptions, gestureListener, connection)
         componentManager = ComponentManager(projectOptions,executor,assetManager.get("RobotoMono-SemiBold.ttf"),connection, scene, gestureListener)
         Gdx.input.setCatchKey(Input.Keys.BACK, true)
         InputMultiplexer().apply {

@@ -80,6 +80,18 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
         }
     }
 
+    fun zoomValue():Float{
+        return camera.zoom
+    }
+
+    fun setCameraPosition(x:Float, y:Float){
+        camera.position.set(x, y,0f)
+    }
+
+    fun setCameraZoom(zoom:Float){
+        camera.zoom = zoom
+    }
+
     fun origin(){
         camera.position.set(SimulationLoop.CAMERA_WIDTH / 2f, SimulationLoop.CAMERA_HEIGHT / 2f, 0f)
         camera.update()
