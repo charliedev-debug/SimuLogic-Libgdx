@@ -1,8 +1,5 @@
 package org.engine.simulogic.android.circuits.components.other
 
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
@@ -14,11 +11,10 @@ import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
-import kotlin.math.min
 
-class CGroup(x:Float, y:Float, connection:Connection,  scene: PlayGroundScene): CRangeSelect(x, y, connection, scene, LayerEnums.GATE_LAYER.name) {
+class CGroup(private val initialX:Float, private val initialY:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
-    private var previousPosition = Vector2(x ,y)
+    private var previousPosition = Vector2(initialX ,initialY)
     private var previousSnapPosition = Vector2()
     var collidableChildren = true
     private val snapAlign = SnapAlign()
@@ -53,7 +49,7 @@ class CGroup(x:Float, y:Float, connection:Connection,  scene: PlayGroundScene): 
             })
         }
         previousPosition.setZero()
-        updatePosition(getPosition().x - getWidth() / 2f ,getPosition().y - getHeight() / 2f )
+        updatePosition(initialX,initialY)
         adjustView()
     }
 
