@@ -30,7 +30,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.round
 
 
-class MotionGestureListener(private val camera:OrthographicCamera, private val connection: Connection, private val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
+class MotionGestureListener(private val camera:OrthographicCamera, private val connection: Connection, val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
@@ -180,10 +180,13 @@ class MotionGestureListener(private val camera:OrthographicCamera, private val c
                     CGroup(
                         rectPointer.getPosition().x,
                         rectPointer.getPosition().y,
+                        200f,
+                        200f,
                         connection,
                         scene
                     ).also { group->
                         group.insert(dataContainer,rangeSelect)
+                        group.gestureListener = this
                     }
                 )
             )

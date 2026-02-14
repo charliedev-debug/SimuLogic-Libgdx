@@ -334,9 +334,10 @@ class DataTransferObject {
                     }
 
                     CTypes.GROUP -> {
-                        connection.insertNode(ListNode(CGroup(x, y, connection, scene).also { group ->
+                        connection.insertNode(ListNode(CGroup(x, y,groupWidth, groupHeight, connection, scene).also { group ->
                             group.setSize(groupWidth, groupHeight)
                             group.componentGroupIds.addAll(groupMemberIds)
+                            group.gestureListener = gestureListener
                             groups.add(group)
                         }))
                     }

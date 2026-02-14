@@ -8,18 +8,20 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.tools.DataContainer
+import org.engine.simulogic.android.events.CollisionDetector
+import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CGroup(val initialX:Float, private val initialY:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
+class CGroup(private val initialX:Float, private val initialY:Float, private val initialWidth:Float, private val initialHeight:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX ,initialY)
     private var previousSnapPosition = Vector2()
     var collidableChildren = true
     private val snapAlign = SnapAlign()
     val componentGroupIds = mutableListOf<Int>()
-
+    var gestureListener:MotionGestureListener? = null
      init {
          type = CTypes.GROUP
          sprite.color  = CDefaults.GROUP_SELECTED_COLOR
@@ -50,6 +52,7 @@ class CGroup(val initialX:Float, private val initialY:Float, connection:Connecti
             })
         }
         previousPosition.setZero()
+        updatePosition(initialWidth, initialHeight)
         updatePosition(initialX,initialY)
         adjustView()
     }
@@ -115,6 +118,9 @@ class CGroup(val initialX:Float, private val initialY:Float, connection:Connecti
         val signalHeight = signalTopLeft.getHeight()
         var updated = false
         signals.forEach {
+            gestureListener?.collisionDetector?.also { collisionDetector ->
+                it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
+            }
             (it as CRangePoint).apply {
                 updated= isUpdated || updated
                 if(isUpdated) {

@@ -67,11 +67,16 @@ open class CNode : Entity(), ICollidable,IExecutable{
     }
 
     override fun draw(spriteBatch: SpriteBatch) {
+
         data.forEach {
-            it.draw(spriteBatch)
+            if(isVisible) {
+                it.draw(spriteBatch)
+            }
         }
 
-        sprite.draw(spriteBatch)
+        if(isVisible) {
+            sprite.draw(spriteBatch)
+        }
     }
 
     override fun updateColor(color: Color) {
