@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.tools
 
 import com.badlogic.gdx.math.Vector2
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.logic.ListNode
 
 class MoveCommand : Command() {
@@ -8,11 +9,29 @@ class MoveCommand : Command() {
     val newPosition = Vector2(0f,0f)
     var node: ListNode? = null
     override fun undo() {
-        node?.value?.updatePosition(oldPosition.x,oldPosition.y)
+        if (node?.value is CGroup ){
+            (node?.value as CGroup).apply {
+                val offsetX = oldPosition.x - newPosition.x
+                val offsetY =  oldPosition.y - newPosition.y
+                resetPositionBuffers()
+                translate(offsetX,  offsetY)
+            }
+        }else {
+            node?.value?.updatePosition(oldPosition.x, oldPosition.y)
+        }
     }
 
     override fun redo() {
-        node?.value?.updatePosition(newPosition.x,newPosition.y)
+        if (node?.value is CGroup){
+            (node?.value as CGroup).apply {
+                val offsetX = newPosition.x - oldPosition.x
+                val offsetY = newPosition.y - oldPosition.y
+                resetPositionBuffers()
+                translate(offsetX,  offsetY)
+            }
+        }else {
+            node?.value?.updatePosition(newPosition.x,newPosition.y)
+        }
     }
 
 }
