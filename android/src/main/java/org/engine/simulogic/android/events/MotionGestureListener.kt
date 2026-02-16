@@ -173,8 +173,30 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     }
 
     fun insertGroup(){
-       sendRangeItemsToDataContainer()
-        if(dataContainer.isNotEmpty()) {
+        if(collisionDetector.mode == RANGED_SELECTION_MODE) {
+            sendRangeItemsToDataContainer()
+            if (dataContainer.isNotEmpty()) {
+                connection.insertNode(
+                    ListNode(
+                        CGroup(
+                            rectPointer.getPosition().x,
+                            rectPointer.getPosition().y,
+                            200f,
+                            200f,
+                            connection,
+                            scene
+                        ).also { group ->
+                            group.insert(dataContainer, rangeSelect)
+                            group.gestureListener = this
+                        }
+                    )
+                )
+
+            }
+        }else if(collisionDetector.mode == SELECTION_MODE){
+            collisionDetector.selectedItems.forEach { item ->
+                dataContainer.insert(item.caller)
+            }
             connection.insertNode(
                 ListNode(
                     CGroup(
@@ -184,15 +206,16 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         200f,
                         connection,
                         scene
-                    ).also { group->
-                        group.insert(dataContainer,rangeSelect)
+                    ).also { group ->
+                        group.insert(dataContainer)
                         group.gestureListener = this
                     }
                 )
             )
-
         }
-        setMode(TOUCH_MODE)
+        collisionDetector.reset()
+        rangeSelect.reset()
+        rangeSelect.isVisible = false
         dataContainer.clear()
     }
 

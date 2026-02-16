@@ -35,6 +35,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
          adjustView()
      }
 
+    // insert range
     fun insert(inputContainer: DataContainer, range: CRangeSelect){
         inputContainer.insertTo(dataContainer)
         dataContainer.forEach {node->
@@ -42,6 +43,28 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
         }
         setSize(range.getWidth(),range.getHeight())
         updatePosition(range.getPosition().x ,range.getPosition().y)
+        adjustView()
+    }
+
+    // insert selection
+    fun insert(inputContainer: DataContainer){
+        inputContainer.insertTo(dataContainer)
+        dataContainer.forEach {node->
+            node.value.collidable = false
+        }
+        dataContainer.sortX()
+        val firstX = dataContainer.first()
+        val lastX = dataContainer.last()
+        dataContainer.sortY()
+        val firstY = dataContainer.first()
+        val lastY = dataContainer.last()
+
+        val rangeWidth = abs((firstX.value.getPosition().x - firstX.value.getWidth() * 2f) - (lastX.value.getPosition().x + lastX.value.getWidth() * 2f))
+        val rangeHeight = abs((firstY.value.getPosition().y - firstY.value.getHeight() * 2f) - (lastY.value.getPosition().y + lastY.value.getHeight() * 2f))
+
+        setSize(rangeWidth, rangeHeight)
+        updatePosition(firstX.value.getPosition().x + rangeWidth / 2f - firstX.value.getWidth() * 2f,
+            firstY.value.getPosition().y + rangeHeight / 2f - firstY.value.getHeight() * 2f)
         adjustView()
     }
 

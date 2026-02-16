@@ -16,8 +16,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/placeholder"
+        android:layout_margin="@dimen/nav_header_vertical_spacing"
+        app:srcCompat="@drawable/ic_launcher"
         android:contentDescription="@string/nav_header_desc"
         android:id="@+id/imageView" />
 
