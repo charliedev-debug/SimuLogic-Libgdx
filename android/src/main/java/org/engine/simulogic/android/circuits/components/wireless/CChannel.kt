@@ -104,7 +104,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.LED_INACTIVE_COLOR)
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
         }
         when(rotationDirection){
             ROTATE_RIGHT ->{
