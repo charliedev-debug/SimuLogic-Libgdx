@@ -126,8 +126,8 @@ class LineMarker(val scene: PlayGroundScene,
         }
 
         //snap align
-        var index = 0
-        while(index < signals.size - 1){
+        var index = 1
+        while(index < signals.size - 2){
             val prevSignal = signals[index]
             val nextSignal = signals[index + 1]
             val prev = prevSignal.getPosition()
@@ -149,7 +149,7 @@ class LineMarker(val scene: PlayGroundScene,
                 }
             }
 
-            if(distanceFromPrevY < distanceToPrevY || index == 0){
+            if(distanceFromPrevY < distanceToPrevY || index == signals.size - 1){
                 if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
