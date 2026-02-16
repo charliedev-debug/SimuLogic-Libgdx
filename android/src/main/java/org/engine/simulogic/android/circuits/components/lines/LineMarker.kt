@@ -34,20 +34,18 @@ class LineMarker(val scene: PlayGroundScene,
         val distanceY = pTo.y - pFrom.y
         val maxDistanceBetweenX = distanceX / (linePointCountX + 1 )
         val maxDistanceBetweenY = distanceY / (linePointCountY + 1)
-        var lastX = pFrom.x
         var signalIndex = 0
         for (i in 0 ..  linePointCountX) {
             val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
-            lastX = x
             signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
         }
 
-        for (i in linePointCountY downTo   0) {
+        for (i in  0  ..  linePointCountY ) {
             val y = pFrom.y + maxDistanceBetweenY * i
-            val x = lastX
+            val x = pTo.x
             signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
