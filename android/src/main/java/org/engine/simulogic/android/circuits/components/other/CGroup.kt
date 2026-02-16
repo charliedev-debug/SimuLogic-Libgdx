@@ -59,12 +59,12 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
         val firstY = dataContainer.first()
         val lastY = dataContainer.last()
 
-        val rangeWidth = abs((firstX.value.getPosition().x - firstX.value.getWidth() * 2f) - (lastX.value.getPosition().x + lastX.value.getWidth() * 2f))
-        val rangeHeight = abs((firstY.value.getPosition().y - firstY.value.getHeight() * 2f) - (lastY.value.getPosition().y + lastY.value.getHeight() * 2f))
+        val rangeWidth = abs((firstX.value.getPosition().x - firstX.value.getWidth()) - (lastX.value.getPosition().x + lastX.value.getWidth() ))
+        val rangeHeight = abs((firstY.value.getPosition().y - firstY.value.getHeight()) - (lastY.value.getPosition().y + lastY.value.getHeight()))
 
         setSize(rangeWidth, rangeHeight)
-        updatePosition(firstX.value.getPosition().x + rangeWidth / 2f - firstX.value.getWidth() * 2f,
-            firstY.value.getPosition().y + rangeHeight / 2f - firstY.value.getHeight() * 2f)
+        updatePosition(firstX.value.getPosition().x +(rangeWidth / 2f - firstX.value.getWidth() / 2f - lastX.value.getWidth() / 2f),
+            firstY.value.getPosition().y + (rangeHeight / 2f - firstY.value.getHeight() / 2f - lastY.value.getHeight() / 2f))
         adjustView()
     }
 
@@ -98,7 +98,17 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
                 val p = dataContainer[i].value
                 val ix = p.getPosition().x + offsetX
                 val iy = p.getPosition().y + offsetY
-                p.updatePosition(ix, iy)
+                // if it's a group translate it indirectly to apply effect to children
+                if(p is CGroup){
+                    /* reset buffers to prevent unexpected glitches,
+                    we don't need to remember the last position the parent does it for us
+                     */
+                    p.resetPositionBuffers()
+                    p.translate(offsetX, offsetY)
+                    p.resetPositionBuffers()
+                }else {
+                    p.updatePosition(ix, iy)
+                }
             }
             dataContainer.forEach { data ->
                 data.getLineMarkerChildren().forEach { marker ->
