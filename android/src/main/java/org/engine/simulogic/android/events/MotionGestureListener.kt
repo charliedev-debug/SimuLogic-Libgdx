@@ -274,7 +274,8 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         moveCommand.apply {
                             node = ListNode(subject)
                             if(subject is CGroup){
-                                 subject.translate( touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
+                                snapAlign.getSnapCoordinates(touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
+                                 subject.translate( snapCoordinates.x, snapCoordinates.y)
                                  newPosition.set(subject.getPosition())
                             }else if(subject is CSignal){
                                 newPosition.set(snapCoordinates.x, snapCoordinates.y)
