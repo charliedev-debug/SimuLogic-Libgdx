@@ -12,7 +12,7 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScene) :CNode(){
+class CPower(signalValue:Int,x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
     private var regionPowerOn:TextureAtlas.AtlasRegion
@@ -25,11 +25,25 @@ class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScen
         val spriteRegion = if(signalValue == SIGNAL_ACTIVE) regionPowerOn else  regionPowerOff
         value = signalValue
         type = CTypes.POWER
+        this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.clockWidth, CDefaults.clockHeight)
             setOriginCenter()
-            rotation = 0f
+            when(rotationDirection){
+                ROTATE_BOTTOM->{
+                    rotation = 270f
+                }
+                ROTATE_TOP->{
+                    rotation = 90f
+                }
+                ROTATE_LEFT->{
+                    rotation = 180f
+                }
+                ROTATE_RIGHT->{
+                    rotation = 0f
+                }
+            }
             setPosition(x - CDefaults.clockWidth / 2f,y - CDefaults.clockHeight / 2f)
         }
 
@@ -90,9 +104,34 @@ class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScen
 
     override fun update() {
         updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
-        signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-        getChildAt(0).getPosition()?.also { outputPosition ->
-            lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+        when(rotationDirection){
+            ROTATE_RIGHT->{
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_LEFT->{
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_TOP->{
+                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
+
+            ROTATE_BOTTOM->{
+                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                getChildAt(0).getPosition()?.also { outputPosition ->
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                }
+            }
         }
         data.forEach {
             it.update()
@@ -136,7 +175,7 @@ class CPower(signalValue:Int,x:Float, y:Float, private val scene: PlayGroundScen
     }
 
     override fun clone():CNode {
-        return CPower(value,getPosition().x,getPosition().y, scene )
+        return CPower(value,getPosition().x,getPosition().y,rotationDirection, scene )
     }
 
 

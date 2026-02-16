@@ -5,6 +5,7 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.logic.SnapAlign
@@ -21,8 +22,9 @@ class CopyTool(
         originX: Float,
         originY: Float,
         scene: PlayGroundScene
-    ) {
-        if (dataContainer.isEmpty()) return
+    ):DataContainer {
+        val cloneDataContainer = DataContainer()
+        if (dataContainer.isEmpty()) return cloneDataContainer
         dataContainer.sort(originX, originY)
         val firstItem = dataContainer[0]
         val ox = firstItem.value.getPosition().x
@@ -40,6 +42,16 @@ class CopyTool(
                      clone.value.updatePosition( coordinates.x, coordinates.y)
                  }
 
+                 // create a copy of all group children
+                 if(data.value is CGroup && clone.value is CGroup){
+                     CopyTool(data.value.dataContainer, data.value.connection, commandHistory).also { copyTool ->
+                         snapAlign.getSnapCoordinates(data.value.getPosition().x - ox + originX,
+                             data.value.getPosition().y - oy + originY).also { coordinates->
+                             clone.value.insert(copyTool.execute(coordinates.x, coordinates.y, scene))
+                         }
+                     }
+                 }
+
                  when(clone.value){
                      is CClock-> connection.insertExecutionPoint(clone)
                      is CPower-> connection.insertExecutionPoint(clone)
@@ -47,6 +59,7 @@ class CopyTool(
                  }
                  cloneOriginMap[data] = clone
                  cloneList.add(clone)
+                 cloneDataContainer.insert(clone)
              }
         }
 
@@ -72,7 +85,6 @@ class CopyTool(
         }
 
         commandHistory.execute(copyCommand)
-
-        dataContainer.clear()
+        return cloneDataContainer
     }
 }

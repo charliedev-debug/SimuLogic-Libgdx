@@ -62,9 +62,9 @@ abstract class Entity {
         }
     }
 
-    open fun attachChildAt(index: Int) {
+    open fun attachChildAt(index: Int, entity: Entity) {
         synchronized(data){
-            data.removeAt(index)
+            data.add(index, entity)
         }
     }
 

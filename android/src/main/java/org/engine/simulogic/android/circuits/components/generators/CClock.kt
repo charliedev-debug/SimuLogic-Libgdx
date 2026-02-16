@@ -94,6 +94,7 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
         signals.forEach { it.detachSelf() }
     }
 
+
     override fun update() {
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)

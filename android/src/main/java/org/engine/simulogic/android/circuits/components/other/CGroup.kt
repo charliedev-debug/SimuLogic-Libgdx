@@ -7,14 +7,17 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
+import org.engine.simulogic.android.circuits.tools.CommandHistory
+import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CGroup(private val initialX:Float, private val initialY:Float, private val initialWidth:Float, private val initialHeight:Float, connection:Connection, scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
+class CGroup(private val initialX:Float, private val initialY:Float, private val initialWidth:Float, private val initialHeight:Float, connection:Connection, private val scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX ,initialY)
     private var previousSnapPosition = Vector2()
@@ -28,7 +31,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
          previousPosition.set(getPosition().x, getPosition().y )
 
          scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
-             layer.attachChild(this)
+             layer.attachChildAt(0,this)
          }
          isVisible = true
          enableDragMotion = true
@@ -219,6 +222,12 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
         }
 
         return null
+    }
+
+
+    override fun clone(): CGroup{
+        val position = getPosition()
+        return CGroup(position.x,position.y,getWidth(),getHeight(),connection, scene).also { clone-> clone.gestureListener = gestureListener }
     }
 
 }

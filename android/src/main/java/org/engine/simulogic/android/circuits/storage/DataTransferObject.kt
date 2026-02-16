@@ -311,7 +311,7 @@ class DataTransferObject {
                     }
 
                     CTypes.POWER -> {
-                        connection.insertExecutionPoint(ListNode(CPower(powerValue, x, y, scene)))
+                        connection.insertExecutionPoint(ListNode(CPower(powerValue, x, y,rotation, scene)))
                     }
 
                     CTypes.DATA_BUS -> {

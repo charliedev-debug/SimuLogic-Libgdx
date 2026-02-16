@@ -145,6 +145,7 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
                             signalValue,
                             coordinates.x,
                             coordinates.y,
+                            rotationDirection = Entity.ROTATE_RIGHT,
                             scene
                         )
                     )
