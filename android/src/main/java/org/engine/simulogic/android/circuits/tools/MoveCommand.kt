@@ -15,6 +15,7 @@ class MoveCommand : Command() {
                 val offsetY =  oldPosition.y - newPosition.y
                 resetPositionBuffers()
                 translate(offsetX,  offsetY)
+                resetPositionBuffers()
             }
         }else {
             node?.value?.updatePosition(oldPosition.x, oldPosition.y)
@@ -28,6 +29,7 @@ class MoveCommand : Command() {
                 val offsetY = newPosition.y - oldPosition.y
                 resetPositionBuffers()
                 translate(offsetX,  offsetY)
+                resetPositionBuffers()
             }
         }else {
             node?.value?.updatePosition(newPosition.x,newPosition.y)

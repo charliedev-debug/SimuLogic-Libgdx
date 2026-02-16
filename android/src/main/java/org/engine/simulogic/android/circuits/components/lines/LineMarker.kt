@@ -37,7 +37,7 @@ class LineMarker(val scene: PlayGroundScene,
         var lastX = pFrom.x
         var signalIndex = 0
         for (i in 0 ..  linePointCountX) {
-            val x = pFrom.x + maxDistanceBetweenX * (i)
+            val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
             lastX = x
             signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
@@ -46,7 +46,7 @@ class LineMarker(val scene: PlayGroundScene,
         }
 
         for (i in linePointCountY downTo   0) {
-            val y = pFrom.y + maxDistanceBetweenY * (i + 1)
+            val y = pFrom.y + maxDistanceBetweenY * i
             val x = lastX
             signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
                 parent = this@LineMarker

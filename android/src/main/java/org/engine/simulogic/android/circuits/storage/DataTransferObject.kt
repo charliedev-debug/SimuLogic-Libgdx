@@ -74,8 +74,8 @@ class DataTransferObject {
         stream.writeInt(description.length)
         stream.write(description.toByteArray(Charsets.UTF_8))
         // save camera state
-        stream.writeFloat(gestureListener.rectPointer.getPosition().x)
-        stream.writeFloat(gestureListener.rectPointer.getPosition().y)
+        stream.writeFloat(gestureListener.camera.position.x)
+        stream.writeFloat(gestureListener.camera.position.y)
         stream.writeFloat(gestureListener.zoomValue())
         // component size
         stream.writeInt(connection.size())
