@@ -140,21 +140,21 @@ class LineMarker(val scene: PlayGroundScene,
             val distanceToPrevY = abs(pTo.y - prev.y)
             // ignore the first and the last elements since we can't modify them directly since it's the source
             if(distanceFromPrevX < distanceToPrevX || index == 0){
-                if (abs(offsetX) <= 10f) {
+                if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     nextSignal.updatePosition(prev.x, next.y)
                 }
             }else if(distanceFromPrevX > distanceToPrevX){
-                if (abs(offsetX) <= 10f) {
+                if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     prevSignal.updatePosition(next.x, prev.y)
                 }
             }
 
             if(distanceFromPrevY < distanceToPrevY || index == 0){
-                if (abs(offsetY) <= 10f) {
+                if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
             }else if(distanceFromPrevY > distanceToPrevY){
-                if (abs(offsetY) <= 10f) {
+                if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     prevSignal.updatePosition(prev.x, next.y)
                 }
             }
