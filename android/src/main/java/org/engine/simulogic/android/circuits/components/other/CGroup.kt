@@ -78,7 +78,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
             })
         }
         previousPosition.setZero()
-        updatePosition(initialWidth, initialHeight)
+        setSize(initialWidth, initialHeight)
         updatePosition(initialX,initialY)
         adjustView()
     }
