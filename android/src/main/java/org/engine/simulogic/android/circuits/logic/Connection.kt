@@ -35,6 +35,7 @@ class Connection : Iterable<ListNode>, IUpdate {
     fun removeNode(node:ListNode){
         synchronized(nodes){
             nodes.remove(node)
+            executionPoints.remove(node)
             AutoSave.dataChanged = true
         }
     }
