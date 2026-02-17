@@ -29,6 +29,16 @@
             android:orientation="vertical">
 
             <include layout="@layout/nav_header_simulation"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/settings"
+                style="@style/customButtonStyle"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tint="@color/dividerColor"
+                android:drawableLeft="@drawable/settings"
+                android:text="Settings"/>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

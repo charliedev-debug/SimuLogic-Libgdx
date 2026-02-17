@@ -1,13 +1,10 @@
 package org.engine.simulogic.android.circuits.logic
-
-import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 import java.util.LinkedList
-import kotlin.math.abs
 
 class Connection : Iterable<ListNode>, IUpdate {
 
