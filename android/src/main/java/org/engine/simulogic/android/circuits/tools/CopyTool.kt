@@ -60,6 +60,7 @@ class CopyTool(
                  cloneOriginMap[data] = clone
                  cloneList.add(clone)
                  cloneDataContainer.insert(clone)
+
              }
         }
 
@@ -82,6 +83,10 @@ class CopyTool(
                     }
                 }
             }
+        }
+
+        cloneList.forEach { clone->
+            copyCommand.insert(clone)
         }
 
         commandHistory.execute(copyCommand)
