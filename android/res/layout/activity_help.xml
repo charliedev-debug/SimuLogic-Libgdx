@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/background_dark"
     android:fitsSystemWindows="true"
     tools:context=".android.HelpActivity">
 
@@ -18,7 +18,10 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width = "match_parent"
-            android:layout_height = "?attr/actionBarSize" />
+            android:layout_height = "?attr/actionBarSize"
+            android:background="@color/background_dark"
+            app:title="Help"
+            app:navigationIcon="@drawable/exit"/>
 
   </com.google.android.material.appbar.AppBarLayout>
 
