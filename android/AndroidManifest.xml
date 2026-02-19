@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools">
 <uses-feature
@@ -59,7 +58,16 @@ xmlns:tools="http://schemas.android.com/tools">
             <category android:name="android.intent.category.OPENABLE" />
         </intent-filter>
     </activity>
-
+    <activity
+        android:name="org.engine.simulogic.android.HelpActivity"
+        android:exported="true"
+        android:label="@string/title_activity_help"
+        android:theme="@style/AppTheme">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.OPENABLE" />
+        </intent-filter>
+    </activity>
 </application>
 
 </manifest>

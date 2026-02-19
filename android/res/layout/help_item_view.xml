@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/background3"
+    app:cardCornerRadius="20dp"
+    style="@style/Widget.App.CardStyle">
+<LinearLayout
+    android:layout_margin="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="12dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="this is a test"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            />
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical"
+            android:background="@drawable/icon_bg">
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/icon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="5dp"
+                    android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:gravity="center_horizontal"
+                    android:textSize="10sp"
+                    android:textColor="@color/dividerColor"
+                    />
+                <View android:id="@+id/selected"
+                    android:background="@drawable/background_selected_rounded"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:layout_height="4dp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

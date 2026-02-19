@@ -27,4 +27,5 @@
     <color name="background_dark">#1f1c22</color>
     <color name="dusty_lavender">#665C70</color>
     <color name="background3">#464153</color>
+    <color name="default_menu_icon_color">#EADBFA</color>
 </resources>
