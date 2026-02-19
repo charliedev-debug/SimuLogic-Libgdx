@@ -191,18 +191,34 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
             it.update()
         }
 
-        lines[0].updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
-            signalTopRight.getPosition().x, signalTopRight.getPosition().y)
-        lines[1].updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
-            signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y)
-        lines[2].updatePosition(signalTopRight.getPosition().x, signalTopRight.getPosition().y,
-            signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
-        lines[3].updatePosition(signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y,
-            signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
-        lines.forEach {
+        lines[0].also {
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
+            it.updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+                signalTopRight.getPosition().x, signalTopRight.getPosition().y)
+
+        }
+        lines[1].also {
+            gestureListener?.collisionDetector?.also { collisionDetector ->
+                it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
+            }
+            it.updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+                signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y)
+        }
+        lines[2].also {
+            gestureListener?.collisionDetector?.also { collisionDetector ->
+                it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
+            }
+            it.updatePosition(signalTopRight.getPosition().x, signalTopRight.getPosition().y,
+                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
+        }
+        lines[3].also {
+            gestureListener?.collisionDetector?.also { collisionDetector ->
+                it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
+            }
+            it.updatePosition(signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y,
+                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
         }
         if(updated) {
             // update the range background size and position
