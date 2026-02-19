@@ -1,10 +1,12 @@
 package org.engine.simulogic.android.circuits.components.other
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
+import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.tools.CommandHistory
@@ -21,6 +23,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX ,initialY)
     private var previousSnapPosition = Vector2()
+    private val lines = mutableListOf<CLine>()
     var collidableChildren = true
     private val snapAlign = SnapAlign()
     val componentGroupIds = mutableListOf<Int>()
@@ -30,9 +33,21 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
          sprite.color  = CDefaults.GROUP_SELECTED_COLOR
          previousPosition.set(getPosition().x, getPosition().y )
 
+         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+             for(i in 0 until 4){
+                 CLine(0f,0f,0f,0f,1f).also { line->
+                     line.color = CDefaults.RANGED_LINE_COLOR
+                     layer.attachChildAt(0, line)
+                     lines.add(line)
+                 }
+
+             }
+         }
+
          scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
              layer.attachChildAt(0,this)
          }
+
          isVisible = true
          enableDragMotion = true
          adjustView()
@@ -150,6 +165,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
         val signalTopLeft = signals[0] as CRangePoint
         val signalTopRight = signals[1] as CRangePoint
         val signalBottomLeft = signals[2] as CRangePoint
+        val signalBottomRight = signals[3] as CRangePoint
         val signalWidth = signalTopLeft.getWidth()
         val signalHeight = signalTopLeft.getHeight()
         var updated = false
@@ -171,6 +187,21 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
                     isUpdated = false
                 }
 
+            }
+            it.update()
+        }
+
+        lines[0].updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+            signalTopRight.getPosition().x, signalTopRight.getPosition().y)
+        lines[1].updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+            signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y)
+        lines[2].updatePosition(signalTopRight.getPosition().x, signalTopRight.getPosition().y,
+            signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
+        lines[3].updatePosition(signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y,
+            signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
+        lines.forEach {
+            gestureListener?.collisionDetector?.also { collisionDetector ->
+                it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
         }
         if(updated) {

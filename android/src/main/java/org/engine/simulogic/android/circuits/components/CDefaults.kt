@@ -36,7 +36,7 @@ class CDefaults {
         val GRID_LINE_COLOR_B = Color(0.411f,0.411f,0.411f ,1f)
         val GRID_LINE_COLOR_A = Color(0.711f,0.711f,0.711f ,1f)
         val RANGED_ICON_RADIUS = 30f
-        val RANGED_LINE_COLOR = Color.RED
+        val RANGED_LINE_COLOR = Color(0.75f, 0f, 0f, 1f)
 
         fun setLinePointCount(x:Int, y:Int){
             linePointCountX = x
