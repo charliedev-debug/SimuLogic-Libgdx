@@ -13,6 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.button.MaterialButton
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 import org.engine.simulogic.R
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
@@ -29,7 +30,7 @@ private lateinit var binding: ActivityLauncherBinding
      setContentView(binding.root)
 
      setSupportActionBar(binding.appBarLauncher.toolbar)
-
+     val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
      findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.title) {
                 "help" -> {
@@ -40,6 +41,12 @@ private lateinit var binding: ActivityLauncherBinding
             }
             true
         }
+        settingsButtonLauncher.setOnClickListener {
+            Intent(this@LauncherActivity,SettingsActivity::class.java).also { intent ->
+                startActivity(intent)
+            }
+        }
+
         binding.appBarLauncher.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()

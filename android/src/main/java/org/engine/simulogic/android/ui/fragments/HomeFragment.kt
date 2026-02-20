@@ -15,7 +15,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import org.engine.simulogic.R
+import org.engine.simulogic.android.SettingsActivity
 import org.engine.simulogic.android.SimulationActivity
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
@@ -44,6 +46,7 @@ class HomeFragment : Fragment() {
         val recentProjectRecyclerView = root.findViewById<RecyclerView>(R.id.recent_projects)
         val sampleProjectRecyclerView = root.findViewById<RecyclerView>(R.id.sample_projects)
             recentProjectAlert = root.findViewById<TextView>(R.id.recent_project_alert)
+
         val projectOptionAdapter = ProjectOptionsAdapter().apply {
             add("Create Project", R.drawable.new_project)
             add("Open Project",R.drawable.open_project)

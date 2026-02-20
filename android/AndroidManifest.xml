@@ -68,6 +68,17 @@ xmlns:tools="http://schemas.android.com/tools">
             <category android:name="android.intent.category.OPENABLE" />
         </intent-filter>
     </activity>
+    <activity
+        android:name="org.engine.simulogic.android.SettingsActivity"
+        android:exported="true"
+        android:label="@string/title_activity_settings"
+        android:theme="@style/AppTheme">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.OPENABLE" />
+        </intent-filter>
+    </activity>
+
 </application>
 
 </manifest>
