@@ -19,55 +19,63 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CGroup(private val initialX:Float, private val initialY:Float, private val initialWidth:Float, private val initialHeight:Float, connection:Connection, private val scene: PlayGroundScene): CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
+class CGroup(
+    private val initialX: Float,
+    private val initialY: Float,
+    private val initialWidth: Float,
+    private val initialHeight: Float,
+    connection: Connection,
+    private val scene: PlayGroundScene
+) : CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
-    private var previousPosition = Vector2(initialX ,initialY)
+    private var previousPosition = Vector2(initialX, initialY)
     private var previousSnapPosition = Vector2()
     private val lines = mutableListOf<CLine>()
     var collidableChildren = true
     private val snapAlign = SnapAlign()
     val componentGroupIds = mutableListOf<Int>()
-    var gestureListener:MotionGestureListener? = null
-     init {
-         type = CTypes.GROUP
-         sprite.color  = CDefaults.GROUP_SELECTED_COLOR
-         previousPosition.set(getPosition().x, getPosition().y )
+    var gestureListener: MotionGestureListener? = null
 
-         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
-             for(i in 0 until 4){
-                 CLine(0f,0f,0f,0f,1f).also { line->
-                     line.color = CDefaults.RANGED_LINE_COLOR
-                     layer.attachChildAt(0, line)
-                     lines.add(line)
-                 }
+    init {
+        type = CTypes.GROUP
+        sprite.color = CDefaults.GROUP_SELECTED_COLOR
+        previousPosition.set(getPosition().x, getPosition().y)
 
-             }
-         }
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+            for (i in 0 until 4) {
+                CLine(0f, 0f, 0f, 0f, 1f).also { line ->
+                    line.color = CDefaults.RANGED_LINE_COLOR
+                    layer.attachChildAt(0, line)
+                    lines.add(line)
+                }
 
-         scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
-             layer.attachChildAt(0,this)
-         }
+            }
+        }
 
-         isVisible = true
-         enableDragMotion = true
-         adjustView()
-     }
+        scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
+            layer.attachChildAt(0, this)
+        }
+
+        isVisible = true
+        enableDragMotion = true
+        adjustView()
+    }
 
     // insert range
-    fun insert(inputContainer: DataContainer, range: CRangeSelect){
+    fun insert(inputContainer: DataContainer, range: CRangeSelect) {
         inputContainer.insertTo(dataContainer)
-        dataContainer.forEach {node->
+        dataContainer.forEach { node ->
             node.value.collidable = false
         }
-        setSize(range.getWidth(),range.getHeight())
-        updatePosition(range.getPosition().x ,range.getPosition().y)
+        setSize(range.getWidth(), range.getHeight())
+        updatePosition(range.getPosition().x, range.getPosition().y)
         adjustView()
     }
 
     // insert selection
-    fun insert(inputContainer: DataContainer){
+    fun insert(inputContainer: DataContainer) {
         inputContainer.insertTo(dataContainer)
-        dataContainer.forEach {node->
+        dataContainer.forEach { node ->
             node.value.collidable = false
         }
         dataContainer.sortX()
@@ -77,54 +85,61 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
         val firstY = dataContainer.first()
         val lastY = dataContainer.last()
 
-        val rangeWidth = abs((firstX.value.getPosition().x - firstX.value.getWidth()) - (lastX.value.getPosition().x + lastX.value.getWidth() ))
-        val rangeHeight = abs((firstY.value.getPosition().y - firstY.value.getHeight()) - (lastY.value.getPosition().y + lastY.value.getHeight()))
+        val rangeWidth =
+            abs((firstX.value.getPosition().x - firstX.value.getWidth()) - (lastX.value.getPosition().x + lastX.value.getWidth()))
+        val rangeHeight =
+            abs((firstY.value.getPosition().y - firstY.value.getHeight()) - (lastY.value.getPosition().y + lastY.value.getHeight()))
 
         setSize(rangeWidth, rangeHeight)
-        updatePosition(firstX.value.getPosition().x +(rangeWidth / 2f - firstX.value.getWidth() / 2f - lastX.value.getWidth() / 2f),
-            firstY.value.getPosition().y + (rangeHeight / 2f - firstY.value.getHeight() / 2f - lastY.value.getHeight() / 2f))
+        updatePosition(
+            firstX.value.getPosition().x + (rangeWidth / 2f - firstX.value.getWidth() / 2f - lastX.value.getWidth() / 2f),
+            firstY.value.getPosition().y + (rangeHeight / 2f - firstY.value.getHeight() / 2f - lastY.value.getHeight() / 2f)
+        )
         adjustView()
     }
 
-    fun loadFromIds(connection:Connection){
-        componentGroupIds.forEach {index->
-            dataContainer.insert(connection[index].also { node->
+    fun loadFromIds(connection: Connection) {
+        componentGroupIds.forEach { index ->
+            dataContainer.insert(connection[index].also { node ->
                 node.value.collidable = false
             })
         }
         previousPosition.setZero()
         setSize(initialWidth, initialHeight)
-        updatePosition(initialX,initialY)
+        updatePosition(initialX, initialY)
         adjustView()
     }
 
     override fun translate(offsetX: Float, offsetY: Float) {
-        updatePosition(getPosition().x - previousSnapPosition.x, getPosition().y - previousSnapPosition.y)
+        updatePosition(
+            getPosition().x - previousSnapPosition.x,
+            getPosition().y - previousSnapPosition.y
+        )
         updateGroup(-previousSnapPosition.x, -previousSnapPosition.y)
-         previousPosition.add(offsetX, offsetY)
-        snapAlign.getSnapCoordinates(previousPosition.x,  previousPosition.y).also { position->
-            updatePosition(getPosition().x + position.x,getPosition().y + position.y)
+        previousPosition.add(offsetX, offsetY)
+        snapAlign.getSnapCoordinates(previousPosition.x, previousPosition.y).also { position ->
+            updatePosition(getPosition().x + position.x, getPosition().y + position.y)
             previousSnapPosition.set(position)
             updateGroup(position.x, position.y)
         }
         adjustView()
     }
 
-    private fun updateGroup(offsetX: Float, offsetY: Float){
-        if(dataContainer.isNotEmpty()) {
+    private fun updateGroup(offsetX: Float, offsetY: Float) {
+        if (dataContainer.isNotEmpty()) {
             for (i in 0 until dataContainer.size()) {
                 val p = dataContainer[i].value
                 val ix = p.getPosition().x + offsetX
                 val iy = p.getPosition().y + offsetY
                 // if it's a group translate it indirectly to apply effect to children
-                if(p is CGroup){
+                if (p is CGroup) {
                     /* reset buffers to prevent unexpected glitches,
                     we don't need to remember the last position the parent does it for us
                      */
                     p.resetPositionBuffers()
                     p.translate(offsetX, offsetY)
                     p.resetPositionBuffers()
-                }else {
+                } else {
                     p.updatePosition(ix, iy)
                 }
             }
@@ -144,19 +159,19 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
 
     override fun detachSelf() {
         super.detachSelf()
-        dataContainer.forEach {node->
+        dataContainer.forEach { node ->
             node.value.collidable = true
         }
     }
 
     override fun attachSelf() {
         super.attachSelf()
-        dataContainer.forEach {node->
+        dataContainer.forEach { node ->
             node.value.collidable = false
         }
     }
 
-    fun resetPositionBuffers(){
+    fun resetPositionBuffers() {
         previousSnapPosition.setZero()
         previousPosition.setZero()
     }
@@ -174,8 +189,8 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
             (it as CRangePoint).apply {
-                updated= isUpdated || updated
-                if(isUpdated) {
+                updated = isUpdated || updated
+                if (isUpdated) {
                     childX?.also { child ->
                         child.updatePosition(child.getPosition().x, getPosition().y)
                         child.isUpdated = false
@@ -195,34 +210,42 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
-            it.updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
-                signalTopRight.getPosition().x, signalTopRight.getPosition().y)
-
+            it.updatePosition(
+                signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+                signalTopRight.getPosition().x, signalTopRight.getPosition().y
+            )
         }
         lines[1].also {
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
-            it.updatePosition(signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
-                signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y)
+            it.updatePosition(
+                signalTopLeft.getPosition().x, signalTopLeft.getPosition().y,
+                signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y
+            )
         }
         lines[2].also {
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
-            it.updatePosition(signalTopRight.getPosition().x, signalTopRight.getPosition().y,
-                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
+            it.updatePosition(
+                signalTopRight.getPosition().x, signalTopRight.getPosition().y,
+                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y
+            )
         }
         lines[3].also {
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
-            it.updatePosition(signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y,
-                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y)
+            it.updatePosition(
+                signalBottomLeft.getPosition().x, signalBottomLeft.getPosition().y,
+                signalBottomRight.getPosition().x, signalBottomRight.getPosition().y
+            )
         }
-        if(updated) {
+
+        if (updated) {
             // update the range background size and position
-            val width =  abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
+            val width = abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
             val height = abs(signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
             sprite.setSize(width, height)
             updatePosition(
@@ -230,11 +253,11 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
                 signalTopLeft.getPosition().y - height / 2f
             )
         }
-         updateColor(if(selected) CDefaults.GROUP_SELECTED_COLOR else CDefaults.GROUP_UNSELECTED_COLOR)
+        updateColor(if (selected) CDefaults.GROUP_SELECTED_COLOR else CDefaults.GROUP_UNSELECTED_COLOR)
     }
 
     override fun contains(entity: CNode): CNode? {
-        if(collidableChildren) {
+        if (collidableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(entity)
@@ -245,7 +268,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
             }
         }
         val parentCollides = super.contains(entity)
-        if(parentCollides != null){
+        if (parentCollides != null) {
             return parentCollides
         }
 
@@ -253,7 +276,7 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        if(collidableChildren) {
+        if (collidableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(rect)
@@ -263,8 +286,8 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
                 }
             }
         }
-       val parentCollides = super.contains(rect)
-        if(parentCollides != null){
+        val parentCollides = super.contains(rect)
+        if (parentCollides != null) {
             return parentCollides
         }
 
@@ -272,9 +295,16 @@ class CGroup(private val initialX:Float, private val initialY:Float, private val
     }
 
 
-    override fun clone(): CGroup{
+    override fun clone(): CGroup {
         val position = getPosition()
-        return CGroup(position.x,position.y,getWidth(),getHeight(),connection, scene).also { clone-> clone.gestureListener = gestureListener }
+        return CGroup(
+            position.x,
+            position.y,
+            getWidth(),
+            getHeight(),
+            connection,
+            scene
+        ).also { clone -> clone.gestureListener = gestureListener }
     }
 
 }

@@ -17,7 +17,6 @@ class HelpAdapter : RecyclerView.Adapter<HelpAdapter.HelpViewHolder>() {
                       itemView.findViewById<ImageView>(R.id.icon).also { imageView ->
                           imageView.setImageResource(item.layoutIcon)
                       }
-                      itemView.findViewById<TextView>(R.id.header).text = item.title
                       itemView.findViewById<TextView>(R.id.title).text = item.title
                       itemView.findViewById<TextView>(R.id.description).text = item.description
                   }else{

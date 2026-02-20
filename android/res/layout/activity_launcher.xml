@@ -39,6 +39,15 @@
                 app:tint="@color/dividerColor"
                 android:drawableLeft="@drawable/settings"
                 android:text="Settings"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/about"
+                style="@style/customButtonStyle"
+                android:layout_marginTop="2dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tint="@color/dividerColor"
+                android:drawableLeft="@drawable/about"
+                android:text="About"/>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

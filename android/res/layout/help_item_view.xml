@@ -13,63 +13,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/icon"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_gravity="center_horizontal" />
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center_horizontal"
+                android:textSize="10dp"
+                android:textStyle="bold"
+                android:textColor="@color/dividerColor"
+                />
+        </LinearLayout>
     <TextView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="12dp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        />
-    <LinearLayout
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="this is a test"
-            android:textSize="12dp"
-            android:textStyle="bold"
-            />
-        <RelativeLayout
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:orientation="vertical"
-            android:background="@drawable/icon_bg">
-            <LinearLayout
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/icon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:padding="5dp"
-                    android:layout_gravity="center_horizontal" />
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:gravity="center_horizontal"
-                    android:textSize="10sp"
-                    android:textColor="@color/dividerColor"
-                    />
-                <View android:id="@+id/selected"
-                    android:background="@drawable/background_selected_rounded"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="2dp"
-                    android:layout_height="4dp"/>
-            </LinearLayout>
-
-        </RelativeLayout>
-    </LinearLayout>
+        android:paddingBottom="10dp"
+        android:text="this is a test"
+        android:textSize="12dp"
+        />
 </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
