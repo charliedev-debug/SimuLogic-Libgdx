@@ -1,6 +1,5 @@
 package org.engine.simulogic.android.circuits.components.other
 
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
@@ -9,12 +8,9 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
-import org.engine.simulogic.android.circuits.tools.CommandHistory
-import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
-import org.engine.simulogic.android.events.CollisionDetector
+import org.engine.simulogic.android.circuits.tools.DeleteCommand
 import org.engine.simulogic.android.events.MotionGestureListener
-import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
@@ -31,11 +27,13 @@ class CGroup(
     private var previousPosition = Vector2(initialX, initialY)
     private var previousSnapPosition = Vector2()
     private val lines = mutableListOf<CLine>()
-    var collidableChildren = true
     private val snapAlign = SnapAlign()
+    // deletes children more efficiently
+    private var deleteCommand = DeleteCommand(scene, connection)
     val componentGroupIds = mutableListOf<Int>()
     var gestureListener: MotionGestureListener? = null
-
+    var collectableChildren = true
+    var deleteChildrenOnDetach = true
     init {
         type = CTypes.GROUP
         sprite.color = CDefaults.GROUP_SELECTED_COLOR
@@ -159,8 +157,12 @@ class CGroup(
 
     override fun detachSelf() {
         super.detachSelf()
+        deleteCommand.reset()
         dataContainer.forEach { node ->
             node.value.collidable = true
+            if(deleteChildrenOnDetach) {
+                deleteCommand.insert(DeleteCommand.DeleteItem(node))
+            }
         }
         lines.forEach {
             it.isRemoved = true
@@ -186,6 +188,7 @@ class CGroup(
                 layer.attachChild(it)
             }
         }
+        deleteCommand.undo()
     }
 
     fun resetPositionBuffers() {
@@ -274,7 +277,7 @@ class CGroup(
     }
 
     override fun contains(entity: CNode): CNode? {
-        if (collidableChildren) {
+        if (collectableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(entity)
@@ -293,7 +296,7 @@ class CGroup(
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        if (collidableChildren) {
+        if (collectableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(rect)

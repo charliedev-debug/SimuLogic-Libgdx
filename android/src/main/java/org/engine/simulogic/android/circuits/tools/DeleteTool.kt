@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.tools
 
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.scene.PlayGroundScene
 

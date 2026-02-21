@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
-import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
@@ -24,11 +23,11 @@ import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.CutTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.circuits.tools.DeleteTool
-import org.engine.simulogic.android.circuits.tools.GroupCommand
+import org.engine.simulogic.android.circuits.tools.GroupInsertCommand
+import org.engine.simulogic.android.circuits.tools.GroupRemoveCommand
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.circuits.tools.RotateCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
-import kotlin.math.round
 
 
 class MotionGestureListener(val camera:OrthographicCamera, private val connection: Connection, val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
@@ -189,9 +188,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         ).also { group ->
                             group.insert(dataContainer, rangeSelect)
                             group.gestureListener = this
-                            commandHistory.execute(GroupCommand(group))
                         }
-                    )
+                    ).also { node->
+                        commandHistory.execute(GroupInsertCommand(node,connection))
+                    }
                 )
 
             }
@@ -211,9 +211,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                     ).also { group ->
                         group.insert(dataContainer)
                         group.gestureListener = this
-                        commandHistory.execute(GroupCommand(group))
                     }
-                )
+                ).also { node->
+                    commandHistory.execute(GroupInsertCommand(node,connection))
+                }
             )
         }
         collisionDetector.reset()
@@ -225,9 +226,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     fun removeGroup(){
         collisionDetector.selectedItems.forEach { item ->
             if (item.subject is CGroup){
+                item.subject.deleteChildrenOnDetach = false
                 item.caller.detachSelf()
                 connection.removeNode(item.caller)
-                commandHistory.execute(GroupCommand(item.subject))
+                commandHistory.execute(GroupRemoveCommand(item.caller, connection,false))
             }
         }
         collisionDetector.reset()
@@ -347,7 +349,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         //double tap to enable and disable groups
         collisionDetector.selectedItems.forEach {
             if(it.subject is CGroup){
-                it.subject.collidableChildren = !it.subject.collidableChildren
+                it.subject.collectableChildren = !it.subject.collectableChildren
             }
         }
         return true
@@ -364,7 +366,9 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         if(collisionDetector.mode == TOUCH_MODE){
-            commandHistory.execute(moveCommand)
+            if(moveCommand.node != null) {
+                commandHistory.execute(moveCommand)
+            }
             collisionDetector.selectedItems.forEach {
                 it.subject.also { subject ->
                     if (subject is CGroup) {

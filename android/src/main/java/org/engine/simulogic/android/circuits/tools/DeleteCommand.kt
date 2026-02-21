@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.tools
 
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.scene.Entity
@@ -21,7 +22,12 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
             }
             iterator.remove()
         }
+        // if it's a group delete all the children
+        if(item.node.value is CGroup){
+            item.node.value.deleteChildrenOnDetach = true
+        }
         item.node.detachSelf()
+        connection.removeNode(item.node)
         data.add(item)
         return this
     }
@@ -41,6 +47,10 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
 
     override fun redo() {
         data.forEach { item->
+            // if it's a group delete all the children
+            if(item.node.value is CGroup){
+                item.node.value.deleteChildrenOnDetach = true
+            }
             item.node.detachSelf()
             item.children.forEach {
                 it.detachSelf()
@@ -50,5 +60,9 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
             }
             connection.removeNode(item.node)
         }
+    }
+
+    fun reset(){
+        data.clear()
     }
 }
