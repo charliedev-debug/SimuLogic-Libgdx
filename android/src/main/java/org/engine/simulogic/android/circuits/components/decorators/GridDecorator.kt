@@ -55,11 +55,11 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val factor = (1f/ camera.zoom)
         val viewPortWidth = (camera.viewportWidth / factor)
         val viewPortHeight = (camera.viewportHeight / factor)
-        val spacingX = CDefaults.GRID_WIDTH
-        val spacingY = CDefaults.GRID_HEIGHT
+        val spacingX = CDefaults.GRID_WIDTH * 2
+        val spacingY = CDefaults.GRID_HEIGHT * 2
         val labelSpacingX = (spacingX * 4).toInt()
         val labelSpacingY = (spacingY * 4).toInt()
-        val labelOffsetY = 15f
+        val labelOffsetY = 0f
         val labelOffsetX = 15f
         val lineCountX = round(viewPortWidth / spacingX).toInt() + 2
         val lineCountY = round(viewPortHeight / spacingY).toInt() + 2
@@ -190,7 +190,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
 
         labelsY.sortBy { it.getPosition().y }
         labelsY.forEach {
-            it.updatePosition(originX + labelOffsetX + it.getWidth() / 4f , it.getPosition().y)
+            it.updatePosition(originX + labelOffsetY + it.getWidth() / 4f , it.getPosition().y)
             it.lineHeader.updatePosition(it.getPosition().x, it.getPosition().y, endX, it.getPosition().y)
             it.lineHeader.isVisible = labelHeaderVisible && gridVisible
             it.isVisible = labelsVisible
