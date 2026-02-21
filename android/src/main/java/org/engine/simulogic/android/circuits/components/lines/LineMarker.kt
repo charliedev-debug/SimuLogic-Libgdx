@@ -162,7 +162,7 @@ class LineMarker(val scene: PlayGroundScene,
         }
 
         // snap align start and end points
-     /*   val startFrom = signals[0]
+        val startFrom = signals[0]
         val startSnapFrom = signals[1]
         val endTo = signals[signals.size - 1]
         val endSnapTo = signals[signals.size - 2]
@@ -182,7 +182,7 @@ class LineMarker(val scene: PlayGroundScene,
         }
         if(offsetToY <= CDefaults.GRID_HEIGHT){
             endSnapTo.updatePosition(endSnapTo.getPosition().x, endTo.getPosition().y)
-        }*/
+        }
 
 
         // mark lines and set coordinates
