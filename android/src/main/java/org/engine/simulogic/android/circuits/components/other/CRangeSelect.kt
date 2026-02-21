@@ -18,7 +18,7 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-open class CRangeSelect(x:Float, y:Float, val connection: Connection, private val scene: PlayGroundScene, layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
+open class CRangeSelect(x:Float, y:Float, val connection: Connection, private val scene: PlayGroundScene, protected val layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
 
     private val pointSize = 30f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()

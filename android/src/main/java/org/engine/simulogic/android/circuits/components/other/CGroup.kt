@@ -162,12 +162,29 @@ class CGroup(
         dataContainer.forEach { node ->
             node.value.collidable = true
         }
+        lines.forEach {
+            it.isRemoved = true
+            it.detachSelf()
+        }
     }
 
     override fun attachSelf() {
         super.attachSelf()
+        signals.forEach {
+            it.isRemoved = false
+            attachChild(it)
+        }
+        scene.getLayerById(layerId).also { layer ->
+            layer.attachChild(this)
+        }
         dataContainer.forEach { node ->
             node.value.collidable = false
+        }
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+            lines.forEach {
+                it.isRemoved = false
+                layer.attachChild(it)
+            }
         }
     }
 

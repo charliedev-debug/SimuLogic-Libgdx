@@ -24,6 +24,7 @@ import org.engine.simulogic.android.circuits.tools.CopyTool
 import org.engine.simulogic.android.circuits.tools.CutTool
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.circuits.tools.DeleteTool
+import org.engine.simulogic.android.circuits.tools.GroupCommand
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.circuits.tools.RotateCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
@@ -188,6 +189,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         ).also { group ->
                             group.insert(dataContainer, rangeSelect)
                             group.gestureListener = this
+                            commandHistory.execute(GroupCommand(group))
                         }
                     )
                 )
@@ -209,6 +211,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                     ).also { group ->
                         group.insert(dataContainer)
                         group.gestureListener = this
+                        commandHistory.execute(GroupCommand(group))
                     }
                 )
             )
@@ -224,6 +227,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             if (item.subject is CGroup){
                 item.caller.detachSelf()
                 connection.removeNode(item.caller)
+                commandHistory.execute(GroupCommand(item.subject))
             }
         }
         collisionDetector.reset()
