@@ -24,8 +24,8 @@ class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, priv
         type = CTypes.DATA_BUS
         this.rotationDirection = rotationDirection
         this.cameraClippingEnabled = false
-        val spacingX = CDefaults.GRID_WIDTH * 4
-        val spacingY = CDefaults.GRID_HEIGHT * 4
+        val spacingX = CDefaults.GRID_WIDTH * 2
+        val spacingY = CDefaults.GRID_HEIGHT * 2
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(spacingX , spacingY)
@@ -121,8 +121,8 @@ class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, priv
     }
 
     override fun update() {
-        val spacingX = CDefaults.GRID_WIDTH * 4
-        val spacingY = CDefaults.GRID_HEIGHT * 4
+        val spacingX = CDefaults.GRID_WIDTH * 2
+        val spacingY = CDefaults.GRID_HEIGHT * 2
         for((counter, i) in (0 until MAX_POINTS step 2).withIndex()) {
             val a = signals[i]
             val b = signals[i+1]
