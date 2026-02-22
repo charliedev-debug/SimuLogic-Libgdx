@@ -312,6 +312,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                             }else {
                                 newPosition.set(snapCoordinates.x, snapCoordinates.y)
                                 subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                subject.snapAlignOriginPoints = true
                             }
                         }
 

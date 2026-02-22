@@ -20,6 +20,7 @@ abstract class Entity {
     var type = CTypes.NONE
     var id = 0
     var cameraClippingEnabled = true
+    var snapAlignOriginPoints = false
     companion object{
         const val ROTATE_RIGHT = 0
         const val ROTATE_BOTTOM = 1

@@ -111,6 +111,44 @@ class LineMarker(val scene: PlayGroundScene,
         }
     }
 
+    fun snapAlignOriginPoints(){
+        // snap align start and end points
+        val startFrom = signals[0]
+        val startSnapFrom = signals[1]
+        val endTo = signals[signals.size - 1]
+        val endSnapTo = signals[signals.size - 2]
+        val offsetFromX = abs(startFrom.getPosition().x - startSnapFrom.getPosition().x)
+        val offsetFromY = abs(startFrom.getPosition().y - startSnapFrom.getPosition().y)
+        val offsetToX = abs(endTo.getPosition().x - endSnapTo.getPosition().x)
+        val offsetToY = abs(endTo.getPosition().y - endSnapTo.getPosition().y)
+
+        if(from.value.snapAlignOriginPoints) {
+            if (offsetFromX <= CDefaults.GRID_WIDTH) {
+                startSnapFrom.updatePosition(
+                    startFrom.getPosition().x,
+                    startSnapFrom.getPosition().y
+                )
+            } else
+                if (offsetFromY <= CDefaults.GRID_HEIGHT) {
+                    startSnapFrom.updatePosition(
+                        startSnapFrom.getPosition().x,
+                        startFrom.getPosition().y
+                    )
+                }
+        }
+
+        if(to.value.snapAlignOriginPoints) {
+            if (offsetToX <= CDefaults.GRID_WIDTH) {
+                endSnapTo.updatePosition(endTo.getPosition().x, endSnapTo.getPosition().y)
+            } else
+                if (offsetToY <= CDefaults.GRID_HEIGHT) {
+                    endSnapTo.updatePosition(endSnapTo.getPosition().x, endTo.getPosition().y)
+                }
+        }
+        from.value.snapAlignOriginPoints = false
+        to.value.snapAlignOriginPoints = false
+    }
+
     override fun update() {
         val signalFrom = from.value.signals[signalFrom]
         val signalTo = to.value.signals[signalTo]
@@ -161,29 +199,7 @@ class LineMarker(val scene: PlayGroundScene,
             index++
         }
 
-        // snap align start and end points
-        val startFrom = signals[0]
-        val startSnapFrom = signals[1]
-        val endTo = signals[signals.size - 1]
-        val endSnapTo = signals[signals.size - 2]
-        val offsetFromX = abs(startFrom.getPosition().x - startSnapFrom.getPosition().x)
-        val offsetFromY = abs(startFrom.getPosition().y - startSnapFrom.getPosition().y)
-        val offsetToX = abs(endTo.getPosition().x - endSnapTo.getPosition().x)
-        val offsetToY = abs(endTo.getPosition().y - endSnapTo.getPosition().y)
-
-        if(offsetFromX <= CDefaults.GRID_WIDTH){
-            startSnapFrom.updatePosition(startFrom.getPosition().x, startSnapFrom.getPosition().y)
-        }
-        if(offsetFromY <= CDefaults.GRID_HEIGHT){
-            startSnapFrom.updatePosition(startSnapFrom.getPosition().x, startFrom.getPosition().y)
-        }
-        if(offsetToX <= CDefaults.GRID_WIDTH){
-            endSnapTo.updatePosition(endTo.getPosition().x, endSnapTo.getPosition().y)
-        }
-        if(offsetToY <= CDefaults.GRID_HEIGHT){
-            endSnapTo.updatePosition(endSnapTo.getPosition().x, endTo.getPosition().y)
-        }
-
+        snapAlignOriginPoints()
 
         // mark lines and set coordinates
         var markerActive = false
@@ -201,6 +217,8 @@ class LineMarker(val scene: PlayGroundScene,
         if (markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
+
+
     }
 
     override fun updateColor(color: Color) {
