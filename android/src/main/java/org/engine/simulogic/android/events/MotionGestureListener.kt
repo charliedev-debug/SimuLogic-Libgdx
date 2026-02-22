@@ -309,6 +309,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                             }else if(subject is CSignal){
                                 newPosition.set(snapCoordinates.x, snapCoordinates.y)
                                 subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                subject.snapAlignOriginPoints = true
                             }else {
                                 newPosition.set(snapCoordinates.x, snapCoordinates.y)
                                 subject.updatePosition(snapCoordinates.x, snapCoordinates.y)

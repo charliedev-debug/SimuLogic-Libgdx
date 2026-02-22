@@ -111,7 +111,7 @@ class LineMarker(val scene: PlayGroundScene,
         }
     }
 
-    fun snapAlignOriginPoints(){
+    private fun snapAlignOriginPoints(){
         // snap align start and end points
         val startFrom = signals[0]
         val startSnapFrom = signals[1]
@@ -176,30 +176,33 @@ class LineMarker(val scene: PlayGroundScene,
             val distanceFromPrevY = abs(pFrom.y - prev.y)
             val distanceToPrevX = abs(pTo.x - prev.x)
             val distanceToPrevY = abs(pTo.y - prev.y)
+            val snapAlignOriginPoints = prevSignal.snapAlignOriginPoints || nextSignal.snapAlignOriginPoints
             // ignore the first and the last elements since we can't modify them directly since it's the source
-            if(distanceFromPrevX < distanceToPrevX || index == 0){
+            if(snapAlignOriginPoints &&(distanceFromPrevX < distanceToPrevX || index == 0)){
                 if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     nextSignal.updatePosition(prev.x, next.y)
                 }
-            }else if(distanceFromPrevX > distanceToPrevX){
+            }else if(snapAlignOriginPoints && (distanceFromPrevX > distanceToPrevX)){
                 if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     prevSignal.updatePosition(next.x, prev.y)
                 }
             }
 
-            if(distanceFromPrevY < distanceToPrevY || (index+1) == signals.size - 1){
+            if(snapAlignOriginPoints &&(distanceFromPrevY < distanceToPrevY || (index+1) == signals.size - 1)){
                 if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
-            }else if(distanceFromPrevY > distanceToPrevY){
+            }else if(snapAlignOriginPoints && (distanceFromPrevY > distanceToPrevY)){
                 if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     prevSignal.updatePosition(prev.x, next.y)
                 }
             }
+            prevSignal.snapAlignOriginPoints = false
+            nextSignal.snapAlignOriginPoints = false
             index++
         }
 
-        snapAlignOriginPoints()
+        //snapAlignOriginPoints()
 
         // mark lines and set coordinates
         var markerActive = false

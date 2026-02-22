@@ -11,9 +11,9 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private val scene: PlayGroundScene) :
+class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, private val scene: PlayGroundScene) :
     CNode(){
-    private val MAX_POINTS = size * 2
+    private val MAX_POINTS = DATA_SIZE * 2
     private val lines = mutableListOf<CLine>()
     constructor(x:Float, y:Float,size:Int, scene: PlayGroundScene):this(x, y,size, ROTATE_RIGHT, scene)
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y,4, ROTATE_RIGHT, scene)
@@ -24,9 +24,11 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
         type = CTypes.DATA_BUS
         this.rotationDirection = rotationDirection
         this.cameraClippingEnabled = false
+        val spacingX = CDefaults.GRID_WIDTH * 4
+        val spacingY = CDefaults.GRID_HEIGHT * 4
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.GRID_WIDTH, CDefaults.GRID_HEIGHT)
+            setSize(spacingX , spacingY)
             setOriginCenter()
             when(rotationDirection){
                 ROTATE_BOTTOM ->{
@@ -42,11 +44,28 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.GRID_WIDTH / 2f,y - CDefaults.GRID_HEIGHT / 2f)
+            setPosition(x - spacingX/ 2f,y - spacingY/ 2f)
         }
+
         for(i in 0 until MAX_POINTS step  2) {
-            signals.add(CSignal(x + sprite.width * 0.8125f, y + sprite.height * (i - MAX_POINTS / 4) , CTypes.SIGNAL_OUT, i, scene))
-            signals.add(CSignal(x - sprite.width * 0.8125f, y + sprite.height * (i - MAX_POINTS / 4), CTypes.SIGNAL_IN, i + 1, scene))
+            when(rotationDirection){
+                ROTATE_RIGHT->{
+                    signals.add(CSignal(x + spacingX, y + spacingY * (i - MAX_POINTS/4) + (spacingY) / 2, CTypes.SIGNAL_OUT, i, scene ))
+                    signals.add(CSignal(x - spacingX, y + spacingY * (i - MAX_POINTS/4) + (spacingY) / 2, CTypes.SIGNAL_IN, i + 1, scene))
+                }
+                ROTATE_LEFT->{
+                    signals.add(CSignal(x - spacingX, y + spacingY * (i - MAX_POINTS/4) + (spacingY) / 2, CTypes.SIGNAL_OUT, i, scene  ))
+                    signals.add(CSignal(x + spacingX, y + spacingY * (i - MAX_POINTS/4) + (spacingY) / 2, CTypes.SIGNAL_IN, i + 1, scene))
+                }
+                ROTATE_BOTTOM->{
+                    signals.add(CSignal(x + spacingX * (i - MAX_POINTS/4) + (spacingX) / 2 , getPosition().y + spacingY, CTypes.SIGNAL_OUT, i, scene))
+                    signals.add(CSignal(x + spacingX * (i - MAX_POINTS/4) + (spacingX) / 2, getPosition().y - spacingY, CTypes.SIGNAL_IN, i + 1, scene))
+                }
+                ROTATE_TOP->{
+                    signals.add(CSignal(x + spacingX * (i - MAX_POINTS/4) + (spacingX) / 2 , getPosition().y - spacingY, CTypes.SIGNAL_OUT, i, scene ))
+                    signals.add(CSignal(x + spacingX * (i - MAX_POINTS/4) + (spacingX) / 2, getPosition().y + spacingY, CTypes.SIGNAL_IN, i + 1, scene))
+                }
+            }
         }
         signals.forEach {
             attachChild(it)
@@ -102,6 +121,8 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
     }
 
     override fun update() {
+        val spacingX = CDefaults.GRID_WIDTH * 4
+        val spacingY = CDefaults.GRID_HEIGHT * 4
         for((counter, i) in (0 until MAX_POINTS step 2).withIndex()) {
             val a = signals[i]
             val b = signals[i+1]
@@ -109,20 +130,20 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
             updateColor(if(b.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
             when(rotationDirection){
                 ROTATE_RIGHT->{
-                    a.updatePosition(getPosition().x + sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2 )
-                    b.updatePosition(getPosition().x - sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2)
+                    a.updatePosition(getPosition().x + spacingX, getPosition().y + spacingY * (counter - MAX_POINTS/4) + (spacingY) / 2 )
+                    b.updatePosition(getPosition().x - spacingX, getPosition().y + spacingY * (counter - MAX_POINTS/4) + (spacingY) / 2)
                 }
                 ROTATE_LEFT->{
-                    a.updatePosition(getPosition().x - sprite.width , getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2 )
-                    b.updatePosition(getPosition().x + sprite.width, getPosition().y + sprite.height * (counter - MAX_POINTS/4) + (sprite.height) / 2)
+                    a.updatePosition(getPosition().x - spacingX, getPosition().y + spacingY * (counter - MAX_POINTS/4) + (spacingY) / 2 )
+                    b.updatePosition(getPosition().x + spacingX, getPosition().y + spacingY * (counter - MAX_POINTS/4) + (spacingY) / 2)
                 }
                 ROTATE_BOTTOM->{
-                    a.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2 , getPosition().y + sprite.height )
-                    b.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2, getPosition().y - sprite.height )
+                    a.updatePosition(getPosition().x + spacingX * (counter - MAX_POINTS/4) + (spacingX) / 2 , getPosition().y + spacingY )
+                    b.updatePosition(getPosition().x + spacingX * (counter - MAX_POINTS/4) + (spacingX) / 2, getPosition().y - spacingY )
                 }
                 ROTATE_TOP->{
-                    a.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2 , getPosition().y - sprite.height)
-                    b.updatePosition(getPosition().x + sprite.width * (counter - MAX_POINTS/4) + (sprite.width) / 2, getPosition().y + sprite.height)
+                    a.updatePosition(getPosition().x + spacingX * (counter - MAX_POINTS/4) + (spacingX) / 2 , getPosition().y - spacingY)
+                    b.updatePosition(getPosition().x + spacingX * (counter - MAX_POINTS/4) + (spacingX) / 2, getPosition().y + spacingY)
                 }
             }
 
@@ -175,7 +196,7 @@ class CDataBus (x:Float, y:Float, val size:Int, rotationDirection:Int, private v
     }
 
     override fun clone(): CNode {
-        return CDataBus(getPosition().x,getPosition().y,size, rotationDirection, scene )
+        return CDataBus(getPosition().x,getPosition().y,DATA_SIZE, rotationDirection, scene )
     }
 
 }

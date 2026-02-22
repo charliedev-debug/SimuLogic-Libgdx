@@ -102,7 +102,7 @@ class DataTransferObject {
             } else if (component is CPower) {
                 stream.writeInt(component.value)
             } else if (component is CDataBus) {
-                stream.writeInt(component.size)
+                stream.writeInt(component.DATA_SIZE)
             } else if (component is CFanOutBus) {
                 stream.writeInt(component.inputSize)
                 stream.writeInt(component.segments)
