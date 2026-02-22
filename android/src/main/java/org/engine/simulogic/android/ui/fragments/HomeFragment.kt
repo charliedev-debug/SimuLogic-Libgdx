@@ -36,6 +36,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var recentProjectAdapter: RecentAdapter
     private lateinit var recentProjectAlert:TextView
+    private val MAX_RECENT_ITEMS = 6
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,7 +46,7 @@ class HomeFragment : Fragment() {
         val projectOptionRecyclerView = root.findViewById<RecyclerView>(R.id.project_operations)
         val recentProjectRecyclerView = root.findViewById<RecyclerView>(R.id.recent_projects)
         val sampleProjectRecyclerView = root.findViewById<RecyclerView>(R.id.sample_projects)
-            recentProjectAlert = root.findViewById<TextView>(R.id.recent_project_alert)
+            recentProjectAlert = root.findViewById(R.id.recent_project_alert)
 
         val projectOptionAdapter = ProjectOptionsAdapter().apply {
             add("Create Project", R.drawable.new_project)
@@ -165,8 +166,10 @@ class HomeFragment : Fragment() {
         super.onResume()
         recentProjectAdapter.apply {
             clear()
-            DataTransferObject().listProjects(requireContext()).forEach {
-                add(it.title,it.path, it.description, it.lastModified)
+            DataTransferObject().listProjects(requireContext()).also { data->
+                data.subList(0, minOf(data.size, MAX_RECENT_ITEMS)).onEach {
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
             }
             if(recentProjectAdapter.isEmpty()){
                 recentProjectAlert.visibility = View.VISIBLE
