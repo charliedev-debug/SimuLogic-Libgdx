@@ -38,7 +38,7 @@ class LineMarker(val scene: PlayGroundScene,
         for (i in 0 ..  linePointCountX) {
             val x = pFrom.x + maxDistanceBetweenX * i
             val y = pFrom.y
-            signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
+            signals.add(CSignal(x, y, CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
         }
@@ -46,7 +46,7 @@ class LineMarker(val scene: PlayGroundScene,
         for (i in  0  ..  linePointCountY ) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = pTo.x
-            signals.add(CSignal(x, y, CTypes.SIGNAL_IN, signalIndex++, scene).apply {
+            signals.add(CSignal(x, y, CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
         }
@@ -202,7 +202,7 @@ class LineMarker(val scene: PlayGroundScene,
             index++
         }
 
-        //snapAlignOriginPoints()
+        snapAlignOriginPoints()
 
         // mark lines and set coordinates
         var markerActive = false

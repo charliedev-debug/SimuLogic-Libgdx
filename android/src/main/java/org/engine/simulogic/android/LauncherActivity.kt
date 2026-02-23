@@ -17,6 +17,7 @@ import com.google.android.material.button.MaterialButton
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 import org.engine.simulogic.R
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
+import org.engine.simulogic.android.views.dialogs.AboutDialog
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -31,6 +32,7 @@ private lateinit var binding: ActivityLauncherBinding
 
      setSupportActionBar(binding.appBarLauncher.toolbar)
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
+     val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
      findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.title) {
                 "help" -> {
@@ -45,6 +47,10 @@ private lateinit var binding: ActivityLauncherBinding
             Intent(this@LauncherActivity,SettingsActivity::class.java).also { intent ->
                 startActivity(intent)
             }
+        }
+
+        aboutButtonLauncher.setOnClickListener {
+            AboutDialog(this@LauncherActivity).show()
         }
 
         binding.appBarLauncher.fab.setOnClickListener { view ->
