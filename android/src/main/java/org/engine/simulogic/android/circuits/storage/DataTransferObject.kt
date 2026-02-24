@@ -97,6 +97,7 @@ class DataTransferObject {
             if (component is CLabel) {
                 stream.writeInt(component.text.length)
                 stream.write(component.text.toByteArray(Charsets.UTF_8))
+                stream.writeFloat(component.fontSize)
             } else if (component is CClock) {
                 stream.writeFloat(component.freq)
             } else if (component is CPower) {
@@ -206,6 +207,7 @@ class DataTransferObject {
                 labelText?.let {
                     stream.readFully(labelText)
                 }
+                val labelFontSize = if(type == CTypes.LABEL) stream.readFloat() else 0f
                 // power generator signal value
                 val powerValue = if (type == CTypes.POWER) stream.readInt() else 0
                 // data bus size value
@@ -301,7 +303,7 @@ class DataTransferObject {
                             ListNode(
                                 CLabel(
                                     font,
-                                    25f,
+                                    labelFontSize,
                                     "${labelText?.toString(Charsets.UTF_8)}",
                                     x,
                                     y,
