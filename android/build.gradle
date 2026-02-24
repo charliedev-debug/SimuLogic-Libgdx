@@ -43,6 +43,9 @@ android {
     targetCompatibility "8"
     coreLibraryDesugaringEnabled = true
   }
+  aaptOptions{
+    noCompress("bin")
+  }
   buildTypes {
     release {
       minifyEnabled true

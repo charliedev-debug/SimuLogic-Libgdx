@@ -147,12 +147,27 @@ class HomeFragment : Fragment() {
         }
 
         val sampleProjectAdapter = RecentAdapter().apply {
-            add("Computation","","",0,RecentItem.VIEW_HEADER,ispremium = true)
-            add("4bitAdder","system/io/files","This is an implementation of a 4bit adder",0L)
-            add("8bitSubtractor","system/io/files", "This is an implementation of a 8bit Subtractor",0L)
-            add("Multiplexing","","", 0L,RecentItem.VIEW_HEADER)
-            add("Multiplexer","system/io/files", "This is an implementation of a multiplexer",0L)
+            DataTransferObject().listSampleProjects(requireContext()).onEach {
+                add(it.title,it.path, it.description, it.lastModified)
+            }
         }
+
+        sampleProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
+            override fun onClick(item: RecentItem) {
+                DataTransferObject().fetchSampleProject(requireContext(),
+                    ProjectOptions(File(item.path).name,item.title, item.description,
+                        item.path, item.lastModified, ProjectOptions.OPEN)).also {projectOptions ->
+                        Intent(context,SimulationActivity::class.java).apply {
+                            putExtra("options",projectOptions)
+                            startActivity(this)
+                        }
+                    }
+
+            }
+            override fun onDelete(item: RecentItem, index:Int) {
+
+            }
+        })
         sampleProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)
             adapter = sampleProjectAdapter

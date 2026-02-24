@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.storage
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.net.Uri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -485,6 +486,37 @@ class DataTransferObject {
         return ProjectOptions("none", "none", "none", path.path, 0L, ProjectOptions.OPEN)
     }
 
+    private fun readFileHeaderFromAsset(path: File, assetManager: AssetManager): ProjectOptions {
+        val inputStream = assetManager.open(path.path)
+        val stream = DataInputStream(BufferedInputStream(inputStream))
+        try {
+            val identifier = stream.readInt()
+            if (identifier != IDENTIFIER) throw IOException("Corrupt or Not a circuit file")
+            val version = stream.readInt()
+            val titleLen = stream.readInt()
+            val title = ByteArray(titleLen)
+            stream.readFully(title)
+            val descrLen = stream.readInt()
+            val description = ByteArray(descrLen)
+            val fileSize = inputStream.available().toLong()
+            stream.readFully(description)
+            inputStream.close()
+            stream.close()
+            return ProjectOptions(
+                path.name,
+                title.toString(Charsets.UTF_8),
+                description.toString(Charsets.UTF_8),
+                path.path,
+                fileSize,
+                ProjectOptions.OPEN
+            )
+        } catch (eof: EOFException) {
+            eof.printStackTrace()
+        }
+        inputStream.close()
+        stream.close()
+        return ProjectOptions("none", "none", "none", path.path, 0L, ProjectOptions.OPEN)
+    }
 
     fun listProjects(context: Context): List<ProjectOptions> {
         val files = mutableListOf<ProjectOptions>()
@@ -505,6 +537,42 @@ class DataTransferObject {
 
     fun listSampleProjects(context: Context):List<ProjectOptions>{
         val files = mutableListOf<ProjectOptions>()
+        val parent = "sample_projects"
+        val assetManager = context.assets
+        assetManager.list("sample_projects")?.onEach {name->
+            try {
+                files.add(readFileHeaderFromAsset(File(parent, name), assetManager))
+            }catch (io:java.lang.Exception){
+                //ignore the file and continue
+            }
+
+        }
         return files
+    }
+
+    fun fetchSampleProject(context: Context, projectOptions: ProjectOptions):ProjectOptions{
+        val destinationFolder = File(context.getExternalFilesDir(""), "projects/${File(projectOptions.path).name}")
+        if(destinationFolder.exists() && destinationFolder.length() != 0L){
+            return readFileHeader(destinationFolder)
+        }
+        val assetManager = context.assets
+        val sourceStream = assetManager.open(projectOptions.path)
+        val fileOutputStream = FileOutputStream(destinationFolder)
+
+        try {
+            val buffer = ByteArray(8192)
+            var length: Int
+            while (sourceStream.read(buffer).also { length = it } > 0) {
+                fileOutputStream.write(buffer, 0, length)
+            }
+        }catch (io:IOException){
+            io.printStackTrace()
+            sourceStream.close()
+            fileOutputStream.close()
+            return projectOptions
+        }
+        sourceStream.close()
+        fileOutputStream.close()
+        return readFileHeader(destinationFolder)
     }
 }

@@ -52,6 +52,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:name="org.engine.simulogic.android.SimulationActivity"
         android:exported="true"
         android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout"
+        android:label="Environment"
         android:theme="@style/AppTheme">
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
