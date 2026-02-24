@@ -27,7 +27,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
     private var gridVisible = true
     private var labelHeaderVisible = true
     var refresh = false
-    class GridLabel(font: BitmapFont, text:String,x:Float, y:Float, scene: PlayGroundScene): CLabel(font, text, x, y, scene){
+    class GridLabel(font: BitmapFont, text:String,x:Float, y:Float, scene: PlayGroundScene): CLabel(font,25f, text, x, y, scene){
            var lineHeader = CLine(0f,0f, 0f, 0f,1f)
         override fun detachSelf() {
             super.detachSelf()

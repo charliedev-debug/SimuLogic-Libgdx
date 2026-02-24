@@ -82,7 +82,7 @@ class LabelDialog(context: Context, private val listener:IDialogLabelListener) :
         }
         save.setOnClickListener {
             dismiss()
-            listener.onCompleted(editTextFileName.text.toString())
+            listener.onCompleted(editTextFileName.text.toString(),fontDropDownEditText.text.toString().toInt())
         }
 
         this.setContentView(view)

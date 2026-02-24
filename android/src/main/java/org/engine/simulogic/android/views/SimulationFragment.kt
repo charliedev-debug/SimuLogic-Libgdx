@@ -299,8 +299,8 @@ class SimulationFragment(
 
                 ComponentBottomSheet.TEXT_COMPONENT -> {
                     LabelDialog(requireContext(), object : IDialogLabelListener {
-                        override fun onCompleted(text: String) {
-                            simulationLoop.componentManager.insertCLabel(text)
+                        override fun onCompleted(text: String, fontSize:Int) {
+                            simulationLoop.componentManager.insertCLabel(text,fontSize)
                         }
 
                         override fun onCancelled() {

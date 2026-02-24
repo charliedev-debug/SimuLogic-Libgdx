@@ -16,7 +16,7 @@ import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float, private val scene: PlayGroundScene, private  val layerId: LayerEnums = LayerEnums.GRID_LAYER_LABELS):CNode() {
+open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:String, x:Float, y:Float, private val scene: PlayGroundScene, private  val layerId: LayerEnums = LayerEnums.GRID_LAYER_LABELS):CNode() {
     private val position = Vector2(x,y)
     private val layout = GlyphLayout()
     var color = Color.WHITE
@@ -32,6 +32,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
 
     override fun draw(spriteBatch: SpriteBatch) {
         font.color = color
+        font.data.setScale(fontSize / CDefaults.MAX_FONT_RESOLUTION)
         layout.setText(font,text)
         if(text.isNotEmpty()) {
             if(selected) {
@@ -44,6 +45,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
                 position.y - layout.height / 2f
             )
         }
+        font.data.setScale(1f)
     }
 
     override fun update() {
@@ -52,7 +54,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
         sprite.setSize(layout.width * 1.1f , layout.height * 2f )
         sprite.setOriginCenter()
         sprite.color = CDefaults.LABEL_SELECTED_COLOR
-        sprite.setPosition(position.x - sprite.width /2f,position.y - layout.height * 2f)
+        sprite.setPosition(position.x - sprite.width /2f,position.y - sprite.height)
     }
 
     override fun contains(entity: CNode): CNode? {
@@ -99,7 +101,7 @@ open class CLabel(private val font:BitmapFont, var text:String, x:Float, y:Float
     }
 
     override fun clone(): CLabel{
-        return CLabel(font,text,position.x, position.y, scene, layerId)
+        return CLabel(font,fontSize,text,position.x, position.y, scene, layerId)
     }
 
 }

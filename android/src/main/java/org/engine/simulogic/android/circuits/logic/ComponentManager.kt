@@ -167,10 +167,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
             }
         }
     }
-    fun insertCLabel(text:String) {
+    fun insertCLabel(text:String, fontSize:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                connection.insertNode(ListNode(CLabel(font, text, coordinates.x, coordinates.y, scene)))
+                connection.insertNode(ListNode(CLabel(font, fontSize.toFloat(), text, coordinates.x, coordinates.y, scene)))
             }
         }
     }

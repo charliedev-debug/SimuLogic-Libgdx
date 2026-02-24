@@ -301,6 +301,7 @@ class DataTransferObject {
                             ListNode(
                                 CLabel(
                                     font,
+                                    25f,
                                     "${labelText?.toString(Charsets.UTF_8)}",
                                     x,
                                     y,

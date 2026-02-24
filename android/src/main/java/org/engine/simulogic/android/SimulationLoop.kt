@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.utils.ScreenUtils
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.ComponentManager
@@ -64,7 +65,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
         val fontParameter = FreeTypeFontLoaderParameter()
             fontParameter.fontFileName = "fonts/RobotoMono-SemiBold.ttf"
-            fontParameter.fontParameters.size = 25
+            fontParameter.fontParameters.size = CDefaults.MAX_FONT_RESOLUTION
         assetManager.load("RobotoMono-SemiBold.ttf", BitmapFont::class.java, fontParameter)
 
         assetManager.finishLoading()
