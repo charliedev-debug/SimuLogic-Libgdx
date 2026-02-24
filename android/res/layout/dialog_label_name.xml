@@ -17,21 +17,59 @@
         android:paddingTop="10dp"
         android:paddingLeft="2dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/white"
         android:textStyle="bold"
         android:textSize="15dp"
         android:maxLines="1"
-        android:text="Enter Label Text"
+        android:text="LABEL"
         />
     <View
         android:layout_width="match_parent"
         android:layout_height=".5dp"
-        android:background="@color/white"/>
+        android:background="@color/gray"/>
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/fileName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:text=""
+        android:hint="Enter Text"
+        android:textSize="11dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textSize="11dp"
+            android:maxLines="1"
+            android:text="FontSize"
+            />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fontDropDown"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
+                android:padding="5dp"
+                android:text=""
+                android:inputType="number"
+                android:textSize="11dp" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/showPopup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dropdown"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
