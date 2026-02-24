@@ -502,4 +502,9 @@ class DataTransferObject {
         files.sortByDescending { it.lastModified }
         return files
     }
+
+    fun listSampleProjects(context: Context):List<ProjectOptions>{
+        val files = mutableListOf<ProjectOptions>()
+        return files
+    }
 }

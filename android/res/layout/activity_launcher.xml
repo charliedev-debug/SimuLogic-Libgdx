@@ -30,6 +30,10 @@
 
             <include layout="@layout/nav_header_simulation"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimary"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/settings"
                 style="@style/customButtonStyle"
