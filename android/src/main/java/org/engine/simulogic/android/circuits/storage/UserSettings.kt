@@ -29,7 +29,7 @@ class UserSettings {
           }
     }
 
-    fun getDataBoolean(context: Context, key: Preferences.Key<Boolean>): Flow<Boolean> {
-        return context.dataStore.data.map { it[key]?:false }
+    fun getDataBoolean(context: Context, key: Preferences.Key<Boolean>, default:Boolean = true): Flow<Boolean> {
+        return context.dataStore.data.map { it[key]?:default }
     }
 }
