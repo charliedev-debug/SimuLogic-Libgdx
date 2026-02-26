@@ -57,7 +57,7 @@
       android:strokeColor="#ffffff"/>
   <path
       android:pathData="M32,38V33H34.25V38H36.5V33H38.75V38H41"
-      android:fillColor="#00000000"/>
+      android:fillColor="#002B2D30"/>
   <path
       android:strokeWidth="1"
       android:pathData="M32,38V33H34.25V38H36.5V33H38.75V38H41"
