@@ -3,12 +3,16 @@
     android:height="250dp"
     android:viewportWidth="250"
     android:viewportHeight="250">
-  <path
-      android:pathData="M20,4H230C238.84,4 246,11.16 246,20V230C246,238.84 238.84,246 230,246H20C11.16,246 4,238.84 4,230V20C4,11.16 11.16,4 20,4Z"
-      android:strokeWidth="8"
-      android:fillColor="#262633"
-      android:strokeColor="#D9D9D9"/>
-  <path
-      android:pathData="M150,50L100,137.5H145L100,212.5L162.5,125H120L150,50Z"
-      android:fillColor="#D9D9D9"/>
+  <group>
+    <clip-path
+        android:pathData="M0,0h250v250h-250z"/>
+    <path
+        android:pathData="M20,4H230C238.84,4 246,11.16 246,20V230C246,238.84 238.84,246 230,246H20C11.16,246 4,238.84 4,230V20C4,11.16 11.16,4 20,4Z"
+        android:strokeWidth="8"
+        android:fillColor="#262633"
+        android:strokeColor="#D9D9D9"/>
+    <path
+        android:pathData="M150,50L100,137.5H145L100,212.5L162.5,125H120L150,50Z"
+        android:fillColor="#D9D9D9"/>
+  </group>
 </vector>
