@@ -147,6 +147,9 @@ class HomeFragment : Fragment() {
         }
 
         val sampleProjectAdapter = RecentAdapter().apply {
+            shareEnabled = false
+            dateEnabled = false
+            fileLengthEnabled = false
             DataTransferObject().listSampleProjects(requireContext()).onEach {
                 add(it.title,it.path, it.description, it.lastModified)
             }
