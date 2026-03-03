@@ -302,18 +302,24 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                     it.subject.also { subject ->
                         moveCommand.apply {
                             node = ListNode(subject)
-                            if(subject is CGroup){
-                                snapAlign.getSnapCoordinates(touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
-                                 subject.translate( snapCoordinates.x, snapCoordinates.y)
-                                 newPosition.set(subject.getPosition())
-                            }else if(subject is CSignal){
-                                newPosition.set(snapCoordinates.x, snapCoordinates.y)
-                                subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
-                                subject.snapAlignOriginPoints = true
-                            }else {
-                                newPosition.set(snapCoordinates.x, snapCoordinates.y)
-                                subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
-                                subject.snapAlignOriginPoints = true
+                            when(subject){
+                                is CGroup->{
+                                    snapAlign.getSnapCoordinates(touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
+                                    subject.translate( snapCoordinates.x, snapCoordinates.y)
+                                    newPosition.set(subject.getPosition())
+                                }
+
+                                is CSignal->{
+                                    newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                    subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                    subject.snapAlignOriginPoints = true
+                                }
+
+                                else->{
+                                    newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                    subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                    subject.snapAlignOriginPoints = true
+                                }
                             }
                         }
 

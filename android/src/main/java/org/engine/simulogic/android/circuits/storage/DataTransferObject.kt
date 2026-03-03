@@ -80,65 +80,67 @@ class DataTransferObject {
         stream.writeFloat(gestureListener.zoomValue())
         // component size
         stream.writeInt(connection.size())
-        // assign indices first for later processing
-        connection.forEachIndexed { index, listNode ->
-            listNode.value.id = index
-        }
-        // save the components first for easier reading in the future
-        connection.forEachIndexed { index, listNode ->
-            // the id will change after every save
-            val component = listNode.value
-            stream.writeInt(component.type.name.length)
-            stream.write(component.type.name.toByteArray(Charsets.UTF_8))
-            stream.writeInt(index)
-            stream.writeFloat(component.getPosition().x)
-            stream.writeFloat(component.getPosition().y)
-            stream.writeInt(component.rotationDirection)
-            // save label data
-            if (component is CLabel) {
-                stream.writeInt(component.text.length)
-                stream.write(component.text.toByteArray(Charsets.UTF_8))
-                stream.writeFloat(component.fontSize)
-            } else if (component is CClock) {
-                stream.writeFloat(component.freq)
-            } else if (component is CPower) {
-                stream.writeInt(component.value)
-            } else if (component is CDataBus) {
-                stream.writeInt(component.DATA_SIZE)
-            } else if (component is CFanOutBus) {
-                stream.writeInt(component.inputSize)
-                stream.writeInt(component.segments)
-            } else if (component is CGroup) {
-                stream.writeFloat(component.getWidth())
-                stream.writeFloat(component.getHeight())
-                stream.writeInt(component.dataContainer.size())
-                component.dataContainer.forEach { item ->
-                    stream.writeInt(item.value.id)
-                }
-            } else if (component is CChannel) {
-                stream.writeInt(component.channelId.length)
-                stream.write(component.channelId.toByteArray(Charsets.UTF_8))
-                stream.writeInt(component.channelType)
+        synchronized(connection) {
+            // assign indices first for later processing
+            connection.forEachIndexed { index, listNode ->
+                listNode.value.id = index
             }
-        }
-        connection.forEach { listNode ->
-            val component = listNode.value
-            //from id
-            stream.writeInt(component.id)
-            stream.writeInt(listNode.getLineMarkerChildren().size)
-            listNode.getLineMarkerChildren().forEach { marker ->
-                stream.writeInt(marker.index)
-                // to id
-                stream.writeInt(marker.to.value.id)
-                stream.writeInt(marker.signalFrom)
-                stream.writeInt(marker.signalTo)
-                stream.writeInt(marker.signals.size)
-                stream.writeInt(marker.linePointCountX)
-                stream.writeInt(marker.linePointCountY)
-                marker.signals.forEach { signal ->
-                    stream.writeInt(signal.signalIndex)
-                    stream.writeFloat(signal.getPosition().x)
-                    stream.writeFloat(signal.getPosition().y)
+            // save the components first for easier reading in the future
+            connection.forEachIndexed { index, listNode ->
+                // the id will change after every save
+                val component = listNode.value
+                stream.writeInt(component.type.name.length)
+                stream.write(component.type.name.toByteArray(Charsets.UTF_8))
+                stream.writeInt(index)
+                stream.writeFloat(component.getPosition().x)
+                stream.writeFloat(component.getPosition().y)
+                stream.writeInt(component.rotationDirection)
+                // save label data
+                if (component is CLabel) {
+                    stream.writeInt(component.text.length)
+                    stream.write(component.text.toByteArray(Charsets.UTF_8))
+                    stream.writeFloat(component.fontSize)
+                } else if (component is CClock) {
+                    stream.writeFloat(component.freq)
+                } else if (component is CPower) {
+                    stream.writeInt(component.value)
+                } else if (component is CDataBus) {
+                    stream.writeInt(component.DATA_SIZE)
+                } else if (component is CFanOutBus) {
+                    stream.writeInt(component.inputSize)
+                    stream.writeInt(component.segments)
+                } else if (component is CGroup) {
+                    stream.writeFloat(component.getWidth())
+                    stream.writeFloat(component.getHeight())
+                    stream.writeInt(component.dataContainer.size())
+                    component.dataContainer.forEach { item ->
+                        stream.writeInt(item.value.id)
+                    }
+                } else if (component is CChannel) {
+                    stream.writeInt(component.channelId.length)
+                    stream.write(component.channelId.toByteArray(Charsets.UTF_8))
+                    stream.writeInt(component.channelType)
+                }
+            }
+            connection.forEach { listNode ->
+                val component = listNode.value
+                //from id
+                stream.writeInt(component.id)
+                stream.writeInt(listNode.getLineMarkerChildren().size)
+                listNode.getLineMarkerChildren().forEach { marker ->
+                    stream.writeInt(marker.index)
+                    // to id
+                    stream.writeInt(marker.to.value.id)
+                    stream.writeInt(marker.signalFrom)
+                    stream.writeInt(marker.signalTo)
+                    stream.writeInt(marker.signals.size)
+                    stream.writeInt(marker.linePointCountX)
+                    stream.writeInt(marker.linePointCountY)
+                    marker.signals.forEach { signal ->
+                        stream.writeInt(signal.signalIndex)
+                        stream.writeFloat(signal.getPosition().x)
+                        stream.writeFloat(signal.getPosition().y)
+                    }
                 }
             }
         }

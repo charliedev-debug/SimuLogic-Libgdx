@@ -121,8 +121,10 @@ class LineMarker(val scene: PlayGroundScene,
         val offsetFromY = abs(startFrom.getPosition().y - startSnapFrom.getPosition().y)
         val offsetToX = abs(endTo.getPosition().x - endSnapTo.getPosition().x)
         val offsetToY = abs(endTo.getPosition().y - endSnapTo.getPosition().y)
+        val snapFromOrigin = from.value.snapAlignOriginPoints || startSnapFrom.snapAlignOriginPoints
+        val snapToOrigin = to.value.snapAlignOriginPoints || endSnapTo.snapAlignOriginPoints
 
-        if(from.value.snapAlignOriginPoints) {
+        if(snapFromOrigin) {
             if (offsetFromX <= CDefaults.GRID_WIDTH) {
                 startSnapFrom.updatePosition(
                     startFrom.getPosition().x,
@@ -137,7 +139,7 @@ class LineMarker(val scene: PlayGroundScene,
                 }
         }
 
-        if(to.value.snapAlignOriginPoints) {
+        if(snapToOrigin) {
             if (offsetToX <= CDefaults.GRID_WIDTH) {
                 endSnapTo.updatePosition(endTo.getPosition().x, endSnapTo.getPosition().y)
             } else
@@ -145,8 +147,6 @@ class LineMarker(val scene: PlayGroundScene,
                     endSnapTo.updatePosition(endSnapTo.getPosition().x, endTo.getPosition().y)
                 }
         }
-        from.value.snapAlignOriginPoints = false
-        to.value.snapAlignOriginPoints = false
     }
 
     override fun update() {
@@ -162,6 +162,8 @@ class LineMarker(val scene: PlayGroundScene,
         for (i in 1 until signals.size - 1) {
             signals[i].update()
         }
+
+        snapAlignOriginPoints()
 
         //snap align body
         var index = 1
@@ -197,12 +199,15 @@ class LineMarker(val scene: PlayGroundScene,
                     prevSignal.updatePosition(prev.x, next.y)
                 }
             }
-            prevSignal.snapAlignOriginPoints = false
-            nextSignal.snapAlignOriginPoints = false
             index++
         }
 
-        snapAlignOriginPoints()
+        signals.forEach {
+            it.snapAlignOriginPoints = false
+        }
+
+        from.value.snapAlignOriginPoints = false
+        to.value.snapAlignOriginPoints = false
 
         // mark lines and set coordinates
         var markerActive = false

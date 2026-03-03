@@ -31,9 +31,14 @@ class ConnectionManager(
         if (collisionDetector.mode == MotionGestureListener.CONNECTION_MODE && collisionDetector.size() >= 2) {
             val a = collisionDetector[0]
             val b = collisionDetector[1]
+
             // only signals can make connections
             if (!(a.subject is CSignal && b.subject is CSignal)){
                 collisionDetector.reset()
+                return
+            }
+
+            if(a.subject.type == CTypes.SIGNAL_RANGE_POINT || b.subject.type == CTypes.SIGNAL_RANGE_POINT){
                 return
             }
 

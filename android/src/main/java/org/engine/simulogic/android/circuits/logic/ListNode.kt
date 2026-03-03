@@ -152,6 +152,8 @@ class ListNode(val value : CNode,
          while (iterator.hasNext()){
              iterator.next().update()
          }
+
+
     }
 
     fun getLineMarkerChildren():List<LineMarker>{
