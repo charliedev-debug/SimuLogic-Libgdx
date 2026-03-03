@@ -101,7 +101,7 @@ class CNand(x:Float, y:Float,rotationDirection:Int , private val scene: PlayGrou
         val output = signals[0]
         val inputA = signals[1]
         val inputB = signals[2]
-        output.value = inputA.value.and(inputB.value).inv()
+        output.value = if(inputA.value.and(inputB.value) == 1) 0 else 1
     }
 
     override fun update() {

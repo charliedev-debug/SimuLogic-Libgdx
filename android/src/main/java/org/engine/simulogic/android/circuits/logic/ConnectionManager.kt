@@ -39,7 +39,7 @@ class ConnectionManager(
             }
 
             if(a.subject.type == CTypes.SIGNAL_RANGE_POINT || b.subject.type == CTypes.SIGNAL_RANGE_POINT){
-                return
+              //  return
             }
 
             // ignore lineMarker signals

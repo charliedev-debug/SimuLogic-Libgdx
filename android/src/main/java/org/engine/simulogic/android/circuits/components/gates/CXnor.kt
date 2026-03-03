@@ -100,7 +100,7 @@ class CXnor(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGrou
         val output = signals[0]
         val inputA = signals[1]
         val inputB = signals[2]
-        output.value = inputA.value.xor(inputB.value).inv()
+        output.value = if(inputA.value.xor(inputB.value) == 1) 0 else 1
     }
 
     override fun update() {

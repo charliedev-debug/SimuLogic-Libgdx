@@ -101,7 +101,7 @@ class CNor(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroun
         val output = signals[0]
         val inputA = signals[1]
         val inputB = signals[2]
-        output.value = inputA.value.or(inputB.value).inv()
+        output.value = if(inputA.value.or(inputB.value) == 1) 0 else 1
     }
 
     override fun update() {

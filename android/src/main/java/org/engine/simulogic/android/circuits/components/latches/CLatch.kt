@@ -78,8 +78,14 @@ class CLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGro
         val outputQ = signals[0]
         val inputD = signals[1]
         val inputE = signals[2]
+
         if(inputE.value == SIGNAL_ACTIVE){
-            outputQ.value = inputD.value
+            val newValue = inputD.value
+            hasChanged = value != newValue
+            value = newValue
+            outputQ.value = newValue
+        }else{
+            hasChanged = false
         }
     }
 

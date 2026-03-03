@@ -15,6 +15,7 @@ class ListNode(val value : CNode,
                val next: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
     private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
+    var visited = false
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene):LineMarker {
         next.add(child)
         child.parent.add(this)
