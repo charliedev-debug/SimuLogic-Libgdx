@@ -34,6 +34,8 @@ class ListNode(val value : CNode,
 
     fun removeMarker(marker: LineMarker){
          next.removeIf { it == marker.from }
+         marker.from.value.reset()
+         marker.to.value.reset()
          lineMarkersChildren.remove(marker)
         AutoSave.dataChanged = true
     }

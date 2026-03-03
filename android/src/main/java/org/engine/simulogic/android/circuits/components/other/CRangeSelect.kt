@@ -113,7 +113,7 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
         }
     }
 
-    fun reset(){
+    override fun reset(){
         rangeItems.forEach {
             it.subject.selected = false
             it.caller.value.selected = false

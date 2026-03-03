@@ -9,6 +9,7 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
+import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
 import org.engine.simulogic.android.circuits.components.gates.CNor
@@ -96,30 +97,38 @@ class DataTransferObject {
                 stream.writeFloat(component.getPosition().y)
                 stream.writeInt(component.rotationDirection)
                 // save label data
-                if (component is CLabel) {
-                    stream.writeInt(component.text.length)
-                    stream.write(component.text.toByteArray(Charsets.UTF_8))
-                    stream.writeFloat(component.fontSize)
-                } else if (component is CClock) {
-                    stream.writeFloat(component.freq)
-                } else if (component is CPower) {
-                    stream.writeInt(component.value)
-                } else if (component is CDataBus) {
-                    stream.writeInt(component.DATA_SIZE)
-                } else if (component is CFanOutBus) {
-                    stream.writeInt(component.inputSize)
-                    stream.writeInt(component.segments)
-                } else if (component is CGroup) {
-                    stream.writeFloat(component.getWidth())
-                    stream.writeFloat(component.getHeight())
-                    stream.writeInt(component.dataContainer.size())
-                    component.dataContainer.forEach { item ->
-                        stream.writeInt(item.value.id)
+                when(component){
+                    is CLabel->{
+                        stream.writeInt(component.text.length)
+                        stream.write(component.text.toByteArray(Charsets.UTF_8))
+                        stream.writeFloat(component.fontSize)
                     }
-                } else if (component is CChannel) {
-                    stream.writeInt(component.channelId.length)
-                    stream.write(component.channelId.toByteArray(Charsets.UTF_8))
-                    stream.writeInt(component.channelType)
+                    is CClock->{
+                        stream.writeFloat(component.freq)
+                    }
+                    is CPower->{
+                        stream.writeInt(component.value)
+                    }
+                    is CDataBus->{
+                        stream.writeInt(component.DATA_SIZE)
+                    }
+                    is CFanOutBus->{
+                        stream.writeInt(component.inputSize)
+                        stream.writeInt(component.segments)
+                    }
+                    is CGroup->{
+                        stream.writeFloat(component.getWidth())
+                        stream.writeFloat(component.getHeight())
+                        stream.writeInt(component.dataContainer.size())
+                        component.dataContainer.forEach { item ->
+                            stream.writeInt(item.value.id)
+                        }
+                    }
+                    is CChannel->{
+                        stream.writeInt(component.channelId.length)
+                        stream.write(component.channelId.toByteArray(Charsets.UTF_8))
+                        stream.writeInt(component.channelType)
+                    }
                 }
             }
             connection.forEach { listNode ->
@@ -274,7 +283,9 @@ class DataTransferObject {
                     CTypes.LATCH -> {
                         connection.insertNode(ListNode(CLatch(x, y, rotation, scene)))
                     }
-
+                    CTypes.FLIP_FLOP -> {
+                        connection.insertNode(ListNode(CDFlipFlop(x, y, rotation, scene)))
+                    }
                     CTypes.CLOCK -> {
                         connection.insertExecutionPoint(
                             ListNode(

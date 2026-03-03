@@ -66,6 +66,13 @@ open class CNode : Entity(), ICollidable,IExecutable{
         updatePosition(position.x,position.y)
     }
 
+    open fun reset(){
+        signals.forEach {
+            it.reset()
+        }
+        value = 0
+    }
+
     override fun draw(spriteBatch: SpriteBatch) {
 
         data.forEach {

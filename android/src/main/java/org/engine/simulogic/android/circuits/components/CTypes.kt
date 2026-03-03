@@ -9,6 +9,7 @@ enum class CTypes {
     XNOR,
     CLOCK,
     LATCH,
+    FLIP_FLOP,
     WIRE,
     RANDOM,
     LED,

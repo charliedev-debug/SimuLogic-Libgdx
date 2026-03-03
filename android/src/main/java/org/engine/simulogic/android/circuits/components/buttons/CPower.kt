@@ -138,6 +138,9 @@ class CPower(signalValue:Int,x:Float, y:Float,rotationDirection:Int = ROTATE_RIG
         }
     }
 
+    override fun reset() {
+        //do nothing
+    }
     override fun contains(entity: CNode): CNode? {
         val parentCollides = super.contains(entity)
         if(parentCollides != null){
@@ -177,6 +180,7 @@ class CPower(signalValue:Int,x:Float, y:Float,rotationDirection:Int = ROTATE_RIG
     override fun clone():CNode {
         return CPower(value,getPosition().x,getPosition().y,rotationDirection, scene )
     }
+
 
 
 

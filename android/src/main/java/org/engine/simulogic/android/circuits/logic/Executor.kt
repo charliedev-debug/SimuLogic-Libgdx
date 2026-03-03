@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.logic
 
 import org.engine.simulogic.android.circuits.components.interfaces.IExecutable
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import java.util.LinkedList
 import java.util.Queue
 
@@ -15,17 +16,19 @@ class Executor(private val connection:Connection):IExecutable {
                 executableNodes.add(it)
             }
             val visitedNodes = mutableListOf<ListNode>()
+            val feedForward = mutableMapOf<LineMarker, Int>()
             while (executableNodes.isNotEmpty()) {
                 executableNodes.poll()?.also { node ->
                     node.value.execute()
                         synchronized(node.getLineMarkerChildren()) {
                             node.getLineMarkerChildren().forEach { marker ->
-                                marker.to.value.signals[marker.signalTo].value =
-                                    node.value.signals[marker.signalFrom].value
                                 if(!marker.to.visited) {
+                                    marker.to.value.signals[marker.signalTo].value =
+                                        node.value.signals[marker.signalFrom].value
                                     executableNodes.offer(marker.to)
                                 }else{
-                                    marker.to.value.execute()
+                                    feedForward[marker] = node.value.signals[marker.signalFrom].value
+                                    // marker.to.value.execute()
                                 }
                         }
                     }
@@ -33,9 +36,16 @@ class Executor(private val connection:Connection):IExecutable {
                 }
             }
 
+            feedForward.forEach {
+                it.key.also { marker->
+                    marker.to.value.signals[marker.signalTo].value = it.value
+                    marker.to.value.execute()
+                }
+            }
             visitedNodes.forEach {
                 it.visited = false
             }
+
         }
 
     }

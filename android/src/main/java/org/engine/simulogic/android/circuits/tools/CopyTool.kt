@@ -37,18 +37,13 @@ class CopyTool(
             val data = dataContainer[i]
 
              data.clone().also { clone->
-                 snapAlign.getSnapCoordinates(clone.value.getPosition().x - ox + originX,
-                     clone.value.getPosition().y - oy + originY).also { coordinates->
-                     clone.value.updatePosition( coordinates.x, coordinates.y)
-                 }
+                 clone.value.updatePosition(clone.value.getPosition().x - ox + originX,
+                     clone.value.getPosition().y - oy + originY)
 
                  // create a copy of all group children
                  if(data.value is CGroup && clone.value is CGroup){
                      CopyTool(data.value.dataContainer, data.value.connection, commandHistory).also { copyTool ->
-                         snapAlign.getSnapCoordinates(data.value.getPosition().x - ox + originX,
-                             data.value.getPosition().y - oy + originY).also { coordinates->
-                             clone.value.insert(copyTool.execute(coordinates.x, coordinates.y, scene))
-                         }
+                       clone.value.insert(copyTool.execute(data.value.getPosition().x - ox + originX, data.value.getPosition().y - oy + originY, scene))
                      }
                  }
 
@@ -74,9 +69,7 @@ class CopyTool(
                         lineMarker.signals.forEachIndexed{indexPoint,originPoint->
                             val px = originPoint.getPosition().x - ox
                             val py = originPoint.getPosition().y - oy
-                            snapAlign.getSnapCoordinates(originX + px, originY + py).also { coordinates->
-                                lineMarkerClone.signals[indexPoint].updatePosition(coordinates.x, coordinates.y)
-                            }
+                             lineMarkerClone.signals[indexPoint].updatePosition(originX + px,originY + py)
 
                         }
                         clone.insertChildUnmarked(cloneChild,lineMarkerClone)

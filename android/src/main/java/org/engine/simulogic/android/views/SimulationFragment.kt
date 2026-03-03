@@ -233,6 +233,10 @@ class SimulationFragment(
                     simulationLoop.componentManager.insertCLatch()
                 }
 
+                ComponentBottomSheet.D_FLIP_FLOP_COMPONENT -> {
+                    simulationLoop.componentManager.insertCDFlipFlop()
+                }
+
                 ComponentBottomSheet.LED_COMPONENT -> {
                     simulationLoop.componentManager.insertCLed()
                 }

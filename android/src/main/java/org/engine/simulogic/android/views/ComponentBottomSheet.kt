@@ -32,6 +32,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val CLOCK_COMPONENT_60HZ = "60Hz"
          const val CLOCK_COMPONENT_CUSTOM = "CUSTOM"
          const val D_LATCH_COMPONENT = "D-LATCH"
+         const val D_FLIP_FLOP_COMPONENT = "D-FLIP-FLOP"
          const val LED_COMPONENT = "LED"
          const val POWER_ON_COMPONENT = "POWER ON"
          const val POWER_OFF_COMPONENT = "POWER OFF"
@@ -81,6 +82,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         clockAdapter.insert(CLOCK_COMPONENT_CUSTOM, R.drawable.clock_custom)
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
+        generalAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
         generalAdapter.insert(LED_COMPONENT, R.drawable.component_led)
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)

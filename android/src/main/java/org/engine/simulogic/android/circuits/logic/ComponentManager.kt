@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
+import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
 import org.engine.simulogic.android.circuits.components.gates.CNor
@@ -126,6 +127,13 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                 connection.insertNode(ListNode(CLatch(coordinates.x, coordinates.y, scene)))
+            }
+        }
+    }
+    fun insertCDFlipFlop(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CDFlipFlop(coordinates.x, coordinates.y, scene)))
             }
         }
     }
