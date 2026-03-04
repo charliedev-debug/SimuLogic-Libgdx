@@ -16,6 +16,7 @@ import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
+import kotlin.math.sign
 
 class LineMarker(val scene: PlayGroundScene,
                  val from: ListNode, val to: ListNode,
@@ -35,10 +36,14 @@ class LineMarker(val scene: PlayGroundScene,
         val maxDistanceBetweenX = distanceX / (linePointCountX + 1 )
         val maxDistanceBetweenY = distanceY / (linePointCountY + 1)
         var signalIndex = 0
-        for (i in 0 ..  linePointCountX) {
-            val x = pFrom.x + maxDistanceBetweenX * i
+        val fromSignY = sign(to.value.getPosition().y - from.value.getPosition().y)
+        signals.add(CSignal(pFrom.x , pFrom.y , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
+            parent = this@LineMarker
+        })
+        for (i in 1 ..  linePointCountX) {
+            val x = pFrom.x + maxDistanceBetweenX * (i -1)
             val y = pFrom.y
-            signals.add(CSignal(x, y, CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
+            signals.add(CSignal(x , y + from.value.getHeight() * fromSignY , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
         }
@@ -46,7 +51,7 @@ class LineMarker(val scene: PlayGroundScene,
         for (i in  0  ..  linePointCountY ) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = pTo.x
-            signals.add(CSignal(x, y, CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
+            signals.add(CSignal(x, y + from.value.getHeight() * fromSignY , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
                 parent = this@LineMarker
             })
         }
