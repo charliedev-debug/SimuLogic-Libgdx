@@ -23,6 +23,7 @@ import org.engine.simulogic.android.circuits.components.latches.CLatch
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
+import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
 import org.engine.simulogic.android.circuits.components.wireless.CChannel
@@ -310,6 +311,10 @@ class DataTransferObject {
 
                     CTypes.SEVEN_SEGMENT_DISPLAY -> {
                         connection.insertNode(ListNode(CSevenSegmentDisplay(x, y, scene)))
+                    }
+
+                    CTypes.BCD_SEVEN_SEGMENT_DISPLAY->{
+                        connection.insertNode(ListNode(CBCDDisplay(x, y, scene)))
                     }
 
                     CTypes.LABEL -> {

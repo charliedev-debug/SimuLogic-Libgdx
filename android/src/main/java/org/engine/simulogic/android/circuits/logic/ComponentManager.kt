@@ -18,6 +18,7 @@ import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.other.CLabel
+import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
 import org.engine.simulogic.android.circuits.components.wireless.CChannel
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
@@ -172,6 +173,14 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val ex
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                 connection.insertNode(ListNode(CSevenSegmentDisplay(coordinates.x, coordinates.y, scene)))
+            }
+        }
+    }
+
+    fun insertBCDDisplay(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                connection.insertNode(ListNode(CBCDDisplay(coordinates.x, coordinates.y, scene)))
             }
         }
     }

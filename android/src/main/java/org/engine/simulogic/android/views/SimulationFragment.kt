@@ -301,6 +301,10 @@ class SimulationFragment(
                     simulationLoop.componentManager.insertSevenSegmentDisplay()
                 }
 
+                ComponentBottomSheet.BCD_DISPLAY_COMPONENT->{
+                    simulationLoop.componentManager.insertBCDDisplay()
+                }
+
                 ComponentBottomSheet.TEXT_COMPONENT -> {
                     LabelDialog(requireContext(), object : IDialogLabelListener {
                         override fun onCompleted(text: String, fontSize:Int) {

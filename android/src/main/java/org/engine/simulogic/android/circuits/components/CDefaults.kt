@@ -4,17 +4,17 @@ import com.badlogic.gdx.graphics.Color
 
 class CDefaults {
     companion object{
-        val signalIconRadius = 15f
-        val gateWidth = 80f
-        val gateHeight = 50f
-        val clockWidth = 60f
-        val clockHeight = 60f
-        val latchWidth = 60f
-        val latchHeight = 60f
-        val ledHeight = 60f
-        val ledWidth = 60f
-        val randomWidth = 60f
-        val randomHeight = 60f
+        val signalIconRadius = 30f
+        val gateWidth = 90f
+        val gateHeight = 70f
+        val clockWidth = 70f
+        val clockHeight = 70f
+        val latchWidth = 70f
+        val latchHeight = 70f
+        val ledHeight = 70f
+        val ledWidth = 70f
+        val randomWidth = 70f
+        val randomHeight = 70f
         val segmentDisplayWidth = 42f
         val segmentDisplayHeight = 72f
         var linePointCountX = 3

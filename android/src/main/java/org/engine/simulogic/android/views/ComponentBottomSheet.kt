@@ -92,6 +92,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
       //  generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
         generalAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
+        generalAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
         val templateAdapter = ComponentViewAdapter()
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)
         templateAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
