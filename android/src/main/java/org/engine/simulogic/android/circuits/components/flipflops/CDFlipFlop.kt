@@ -13,7 +13,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-    private var previousEdge = -1
+    private var previousEdge = 0
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
@@ -78,10 +78,13 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         val outputQ = signals[0]
         val inputD = signals[1]
         val inputE = signals[2]
-        val hasEdge = value != inputE.value
+        val hasEdge = previousEdge != inputE.value
         if(hasEdge){
             outputQ.value = inputD.value
-            value = inputE.value
+        }
+
+        if(hasEdge){
+            previousEdge = inputE.value
         }
 
     }
