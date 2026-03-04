@@ -81,12 +81,8 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         val hasEdge = previousEdge != inputE.value
         if(hasEdge){
             outputQ.value = inputD.value
-        }
-
-        if(hasEdge){
             previousEdge = inputE.value
         }
-
     }
 
     override fun attachSelf() {

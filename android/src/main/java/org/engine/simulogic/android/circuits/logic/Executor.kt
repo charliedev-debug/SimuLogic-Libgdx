@@ -18,17 +18,17 @@ class Executor(private val connection:Connection):IExecutable {
             val visitedNodes = mutableListOf<ListNode>()
             while (executableNodes.isNotEmpty()) {
                 executableNodes.poll()?.also { node ->
-                    node.value.execute()
                         synchronized(node.getLineMarkerChildren()) {
                             node.getLineMarkerChildren().forEach { marker ->
-                                marker.to.value.signals[marker.signalTo].value =
-                                    node.value.signals[marker.signalFrom].value
                                 if(!marker.to.visited) {
                                     executableNodes.offer(marker.to)
                                 }else{
-                                     marker.to.value.execute()
+                                    marker.to.value.execute()
                                 }
+                                marker.to.value.signals[marker.signalTo].value =
+                                    node.value.signals[marker.signalFrom].value
                         }
+                        node.value.execute()
                     }
                     visitedNodes.add(node.apply { visited = true })
                 }
