@@ -11,19 +11,23 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.Timer
+import org.engine.simulogic.android.utilities.TimerManager
 
 class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
     constructor(x:Float, y:Float,freq:Float = 1/60f, scene: PlayGroundScene):this(x, y,freq, ROTATE_RIGHT, scene)
     private val timer = Timer(freq, object :Timer.ITimerListener{
-        override fun onTick() {
-            value = (value + 1) % 2
+        override fun onTick(hasReset:Boolean) {
+            if(hasReset){
+                value = 0
+            }else {
+                value = (value + 1) % 2
+            }
         }
     })
 
     init {
-
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("CLOCK")
         type = CTypes.CLOCK
@@ -68,6 +72,7 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
                 layer.attachChild(it)
             }
         }
+        TimerManager.getInstance().insert(timer)
     }
 
 
@@ -86,12 +91,14 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
             }
             layer.attachChild(this)
         }
+        TimerManager.getInstance().insert(timer)
     }
 
     override fun detachSelf() {
         super.detachSelf()
         lines.forEach { it.detachSelf() }
         signals.forEach { it.detachSelf() }
+        TimerManager.getInstance().remove(timer)
     }
 
 
@@ -139,7 +146,6 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
 
     override fun execute() {
         super.execute()
-        timer.update()
     }
 
     override fun contains(entity: CNode): CNode? {

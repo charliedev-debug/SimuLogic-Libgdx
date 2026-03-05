@@ -30,6 +30,7 @@ import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
+import org.engine.simulogic.android.utilities.TimerManager
 import org.engine.simulogic.android.views.interfaces.ISimulationListener
 
 class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions, private val listener:ISimulationListener) : ApplicationAdapter(){
@@ -102,6 +103,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         connection.update()
         gridDecorator.update()
         gestureListener.update()
+        TimerManager.getInstance().update()
         scene.update()
         scene.draw()
 
@@ -119,6 +121,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         batch.dispose()
         assetManager.dispose()
         ChannelBuffer.clear()
+        TimerManager.reset()
     }
 
 
