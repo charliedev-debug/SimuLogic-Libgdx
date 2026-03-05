@@ -20,13 +20,14 @@ class Executor(private val connection:Connection):IExecutable {
                 executableNodes.poll()?.also { node ->
                         synchronized(node.getLineMarkerChildren()) {
                             node.getLineMarkerChildren().forEach { marker ->
+                                marker.to.value.signals[marker.signalTo].value =
+                                    node.value.signals[marker.signalFrom].value
                                 if(!marker.to.visited) {
                                     executableNodes.offer(marker.to)
                                 }else{
                                     marker.to.value.execute()
                                 }
-                                marker.to.value.signals[marker.signalTo].value =
-                                    node.value.signals[marker.signalFrom].value
+
                         }
                         node.value.execute()
                     }
