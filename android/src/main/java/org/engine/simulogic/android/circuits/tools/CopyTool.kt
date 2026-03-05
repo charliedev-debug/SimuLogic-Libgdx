@@ -6,6 +6,8 @@ import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
+import org.engine.simulogic.android.circuits.components.wireless.CChannel
+import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.logic.SnapAlign
@@ -50,6 +52,13 @@ class CopyTool(
                  when(clone.value){
                      is CClock-> connection.insertExecutionPoint(clone)
                      is CPower-> connection.insertExecutionPoint(clone)
+                     is CChannel ->{
+                         if(clone.value.channelType == ChannelBuffer.CHANNEL_OUTPUT){
+                             connection.insertExecutionPoint(clone)
+                         }else{
+                             connection.insertNode(clone)
+                         }
+                     }
                      else -> connection.insertNode(clone)
                  }
                  cloneOriginMap[data] = clone

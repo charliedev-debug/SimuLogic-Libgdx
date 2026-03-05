@@ -1,7 +1,11 @@
 package org.engine.simulogic.android.circuits.tools
 
+import org.engine.simulogic.android.circuits.components.buttons.CPower
+import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
+import org.engine.simulogic.android.circuits.components.wireless.CChannel
+import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.scene.Entity
@@ -41,7 +45,18 @@ class DeleteCommand(private val scene: PlayGroundScene, private val connection: 
             item.parent.forEach {
                 it.attachSelf()
             }
-            connection.insertNode(item.node)
+            when(item.node.value){
+                is CClock -> connection.insertExecutionPoint(item.node)
+                is CPower -> connection.insertExecutionPoint(item.node)
+                is CChannel ->{
+                    if(item.node.value.channelType == ChannelBuffer.CHANNEL_OUTPUT){
+                        connection.insertExecutionPoint(item.node)
+                    }else{
+                        connection.insertNode(item.node)
+                    }
+                }
+                else -> connection.insertNode(item.node)
+            }
         }
     }
 

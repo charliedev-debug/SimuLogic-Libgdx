@@ -36,7 +36,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
     val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
     private var touch = Vector3(0f, 0f, 0f)
-    private val commandHistory = CommandHistory()
+    val commandHistory = CommandHistory()
     private val dataContainer = DataContainer()
     private val cutTool = CutTool(dataContainer, commandHistory)
     private val copyTool = CopyTool(dataContainer, connection, commandHistory)
