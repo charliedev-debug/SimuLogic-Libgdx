@@ -180,6 +180,14 @@ class HelpActivity : AppCompatActivity() {
             )
             add(
                 HelpItem(
+                    "D-FLIP-FLOP",
+                    description = "Memory component that stores 1 bit of data and can only be updated on clock edge.",
+                    layoutId = R.layout.help_item_view,
+                    layoutIcon = R.drawable.d_flip_flop
+                )
+            )
+            add(
+                HelpItem(
                     "LED",
                     description = "Output indicator, either on or off.",
                     layoutId = R.layout.help_item_view,
@@ -240,6 +248,14 @@ class HelpActivity : AppCompatActivity() {
                     description = "Seven segment display screen with a single output.",
                     layoutId = R.layout.help_item_view,
                     layoutIcon = R.drawable.ss_display
+                )
+            )
+            add(
+                HelpItem(
+                    "BCD DISPLAY",
+                    description = "Binary Coded Decimal values from 0 - F.",
+                    layoutId = R.layout.help_item_view,
+                    layoutIcon = R.drawable.bcd_display
                 )
             )
         }
