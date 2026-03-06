@@ -13,7 +13,7 @@ class ShareFileHelper {
         fun share(file: File, title:String, context:Context){
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_STREAM,  FileProvider.getUriForFile(context, "org.engine.simulogic.android.fileprovider",file,title))
+                putExtra(Intent.EXTRA_STREAM,  FileProvider.getUriForFile(context, "org.engine.simulogic.android.fileprovider",file,"$title.bin"))
                 type = "application/octet-stream"
             }
 
