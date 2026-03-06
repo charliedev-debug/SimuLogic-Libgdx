@@ -11,7 +11,7 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import java.util.Collections
 
 abstract class Entity {
-    var value = 1000
+    var value = 0
     var rotationDirection = ROTATE_RIGHT
     var selected = false
     var isVisible = true
