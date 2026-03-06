@@ -276,7 +276,6 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 snapAlign.getSnapCoordinates(touch).also { coord->
                     moveCommand.oldPosition.set(coord.x, coord.y)
                 }
-
             }
 
             if (collisionDetector.mode == RANGED_SELECTION_MODE) {

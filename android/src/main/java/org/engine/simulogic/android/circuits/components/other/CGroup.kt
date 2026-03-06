@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.tools.DataContainer
 import org.engine.simulogic.android.circuits.tools.DeleteCommand
+import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
@@ -62,9 +63,6 @@ class CGroup(
     // insert range
     fun insert(inputContainer: DataContainer, range: CRangeSelect) {
         inputContainer.insertTo(dataContainer)
-        dataContainer.forEach { node ->
-            node.value.collidable = false
-        }
         setSize(range.getWidth(), range.getHeight())
         updatePosition(range.getPosition().x, range.getPosition().y)
         adjustView()
@@ -73,9 +71,6 @@ class CGroup(
     // insert selection
     fun insert(inputContainer: DataContainer) {
         inputContainer.insertTo(dataContainer)
-        dataContainer.forEach { node ->
-            node.value.collidable = false
-        }
         dataContainer.sortX()
         val firstX = dataContainer.first()
         val lastX = dataContainer.last()

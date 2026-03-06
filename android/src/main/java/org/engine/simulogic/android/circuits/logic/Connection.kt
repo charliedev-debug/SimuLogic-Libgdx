@@ -37,6 +37,13 @@ class Connection : Iterable<ListNode>, IUpdate {
         }
     }
 
+    fun reset(){
+        synchronized(nodes){
+            nodes.clear()
+            executionPoints.clear()
+        }
+    }
+
     fun insertConnection(parent:ListNode, child:ListNode, signalFrom: Int, signalTo: Int, scene:PlayGroundScene):LineMarker{
         return parent.insertChild(child, signalFrom, signalTo, scene)
     }
