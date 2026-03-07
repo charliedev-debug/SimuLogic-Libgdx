@@ -12,6 +12,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background"
         android:theme="@style/AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -24,8 +25,9 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/menu_list"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/app_bar_shape"
             android:padding="5dp"
             android:scrollbarAlwaysDrawHorizontalTrack="true" />

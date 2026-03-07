@@ -49,7 +49,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                             listeners.forEach { it.onDelete(item,position) }
                         }
                     }
-                    itemView.setOnClickListener {
+                    itemView.findViewById<View>(R.id.recentItemViewClickable).setOnClickListener {
                         listeners.forEach {
                             it.onClick(item)
                         }

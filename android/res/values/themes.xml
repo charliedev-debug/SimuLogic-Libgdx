@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.AppCompat.DayNight." parent="Platform.MaterialComponents.Light"></style>
+    <style name="Theme.AppCompat.DayNight." parent="Platform.MaterialComponents.Light">
+        <item name="android:statusBarColor">@color/background</item>
+    </style>
 
     <style name="Widget.App.CardStyle" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">@color/background_dark</item>
@@ -9,6 +11,7 @@
         <item name="elevationOverlayColor">@color/white</item>
         <item name="android:colorControlHighlight">@color/white</item>
         <item name="android:colorFocusedHighlight">@color/white</item>
+        <item name="rippleColor">@color/white</item>
     </style>
 
     <style name="customButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -37,21 +40,29 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AppTheme.FullScreen" parent="AppTheme">
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+
     <style name="NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="GdxTheme.NoActionBar">
+    <style name="GdxTheme.NoActionBar" parent="AppTheme.FullScreen">
+        <item name="android:windowFullscreen">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
     </style>
 
-    <style name="GdxTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="GdxTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="GdxTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 

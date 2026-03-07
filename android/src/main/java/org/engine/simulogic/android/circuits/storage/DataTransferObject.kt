@@ -569,7 +569,9 @@ class DataTransferObject {
     }
 
     fun fetchSampleProject(context: Context, projectOptions: ProjectOptions):ProjectOptions{
-        val destinationFolder = File(context.getExternalFilesDir(""), "projects/${File(projectOptions.path).name}")
+        val parentFolder = File(context.getExternalFilesDir(""), "projects")
+        while(!parentFolder.exists())parentFolder.mkdirs()
+        val destinationFolder = File(parentFolder, File(projectOptions.path).name)
         if(destinationFolder.exists() && destinationFolder.length() != 0L){
             return readFileHeader(destinationFolder)
         }

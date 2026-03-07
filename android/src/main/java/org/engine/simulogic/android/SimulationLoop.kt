@@ -112,6 +112,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         } else {
             camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
         }
+        gestureListener.gridDecorator?.refresh = true
     }
     override fun render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)

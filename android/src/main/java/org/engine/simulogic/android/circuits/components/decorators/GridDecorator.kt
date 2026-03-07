@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.circuits.components.decorators
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -61,12 +62,12 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 0f
         val labelOffsetX = 15f
-        val lineCountX = round(viewPortWidth / spacingX).toInt() + 2
-        val lineCountY = round(viewPortHeight / spacingY).toInt() + 2
+        val lineCountX = round(viewPortWidth / spacingX).toInt()
+        val lineCountY = round(viewPortHeight / spacingY).toInt()
         val originX = camera.position.x - viewPortWidth / 2f
         val originY = camera.position.y - viewPortHeight / 2f
         // prevents flickering
-        val lineWidth = 1f
+        val lineWidth = 1.5f
         val endX = originX + viewPortWidth
         val endY = originY + viewPortHeight
 
