@@ -23,6 +23,8 @@
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="android:windowBackground">@color/background_dark</item>
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColorTertiary">@color/white</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardStyle</item>
         <item name="rippleColor">@color/white</item>
     </style>
