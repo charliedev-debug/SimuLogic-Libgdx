@@ -51,9 +51,16 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
          const val CAMERA_WIDTH = 720f
          const val CAMERA_HEIGHT = 1280f
     }
+
     override fun create() {
         camera = OrthographicCamera()
-        camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+        // set camera according to screen orientation
+        if (Gdx.graphics.width > Gdx.graphics.height) {
+            camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
+        } else {
+            camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+        }
+
         camera.zoom = 1.5f
         batch = SpriteBatch()
 
@@ -98,6 +105,14 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         listener.onCreate()
     }
 
+    // set camera according to screen orientation
+    override fun resize(width: Int, height: Int) {
+        if (width > height) {
+            camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
+        } else {
+            camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+        }
+    }
     override fun render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)
         connection.update()
