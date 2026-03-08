@@ -82,6 +82,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val simulationToolbarEnabledSwitch = findViewById<SwitchMaterial>(R.id.top_bar_enabled)
         val simulationMenuBarEnabledSwitch = findViewById<SwitchMaterial>(R.id.menu_bar_enabled)
         val drawerLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.drawer_minimized)
+        val exitLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.exit_minimized)
+        val saveLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.save_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
 
@@ -241,17 +243,52 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             drawerLayout.openDrawer(Gravity.RIGHT)
         }
 
+        saveLayoutButtonMinimized.setOnClickListener {
+            menuViewModel.onModeChanged(
+                MenuAdapterItem(
+                    id = "Save",
+                    title = "Save",
+                    isMode = false,
+                    0
+                )
+            )
+        }
+
         simulationToggleButton.setOnClickListener {
             simulationOptions.executionEnabled = simulationToggleButton.isChecked
+        }
+
+        exitLayoutButtonMinimized.setOnClickListener {
+            if (AutoSave.dataChanged) {
+                AlertDialog(
+                    this,
+                    "Exit without saving data?",
+                    object : AlertDialog.OnAlertListener {
+                        override fun accept() {
+                            finish()
+                        }
+
+                        override fun cancel() {
+                            //ignore
+                        }
+
+                    }).show()
+            } else {
+                finish()
+            }
         }
 
         simulationToolbarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 toolBar.visibility = View.VISIBLE
                 drawerLayoutButtonMinimized.visibility = View.GONE
+                exitLayoutButtonMinimized.visibility = View.GONE
+                saveLayoutButtonMinimized.visibility = View.GONE
             } else {
                 toolBar.visibility = View.GONE
                 drawerLayoutButtonMinimized.visibility = View.VISIBLE
+                exitLayoutButtonMinimized.visibility = View.VISIBLE
+                saveLayoutButtonMinimized.visibility = View.VISIBLE
             }
             CoroutineScope(Dispatchers.Main).launch {
                 userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.TOOLBAR_ENABLED,isChecked)
