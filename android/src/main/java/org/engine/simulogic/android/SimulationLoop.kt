@@ -119,7 +119,9 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         connection.update()
         gridDecorator.update()
         gestureListener.update()
-        TimerManager.getInstance().update()
+        if(simulationOptions.executionEnabled) {
+            TimerManager.getInstance().update()
+        }
         scene.update()
         scene.draw()
 

@@ -51,6 +51,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         savedInstanceState: Bundle?
     ): View {
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomBottomSheetDialogTheme)
+
         val mainView: View = inflater.inflate(R.layout.bottom_sheet_simulation, container, false)
         val gatesRecyclerview = mainView.findViewById<RecyclerView>(R.id.gates_component_list)
         val clockRecyclerview = mainView.findViewById<RecyclerView>(R.id.clock_component_list)

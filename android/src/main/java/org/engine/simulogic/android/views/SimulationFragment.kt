@@ -49,7 +49,6 @@ class SimulationFragment(
                             object : LoadingDialog.IDialogLoadingListener {
                                 override fun onLoad() {
                                     simulationLoop.componentManager.loadProject()
-
                                 }
                                 override fun onCancelled() {
                                     Gdx.app.exit()
@@ -319,10 +318,6 @@ class SimulationFragment(
                 }
             }
         }
-
-
-
-
         return initializeForView(simulationLoop, configuration)
     }
 
