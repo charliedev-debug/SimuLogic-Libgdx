@@ -23,7 +23,7 @@
         android:layout_height = "?attr/actionBarSize"
         android:background="@color/background_dark"
         app:title="Settings"
-        app:navigationIcon="@drawable/exit"/>
+        app:navigationIcon="@drawable/back"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"

@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import org.engine.simulogic.R
 import org.engine.simulogic.android.SimulationActivity
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
@@ -36,7 +38,6 @@ class ManageProjectsFragment : Fragment() {
               add(it.title,it.path, it.description, it.lastModified, canDelete = true)
           }
       }
-
       projectListAdapter.addListener(object : RecentAdapter.OnItemClickListener{
           override fun onClick(item: RecentItem) {
               Intent(context, SimulationActivity::class.java).apply {

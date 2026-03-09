@@ -13,11 +13,15 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.savedstate.SavedState
 import com.google.android.material.button.MaterialButton
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 import org.engine.simulogic.R
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
 import org.engine.simulogic.android.views.dialogs.AboutDialog
+import kotlin.system.exitProcess
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -33,6 +37,7 @@ private lateinit var binding: ActivityLauncherBinding
      setSupportActionBar(binding.appBarLauncher.toolbar)
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
      val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
+
      findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.title) {
                 "help" -> {
@@ -56,12 +61,27 @@ private lateinit var binding: ActivityLauncherBinding
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_launcher)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
             R.id.nav_home, R.id.nav_open_project, R.id.nav_manage_projects), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.nav_home) {
+                binding.appBarLauncher.toolbar.setNavigationOnClickListener {
+                    binding.drawerLayout.openDrawer(Gravity.LEFT)
+                }
+            }else if(destination.id == R.id.nav_open_project || destination.id == R.id.nav_manage_projects){
+                binding.appBarLauncher.toolbar.also{ toolbar->
+                    toolbar.setNavigationIcon(R.drawable.back)
+                    toolbar.setNavigationOnClickListener {
+                        supportFragmentManager.popBackStack()
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
