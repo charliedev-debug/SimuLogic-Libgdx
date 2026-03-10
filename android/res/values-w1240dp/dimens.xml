@@ -2,7 +2,7 @@
     <dimen name="fab_margin">200dp</dimen>
     <dimen name="popup_width">550dp</dimen>
     <dimen name="popup_height">500dp</dimen>
-    <dimen name="bottom_sheet_item_width">125dp</dimen>
+    <dimen name="bottom_sheet_item_width">100dp</dimen>
     <dimen name="bottom_sheet_item_text_size">18sp</dimen>
     <dimen name="menu_item_layout_width">100dp</dimen>
     <dimen name="menu_item_icon_width">50dp</dimen>

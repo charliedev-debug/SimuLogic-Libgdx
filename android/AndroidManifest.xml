@@ -53,7 +53,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:exported="true"
         android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|screenLayout"
         android:label="Environment"
-        android:screenOrientation="fullSensor"
+        android:screenOrientation="fullUser"
         android:theme="@style/GdxTheme.NoActionBar">
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
