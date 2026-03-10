@@ -16,7 +16,6 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     android:padding="10dp"
-    android:layout_margin="10dp"
     app:cardBackgroundColor="@color/background3"
     app:cardCornerRadius="20dp"
     android:clickable="true"
