@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.doOnPreDraw
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -28,6 +29,7 @@ import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +50,7 @@ import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
 import org.engine.simulogic.android.views.dialogs.AlertDialog
 import org.engine.simulogic.android.views.dialogs.EditProjectDialog
+import org.engine.simulogic.android.views.dialogs.EnvironmentHelpDialog
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
@@ -70,6 +73,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
+        val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
         val componentCountTextView = findViewById<TextView>(R.id.components_count)
@@ -85,6 +89,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val exitLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.exit_minimized)
         val saveLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.save_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
+        appBarLayout.doOnPreDraw {
+            SimulationLoop.offsetTop = appBarLayout.height.toFloat() - 50f
+        }
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
 
             userSettings.getDataBoolean(this@SimulationActivity,UserSettings.GRID_ENABLED).asLiveData().observe(this@SimulationActivity){
@@ -112,7 +119,6 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         projectDescription = findViewById(R.id.project_description)
         setSupportActionBar(toolBar)
 
-
         val projectOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra("options", ProjectOptions::class.java)
         } else {
@@ -139,6 +145,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
                 "Drawer" -> {
                     drawerLayout.openDrawer(Gravity.RIGHT)
+                }
+
+                "Help"->{
+                    EnvironmentHelpDialog(this@SimulationActivity).show()
                 }
             }
 

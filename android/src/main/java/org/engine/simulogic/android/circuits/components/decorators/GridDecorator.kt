@@ -1,17 +1,16 @@
 package org.engine.simulogic.android.circuits.components.decorators
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.components.other.CLabel
-import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
-import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.round
 
 class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScene, private val camera: OrthographicCamera):IUpdate {
@@ -61,7 +60,9 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val labelSpacingX = (spacingX * 4).toInt()
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 0f
-        val labelOffsetX = 15f
+        val labelOffsetXTop = -(SimulationLoop.offsetTop * camera.zoom)
+        val labelFontSize = 20f
+        val labelFontSizeMax = 50f
         val lineCountX = round(viewPortWidth / spacingX).toInt()
         val lineCountY = round(viewPortHeight / spacingY).toInt()
         val originX = camera.position.x - viewPortWidth / 2f
@@ -99,6 +100,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                         lineHeader.updatePosition(x, getPosition().y, x, 0f )
                         lineHeader.color = labelHeaderColor
                         lineHeader.lineWidth = lineWidth
+                        fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                         lineLayer.attachChild(lineHeader)
                         lineHeader.isVisible = labelHeaderVisible && gridVisible
                         isVisible = labelsVisible
@@ -124,6 +126,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                     lineHeader.updatePosition(getPosition().x, y, viewPortWidth, y )
                     lineHeader.color = labelHeaderColor
                     lineHeader.lineWidth = lineWidth
+                    fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                     lineLayer.attachChild(lineHeader)
                     lineHeader.isVisible = labelHeaderVisible && gridVisible
                     isVisible = labelsVisible
@@ -152,7 +155,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
 
         labelsX.sortBy { it.getPosition().x }
         labelsX.forEach {
-            it.updatePosition(it.getPosition().x, originY + viewPortHeight - labelOffsetY)
+            it.updatePosition(it.getPosition().x, originY + viewPortHeight - labelOffsetY + labelOffsetXTop)
             it.lineHeader.updatePosition(it.getPosition().x, it.getPosition().y, it.getPosition().x, originY)
             it.lineHeader.isVisible = labelHeaderVisible && gridVisible
             it.isVisible = labelsVisible

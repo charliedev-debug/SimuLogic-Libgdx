@@ -50,6 +50,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     companion object {
          const val CAMERA_WIDTH = 720f
          const val CAMERA_HEIGHT = 1280f
+         var offsetTop = 0f
     }
 
     override fun create() {
@@ -114,6 +115,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         }
         gestureListener.gridDecorator?.refresh = true
     }
+
     override fun render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)
         connection.update()

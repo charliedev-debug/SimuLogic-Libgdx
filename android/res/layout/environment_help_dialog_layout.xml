@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/background"
+    app:cardCornerRadius="20dp"
+    style="@style/Widget.App.CardStyle">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            app:layout_constraintTop_toTopOf="@id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    <LinearLayout
+        app:layout_constraintTop_toBottomOf="@id/pager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/prev"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:background="@drawable/icon_ripple_oval_bg"
+            android:tint="@color/background"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/back"/>
+        <Space
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/next"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:background="@drawable/icon_ripple_oval_bg"
+            android:tint="@color/background"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/next"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
