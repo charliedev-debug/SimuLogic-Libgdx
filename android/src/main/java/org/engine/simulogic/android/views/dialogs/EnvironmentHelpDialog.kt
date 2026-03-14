@@ -19,6 +19,11 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
         setContentView(R.layout.environment_help_dialog_layout)
         val next = findViewById<AppCompatImageButton>(R.id.next)
         val prev = findViewById<AppCompatImageButton>(R.id.prev)
+            findViewById<AppCompatImageButton>(R.id.close).apply {
+            setOnClickListener {
+                dismiss()
+            }
+        }
         val pager = findViewById<ViewPager2>(R.id.pager).apply {
             adapter = EnvironmentHelpViewPagerAdapter()
 

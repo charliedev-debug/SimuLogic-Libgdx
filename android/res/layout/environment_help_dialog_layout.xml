@@ -12,19 +12,86 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="10dp">
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:text="Explore"/>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/close"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/icon_ripple_oval_bg"
+            android:tint="@color/delete_color"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/close"/>
+        <View
+            android:layout_below="@+id/close"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="1px"
+            android:background="@color/dividerColor"/>
+    </RelativeLayout>
+
+
+        <RadioGroup
+            android:id="@+id/groupEnvironmentTutorial"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/modes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@null"
+                android:layout_weight="1"
+                android:text="MODES"
+                android:gravity="center"
+                android:checked="true"/>
+           <RadioButton
+                android:id="@+id/actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@null"
+                android:layout_weight="1"
+                android:text="ACTIONS"
+                android:gravity="center"/>
+            <RadioButton
+                android:id="@+id/components"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/radio_button_custom"
+                android:button="@null"
+                android:layout_weight="1"
+                android:text="COMPONENTS"
+                android:gravity="center"/>
+        </RadioGroup>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
-            app:layout_constraintTop_toTopOf="@id/tab_layout"
+            app:layout_constraintTop_toBottomOf="@id/groupEnvironmentTutorial"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_height="match_parent" />
 
     <LinearLayout
         app:layout_constraintTop_toBottomOf="@id/pager"
