@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.view.size
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.google.android.material.textview.MaterialTextView
 import org.engine.simulogic.R
 import org.engine.simulogic.android.ui.adapters.EnvironmentHelpViewPagerAdapter
 
@@ -19,6 +19,7 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
         setContentView(R.layout.environment_help_dialog_layout)
         val next = findViewById<AppCompatImageButton>(R.id.next)
         val prev = findViewById<AppCompatImageButton>(R.id.prev)
+        val currentPageView = findViewById<MaterialTextView>(R.id.currentPage)
             findViewById<AppCompatImageButton>(R.id.close).apply {
             setOnClickListener {
                 dismiss()
@@ -43,8 +44,10 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     val max = adapter?.itemCount?:0
+                    val textCurrentPage = "${position + 1} / $max"
                     next.visibility = if(position >= max - 1) View.INVISIBLE else View.VISIBLE
                     prev.visibility = if(position == 0) View.INVISIBLE else View.VISIBLE
+                    currentPageView.text = textCurrentPage
                 }
             })
         }

@@ -16,10 +16,12 @@
     app:cardBackgroundColor="@color/background"
     app:cardCornerRadius="20dp"
     style="@style/Widget.App.CardStyle">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -108,6 +110,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/prev"
@@ -119,9 +122,13 @@
             android:tint="@color/background"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/back"/>
-        <Space
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/currentPage"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="1 / 10"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/next"
             android:layout_width="35dp"
@@ -133,7 +140,7 @@
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/next"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
