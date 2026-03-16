@@ -51,6 +51,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
          const val CAMERA_WIDTH = 720f
          const val CAMERA_HEIGHT = 1280f
          var offsetTop = 0f
+         val offsetLeft = 0f
     }
 
     override fun create() {
@@ -62,7 +63,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
             camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
         }
 
-        camera.zoom = 1.5f
+        camera.zoom = 1.0f
         batch = SpriteBatch()
 
         assetManager.load("component.atlas", TextureAtlas::class.java)
@@ -108,12 +109,19 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
     // set camera according to screen orientation
     override fun resize(width: Int, height: Int) {
-        if (width > height) {
-            camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
-        } else {
-            camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+        if(camera.viewportWidth.toInt() != width ) {
+            if (width > height) {
+                camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
+            } else {
+                camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+            }
         }
         gestureListener.gridDecorator?.refresh = true
+    }
+
+    override fun pause() {
+        super.pause()
+
     }
 
     override fun render() {
@@ -143,7 +151,4 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         ChannelBuffer.clear()
         TimerManager.reset()
     }
-
-
-
 }

@@ -17,6 +17,9 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -74,6 +77,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         setContentView(R.layout.activity_simulation)
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
+        val toolBarWrapper = findViewById<View>(R.id.toolBarWrapper)
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val bottomSheetButton = findViewById<View>(R.id.component_bottom_sheet)
         val componentCountTextView = findViewById<TextView>(R.id.components_count)
@@ -89,9 +93,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val exitLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.exit_minimized)
         val saveLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.save_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
-        appBarLayout.doOnPreDraw {
-            SimulationLoop.offsetTop = appBarLayout.height.toFloat() - 50f
+        toolBarWrapper.doOnPreDraw {
+            SimulationLoop.offsetTop = toolBarWrapper.height.toFloat()
         }
+
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
 
             userSettings.getDataBoolean(this@SimulationActivity,UserSettings.GRID_ENABLED).asLiveData().observe(this@SimulationActivity){
@@ -289,6 +294,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         simulationToolbarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            toolBarWrapper.doOnPreDraw {
+                SimulationLoop.offsetTop = toolBarWrapper.height.toFloat()
+            }
             if (isChecked) {
                 toolBar.visibility = View.VISIBLE
                 drawerLayoutButtonMinimized.visibility = View.GONE
@@ -300,6 +308,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 exitLayoutButtonMinimized.visibility = View.VISIBLE
                 saveLayoutButtonMinimized.visibility = View.VISIBLE
             }
+
             CoroutineScope(Dispatchers.Main).launch {
                 userSettings.saveBooleanPref(this@SimulationActivity,UserSettings.TOOLBAR_ENABLED,isChecked)
                 simulationOptions.showTopBar = isChecked
@@ -307,6 +316,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         simulationMenuBarEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
+            toolBarWrapper.doOnPreDraw {
+                SimulationLoop.offsetTop = toolBarWrapper.height.toFloat()
+            }
             if (isChecked) {
                 menuRecyclerView.visibility = View.VISIBLE
             } else {

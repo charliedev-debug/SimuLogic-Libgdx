@@ -1,8 +1,10 @@
 package org.engine.simulogic.android.circuits.components.decorators
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
@@ -52,6 +54,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
     }
 
     override fun update() {
+
         val factor = (1f/ camera.zoom)
         val viewPortWidth = (camera.viewportWidth / factor)
         val viewPortHeight = (camera.viewportHeight / factor)
@@ -60,7 +63,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val labelSpacingX = (spacingX * 4).toInt()
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 0f
-        val labelOffsetXTop = -(SimulationLoop.offsetTop * camera.zoom)
+        val labelOffsetXTop = -(SimulationLoop.offsetTop * viewPortHeight / Gdx.graphics.height)
         val labelFontSize = 20f
         val labelFontSizeMax = 50f
         val lineCountX = round(viewPortWidth / spacingX).toInt()

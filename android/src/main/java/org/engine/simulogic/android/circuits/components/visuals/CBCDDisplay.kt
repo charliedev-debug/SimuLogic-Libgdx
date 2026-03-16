@@ -95,10 +95,6 @@ class CBCDDisplay (x:Float, y:Float, private val scene: PlayGroundScene) : CNode
         data.forEach {
             it.update()
         }
-    }
-
-    override fun draw(spriteBatch: SpriteBatch) {
-        super.draw(spriteBatch)
         val x = getPosition().x
         val y = getPosition().y
         val width = sprite.width
@@ -119,12 +115,12 @@ class CBCDDisplay (x:Float, y:Float, private val scene: PlayGroundScene) : CNode
         // top center segment
         segmentList[0].also { segment->
             segment.updatePosition(x  , y + height / 2f - segHeight / 2f )
-           segment.updateColor(if(currentBCDIntValue == 0 || currentBCDIntValue == 2 ||
-               currentBCDIntValue == 3 ||currentBCDIntValue == 5 ||
-               currentBCDIntValue == 6 || currentBCDIntValue == 7 ||
-               currentBCDIntValue == 8 || currentBCDIntValue == 9 ||
-               currentBCDIntValue == 10 || currentBCDIntValue == 12 ||
-               currentBCDIntValue == 14 || currentBCDIntValue == 15) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
+            segment.updateColor(if(currentBCDIntValue == 0 || currentBCDIntValue == 2 ||
+                currentBCDIntValue == 3 ||currentBCDIntValue == 5 ||
+                currentBCDIntValue == 6 || currentBCDIntValue == 7 ||
+                currentBCDIntValue == 8 || currentBCDIntValue == 9 ||
+                currentBCDIntValue == 10 || currentBCDIntValue == 12 ||
+                currentBCDIntValue == 14 || currentBCDIntValue == 15) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
 
         }
 

@@ -14,9 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/transparent"
+        android:outlineProvider="none"
+        android:padding="0dp"
         android:theme="@style/AppBarOverlay">
 
         <LinearLayout
+            android:id="@+id/toolBarWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -35,6 +38,7 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/app_bar_shape"
                 android:padding="5dp"
+                android:scrollbars="horizontal"
                 android:scrollbarAlwaysDrawHorizontalTrack="true" />
             <RelativeLayout
                 android:layout_width="match_parent"
