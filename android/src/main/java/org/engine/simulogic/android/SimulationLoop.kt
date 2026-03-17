@@ -50,6 +50,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     companion object {
          const val CAMERA_WIDTH = 720f
          const val CAMERA_HEIGHT = 1280f
+         var isPortrait = true
          var offsetTop = 0f
          val offsetLeft = 0f
     }
@@ -58,8 +59,10 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         camera = OrthographicCamera()
         // set camera according to screen orientation
         if (Gdx.graphics.width > Gdx.graphics.height) {
+            isPortrait = false
             camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
         } else {
+            isPortrait = true
             camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
         }
 
@@ -109,13 +112,17 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
     // set camera according to screen orientation
     override fun resize(width: Int, height: Int) {
-        if(camera.viewportWidth.toInt() != width ) {
-            if (width > height) {
+           val x = camera.position.x
+           val y = camera.position.y
+            if (width > height && isPortrait) {
+                isPortrait = false
                 camera.setToOrtho(false, CAMERA_HEIGHT, CAMERA_WIDTH)
-            } else {
+                camera.position.set(x, y, 0f)
+            } else if(width < height && !isPortrait) {
+                isPortrait = true
                 camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
+                camera.position.set(x, y, 0f)
             }
-        }
         gestureListener.gridDecorator?.refresh = true
     }
 

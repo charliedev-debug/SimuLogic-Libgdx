@@ -36,7 +36,7 @@
         android:padding="10dp"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:text="Explore"/>
+        android:text="Environment Guide"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/close"
             android:layout_width="35dp"
