@@ -143,9 +143,9 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
         }
         if(updated) {
             // update the range background size and position
-            val width = abs(signalTopLeft.getPosition().x - signalTopRight.getPosition().x)
-            val height = abs(signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
-            sprite.setSize(width, height)
+            val width = (signalTopRight.getPosition().x - signalTopLeft.getPosition().x)
+            val height = (signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
+            sprite.setSize(abs(width), abs(height))
             updatePosition(
                 signalTopLeft.getPosition().x + width / 2f,
                 signalTopLeft.getPosition().y - height / 2f
