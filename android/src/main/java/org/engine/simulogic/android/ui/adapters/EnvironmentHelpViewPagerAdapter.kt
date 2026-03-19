@@ -31,6 +31,49 @@ class EnvironmentHelpViewPagerAdapter : RecyclerView.Adapter<EnvironmentHelpView
             "These joints can be used for proper wire management in the project.",0,R.drawable.tutorial_connect_4_mode))
         addItem(0,HelpItem("Connect-2","Enables connection mode with an upper limit of 6 joints. " +
             "These joints can be used for proper wire management in the project.",0,R.drawable.tutorial_connect_6_mode))
+        addItem(1,  HelpItem("Rotate",
+            description = "Rotates selected components 90-degrees in a clockwise direction.",
+            0,
+            layoutIcon = R.drawable.action_rotate
+        ))
+        addItem(1,HelpItem(
+            "Group With Sel-Touch",
+            description = "Groups selected components as one entity.",
+             0,
+            layoutIcon = R.drawable.action_group_sel_touch
+        ))
+        addItem(1,HelpItem(
+            "Group With Sel-Range",
+            description = "Groups selected components as one entity.",
+             0,
+            layoutIcon = R.drawable.action_group_sel_range
+        ))
+        addItem(1, HelpItem(
+            "UnGroup",
+            description = "Collapses grouped components as individual entities.",
+            0,
+            layoutIcon = R.drawable.action_ungroup
+        ))
+        addItem(1, HelpItem(
+            "Undo/Redo",
+            description = "Undo/removes the current operation in order. Redo/restores the previous operation in order.",
+             0,
+            layoutIcon = R.drawable.action_undo_redo
+        ))
+        addItem(1,
+            HelpItem(
+                "Cut",
+                description = "Cut items from a certain position.",
+                0,
+                layoutIcon = R.drawable.action_cut
+            )
+        )
+        addItem(1,   HelpItem(
+            "Copy",
+            description = "Duplicates the selected components, this operation can be finalized by clicking the paste button and only connections of selected children or parents will be duplicated.",
+            0,
+            layoutIcon = R.drawable.action_copy
+        ))
     }
 
     private fun addItem(key:Int, item: HelpItem){

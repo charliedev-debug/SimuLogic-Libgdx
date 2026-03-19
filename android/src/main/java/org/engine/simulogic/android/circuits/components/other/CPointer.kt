@@ -13,8 +13,8 @@ class CPointer (x:Float, y:Float, scene: PlayGroundScene) : CNode() {
 
         val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("POINTER")
-        val width = 30f
-        val height = 30f
+        val width = 40f
+        val height = 40f
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x, y)
             setSize(width, height)
