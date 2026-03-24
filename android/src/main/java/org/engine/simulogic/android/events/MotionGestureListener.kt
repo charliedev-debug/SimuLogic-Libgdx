@@ -266,11 +266,11 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         camera.unproject(touch)
         rectPointer.updatePosition(touch.x, touch.y)
         if(collisionDetector.mode == INTERACT_MODE){
-            collisionDetector.contains(rectPointer)?.also { collisionItem ->
+            collisionDetector.containsQ(rectPointer,scene)?.also { collisionItem ->
                 collisionItem.subject.toggleAction()
             }
         }else {
-            collisionDetector.contains(rectPointer)?.also { collisionItem ->
+            collisionDetector.containsQ(rectPointer, scene)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
                 // this might be moved in the future
                 snapAlign.getSnapCoordinates(touch).also { coord->
@@ -279,7 +279,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             }
 
             if (collisionDetector.mode == RANGED_SELECTION_MODE) {
-                rangeSelect.collisionDetector.contains(rectPointer)
+                rangeSelect.collisionDetector.containsQ(rectPointer, scene)
             }
         }
 
@@ -341,7 +341,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         rangeSelect.update()
                     }
                 }
-                collisionDetector.containsRanged(rangeSelect)
+                collisionDetector.containsRangedQ(rangeSelect,scene)
 
             } else {
                 camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
@@ -354,6 +354,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
         //double tap to enable and disable groups
+        if(count > 1)
         collisionDetector.selectedItems.forEach {
             if(it.subject is CGroup){
                 it.subject.collectableChildren = !it.subject.collectableChildren
@@ -389,6 +390,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         AutoSave.dataChanged = true
         return false
     }
+
 
     override fun zoom(initialDistance: Float, distance: Float): Boolean {
         return false

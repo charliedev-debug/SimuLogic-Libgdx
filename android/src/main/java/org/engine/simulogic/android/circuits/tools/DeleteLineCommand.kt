@@ -21,7 +21,7 @@ class DeleteLineCommand (private val scene: PlayGroundScene, private val connect
 
     override fun redo() {
         data.forEach { node->
-            node.detachSelf()
+            node.removeSelf()
         }
     }
 }

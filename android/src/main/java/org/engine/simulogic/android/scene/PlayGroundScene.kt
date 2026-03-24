@@ -13,11 +13,13 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
 
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
+        addLayer(LayerLines(LayerEnums.DEBUG_LAYER.name))
         addLayer(Layer(LayerEnums.GRID_LAYER_LABELS.name))
         addLayer(LayerLines(LayerEnums.CONNECTION_LAYER.name))
         addLayer(Layer(LayerEnums.CONNECTION_LAYER_INPUTS.name))
         addLayer(Layer(LayerEnums.GATE_LAYER.name))
         addLayer(Layer(LayerEnums.SCREEN_LAYER.name))
+
     }
    private fun addLayer(layer: Layer):Layer{
        data.add(layer)

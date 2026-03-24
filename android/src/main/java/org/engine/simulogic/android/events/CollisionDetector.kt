@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.events
 
+import org.engine.simulogic.android.circuits.algorithms.QuadTree
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
@@ -8,12 +9,13 @@ import org.engine.simulogic.android.circuits.components.other.CRangePoint
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
-import org.engine.simulogic.android.scene.Entity
+import org.engine.simulogic.android.scene.PlayGroundScene
 
 class CollisionDetector(private val connection: Connection) {
 
     var selectedItems = mutableListOf<CollisionItem>()
     var mode = MotionGestureListener.TOUCH_MODE
+    var quadTreeInstance:QuadTree ? = null
     fun isNotEmpty(): Boolean {
         return selectedItems.isNotEmpty()
     }
@@ -42,6 +44,27 @@ class CollisionDetector(private val connection: Connection) {
         return selectedItems[index]
     }
 
+    fun containsRangedQ(rangeSelect: CRangeSelect, scene:PlayGroundScene){
+        rangeSelect.rangeItems.forEach {
+            it.subject.selected = false
+        }
+        rangeSelect.rangeItems.clear()
+        quadTreeInstance?.release()
+        QuadTree.build(connection,scene).also { quadTree ->
+            quadTreeInstance = quadTree
+            val collidedList = mutableListOf<ListNode>()
+            quadTree.searchMultiple(rangeSelect.getBoundingBox(), collidedList)
+            collidedList.onEach { collided ->
+                val collidedObject = collided.value
+                val node = collided.callingRef
+                if (collidedObject !is CRangePoint && collidedObject != rangeSelect) {
+                    node.value.selected = true
+                    rangeSelect.rangeItems.add(CollisionItem(node, node.value))
+                }
+            }
+        }
+    }
+
     fun containsRanged(rangeSelect: CRangeSelect) {
         rangeSelect.rangeItems.forEach {
             it.subject.selected = false
@@ -55,6 +78,47 @@ class CollisionDetector(private val connection: Connection) {
             }
         }
 
+    }
+
+    fun containsQ(entity: CNode,scene: PlayGroundScene):CollisionItem?{
+        //remove the previous items and add the new item if Touch or interact mode
+        if (mode == MotionGestureListener.TOUCH_MODE || mode == MotionGestureListener.INTERACT_MODE || mode == MotionGestureListener.RANGED_SELECTION_MODE) {
+            selectedItems.forEach {
+                it.subject.selected = false
+            }
+            reset()
+        }
+
+        quadTreeInstance?.release()
+        QuadTree.build(connection,scene).also { quadTree ->
+            quadTreeInstance = quadTree
+            quadTree.searchSingle(entity.getBoundingBox())?.also {
+                collided->
+                val node = collided.callingRef
+                val collidedObject = collided.value
+                if (node.value.isVisible) {
+                    // for connections only return touch events for input and output signals
+                    if (mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && collidedObject.parent !is LineMarker && node.value !is CGroup) {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
+                    } else if (mode == MotionGestureListener.INTERACT_MODE || mode == MotionGestureListener.TOUCH_MODE) {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
+                    } else if (mode == MotionGestureListener.SELECTION_MODE && collidedObject !is CSignal) {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
+                    } else if (mode == MotionGestureListener.RANGED_SELECTION_MODE) {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
+                    }
+                }
+            }
+        }
+        return null
     }
 
     fun contains(entity: CNode): CollisionItem? {

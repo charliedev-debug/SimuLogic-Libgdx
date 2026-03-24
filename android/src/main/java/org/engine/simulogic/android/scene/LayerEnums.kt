@@ -7,5 +7,6 @@ enum class LayerEnums {
     SCREEN_LAYER,
     GRID_LAYER,
     GRID_LAYER_LABELS,
-    SCENE
+    SCENE,
+    DEBUG_LAYER
 }

@@ -35,4 +35,7 @@ class LayerLines(layerId:String) : Layer(layerId) {
         }
     }
 
+    override fun update() {
+        super.update()
+    }
 }

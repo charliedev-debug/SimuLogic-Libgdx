@@ -120,6 +120,10 @@ open class CNode : Entity(), ICollidable,IExecutable{
         return null
     }
 
+    fun getBoundingBox():Rectangle{
+        return sprite.boundingRectangle
+    }
+
     open fun toggleAction(){
 
     }
