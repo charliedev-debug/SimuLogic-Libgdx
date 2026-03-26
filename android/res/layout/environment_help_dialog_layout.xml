@@ -73,6 +73,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="MODES"
+                android:textColor="@color/dividerColor"
                 android:gravity="center"
                 android:checked="true"/>
            <RadioButton
@@ -84,6 +85,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="ACTIONS"
+                android:textColor="@color/dividerColor"
                 android:gravity="center"/>
             <RadioButton
                 android:id="@+id/components"
@@ -94,6 +96,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="COMPONENTS"
+                android:textColor="@color/dividerColor"
                 android:gravity="center"/>
         </RadioGroup>
 

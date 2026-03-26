@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.engine.simulogic.android.ui.models.HelpItem
 import org.engine.simulogic.R
+import pl.droidsonroids.gif.GifImageView
+
 class HelpAdapter : RecyclerView.Adapter<HelpAdapter.HelpViewHolder>() {
  private val dataList = mutableListOf<HelpItem>()
     inner class HelpViewHolder(view: View): RecyclerView.ViewHolder(view){
@@ -19,6 +21,14 @@ class HelpAdapter : RecyclerView.Adapter<HelpAdapter.HelpViewHolder>() {
                       }
                       itemView.findViewById<TextView>(R.id.title).text = item.title
                       itemView.findViewById<TextView>(R.id.description).text = item.description
+                      itemView.findViewById<GifImageView>(R.id.gif_view).apply {
+                          if(item.gifView != 0) {
+                              visibility = View.VISIBLE
+                              setImageResource(item.gifView)
+                          }else{
+                              visibility = View.GONE
+                          }
+                      }
                   }else{
                       itemView.findViewById<TextView>(R.id.title).text = item.title
                   }

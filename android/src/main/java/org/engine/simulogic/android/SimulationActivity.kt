@@ -2,45 +2,46 @@ package org.engine.simulogic.android
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
-import org.engine.simulogic.R
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.View
+import android.view.Window
+import android.view.WindowInsets
 import android.widget.RadioGroup
 import android.widget.TextView
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.doOnLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.internal.EdgeToEdgeUtils
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
@@ -48,9 +49,9 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
-import org.engine.simulogic.android.views.adapters.MenuViewAdapter
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
+import org.engine.simulogic.android.views.adapters.MenuViewAdapter
 import org.engine.simulogic.android.views.dialogs.AlertDialog
 import org.engine.simulogic.android.views.dialogs.EditProjectDialog
 import org.engine.simulogic.android.views.dialogs.EnvironmentHelpDialog
@@ -58,6 +59,7 @@ import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
 import org.engine.simulogic.android.views.interfaces.IMenuAdapterListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
+
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callbacks {
 
@@ -75,6 +77,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        setStatusBarColor(window, R.color.background_dark)
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
         val toolBarWrapper = findViewById<View>(R.id.toolBarWrapper)
@@ -96,6 +101,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         toolBarWrapper.doOnPreDraw {
             SimulationLoop.offsetTop = toolBarWrapper.height.toFloat()
         }
+
+
 
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
 
@@ -384,6 +391,32 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
         supportFragmentManager.beginTransaction()
             .add(R.id.simulation_fragment, simulationFragment).commit()
+    }
+
+    fun setStatusBarColor(window: Window, color: Int) {
+        window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                val statusBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
+                view.setBackgroundResource(color)
+                view.setPadding(statusBarInsets.left, statusBarInsets.top, statusBarInsets.right, statusBarInsets.bottom)
+                insets
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val bars = insets.getInsets(WindowInsets.Type.systemBars())
+                    view.setBackgroundResource(color)
+                    view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+                    return@setOnApplyWindowInsetsListener insets
+                }else{
+                    window.statusBarColor = ContextCompat.getColor(this, color)
+                    window.navigationBarColor = ContextCompat.getColor(this, color)
+                    val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+                    insetsController.isAppearanceLightStatusBars = false
+                    view.setPadding(insets.systemWindowInsetLeft,insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
+                    window.decorView.setBackgroundColor(ContextCompat.getColor(this, color))
+                    return@setOnApplyWindowInsetsListener insets
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -80,7 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="normal"
-            android:textSize="10dp"
+            android:textSize="13dp"
             android:text="This app was created to help both students and professionals to learn digital logic more efficiently, focusing on both user experience and performance even on low to mid range devices. More features will be added in subsequent updates, also consider leaving us a review."
             />
         <com.google.android.material.button.MaterialButton

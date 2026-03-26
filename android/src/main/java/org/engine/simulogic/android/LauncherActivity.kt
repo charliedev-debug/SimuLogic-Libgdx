@@ -1,27 +1,31 @@
 package org.engine.simulogic.android
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.view.Window
+import android.view.WindowInsets
+import androidx.activity.SystemBarStyle
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.savedstate.SavedState
 import com.google.android.material.button.MaterialButton
-import org.engine.simulogic.databinding.ActivityLauncherBinding
+import com.google.android.material.navigation.NavigationView
 import org.engine.simulogic.R
-import org.engine.simulogic.android.views.adapters.MenuAdapterItem
 import org.engine.simulogic.android.views.dialogs.AboutDialog
-import kotlin.system.exitProcess
+import org.engine.simulogic.databinding.ActivityLauncherBinding
+
 
 class LauncherActivity : AppCompatActivity() {
 
@@ -33,6 +37,10 @@ private lateinit var binding: ActivityLauncherBinding
 
      binding = ActivityLauncherBinding.inflate(layoutInflater)
      setContentView(binding.root)
+
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        setStatusBarColor(window, R.color.background_dark)
 
      setSupportActionBar(binding.appBarLauncher.toolbar)
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
@@ -93,5 +101,33 @@ private lateinit var binding: ActivityLauncherBinding
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_launcher)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun setStatusBarColor(window: Window, color: Int) {
+        window.decorView.setOnApplyWindowInsetsListener { view, insets ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                val statusBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
+                view.setBackgroundResource(color)
+                view.setPadding(statusBarInsets.left, statusBarInsets.top, statusBarInsets.right, statusBarInsets.bottom)
+                insets
+            } else {
+                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val bars = insets.getInsets(WindowInsets.Type.systemBars())
+                    view.setBackgroundResource(color)
+                    view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
+                   return@setOnApplyWindowInsetsListener insets
+                }else{
+                     window.statusBarColor = ContextCompat.getColor(this, color)
+                     window.navigationBarColor = ContextCompat.getColor(this, color)
+                     val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+                     insetsController.isAppearanceLightStatusBars = false
+                     view.setPadding(insets.systemWindowInsetLeft,insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
+                     window.decorView.setBackgroundColor(ContextCompat.getColor(this, color))
+                     return@setOnApplyWindowInsetsListener insets
+                }
+            }
+
+        }
+
     }
 }

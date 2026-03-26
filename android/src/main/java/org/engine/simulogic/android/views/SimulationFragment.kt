@@ -39,7 +39,7 @@ class SimulationFragment(
         savedInstanceState: Bundle?
     ): View {
         val configuration = AndroidApplicationConfiguration()
-        configuration.useImmersiveMode = true // Recommended, but not required.
+        configuration.useImmersiveMode = false // Recommended, but not required.
         configuration.useGL30 = true
         simulationLoop = SimulationLoop(projectOptions, simulationOptions, object : ISimulationListener {
                 override fun onCreate() {

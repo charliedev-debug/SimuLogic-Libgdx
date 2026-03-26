@@ -25,13 +25,13 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
     var itemsTotal = 0
     var lines = mutableListOf<CLine>()
     init {
-        scene.getLayerById(LayerEnums.DEBUG_LAYER.name).also { layer ->
+       /* scene.getLayerById(LayerEnums.DEBUG_LAYER.name).also { layer ->
             layer.attachChild(CLine(center.x - width/2f, center.y + height / 2f, center.x + width / 2, center.y + height / 2f, 1f).apply { lines.add(this) })
             layer.attachChild(CLine(center.x - width/2f, center.y - height / 2f, center.x + width / 2, center.y - height / 2f, 1f).apply { lines.add(this) })
 
             layer.attachChild(CLine(center.x - width/2f, center.y - height / 2f, center.x - width / 2, center.y + height / 2f, 1f).apply { lines.add(this) })
             layer.attachChild(CLine(center.x + width/2f, center.y - height / 2f, center.x + width / 2, center.y + height / 2f, 1f).apply { lines.add(this) })
-        }
+        }*/
     }
 
     fun release(){
