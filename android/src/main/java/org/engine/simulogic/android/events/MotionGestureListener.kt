@@ -266,11 +266,11 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         camera.unproject(touch)
         rectPointer.updatePosition(touch.x, touch.y)
         if(collisionDetector.mode == INTERACT_MODE){
-            collisionDetector.containsQ(rectPointer,scene)?.also { collisionItem ->
+            collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.toggleAction()
             }
         }else {
-            collisionDetector.containsQ(rectPointer, scene)?.also { collisionItem ->
+            collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
                 // this might be moved in the future
                 snapAlign.getSnapCoordinates(touch).also { coord->
@@ -279,7 +279,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             }
 
             if (collisionDetector.mode == RANGED_SELECTION_MODE) {
-                rangeSelect.collisionDetector.containsQ(rectPointer, scene)
+                rangeSelect.collisionDetector.contains(rectPointer)
             }
         }
 
@@ -341,7 +341,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                         rangeSelect.update()
                     }
                 }
-                collisionDetector.containsRangedQ(rangeSelect,scene)
+                collisionDetector.containsRanged(rangeSelect)
 
             } else {
                 camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)

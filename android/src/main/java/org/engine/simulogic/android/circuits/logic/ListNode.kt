@@ -152,10 +152,12 @@ class ListNode(val value : CNode,
 
     override fun update() {
          value.update()
-        val iterator = lineMarkersChildren.listIterator()
-         while (iterator.hasNext()){
-             iterator.next().update()
-         }
+        synchronized(lineMarkersChildren) {
+            val iterator = lineMarkersChildren.listIterator()
+            while (iterator.hasNext()) {
+                iterator.next().update()
+            }
+        }
 
 
     }
