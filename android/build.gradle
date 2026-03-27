@@ -35,16 +35,13 @@ android {
     applicationId 'org.engine.simulogic'
     minSdkVersion 23
     targetSdkVersion 35
-    versionCode 1510
-    versionName "1.5.10"
+    versionCode 1511
+    versionName "1.5.11"
   }
   compileOptions {
     sourceCompatibility "8"
     targetCompatibility "8"
     coreLibraryDesugaringEnabled = true
-  }
-  aaptOptions{
-    noCompress("bin")
   }
   buildTypes {
     release {
@@ -58,6 +55,9 @@ android {
   }
   kotlinOptions {
     jvmTarget = '1.8'
+  }
+  androidResources {
+    noCompress 'bin'
   }
 }
 
@@ -76,8 +76,8 @@ dependencies {
   implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0'
   implementation 'androidx.navigation:navigation-fragment-ktx:2.9.6'
   implementation 'androidx.navigation:navigation-ui-ktx:2.9.6'
-  implementation("androidx.datastore:datastore-preferences:1.2.0")
-  implementation 'androidx.preference:preference:1.2.0'
+  implementation("androidx.datastore:datastore-preferences:1.2.1")
+  implementation 'androidx.preference:preference:1.2.1'
   implementation("androidx.viewpager2:viewpager2:1.1.0")
   implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.31")
   implementation("com.github.AtifSayings:ViewPager2-Transformers:1.0.1")
