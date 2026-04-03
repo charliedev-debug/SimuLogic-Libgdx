@@ -45,7 +45,7 @@ class Connection : Iterable<ListNode>, IUpdate {
     }
 
     fun insertConnection(parent:ListNode, child:ListNode, signalFrom: Int, signalTo: Int, scene:PlayGroundScene):LineMarker{
-        return parent.insertChild(child, signalFrom, signalTo, scene)
+        return parent.insertChild(child, signalFrom, signalTo, this,scene)
     }
 
     override fun update() {

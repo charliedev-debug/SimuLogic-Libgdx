@@ -17,10 +17,10 @@ class ListNode(val value : CNode,
     private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
     var visited = false
     var callingRef = this
-    fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int, scene: PlayGroundScene):LineMarker {
+    fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
         next.add(child)
         child.parent.add(this)
-        val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene) }
+        val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene, connection) }
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
         return marker

@@ -165,12 +165,12 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         }
         val lastLabelX = labelsX[labelsX.size - 1]
         val firstLabelX = labelsX[0]
-        if(firstLabelX.getPosition().x > (originX + labelSpacingX)){
+        if(firstLabelX.getPosition().x > (originX + labelSpacingX + firstLabelX.getWidth() / 2f)){
             val offsetX = firstLabelX.getPosition().x - labelSpacingX
             lastLabelX.updatePosition(offsetX,firstLabelX.getPosition().y)
             lastLabelX.lineHeader.updatePosition(offsetX, firstLabelX.getPosition().y, offsetX, originY )
             lastLabelX.text = "${firstLabelX.text.toInt() - labelSpacingX}"
-        }else if(lastLabelX.getPosition().x <= (endX - labelSpacingX)){
+        }else if(lastLabelX.getPosition().x <= (endX - labelSpacingX - firstLabelX.getWidth()/ 2f)){
             val offsetX = lastLabelX.getPosition().x + labelSpacingX
             firstLabelX.updatePosition(offsetX, firstLabelX.getPosition().y)
             firstLabelX.lineHeader.updatePosition(offsetX, firstLabelX.getPosition().y, offsetX, originY)
@@ -205,12 +205,12 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val lastLabelY = labelsY[labelsY.size - 1]
         val firstLabelY = labelsY[0]
 
-        if(firstLabelY.getPosition().y > (originY + labelSpacingY)){
+        if(firstLabelY.getPosition().y > (originY + labelSpacingY + firstLabelY.getHeight() / 2f)){
             val offsetY = firstLabelY.getPosition().y - labelSpacingY
             lastLabelY.updatePosition(lastLabelY.getPosition().x, offsetY)
             lastLabelY.lineHeader.updatePosition(lastLabelY.getPosition().x,offsetY, endX, offsetY)
             lastLabelY.text = "${firstLabelY.text.toInt() - labelSpacingY}"
-        }else if(lastLabelY.getPosition().y < (endY - labelSpacingY)){
+        }else if(lastLabelY.getPosition().y < (endY - labelSpacingY - firstLabelY.getHeight() / 2f)){
             val offsetY = lastLabelY.getPosition().y + labelSpacingY
             firstLabelY.updatePosition(lastLabelY.getPosition().x, offsetY)
             lastLabelY.lineHeader.updatePosition(lastLabelY.getPosition().x,offsetY, endX, offsetY)

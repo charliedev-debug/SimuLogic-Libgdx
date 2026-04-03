@@ -2,6 +2,8 @@ package org.engine.simulogic.android.circuits.components.lines
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
+import org.engine.simulogic.android.circuits.algorithms.QuadTree
+import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_ACTIVE
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_INACTIVE
@@ -11,6 +13,7 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
+import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
@@ -56,6 +59,45 @@ class LineMarker(val scene: PlayGroundScene,
             })
         }
 
+        createMarker(scene)
+    }
+
+    fun initialize(scene: PlayGroundScene, connection: Connection){
+        val signalFrom = from.value.signals[signalFrom]
+        val signalTo = to.value.signals[signalTo]
+        val wirePathRouter = WirePathRouter(connection, scene)
+        wirePathRouter.route(signalFrom, signalTo).also{ pathQueue->
+            var countPoint = linePointCountX + linePointCountY
+            val startNode = pathQueue.removeFirst()
+            val endNode = pathQueue.removeLast()
+            var signalIndex = 0
+           signals.add(CSignal(startNode.x, startNode.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply {
+               parent = this@LineMarker
+           })
+
+            signalIndex++
+            while (countPoint > 0){
+                if(pathQueue.size  == 1){
+                    val node = pathQueue[0]
+                    signals.add(CSignal(node.x, node.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply{
+                        parent = this@LineMarker
+                    })
+                }else{
+                    val node = pathQueue.removeFirst()
+                    signals.add(CSignal(node.x, node.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply{
+                        parent = this@LineMarker
+                    })
+                }
+                signalIndex++
+                countPoint--
+            }
+
+           signals.add(CSignal(endNode.x, endNode.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply {
+                parent = this@LineMarker
+            })
+
+        }
+        //initialize(scene)
         createMarker(scene)
     }
 

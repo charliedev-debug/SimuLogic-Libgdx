@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.circuits.logic
 
+import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker

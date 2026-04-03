@@ -11,8 +11,7 @@
     <color name="dividerColor">#D2FFFFFF</color>
     <color name="gray">#252525</color>
     <color name="lightred">#CC4949</color>
-    <color name="background">#262633</color>
-    <color name="background2">#494949</color>
+
     <color name="transparent">#00FFFFFF</color>
 
     <color name="beginner">#71C787</color>
@@ -25,7 +24,9 @@
     <color name="colorPrimary">#C3AFD7</color>
     <color name="colorSecondary">#C8AFE0</color>
     <color name="background_dark">#1f1c22</color>
+    <color name="background">#262633</color>
     <color name="dusty_lavender">#665C70</color>
     <color name="background3">#464153</color>
+    <color name="background2">#494949</color>
     <color name="default_menu_icon_color">#EADBFA</color>
 </resources>

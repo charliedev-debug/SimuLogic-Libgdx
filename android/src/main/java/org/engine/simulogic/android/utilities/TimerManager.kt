@@ -1,22 +1,31 @@
 package org.engine.simulogic.android.utilities
 
+import org.engine.simulogic.android.scene.Entity
+import java.util.Collections
+
 class TimerManager {
-    private val timers = mutableListOf<Timer>()
+    private val timers = Collections.synchronizedList(mutableListOf<Timer>())
     private var resetTick = false
     fun insert(timer:Timer){
-        timers.add(timer)
-        timers.onEach {
-            it.reset()
+        synchronized(timers) {
+            timers.add(timer)
+            timers.onEach {
+                it.reset()
+            }
         }
         resetTick = true
     }
 
     fun remove(timer:Timer){
-        timers.remove(timer)
+        synchronized(timers) {
+            timers.remove(timer)
+        }
     }
     fun update(){
-        timers.onEach {
-            it.update(resetTick)
+        synchronized(timers) {
+            timers.onEach {
+                it.update(resetTick)
+            }
         }
         resetTick = false
     }
