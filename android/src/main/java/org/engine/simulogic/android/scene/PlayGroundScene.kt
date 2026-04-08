@@ -14,7 +14,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
         addLayer(LayerLines(LayerEnums.DEBUG_LAYER.name))
-        addLayer(Layer(LayerEnums.GRID_LAYER_LABELS.name))
+        addLayer(LayerLabel(LayerEnums.GRID_LAYER_LABELS.name))
         addLayer(LayerLines(LayerEnums.CONNECTION_LAYER.name))
         addLayer(Layer(LayerEnums.CONNECTION_LAYER_INPUTS.name))
         addLayer(Layer(LayerEnums.GATE_LAYER.name))
@@ -49,6 +49,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                     shapeRenderer.setAutoShapeType(true)
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
                 }
+
                 if (entity.isVisible) {
                     if (entity is LayerLines) {
                         entity.draw(shapeRenderer,camera)
@@ -58,7 +59,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                 //TODO("look ahead to see if there is a line layer before flushing")
                 if (entity is LayerLines) {
                     shapeRenderer.end()
-                    if ((index + 1) < data.size) {
+                    if(index + 1 < data.size){
                         spriteBatch.projectionMatrix = camera.combined
                         spriteBatch.begin()
                     }

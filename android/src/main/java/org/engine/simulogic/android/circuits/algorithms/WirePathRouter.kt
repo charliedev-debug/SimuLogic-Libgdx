@@ -13,10 +13,6 @@ import kotlin.math.abs
 import kotlin.math.sign
 
 class WirePathRouter(private val connection: Connection, private val scene: PlayGroundScene) {
-
-    private var gCost = 0f
-    private var hCost = 0f
-
     data class PathNode(
         val i: Int,
         val j: Int,
@@ -115,16 +111,16 @@ class WirePathRouter(private val connection: Connection, private val scene: Play
             startNodeTreeB = startNodeTreeB.child
         }
 
-        if(directionAList.size < directionBList.size){
-           /* directionAList.onEach {
-                drawPathHighlight(Vector2(it.x , it.y ), 30f, 30f)
-            }*/
-            return directionAList
+        return if(directionAList.size < directionBList.size){
+            /* directionAList.onEach {
+                    drawPathHighlight(Vector2(it.x , it.y ), 30f, 30f)
+                }*/
+            directionAList
         }else{
-           /* directionBList.onEach {
-                drawPathHighlight(Vector2(it.x , it.y ), 30f, 30f)
-            }*/
-            return  directionBList
+            /* directionBList.onEach {
+                    drawPathHighlight(Vector2(it.x , it.y ), 30f, 30f)
+                }*/
+            directionBList
         }
     }
 

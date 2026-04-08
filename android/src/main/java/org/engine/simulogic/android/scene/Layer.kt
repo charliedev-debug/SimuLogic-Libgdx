@@ -36,4 +36,7 @@ open class Layer(val layerId:String) : Entity(){
         autoDetachChildren()
     }
 
+    fun bucketLength(): Int{
+        return data.size
+    }
 }
