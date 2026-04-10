@@ -26,6 +26,15 @@ class ListNode(val value : CNode,
         return marker
     }
 
+    fun insertChild(parent:ListNode, child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
+        next.add(child)
+        child.parent.add(parent)
+        val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene, connection) }
+        lineMarkersChildren.add(marker)
+        AutoSave.dataChanged = true
+        return marker
+    }
+
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
         next.add(child)
         child.parent.add(this)

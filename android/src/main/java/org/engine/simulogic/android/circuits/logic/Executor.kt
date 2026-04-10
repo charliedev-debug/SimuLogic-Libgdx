@@ -1,7 +1,7 @@
 package org.engine.simulogic.android.circuits.logic
 
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IExecutable
-import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import java.util.LinkedList
 import java.util.Queue
 
@@ -20,14 +20,25 @@ class Executor(private val connection:Connection):IExecutable {
                 executableNodes.poll()?.also { node ->
                         synchronized(node.getLineMarkerChildren()) {
                             node.getLineMarkerChildren().forEach { marker ->
-                                marker.to.value.signals[marker.signalTo].value =
-                                    node.value.signals[marker.signalFrom].value
-                                if(!marker.to.visited) {
-                                    executableNodes.offer(marker.to)
-                                }else{
-                                    marker.to.value.execute()
+                                if(marker.from.value !is CSignal && marker.to.value !is CSignal) {
+                                    marker.to.value.signals[marker.signalTo].value =
+                                        node.value.signals[marker.signalFrom].value
+                                    if (!marker.to.visited) {
+                                        executableNodes.offer(marker.to)
+                                    } else {
+                                        marker.to.value.execute()
+                                    }
+                                }else {
+                                    marker.getNodeOriginFrom(marker.from).also { originFrom ->
+                                        marker.to.value.signals[marker.signalTo].value =
+                                            originFrom.from.value.signals[originFrom.signalFrom].value
+                                        if (!marker.to.visited) {
+                                            executableNodes.offer(originFrom.to)
+                                        } else {
+                                            originFrom.to.value.execute()
+                                        }
+                                    }
                                 }
-
                         }
                         node.value.execute()
                     }

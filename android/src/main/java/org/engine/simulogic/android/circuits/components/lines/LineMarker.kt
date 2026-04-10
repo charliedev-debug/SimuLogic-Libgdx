@@ -2,7 +2,6 @@ package org.engine.simulogic.android.circuits.components.lines
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
-import org.engine.simulogic.android.circuits.algorithms.QuadTree
 import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_ACTIVE
@@ -21,97 +20,176 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 import kotlin.math.sign
 
-class LineMarker(val scene: PlayGroundScene,
-                 val from: ListNode, val to: ListNode,
-                 var signalFrom: Int, val signalTo: Int, var index: Int = 0,
-                 val linePointCountX: Int = CDefaults.linePointCountX, val linePointCountY: Int = CDefaults.linePointCountY
+class LineMarker(
+    val scene: PlayGroundScene,
+    val from: ListNode,
+    val to: ListNode,
+    var signalFrom: Int,
+    val signalTo: Int,
+    var index: Int = 0,
+    val linePointCountX: Int = CDefaults.linePointCountX,
+    val linePointCountY: Int = CDefaults.linePointCountY
 ) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
-
+    var markerActive = false
+    /*Connections can be made in 2 ways:-
+    * 1. Through components with inputs and outputs.
+    * 2. Through already established connection nodes. Acting like an extension.
+    * */
     fun initialize(scene: PlayGroundScene) {
-        val signalFrom = from.value.signals[signalFrom]
-        val signalTo = to.value.signals[signalTo]
+
+        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
+        val signalTo = if(to.value is CSignal) to.value else to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
         val pTo = signalTo.getPosition()
         val distanceX = pTo.x - pFrom.x
         val distanceY = pTo.y - pFrom.y
-        val maxDistanceBetweenX = distanceX / (linePointCountX + 1 )
+        val maxDistanceBetweenX = distanceX / (linePointCountX + 1)
         val maxDistanceBetweenY = distanceY / (linePointCountY + 1)
         var signalIndex = 0
-        val fromSignY = sign(pTo.y- pFrom.y)
-        signals.add(CSignal(pFrom.x , pFrom.y , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
-            parent = this@LineMarker
-        })
-        for (i in 1 ..  linePointCountX) {
-            val x = pFrom.x + maxDistanceBetweenX * (i -1)
-            val y = pFrom.y
-            signals.add(CSignal(x, y + from.value.getHeight() * fromSignY , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
+        val fromSignY = sign(pTo.y - pFrom.y)
+
+        signals.add(
+            CSignal(
+                pFrom.x,
+                pFrom.y,
+                CTypes.SIGNAL_RANGE_POINT,
+                signalIndex++,
+                scene
+            ).apply {
                 parent = this@LineMarker
             })
+
+        for (i in 1..linePointCountX) {
+            val x = pFrom.x + maxDistanceBetweenX * (i - 1)
+            val y = pFrom.y
+            signals.add(
+                CSignal(
+                    x,
+                    y + from.value.getHeight() * fromSignY,
+                    CTypes.SIGNAL_RANGE_POINT,
+                    signalIndex++,
+                    scene
+                ).apply {
+                    parent = this@LineMarker
+                })
         }
 
-        for (i in  0  ..  linePointCountY ) {
+        for (i in 0..linePointCountY) {
             val y = pFrom.y + maxDistanceBetweenY * i
             val x = pTo.x
-            signals.add(CSignal(x, y + from.value.getHeight() * fromSignY , CTypes.SIGNAL_RANGE_POINT, signalIndex++, scene).apply {
-                parent = this@LineMarker
-            })
+            signals.add(
+                CSignal(
+                    x,
+                    y + from.value.getHeight() * fromSignY,
+                    CTypes.SIGNAL_RANGE_POINT,
+                    signalIndex++,
+                    scene
+                ).apply {
+                    parent = this@LineMarker
+                })
         }
 
         createMarker(scene)
     }
 
-    fun initialize(scene: PlayGroundScene, connection: Connection){
-        val signalFrom = from.value.signals[signalFrom]
-        val signalTo = to.value.signals[signalTo]
+    fun initialize(scene: PlayGroundScene, connection: Connection) {
+        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
+        val signalTo = if(to.value is CSignal) to.value else to.value.signals[signalTo]
         val wirePathRouter = WirePathRouter(connection, scene)
-        wirePathRouter.route(signalFrom, signalTo).also{ pathQueue->
+        wirePathRouter.route(signalFrom, signalTo).also { pathQueue ->
             var countPoint = linePointCountX + linePointCountY
             val startNode = pathQueue.removeFirst()
             val endNode = pathQueue.removeLast()
             var signalIndex = 0
-           signals.add(CSignal(startNode.x, startNode.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply {
-               parent = this@LineMarker
-           })
+            signals.add(
+                CSignal(
+                    startNode.x,
+                    startNode.y,
+                    CTypes.SIGNAL_RANGE_POINT,
+                    signalIndex,
+                    scene
+                ).apply {
+                    parent = this@LineMarker
+                })
 
             signalIndex++
-            while (countPoint > 0){
-                if(pathQueue.size  == 1){
+            while (countPoint > 0) {
+                if (pathQueue.size == 1) {
                     val node = pathQueue[0]
-                    signals.add(CSignal(node.x, node.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply{
-                        parent = this@LineMarker
-                    })
-                }else{
+                    signals.add(
+                        CSignal(
+                            node.x,
+                            node.y,
+                            CTypes.SIGNAL_RANGE_POINT,
+                            signalIndex,
+                            scene
+                        ).apply {
+                            parent = this@LineMarker
+                        })
+                } else {
                     val node = pathQueue.removeFirst()
-                    signals.add(CSignal(node.x, node.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply{
-                        parent = this@LineMarker
-                    })
+                    signals.add(
+                        CSignal(
+                            node.x,
+                            node.y,
+                            CTypes.SIGNAL_RANGE_POINT,
+                            signalIndex,
+                            scene
+                        ).apply {
+                            parent = this@LineMarker
+                        })
                 }
                 signalIndex++
                 countPoint--
             }
 
-           signals.add(CSignal(endNode.x, endNode.y, CTypes.SIGNAL_RANGE_POINT, signalIndex, scene).apply {
-                parent = this@LineMarker
-            })
+            signals.add(
+                CSignal(
+                    endNode.x,
+                    endNode.y,
+                    CTypes.SIGNAL_RANGE_POINT,
+                    signalIndex,
+                    scene
+                ).apply {
+                    parent = this@LineMarker
+                })
 
         }
         //initialize(scene)
         createMarker(scene)
     }
 
-     override fun detachSelf(){
-         lines.forEach {
-             it.detachSelf()
-         }
-         signals.forEach {
-             it.detachSelf()
-         }
+    fun getNodeOriginFrom(node: ListNode): LineMarker {
+        if (node.value !is CSignal) {
+            return this
+        } else {
+            var parent = node.value as CSignal
+            var origin = this
+            while (parent.parent != null && parent.parent is LineMarker) {
+                origin = (parent.parent as LineMarker)
+                if (origin.from.value is CSignal) {
+                    parent = origin.from.value as CSignal
+                } else {
+                    break
+                }
+            }
+            return origin
+        }
+    }
+
+    override fun detachSelf() {
+        lines.forEach {
+            it.detachSelf()
+        }
+        signals.forEach {
+            it.detachSelf()
+        }
     }
 
     // removes marker for the parent node
-    fun removeSelf(){
+    fun removeSelf() {
         detachSelf()
         from.removeMarker(this)
     }
@@ -130,7 +208,7 @@ class LineMarker(val scene: PlayGroundScene,
             }
         }
 
-        from.insertChildUnmarked(to,this)
+        from.insertChildUnmarked(to, this)
     }
 
     private fun createMarker(scene: PlayGroundScene) {
@@ -158,7 +236,7 @@ class LineMarker(val scene: PlayGroundScene,
         }
     }
 
-    private fun snapAlignOriginPoints(){
+    private fun snapAlignOriginPoints() {
         // snap align start and end points
         val startFrom = signals[0]
         val startSnapFrom = signals[1]
@@ -171,7 +249,7 @@ class LineMarker(val scene: PlayGroundScene,
         val snapFromOrigin = from.value.snapAlignOriginPoints || startSnapFrom.snapAlignOriginPoints
         val snapToOrigin = to.value.snapAlignOriginPoints || endSnapTo.snapAlignOriginPoints
 
-        if(snapFromOrigin) {
+        if (snapFromOrigin) {
             if (offsetFromX <= CDefaults.GRID_WIDTH) {
                 startSnapFrom.updatePosition(
                     startFrom.getPosition().x,
@@ -186,7 +264,7 @@ class LineMarker(val scene: PlayGroundScene,
                 }
         }
 
-        if(snapToOrigin) {
+        if (snapToOrigin) {
             if (offsetToX <= CDefaults.GRID_WIDTH) {
                 endSnapTo.updatePosition(endTo.getPosition().x, endSnapTo.getPosition().y)
             } else
@@ -197,8 +275,8 @@ class LineMarker(val scene: PlayGroundScene,
     }
 
     override fun update() {
-        val signalFrom = from.value.signals[signalFrom]
-        val signalTo = to.value.signals[signalTo]
+        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
+        val signalTo =  if (to.value is CSignal) to.value else to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
         val pTo = signalTo.getPosition()
         // the first and last marker come from the origin node
@@ -214,7 +292,7 @@ class LineMarker(val scene: PlayGroundScene,
 
         //snap align body
         var index = 1
-        while(index < signals.size - 2){
+        while (index < signals.size - 2) {
             val prevSignal = signals[index]
             val nextSignal = signals[index + 1]
             val prev = prevSignal.getPosition()
@@ -225,23 +303,24 @@ class LineMarker(val scene: PlayGroundScene,
             val distanceFromPrevY = abs(pFrom.y - prev.y)
             val distanceToPrevX = abs(pTo.x - prev.x)
             val distanceToPrevY = abs(pTo.y - prev.y)
-            val snapAlignOriginPoints = prevSignal.snapAlignOriginPoints || nextSignal.snapAlignOriginPoints
+            val snapAlignOriginPoints =
+                prevSignal.snapAlignOriginPoints || nextSignal.snapAlignOriginPoints
             // ignore the first and the last elements since we can't modify them directly since it's the source
-            if(snapAlignOriginPoints &&(distanceFromPrevX < distanceToPrevX || index == 0)){
+            if (snapAlignOriginPoints && (distanceFromPrevX < distanceToPrevX || index == 0)) {
                 if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     nextSignal.updatePosition(prev.x, next.y)
                 }
-            }else if(snapAlignOriginPoints && (distanceFromPrevX > distanceToPrevX)){
+            } else if (snapAlignOriginPoints && (distanceFromPrevX > distanceToPrevX)) {
                 if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
                     prevSignal.updatePosition(next.x, prev.y)
                 }
             }
 
-            if(snapAlignOriginPoints &&(distanceFromPrevY < distanceToPrevY || (index+1) == signals.size - 1)){
+            if (snapAlignOriginPoints && (distanceFromPrevY < distanceToPrevY || (index + 1) == signals.size - 1)) {
                 if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     nextSignal.updatePosition(next.x, prev.y)
                 }
-            }else if(snapAlignOriginPoints && (distanceFromPrevY > distanceToPrevY)){
+            } else if (snapAlignOriginPoints && (distanceFromPrevY > distanceToPrevY)) {
                 if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
                     prevSignal.updatePosition(prev.x, next.y)
                 }
@@ -256,24 +335,33 @@ class LineMarker(val scene: PlayGroundScene,
         from.value.snapAlignOriginPoints = false
         to.value.snapAlignOriginPoints = false
 
-        // mark lines and set coordinates
-        var markerActive = false
+        // mark, highlight lines and set coordinates
+        var highLightFrom:CNode
+        var origin:LineMarker
+        // in case it's a nested connection we highlight it based on the source origin node
+        if(from.value is CSignal){
+            origin = getNodeOriginFrom(from)
+            highLightFrom = origin.from.value.signals[origin.signalFrom]
+        }else{
+            origin = this
+            highLightFrom = from.value.signals[this.signalFrom]
+        }
+        markerActive = false
         for (i in 0 until signals.size - 1) {
             val prevSignal = signals[i]
             val nextSignal = signals[i + 1]
             val prev = prevSignal.getPosition()
             val next = nextSignal.getPosition()
-            lines[i].also { line->
-                line.color = if(signalFrom.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
+            lines[i].also { line ->
+                line.color =
+                    if (highLightFrom.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
             markerActive = markerActive || nextSignal.selected || prevSignal.selected
         }
-        if (markerActive) {
+        if (markerActive || origin.markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
-
-
     }
 
     override fun updateColor(color: Color) {
@@ -313,7 +401,16 @@ class LineMarker(val scene: PlayGroundScene,
         signalTo: Int,
         scene: PlayGroundScene
     ): LineMarker {
-        return LineMarker(scene,from, to, signalFrom, signalTo, index, linePointCountX, linePointCountY).also { it.initialize(scene) }
+        return LineMarker(
+            scene,
+            from,
+            to,
+            signalFrom,
+            signalTo,
+            index,
+            linePointCountX,
+            linePointCountY
+        ).also { it.initialize(scene) }
     }
 
 }

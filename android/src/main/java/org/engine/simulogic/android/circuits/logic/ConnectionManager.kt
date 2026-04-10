@@ -19,13 +19,14 @@ class ConnectionManager(
     private val validationMap = mutableMapOf<CTypes, List<CTypes>>()
 
     init {
-        validationMap[CTypes.SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
+        validationMap[CTypes.SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.SIGNAL_RANGE_POINT)
         validationMap[CTypes.SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
         validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
+        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN)
     }
 
     fun resolveConnection() {
@@ -39,17 +40,27 @@ class ConnectionManager(
                 return
             }
 
-            if(a.subject.type == CTypes.SIGNAL_RANGE_POINT || b.subject.type == CTypes.SIGNAL_RANGE_POINT){
+            /*if(a.subject.type == CTypes.SIGNAL_RANGE_POINT || b.subject.type == CTypes.SIGNAL_RANGE_POINT){
               //  return
-            }
+            }*/
 
             // ignore lineMarker signals
-            if (a.subject.parent is LineMarker || b.subject.parent is LineMarker){
+          /*  if (a.subject.parent is LineMarker || b.subject.parent is LineMarker){
+                collisionDetector.reset()
+                return
+            }*/
+
+            if (validationMap[a.subject.type]?.contains(b.subject.type) == false){
                 collisionDetector.reset()
                 return
             }
 
-            if (validationMap[a.subject.type]?.contains(b.subject.type) == false){
+            if(a.subject.type == CTypes.SIGNAL_RANGE_POINT && a.subject.parent !is LineMarker){
+                collisionDetector.reset()
+                 return
+            }
+
+            if(b.subject.type == CTypes.SIGNAL_RANGE_POINT && b.subject.parent !is LineMarker){
                 collisionDetector.reset()
                 return
             }
@@ -65,14 +76,40 @@ class ConnectionManager(
                     commandHistory.execute(ConnectionCommand(marker))
                 }
             } else {
-                connection.insertConnection(
-                    b.caller,
-                    a.caller,
-                    b.subject.signalIndex,
-                    a.subject.signalIndex,
-                    scene
-                ).also { marker->
-                    commandHistory.execute(ConnectionCommand(marker))
+
+                /*Cover the range signal edge cases*/
+                if(b.subject.type == CTypes.SIGNAL_RANGE_POINT){
+                    connection.insertConnection(
+                        b.caller,
+                        ListNode(b.subject),
+                        a.caller,
+                        b.subject.signalIndex,
+                        a.subject.signalIndex,
+                        scene
+                    ).also { marker->
+                        commandHistory.execute(ConnectionCommand(marker))
+                    }
+                }else if(a.subject.type == CTypes.SIGNAL_RANGE_POINT){
+                    connection.insertConnection(
+                          a.caller,
+                        ListNode(a.subject),
+                        b.caller,
+                        a.subject.signalIndex,
+                        b.subject.signalIndex,
+                        scene
+                    ).also { marker->
+                        commandHistory.execute(ConnectionCommand(marker))
+                    }
+                }else{
+                    connection.insertConnection(
+                        b.caller,
+                        a.caller,
+                        b.subject.signalIndex,
+                        a.subject.signalIndex,
+                        scene
+                    ).also { marker->
+                        commandHistory.execute(ConnectionCommand(marker))
+                    }
                 }
             }
 

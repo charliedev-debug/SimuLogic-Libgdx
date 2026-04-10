@@ -133,7 +133,7 @@ class CollisionDetector(private val connection: Connection) {
             val collidedObject = node.contains(entity)
             if (collidedObject != null && node.value.isVisible) {
                 // for connections only return touch events for input and output signals
-                if (mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && collidedObject.parent !is LineMarker && node.value !is CGroup) {
+                if (mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && /*collidedObject.parent !is LineMarker &&*/ node.value !is CGroup) {
                     return CollisionItem(node, collidedObject).also { item ->
                         selectedItems.add(item)
                     }
