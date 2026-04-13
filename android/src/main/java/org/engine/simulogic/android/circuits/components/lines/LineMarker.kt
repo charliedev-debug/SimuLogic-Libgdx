@@ -33,14 +33,18 @@ class LineMarker(
     IUpdate {
     private val lines = mutableListOf<CLine>()
     var markerActive = false
+    companion object{
+        const val FROM_SIGNAL = 0
+        const val FROM_COMPONENT = 1
+    }
     /*Connections can be made in 2 ways:-
     * 1. Through components with inputs and outputs.
     * 2. Through already established connection nodes. Acting like an extension.
     * */
     fun initialize(scene: PlayGroundScene) {
 
-        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
-        val signalTo = if(to.value is CSignal) to.value else to.value.signals[signalTo]
+        val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
+        val signalTo = if(isDestinationSignal()) to.value else to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
         val pTo = signalTo.getPosition()
         val distanceX = pTo.x - pFrom.x
@@ -95,8 +99,8 @@ class LineMarker(
     }
 
     fun initialize(scene: PlayGroundScene, connection: Connection) {
-        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
-        val signalTo = if(to.value is CSignal) to.value else to.value.signals[signalTo]
+        val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
+        val signalTo = if(isDestinationSignal()) to.value else to.value.signals[signalTo]
         val wirePathRouter = WirePathRouter(connection, scene)
         wirePathRouter.route(signalFrom, signalTo).also { pathQueue ->
             var countPoint = linePointCountX + linePointCountY
@@ -275,8 +279,8 @@ class LineMarker(
     }
 
     override fun update() {
-        val signalFrom = if(from.value is CSignal) from.value else from.value.signals[signalFrom]
-        val signalTo =  if (to.value is CSignal) to.value else to.value.signals[signalTo]
+        val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
+        val signalTo =  if (isDestinationSignal()) to.value else to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
         val pTo = signalTo.getPosition()
         // the first and last marker come from the origin node
@@ -338,13 +342,19 @@ class LineMarker(
         // mark, highlight lines and set coordinates
         var highLightFrom:CNode
         var origin:LineMarker
+        var parentMarker:LineMarker
+        var parentNodeMarker: CNode
         // in case it's a nested connection we highlight it based on the source origin node
-        if(from.value is CSignal){
-            origin = getNodeOriginFrom(from)
-            highLightFrom = origin.from.value.signals[origin.signalFrom]
+        if(isSourceSignal()){
+            parentMarker = getNodeOriginFrom(from)
+            origin = ((from.value as CSignal).parent as LineMarker)
+            highLightFrom = origin.from.value
+            parentNodeMarker = parentMarker.from.value.signals[parentMarker.signalFrom]
         }else{
             origin = this
+            parentMarker = this
             highLightFrom = from.value.signals[this.signalFrom]
+            parentNodeMarker = highLightFrom
         }
         markerActive = false
         for (i in 0 until signals.size - 1) {
@@ -354,16 +364,22 @@ class LineMarker(
             val next = nextSignal.getPosition()
             lines[i].also { line ->
                 line.color =
-                    if (highLightFrom.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
+                    if (highLightFrom.value == CNode.SIGNAL_ACTIVE || parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
-            markerActive = markerActive || nextSignal.selected || prevSignal.selected
+            markerActive = markerActive || nextSignal.selected || prevSignal.selected || origin.markerActive || parentMarker.markerActive
         }
-        if (markerActive || origin.markerActive) {
+        if (markerActive || origin.markerActive || parentMarker.markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
     }
 
+    fun isSourceSignal(): Boolean{
+        return from.value is CSignal
+    }
+    fun isDestinationSignal():Boolean{
+        return to.value is CSignal
+    }
     override fun updateColor(color: Color) {
         lines.forEach {
             it.color = color

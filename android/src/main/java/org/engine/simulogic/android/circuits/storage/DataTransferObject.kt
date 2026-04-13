@@ -5,6 +5,7 @@ import android.content.res.AssetManager
 import android.net.Uri
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
@@ -15,6 +16,7 @@ import org.engine.simulogic.android.circuits.components.gates.CNand
 import org.engine.simulogic.android.circuits.components.gates.CNor
 import org.engine.simulogic.android.circuits.components.gates.CNot
 import org.engine.simulogic.android.circuits.components.gates.COr
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.gates.CXnor
 import org.engine.simulogic.android.circuits.components.gates.CXor
 import org.engine.simulogic.android.circuits.components.generators.CClock
@@ -46,7 +48,8 @@ import java.util.UUID
 class DataTransferObject {
 
     private val IDENTIFIER = 0xC145FF
-    private val VERSION = 1
+    private val VERSION_1 = 1
+    private val VERSION_2 = 2
 
     companion object {
         fun deleteFile(context: Context, title: String) {
@@ -71,7 +74,7 @@ class DataTransferObject {
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(temp.write(false))
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION)
+        stream.writeInt(VERSION_2)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(description.length)
@@ -146,6 +149,18 @@ class DataTransferObject {
                     stream.writeInt(marker.signals.size)
                     stream.writeInt(marker.linePointCountX)
                     stream.writeInt(marker.linePointCountY)
+                    // in case the connection is connected to another connection joint
+                    if(marker.isSourceSignal()){
+                     stream.writeInt(LineMarker.FROM_SIGNAL)
+                     // where this node is picking up a signal from
+                     stream.writeInt(marker.getNodeOriginFrom(marker.from).from.value.id)
+                      //which lineMarker it is connected to
+                     stream.writeInt(((marker.from.value as CSignal).parent as LineMarker).index)
+                    // which signal is it connected to
+                     stream.writeInt((marker.from.value as CSignal).signalIndex)
+                    }else{
+                     stream.writeInt(LineMarker.FROM_COMPONENT)
+                    }
                     marker.signals.forEach { signal ->
                         stream.writeInt(signal.signalIndex)
                         stream.writeFloat(signal.getPosition().x)
@@ -168,7 +183,7 @@ class DataTransferObject {
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(file.write(false))
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION)
+        stream.writeInt(VERSION_1)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(description.length)
@@ -415,31 +430,91 @@ class DataTransferObject {
                     val signalSize = stream.readInt()
                     val linePointCountX = stream.readInt()
                     val linePointCountY = stream.readInt()
-                    LineMarker(
-                        scene,
-                        connection[fromId],
-                        connection[toId],
-                        signalFromIndex,
-                        signalToIndex,
-                        index,
-                        linePointCountX,
-                        linePointCountY
-                    ).also { marker ->
-                        marker.initialize(scene)
-                        for (j in 0 until signalSize) {
-                            val signalIndex = stream.readInt()
-                            val x = stream.readFloat()
-                            val y = stream.readFloat()
-                            marker.signals[signalIndex].also { signal ->
-                                signal.updatePosition(x, y)
+                    if(version == VERSION_2){
+                        val sourceID = stream.readInt()
+                        if(sourceID == LineMarker.FROM_SIGNAL){
+                         val fromSourceNode = stream.readInt()
+                         val fromLineMarker = stream.readInt()
+                         val sourceSignalIndex = stream.readInt()
+                         CDefaults.linePointCountX = linePointCountX
+                         CDefaults.linePointCountY = linePointCountY
+                         connection.insertConnection(parent = connection[fromSourceNode],
+                             from = ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),
+                             to = connection[toId], signalFrom = sourceSignalIndex, signalTo = signalToIndex ,scene = scene).also{
+                                 marker->
+                             for (j in 0 until signalSize) {
+                                 val signalIndex = stream.readInt()
+                                 val x = stream.readFloat()
+                                 val y = stream.readFloat()
+                                 marker.signals[signalIndex].also { signal ->
+                                     signal.updatePosition(x, y)
+                                 }
+                             }
+                         }
+                         /*connection[fromSourceNode].insertChild(ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),connection[toId], signalFromIndex, signalToIndex,connection, scene).also{
+                                marker->
+                                for (j in 0 until signalSize) {
+                                    val signalIndex = stream.readInt()
+                                    val x = stream.readFloat()
+                                    val y = stream.readFloat()
+                                    marker.signals[signalIndex].also { signal ->
+                                        signal.updatePosition(x, y)
+                                    }
+                                }
+                            }*/
+
+                        }else{
+                            LineMarker(
+                                scene,
+                                connection[fromId],
+                                connection[toId],
+                                signalFromIndex,
+                                signalToIndex,
+                                index,
+                                linePointCountX,
+                                linePointCountY
+                            ).also { marker ->
+                                marker.initialize(scene)
+                                for (j in 0 until signalSize) {
+                                    val signalIndex = stream.readInt()
+                                    val x = stream.readFloat()
+                                    val y = stream.readFloat()
+                                    marker.signals[signalIndex].also { signal ->
+                                        signal.updatePosition(x, y)
+                                    }
+                                }
+                                connection[fromId].insertChildUnmarked(connection[toId], marker)
                             }
+
                         }
-                        connection[fromId].insertChildUnmarked(connection[toId], marker)
+                    }else {
+                        LineMarker(
+                            scene,
+                            connection[fromId],
+                            connection[toId],
+                            signalFromIndex,
+                            signalToIndex,
+                            index,
+                            linePointCountX,
+                            linePointCountY
+                        ).also { marker ->
+                            marker.initialize(scene)
+                            for (j in 0 until signalSize) {
+                                val signalIndex = stream.readInt()
+                                val x = stream.readFloat()
+                                val y = stream.readFloat()
+                                marker.signals[signalIndex].also { signal ->
+                                    signal.updatePosition(x, y)
+                                }
+                            }
+                            connection[fromId].insertChildUnmarked(connection[toId], marker)
+                        }
                     }
                 }
             }
         } catch (eof: EOFException) {
             eof.printStackTrace()
+            stream.close()
         }
     }
 

@@ -76,7 +76,6 @@ class ConnectionManager(
                     commandHistory.execute(ConnectionCommand(marker))
                 }
             } else {
-
                 /*Cover the range signal edge cases*/
                 if(b.subject.type == CTypes.SIGNAL_RANGE_POINT){
                     connection.insertConnection(
