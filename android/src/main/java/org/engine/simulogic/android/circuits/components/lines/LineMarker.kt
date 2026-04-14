@@ -195,7 +195,7 @@ class LineMarker(
     // removes marker for the parent node
     fun removeSelf() {
         detachSelf()
-        from.removeMarker(this)
+        getNodeOriginFrom(from).from.removeMarker(this)
     }
 
     override fun attachSelf() {
@@ -211,8 +211,7 @@ class LineMarker(
                 layer.attachChild(it)
             }
         }
-
-        from.insertChildUnmarked(to, this)
+        getNodeOriginFrom(from).from.insertChildUnmarked(to, this)
     }
 
     private fun createMarker(scene: PlayGroundScene) {

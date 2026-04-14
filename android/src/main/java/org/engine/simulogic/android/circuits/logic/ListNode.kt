@@ -167,8 +167,6 @@ class ListNode(val value : CNode,
                 iterator.next().update()
             }
         }
-
-
     }
 
     fun getLineMarkerChildren():List<LineMarker>{

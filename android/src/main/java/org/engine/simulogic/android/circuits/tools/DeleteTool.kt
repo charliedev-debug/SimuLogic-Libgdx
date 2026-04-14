@@ -16,9 +16,23 @@ class DeleteTool (private val dataContainer: DataContainer, private val connecti
         dataContainer.forEach {node->
             // it must be a line
             if(node.value is CSignal && node.value.parent is LineMarker){
-                val lineMarker = node.value.parent as LineMarker
-                lineMarker.removeSelf()
-                deleteLine.insert(lineMarker)
+                val selectedMarker = node.value.parent as LineMarker
+                val parentComponent = selectedMarker.getNodeOriginFrom(selectedMarker.from)
+                synchronized(parentComponent.from.getLineMarkerChildren()) {
+                    //Delete the items in a separate list, this prevents concurrent modification exceptions
+                    val markedLines = mutableListOf<LineMarker>()
+                    parentComponent.from.getLineMarkerChildren().onEach {lineMarker ->
+                        if(lineMarker.markerActive){
+                            markedLines.add(lineMarker)
+                        }
+                    }
+                    markedLines.onEach { lineMarker ->
+                        if(lineMarker.markerActive){
+                           lineMarker.removeSelf()
+                            deleteLine.insert(lineMarker)
+                        }
+                    }
+                }
                 commandHistory.execute(deleteLine)
             }
             // it must be a component

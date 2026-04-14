@@ -13,10 +13,10 @@ class DeleteLineCommand (private val scene: PlayGroundScene, private val connect
     }
 
     override fun undo() {
+        data.sortBy{ it.index }
         data.forEach { node->
             node.attachSelf()
         }
-
     }
 
     override fun redo() {

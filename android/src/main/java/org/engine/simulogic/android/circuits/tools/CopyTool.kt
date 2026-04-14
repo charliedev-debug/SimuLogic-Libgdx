@@ -69,19 +69,71 @@ class CopyTool(
         }
 
         // clone all possible signals that can be created
+        val nestedMarkers = mutableListOf<LineMarker>()
         for (i in 0 until dataContainer.size()){
             val origin = dataContainer[i]
             origin.getLineMarkerChildren().forEach {lineMarker ->
-                 cloneOriginMap[lineMarker.to]?.also { cloneChild->
-                     val clone = cloneOriginMap[lineMarker.from]!!
-                    lineMarker.clone(clone,cloneChild,lineMarker.signalFrom,lineMarker.signalTo, scene).also { lineMarkerClone->
-                        lineMarker.signals.forEachIndexed{indexPoint,originPoint->
-                            val px = originPoint.getPosition().x - ox
-                            val py = originPoint.getPosition().y - oy
-                             lineMarkerClone.signals[indexPoint].updatePosition(originX + px,originY + py)
+                //if the source is a signal then it's a nested connection
+                if(lineMarker.from.value is CSignal){
+                    nestedMarkers.add(lineMarker)
+                }else {
+                    cloneOriginMap[lineMarker.to]?.also { cloneChild ->
+                        val clone = cloneOriginMap[lineMarker.from]!!
+                        lineMarker.clone(
+                            clone,
+                            cloneChild,
+                            lineMarker.signalFrom,
+                            lineMarker.signalTo,
+                            scene
+                        ).also { lineMarkerClone ->
+                            lineMarker.signals.forEachIndexed { indexPoint, originPoint ->
+                                val px = originPoint.getPosition().x - ox
+                                val py = originPoint.getPosition().y - oy
+                                lineMarkerClone.signals[indexPoint].updatePosition(
+                                    originX + px,
+                                    originY + py
+                                )
 
+                            }
+                            clone.insertChildUnmarked(cloneChild, lineMarkerClone)
                         }
-                        clone.insertChildUnmarked(cloneChild,lineMarkerClone)
+                    }
+                }
+            }
+        }
+        nestedMarkers.onEach { lineMarker->
+            if(lineMarker.from.value is CSignal) {
+                val originLineMarker = lineMarker.getNodeOriginFrom(lineMarker.from)
+                val parentLineMarker = lineMarker.from.value.parent as LineMarker
+                var parentLineComponent = lineMarker.from.value.parent as LineMarker
+                /* for nested connections sometimes the parentLineMarker source can be a signal and not a component
+                * So we will walk through the parents until we find a valid source component */
+                  while(parentLineComponent.from.value is CSignal){
+                      parentLineComponent = (parentLineComponent.from.value as CSignal).parent as LineMarker
+                  }
+                val originComponent = cloneOriginMap[originLineMarker.from]
+                // the signal contains a pointer to the parent component within the lineMarker object
+                val parentComponent = cloneOriginMap[parentLineComponent.from]
+                if (originComponent != null && parentComponent != null) {
+                    cloneOriginMap[lineMarker.to]?.also { cloneChild ->
+                        lineMarker.clone(
+                            ListNode(parentComponent.getLineMarkerChildren()[parentLineMarker.index].signals[lineMarker.signalFrom]),
+                            cloneChild,
+                            lineMarker.signalFrom,
+                            lineMarker.signalTo,
+                            scene
+                        ).also { lineMarkerClone ->
+                            lineMarker.signals.forEachIndexed { indexPoint, originPoint ->
+                                val px = originPoint.getPosition().x - ox
+                                val py = originPoint.getPosition().y - oy
+                                lineMarkerClone.signals[indexPoint].updatePosition(
+                                    originX + px,
+                                    originY + py
+                                )
+
+                            }
+                            originComponent.insertChildUnmarked(cloneChild, lineMarkerClone)
+                        }
                     }
                 }
             }
