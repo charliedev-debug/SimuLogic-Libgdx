@@ -33,9 +33,9 @@ class Executor(private val connection:Connection):IExecutable {
                                         marker.to.value.signals[marker.signalTo].value =
                                             originFrom.from.value.signals[originFrom.signalFrom].value
                                         if (!marker.to.visited) {
-                                            executableNodes.offer(originFrom.to)
+                                            executableNodes.offer(marker.to)
                                         } else {
-                                            originFrom.to.value.execute()
+                                            marker.to.value.execute()
                                         }
                                     }
                                 }
