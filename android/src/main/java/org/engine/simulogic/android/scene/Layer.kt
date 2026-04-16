@@ -13,7 +13,6 @@ open class Layer(val layerId:String) : Entity(){
         val topRight = camera.position.x + viewPortWidth / 2
         val bottomLeft = camera.position.y - viewPortHeight / 2
         val bottomRight = camera.position.y + viewPortHeight / 2
-        synchronized(data) {
             data.forEach { entity ->
                 if (entity.isVisible) {
                     if(entity is CNode){
@@ -29,7 +28,6 @@ open class Layer(val layerId:String) : Entity(){
                     }
                 }
             }
-        }
     }
 
     override fun update() {

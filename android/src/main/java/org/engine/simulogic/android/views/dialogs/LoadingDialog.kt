@@ -23,6 +23,7 @@ class LoadingDialog (context: Context, private val title:String, private val lis
                listener.onLoad()
                 launch(Dispatchers.Main){
                     dismiss()
+                    listener.onFinished()
                 }
             }
 
@@ -42,6 +43,7 @@ class LoadingDialog (context: Context, private val title:String, private val lis
     interface IDialogLoadingListener{
 
         fun onLoad()
+        fun onFinished()
         fun onCancelled()
     }
 }

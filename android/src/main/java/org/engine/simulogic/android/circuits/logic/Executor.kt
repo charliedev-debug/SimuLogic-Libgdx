@@ -9,7 +9,6 @@ class Executor(private val connection:Connection):IExecutable {
     var isActive = true
     override fun execute(){
         if(!isActive) return
-        synchronized(connection.executionPoints) {
             if(connection.executionPoints.isEmpty()) return
             val executableNodes: Queue<ListNode> = LinkedList()
             connection.executionPoints.forEach {
@@ -18,7 +17,6 @@ class Executor(private val connection:Connection):IExecutable {
             val visitedNodes = mutableListOf<ListNode>()
             while (executableNodes.isNotEmpty()) {
                 executableNodes.poll()?.also { node ->
-                        synchronized(node.getLineMarkerChildren()) {
                             node.getLineMarkerChildren().forEach { marker ->
                                 if(marker.from.value !is CSignal && marker.to.value !is CSignal) {
                                     marker.to.value.signals[marker.signalTo].value =
@@ -41,15 +39,12 @@ class Executor(private val connection:Connection):IExecutable {
                                 }
                         }
                         node.value.execute()
-                    }
                     visitedNodes.add(node.apply { visited = true })
                 }
             }
             visitedNodes.forEach {
                 it.visited = false
             }
-
-        }
 
     }
 

@@ -19,7 +19,7 @@ class CDefaults {
         val segmentDisplayHeight = 72f
         var linePointCountX = 3
         var linePointCountY = 2
-        val lineWeight = 3f
+        val lineWeight = 2f
         val GATE_SELECTED_COLOR = Color.RED
         val GATE_UNSELECTED_COLOR = Color.WHITE
         val INPUT_SELECTED_COLOR = Color.RED

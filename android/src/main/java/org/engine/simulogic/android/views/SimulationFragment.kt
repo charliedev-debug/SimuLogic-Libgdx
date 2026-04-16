@@ -54,6 +54,10 @@ class SimulationFragment(
                                     Gdx.app.exit()
                                     requireActivity().finish()
                                 }
+
+                                override fun onFinished() {
+                                    simulationLoop.isReady = true
+                                }
                             }).show()
                     }
                 }

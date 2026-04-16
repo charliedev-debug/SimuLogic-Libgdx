@@ -7,7 +7,9 @@ import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.PixmapPacker
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
@@ -21,7 +23,6 @@ import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.ComponentManager
 import org.engine.simulogic.android.circuits.logic.Connection
-import org.engine.simulogic.android.circuits.logic.ConnectionManager
 import org.engine.simulogic.android.circuits.logic.Executor
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
@@ -32,6 +33,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.FpsCounter
 import org.engine.simulogic.android.utilities.TimerManager
 import org.engine.simulogic.android.views.interfaces.ISimulationListener
+
 
 class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions, private val listener:ISimulationListener) : ApplicationAdapter(){
 
@@ -79,6 +81,8 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         val fontParameter = FreeTypeFontLoaderParameter()
             fontParameter.fontFileName = "fonts/RobotoMono-SemiBold.ttf"
             fontParameter.fontParameters.size = CDefaults.MAX_FONT_RESOLUTION
+            fontParameter.fontParameters.packer =
+                PixmapPacker(4096, 4096, Pixmap.Format.RGBA8888, 2, false);
         assetManager.load("RobotoMono-SemiBold.ttf", BitmapFont::class.java, fontParameter)
 
         assetManager.finishLoading()
@@ -106,7 +110,6 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         }
         // we loaded the project so we reset this value
         AutoSave.dataChanged = false
-        isReady = true
         listener.onCreate()
     }
 
@@ -133,19 +136,23 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
     override fun render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)
-        connection.update()
-        gridDecorator.update()
-        gestureListener.update()
-        componentManager.eventBridge.evaluate()
-        if(simulationOptions.executionEnabled) {
-            TimerManager.getInstance().update()
-        }
-        scene.update()
-        scene.draw()
+        if(isReady) {
+            connection.update()
+            gridDecorator.update()
+            gestureListener.update()
+            componentManager.eventBridge.evaluate()
+            if (simulationOptions.executionEnabled) {
+                TimerManager.getInstance().update()
+            }
 
-        fpsCounter.update()
-        executor.execute()
-        AutoSave.instance.run()
+
+            scene.update()
+            scene.draw()
+
+            fpsCounter.update()
+            executor.execute()
+            AutoSave.instance.run()
+        }
 
         gridDecorator.toggleGrid(simulationOptions.showGrid)
         gridDecorator.toggleLabels(simulationOptions.showGridLabel)

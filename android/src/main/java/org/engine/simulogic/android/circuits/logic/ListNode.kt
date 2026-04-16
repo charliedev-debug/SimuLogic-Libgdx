@@ -85,7 +85,6 @@ class ListNode(val value : CNode,
     }
 
     fun detachSelf(){
-        synchronized(lineMarkersChildren){
             // use an iterator to prevent concurrent exceptions since we still need to modify this list on another thread
             lineMarkersChildren.listIterator().also { iterator->
                while (iterator.hasNext()){
@@ -93,7 +92,6 @@ class ListNode(val value : CNode,
                    iterator.remove()
                }
            }
-        }
         next.clear()
         value.detachSelf()
     }
@@ -103,7 +101,6 @@ class ListNode(val value : CNode,
     }
 
     fun clearConnections(){
-        synchronized(lineMarkersChildren){
             lineMarkersChildren.listIterator().also { iterator->
                 while (iterator.hasNext()){
                     iterator.next().detachSelf()
@@ -111,7 +108,6 @@ class ListNode(val value : CNode,
                 }
             }
             next.clear()
-        }
     }
 
     override fun contains(x: Float, y: Float): CNode? {
@@ -161,12 +157,10 @@ class ListNode(val value : CNode,
 
     override fun update() {
          value.update()
-        synchronized(lineMarkersChildren) {
             val iterator = lineMarkersChildren.listIterator()
             while (iterator.hasNext()) {
                 iterator.next().update()
             }
-        }
     }
 
     fun getLineMarkerChildren():List<LineMarker>{

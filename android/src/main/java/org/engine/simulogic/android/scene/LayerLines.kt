@@ -2,6 +2,7 @@ package org.engine.simulogic.android.scene
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import kotlin.math.max
 
 class LayerLines(layerId:String) : Layer(layerId) {
     override fun draw(shapeRenderer: ShapeRenderer, camera: OrthographicCamera) {
@@ -12,7 +13,6 @@ class LayerLines(layerId:String) : Layer(layerId) {
         val topRight = camera.position.x + viewPortWidth / 2
         val bottomLeft = camera.position.y - viewPortHeight / 2
         val bottomRight = camera.position.y + viewPortHeight / 2
-        synchronized(data) {
             data.forEach { entity ->
                 if (entity.isVisible) {
                     if(entity is CLine){
@@ -24,7 +24,7 @@ class LayerLines(layerId:String) : Layer(layerId) {
                             ((x2+ 10f) >= topLeft && (x2-10f) <= topRight)||
                             ((y1 + 10f) >= bottomLeft && (y1 - 10f) <= bottomRight)||
                             ((y2 + 10f) >= bottomLeft && (y2 - 10f) <= bottomRight)){
-                            entity.zoomFactor = camera.zoom
+                            entity.zoomFactor = camera.zoom + entity.lineWidth
                             entity.draw(shapeRenderer)
                         }
                     }else {
@@ -32,7 +32,6 @@ class LayerLines(layerId:String) : Layer(layerId) {
                     }
                 }
             }
-        }
     }
 
     override fun update() {

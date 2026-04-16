@@ -1,16 +1,18 @@
 package org.engine.simulogic.android.scene
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.graphics.profiling.GLProfiler
 
 
 class PlayGroundScene (private val spriteBatch: SpriteBatch,
                        private val camera: OrthographicCamera, val assetManager:AssetManager) : Layer(LayerEnums.SCENE.name){
 
     private val shapeRenderer = ShapeRenderer(10000)
-
+   private  val profiler = GLProfiler(Gdx.graphics).apply { disable() }
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
         addLayer(LayerLines(LayerEnums.DEBUG_LAYER.name))
@@ -31,17 +33,15 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
     }
 
     override fun update() {
-        synchronized(data) {
             data.forEach {
                 it.update()
             }
-        }
     }
     override fun draw() {
+        profiler.reset()
         camera.update()
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
-        synchronized(data) {
             data.forEachIndexed { index, entity ->
                 if (entity is LayerLines) {
                     spriteBatch.end()
@@ -52,21 +52,22 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
 
                 if (entity.isVisible) {
                     if (entity is LayerLines) {
-                        entity.draw(shapeRenderer,camera)
+                        entity.draw(shapeRenderer, camera)
                     } else
-                        entity.draw(spriteBatch,camera)
+                        entity.draw(spriteBatch, camera)
                 }
                 //TODO("look ahead to see if there is a line layer before flushing")
                 if (entity is LayerLines) {
                     shapeRenderer.end()
-                    if(index + 1 < data.size){
+                    if (index + 1 < data.size) {
                         spriteBatch.projectionMatrix = camera.combined
                         spriteBatch.begin()
                     }
                 }
             }
-        }
         spriteBatch.end()
+
+       // println("render calls ${profiler.drawCalls} number of layers ${data.size} text count ${(data[2] as Layer).bucketLength()}")
     }
 
 }
