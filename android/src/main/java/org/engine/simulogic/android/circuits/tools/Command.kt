@@ -5,6 +5,10 @@ abstract class Command {
     open fun execute(command: Command){
 
     }
+
+    open fun execute(){
+
+    }
     open fun undo(){
 
     }

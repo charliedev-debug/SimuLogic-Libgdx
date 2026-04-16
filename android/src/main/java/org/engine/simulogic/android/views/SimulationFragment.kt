@@ -67,38 +67,38 @@ class SimulationFragment(
                     }
 
                     "Touch" -> {
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.TOUCH_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.TOUCH_MODE)
                     }
 
                     "Interact" -> {
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.INTERACT_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.INTERACT_MODE)
                     }
 
                     "Sel-Touch" -> {
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.SELECTION_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.SELECTION_MODE)
                     }
 
                     "Sel-Range" -> {
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.RANGED_SELECTION_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.RANGED_SELECTION_MODE)
                     }
 
                     "Connect2" -> {
                         CDefaults.setLinePointCount(1, 1)
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
                     }
 
                     "Connect4" -> {
                         CDefaults.setLinePointCount(2, 2)
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
                     }
 
                     "Connect6" -> {
                         CDefaults.setLinePointCount(3, 3)
-                        simulationLoop.gestureListener.setMode(MotionGestureListener.CONNECTION_MODE)
+                        simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
                     }
 
                     "Rotate" -> {
-                        simulationLoop.gestureListener.rotateRight()
+                        simulationLoop.componentManager.rotateRight()
                     }
 
                     "Group" ->{
@@ -110,27 +110,27 @@ class SimulationFragment(
                     }
 
                     "Redo" -> {
-                        simulationLoop.gestureListener.redo()
+                        simulationLoop.componentManager.redo()
                     }
 
                     "Undo" -> {
-                        simulationLoop.gestureListener.undo()
+                        simulationLoop.componentManager.undo()
                     }
 
                     "Cut" -> {
-                        simulationLoop.gestureListener.cut()
+                        simulationLoop.componentManager.cut()
                     }
 
                     "Paste" -> {
-                        simulationLoop.gestureListener.paste()
+                        simulationLoop.componentManager.paste()
                     }
 
                     "Copy" -> {
-                        simulationLoop.gestureListener.copy()
+                        simulationLoop.componentManager.copy()
                     }
 
                     "Delete" -> {
-                        simulationLoop.gestureListener.delete()
+                        simulationLoop.componentManager.delete()
                     }
 
                     "Save" -> {

@@ -26,7 +26,6 @@ import org.engine.simulogic.android.circuits.tools.DeleteTool
 import org.engine.simulogic.android.circuits.tools.GroupInsertCommand
 import org.engine.simulogic.android.circuits.tools.GroupRemoveCommand
 import org.engine.simulogic.android.circuits.tools.MoveCommand
-import org.engine.simulogic.android.circuits.tools.RotateCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 
@@ -80,53 +79,13 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         }
     }
 
-    fun zoomValue():Float{
-        return camera.zoom
-    }
-
-    fun setCameraPosition(x:Float, y:Float){
-        camera.position.set(x, y,0f)
-    }
-
-    fun setCameraZoom(zoom:Float){
-        camera.zoom = zoom
-    }
-
-    fun origin(){
-        camera.position.set(SimulationLoop.CAMERA_WIDTH / 2f, SimulationLoop.CAMERA_HEIGHT / 2f, 0f)
-        camera.update()
-        gridDecorator?.refresh = true
-    }
-
-    fun rotateRight(){
-        val rotateCommand = RotateCommand()
-        collisionDetector.selectedItems.forEach { item->
-            val pRotation = item.caller.value.rotationDirection
-            item.caller.value.rotateRight()
-            val nRotation = item.caller.value.rotationDirection
-            RotateCommand.RotateItem(pRotation,nRotation,item.caller.value).also {item->
-                rotateCommand.insert(item)
-            }
-        }
-        commandHistory.execute(rotateCommand)
-        AutoSave.dataChanged = true
-    }
-
-    fun undo(){
-        commandHistory.undo()
-    }
-
-    fun redo(){
-        commandHistory.redo()
-    }
-
     fun cut(){
         dataContainer.mode = DataContainer.CUT
         if(collisionDetector.mode == RANGED_SELECTION_MODE){
             sendRangeItemsToDataContainer()
         }else {
             collisionDetector.selectedItems.forEach { item ->
-                dataContainer.insert(item.caller)
+               dataContainer.insert(item.caller)
             }
         }
     }
@@ -140,6 +99,19 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 dataContainer.insert(item.caller)
             }
         }
+    }
+
+    fun paste(){
+        if(dataContainer.mode == DataContainer.CUT) {
+            cutTool.execute(rectPointer.getPosition().x,
+                rectPointer.getPosition().y)
+        }else if(dataContainer.mode == DataContainer.COPY){
+                copyTool.execute(rectPointer.getPosition().x,
+                    rectPointer.getPosition().y,scene)
+        }
+        dataContainer.clear()
+        collisionDetector.reset()
+        //  println("Data Size: ${connection.size()}")
     }
 
     fun delete(){
@@ -161,15 +133,30 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         collisionDetector.reset()
     }
 
-    fun paste(){
-        if(dataContainer.mode == DataContainer.CUT) {
-            cutTool.execute(rectPointer.getPosition().x, rectPointer.getPosition().y)
-        }else if(dataContainer.mode == DataContainer.COPY){
-            copyTool.execute(rectPointer.getPosition().x, rectPointer.getPosition().y,scene)
-        }
-        dataContainer.clear()
-        collisionDetector.reset()
-      //  println("Data Size: ${connection.size()}")
+    fun zoomValue():Float{
+        return camera.zoom
+    }
+
+    fun setCameraPosition(x:Float, y:Float){
+        camera.position.set(x, y,0f)
+    }
+
+    fun setCameraZoom(zoom:Float){
+        camera.zoom = zoom
+    }
+
+    fun origin(){
+        camera.position.set(SimulationLoop.CAMERA_WIDTH / 2f, SimulationLoop.CAMERA_HEIGHT / 2f, 0f)
+        camera.update()
+        gridDecorator?.refresh = true
+    }
+
+    fun undo(){
+        commandHistory.undo()
+    }
+
+    fun redo(){
+        commandHistory.redo()
     }
 
     fun insertGroup(){
@@ -391,11 +378,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         return false
     }
 
-
     override fun zoom(initialDistance: Float, distance: Float): Boolean {
         return false
     }
-
-
-
 }

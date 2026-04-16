@@ -2,6 +2,8 @@ package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.math.Vector
+import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
@@ -22,6 +24,35 @@ import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
 import org.engine.simulogic.android.circuits.components.wireless.CChannel
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
+import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
+import org.engine.simulogic.android.circuits.logic.events.EventBcdDisplayCommand
+import org.engine.simulogic.android.circuits.logic.events.EventBridge
+import org.engine.simulogic.android.circuits.logic.events.EventChannelCommand
+import org.engine.simulogic.android.circuits.logic.events.EventClockCommand
+import org.engine.simulogic.android.circuits.logic.events.EventCopyCommand
+import org.engine.simulogic.android.circuits.logic.events.EventCutCommand
+import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
+import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
+import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
+import org.engine.simulogic.android.circuits.logic.events.EventInsertGroupCommand
+import org.engine.simulogic.android.circuits.logic.events.EventLabelCommand
+import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
+import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
+import org.engine.simulogic.android.circuits.logic.events.EventModeCommand
+import org.engine.simulogic.android.circuits.logic.events.EventNandCommand
+import org.engine.simulogic.android.circuits.logic.events.EventNorCommand
+import org.engine.simulogic.android.circuits.logic.events.EventNotCommand
+import org.engine.simulogic.android.circuits.logic.events.EventOrCommand
+import org.engine.simulogic.android.circuits.logic.events.EventPasteCommand
+import org.engine.simulogic.android.circuits.logic.events.EventPowerCommand
+import org.engine.simulogic.android.circuits.logic.events.EventRandomCommand
+import org.engine.simulogic.android.circuits.logic.events.EventRedoCommand
+import org.engine.simulogic.android.circuits.logic.events.EventRemoveGroupCommand
+import org.engine.simulogic.android.circuits.logic.events.EventRotateCommand
+import org.engine.simulogic.android.circuits.logic.events.EventSSDisplayCommand
+import org.engine.simulogic.android.circuits.logic.events.EventUndoCommand
+import org.engine.simulogic.android.circuits.logic.events.EventXnorCommand
+import org.engine.simulogic.android.circuits.logic.events.EventXorCommand
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
@@ -34,6 +65,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class ComponentManager(private val projectOptions: ProjectOptions,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
 
     private val snapAlign = SnapAlign()
+    val eventBridge = EventBridge()
     fun loadProject(){
         when(projectOptions.mode){
             ProjectOptions.CREATE->{
@@ -57,26 +89,50 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         return counter
     }
 
+    fun setMode(mode:Int){
+        eventBridge.insertCommand(EventModeCommand(mode, gestureListener))
+    }
+
+    fun rotateRight(){
+        eventBridge.insertCommand(EventRotateCommand(gestureListener))
+    }
+
+    fun cut(){
+        eventBridge.insertCommand(EventCutCommand(gestureListener))
+    }
+
+    fun copy(){
+        eventBridge.insertCommand(EventCopyCommand(gestureListener))
+    }
+
+    fun delete(){
+        eventBridge.insertCommand(EventDeleteCommand(gestureListener))
+    }
+
+    fun paste(){
+        eventBridge.insertCommand(EventPasteCommand(gestureListener, scene))
+    }
+
+    fun undo(){
+        eventBridge.insertCommand(EventUndoCommand(gestureListener))
+    }
+
+    fun redo(){
+        eventBridge.insertCommand(EventRedoCommand(gestureListener))
+    }
+
     fun insertAND(){
        gestureListener.rectPointer.getPosition().also {position->
             snapAlign.getSnapCoordinates(position).also { coordinates->
-                ListNode(CAnd( coordinates.x,coordinates.y,scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+                eventBridge.insertCommand(EventAndCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
-
         }
     }
 
     fun insertOR(){
         gestureListener.rectPointer.getPosition().also {position->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(COr(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+                eventBridge.insertCommand(EventOrCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
@@ -84,21 +140,14 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     fun insertXOR(){
         gestureListener.rectPointer.getPosition().also {position->
             snapAlign.getSnapCoordinates(position).also { coordinates->
-                ListNode(CXor(coordinates.x,coordinates.y,scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+            eventBridge.insertCommand(EventXorCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
         }
     }}
 
     fun insertNOR() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CNor(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+            eventBridge.insertCommand(EventNorCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
@@ -106,113 +155,70 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     fun insertNOT() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CNot(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+            eventBridge.insertCommand(EventNotCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
     fun insertNAND() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CNand(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+            eventBridge.insertCommand(EventNandCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
     fun insertXNOR() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CXnor(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+            eventBridge.insertCommand(EventXnorCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
     fun insertCClock(freq:Float) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CClock(coordinates.x, coordinates.y, freq, scene)).also { node->
-                    connection.insertExecutionPoint(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+             eventBridge.insertCommand(EventClockCommand(Vector2(coordinates),freq, connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCLatch() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CLatch(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+              eventBridge.insertCommand(EventLatchCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCDFlipFlop(){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CDFlipFlop(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+               eventBridge.insertCommand(EventFipFlopCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCLed() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CLed(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+               eventBridge.insertCommand(EventLedCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCPower(signalValue:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CPower(
-                        signalValue,
-                        coordinates.x,
-                        coordinates.y,
-                        rotationDirection = Entity.ROTATE_RIGHT,
-                        scene
-                    )
-                ).also { node->
-                    connection.insertExecutionPoint(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+              eventBridge.insertCommand(EventPowerCommand(Vector2(coordinates),signalValue, connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCRandom(){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CRandom(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+               eventBridge.insertCommand(EventRandomCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertSevenSegmentDisplay() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CSevenSegmentDisplay(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+               eventBridge.insertCommand(EventSSDisplayCommand(Vector2(coordinates),connection,gestureListener.commandHistory, scene))
             }
         }
     }
@@ -220,30 +226,21 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     fun insertBCDDisplay(){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CBCDDisplay(coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+                eventBridge.insertCommand(EventBcdDisplayCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }
     fun insertCLabel(text:String, fontSize:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CLabel(font, fontSize.toFloat(), text, coordinates.x, coordinates.y, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+                eventBridge.insertCommand(EventLabelCommand(Vector2(coordinates),text, fontSize.toFloat(), font, connection, gestureListener.commandHistory, scene))
             }
         }
     }
     fun insertCDataBus(size:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(CDataBus(coordinates.x, coordinates.y, size, scene)).also{node->
-                    connection.insertNode(node)
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
+                eventBridge.insertCommand(EventDataBusCommand(Vector2(coordinates),size, connection, gestureListener.commandHistory,scene))
             }
         }
     }
@@ -268,34 +265,17 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     }
 
     fun insertGroup(){
-        gestureListener.insertGroup()
+        eventBridge.insertCommand(EventInsertGroupCommand(gestureListener))
     }
 
     fun removeGroup(){
-        gestureListener.removeGroup()
+        eventBridge.insertCommand(EventRemoveGroupCommand(gestureListener))
     }
 
     fun insertChannel(id:String, type:Int){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                ListNode(
-                    CChannel(
-                        coordinates.x,
-                        coordinates.y,
-                        id,
-                        type,
-                        Entity.ROTATE_RIGHT,
-                        scene
-                    )
-                ).also{node->
-                    if(type == ChannelBuffer.CHANNEL_OUTPUT) {
-                        connection.insertExecutionPoint(node)
-                    }else{
-                        connection.insertNode(node)
-                    }
-                    gestureListener.commandHistory.execute(InsertCommand(node, connection))
-                }
-
+             eventBridge.insertCommand(EventChannelCommand(Vector2(coordinates),id,type,connection, gestureListener.commandHistory, scene))
             }
         }
     }
