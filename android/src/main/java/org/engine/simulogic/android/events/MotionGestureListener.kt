@@ -46,7 +46,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     var gridDecorator:GridDecorator? = null
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
-         const val MAX_ZOOM_FACTOR = 4.5f
+         const val MAX_ZOOM_FACTOR = 6.5f
         //move objects around and perform single element selection
         const val TOUCH_MODE = 1
 
@@ -91,6 +91,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     }
 
     fun copy(){
+        dataContainer.clear()
         dataContainer.mode = DataContainer.COPY
         if(collisionDetector.mode == RANGED_SELECTION_MODE){
             sendRangeItemsToDataContainer()
