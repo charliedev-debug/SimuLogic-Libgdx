@@ -339,7 +339,6 @@ class LineMarker(
         to.value.snapAlignOriginPoints = false
 
         // mark, highlight lines and set coordinates
-        var highLightFrom:CNode
         var origin:LineMarker
         var parentMarker:LineMarker
         var parentNodeMarker: CNode
@@ -347,13 +346,11 @@ class LineMarker(
         if(isSourceSignal()){
             parentMarker = getNodeOriginFrom(from)
             origin = ((from.value as CSignal).parent as LineMarker)
-            highLightFrom = origin.from.value
             parentNodeMarker = parentMarker.from.value.signals[parentMarker.signalFrom]
         }else{
             origin = this
             parentMarker = this
-            highLightFrom = from.value.signals[this.signalFrom]
-            parentNodeMarker = highLightFrom
+            parentNodeMarker = from.value.signals[this.signalFrom]
         }
         markerActive = false
         for (i in 0 until signals.size - 1) {
@@ -363,12 +360,12 @@ class LineMarker(
             val next = nextSignal.getPosition()
             lines[i].also { line ->
                 line.color =
-                    if (highLightFrom.value == CNode.SIGNAL_ACTIVE || parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
+                    if (parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
             markerActive = markerActive || nextSignal.selected || prevSignal.selected || origin.markerActive || parentMarker.markerActive
         }
-        if (markerActive || origin.markerActive || parentMarker.markerActive) {
+        if (markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
     }

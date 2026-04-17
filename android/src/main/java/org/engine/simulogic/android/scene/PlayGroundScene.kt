@@ -12,7 +12,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                        private val camera: OrthographicCamera, val assetManager:AssetManager) : Layer(LayerEnums.SCENE.name){
 
     private val shapeRenderer = ShapeRenderer(10000)
-   private  val profiler = GLProfiler(Gdx.graphics).apply { disable() }
+ //  private  val profiler = GLProfiler(Gdx.graphics).apply { enable() }
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
         addLayer(LayerLines(LayerEnums.DEBUG_LAYER.name))
@@ -38,7 +38,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
             }
     }
     override fun draw() {
-        profiler.reset()
+       // profiler.reset()
         camera.update()
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
@@ -48,6 +48,10 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                     shapeRenderer.projectionMatrix = camera.combined
                     shapeRenderer.setAutoShapeType(true)
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled)
+                }else if(entity is LayerLabel){
+                    spriteBatch.end()
+                    spriteBatch.projectionMatrix = camera.combined
+                    spriteBatch.begin()
                 }
 
                 if (entity.isVisible) {
@@ -63,6 +67,10 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                         spriteBatch.projectionMatrix = camera.combined
                         spriteBatch.begin()
                     }
+                }else if(entity is LayerLabel){
+                    spriteBatch.end()
+                    spriteBatch.projectionMatrix = camera.combined
+                    spriteBatch.begin()
                 }
             }
         spriteBatch.end()

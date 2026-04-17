@@ -24,8 +24,8 @@ class AutoSave private constructor(private val projectOptions: ProjectOptions, p
         }
     }
 
-   // save the file at 1sec intervals
-   private val timer = Timer(10f, listener = object : Timer.ITimerListener{
+   // save the file at 30sec intervals
+   private val timer = Timer(30f, listener = object : Timer.ITimerListener{
        override fun onTick(hasReset:Boolean) {
            if(dataChanged && enabled) {
                dto.writeData(projectOptions,gestureListener, connection)
