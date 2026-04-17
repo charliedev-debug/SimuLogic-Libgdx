@@ -69,7 +69,7 @@ class EnvironmentHelpViewPagerAdapter :
         )
         addItem(
             0, HelpItem(
-                "Connect-2",
+                "Connect-4",
                 "Enables connection mode with an upper limit of 4 joints. " +
                     "These joints can be used for proper wire management in the project.",
                 0,
@@ -78,7 +78,7 @@ class EnvironmentHelpViewPagerAdapter :
         )
         addItem(
             0, HelpItem(
-                "Connect-2",
+                "Connect-6",
                 "Enables connection mode with an upper limit of 6 joints. " +
                     "These joints can be used for proper wire management in the project.",
                 0,
