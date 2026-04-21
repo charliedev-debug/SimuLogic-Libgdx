@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_dark"
     android:orientation="vertical"
+    android:background="?attr/backgroundColor"
     tools:context=".android.ui.fragments.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -15,7 +15,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/background_dark"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +37,7 @@
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/colorOutline" />
 
             <RelativeLayout
                 android:gravity="center_vertical"
@@ -61,6 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
+                        android:textColor="?attr/colorOnSurface"
                         android:text="Recent Projects" />
                 </LinearLayout>
                 <androidx.appcompat.widget.AppCompatImageView
@@ -113,6 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="2dp"
+                    android:textColor="?attr/colorOnSurface"
                     android:text="Sample Projects" />
             </LinearLayout>
             <RelativeLayout

@@ -15,7 +15,7 @@
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     android:padding="10dp"
-    app:cardBackgroundColor="@color/background3"
+    app:cardBackgroundColor="?attr/colorSurface"
     app:cardCornerRadius="20dp"
     android:clickable="true"
     android:focusable="true"
@@ -45,7 +45,7 @@
                 android:gravity="center_horizontal"
                 android:textSize="10dp"
                 android:textStyle="bold"
-                android:textColor="@color/dividerColor"
+                android:textColor="?attr/colorOnSurface"
                 />
         </LinearLayout>
     <TextView
@@ -55,6 +55,7 @@
         android:paddingBottom="10dp"
         android:text="this is a test"
         android:textSize="12dp"
+        android:textColor="?attr/colorOnSurface"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

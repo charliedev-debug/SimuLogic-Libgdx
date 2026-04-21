@@ -324,5 +324,7 @@ class SimulationFragment(
         }
         return initializeForView(simulationLoop, configuration)
     }
-
+    override fun onPause() {
+        super.onPause()
+    }
 }

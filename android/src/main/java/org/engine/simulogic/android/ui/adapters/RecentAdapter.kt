@@ -63,6 +63,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                 }
                 RecentItem.VIEW_HEADER->{
                     itemView.findViewById<TextView>(R.id.title).text = item.title
+                    itemView.findViewById<ImageView>(R.id.icon).setImageResource(item.icon)
                     itemView.findViewById<ImageView>(R.id.premium).apply {
                         if(item.ispremium){
                             visibility = View.VISIBLE
@@ -79,6 +80,10 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
 
     fun add(title:String, path:String,description:String,lastModified:Long, type:Int = RecentItem.VIEW_ITEM,ispremium:Boolean = false, canDelete:Boolean = false){
         dataList.add(RecentItem(title, path,description,lastModified, type,ispremium,canDelete))
+    }
+
+    fun addHeader(title: String, icon:Int){
+        dataList.add(RecentItem(title,path = "", description = "", type = RecentItem.VIEW_HEADER, ispremium = false, icon = icon))
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -6,10 +6,10 @@
         android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/background3"
+        app:cardBackgroundColor="?attr/colorSurface"
         android:layout_margin="4dp"
         app:cardCornerRadius="12dp"
-        app:cardElevation="4dp">
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,6 +22,7 @@
                 android:id="@+id/icon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                app:tint="?attr/colorOnSurface"
                 app:srcCompat="@drawable/import_project" />
 
             <TextView
@@ -30,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="11sp"
+                android:textColor="?attr/colorOnSurface"
                 android:text="Import Project" />
 
         </LinearLayout>

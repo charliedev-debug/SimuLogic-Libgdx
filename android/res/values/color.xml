@@ -29,4 +29,6 @@
     <color name="background3">#464153</color>
     <color name="background2">#494949</color>
     <color name="default_menu_icon_color">#EADBFA</color>
+
+    <color name="statusBarColor">#1D2021</color>
 </resources>

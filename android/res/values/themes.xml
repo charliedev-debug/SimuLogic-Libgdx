@@ -6,17 +6,19 @@
     </style>
 
     <style name="Widget.App.CardStyle" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">@color/background_dark</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
         <item name="elevationOverlayEnabled">true</item>
-        <item name="elevationOverlayColor">@color/white</item>
-        <item name="android:colorControlHighlight">@color/white</item>
-        <item name="android:colorFocusedHighlight">@color/white</item>
-        <item name="rippleColor">@color/white</item>
+        <item name="elevationOverlayColor">?attr/colorOutline</item>
+        <item name="android:colorControlHighlight">?attr/colorPrimary</item>
+        <item name="android:colorFocusedHighlight">?attr/colorPrimary</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
     </style>
 
     <style name="customButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/dusty_lavender</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:outlineAmbientShadowColor">?attr/colorOutline</item>
+        <item name="android:outlineSpotShadowColor">?attr/colorOutline</item>
         <item name="rippleColor">@color/white</item>
     </style>
 
@@ -30,6 +32,130 @@
         <item name="android:textColorTertiary">@color/white</item>
         <item name="materialCardViewStyle">@style/Widget.App.CardStyle</item>
         <item name="rippleColor">@color/white</item>
+    </style>
+
+    <style name = "TokyoNight" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">#7AA2F7</item>
+        <item name="colorOnPrimary">#1A1B26</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">#7DCFFF</item>
+        <item name="colorOnSecondary">#1A1B26</item>
+
+        <!-- Backgrounds -->
+        <item name="backgroundColor">#1A1B26</item>
+        <item name="colorSurface">#24283B</item>
+        <item name="colorSurfaceVariant">#2F334D</item>
+
+        <!-- Text -->
+        <item name="colorOnBackground">#C0CAF5</item>
+        <item name="colorOnSurface">#C0CAF5</item>
+
+        <!-- Divider -->
+        <item name="colorOutline">#504945</item>
+
+    </style>
+
+    <style name="GruvBox" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">#83A598</item>
+        <item name="colorOnPrimary">#1D2021</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">#8EC07C</item>
+        <item name="colorOnSecondary">#1D2021</item>
+
+        <!-- Backgrounds -->
+        <item name="backgroundColor">#1D2021</item>
+        <item name="colorSurface">#282828</item>
+        <item name="colorSurfaceVariant">#3C3836</item>
+
+        <!-- Text -->
+        <item name="colorOnBackground">#EBDBB2</item>
+        <item name="colorOnSurface">#EBDBB2</item>
+
+        <!-- Divider -->
+        <item name="colorOutline">#504945</item>
+    </style>
+
+    <style name="RosePine" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">#EB6F92</item>
+        <item name="colorOnPrimary">#191724</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">#9CCFD8</item>
+        <item name="colorOnSecondary">#191724</item>
+
+        <!-- Backgrounds -->
+        <item name="backgroundColor">#191724</item>
+        <item name="colorSurface">#1F1D2E</item>
+        <item name="colorSurfaceVariant">#26233A</item>
+
+        <!-- Text -->
+        <item name="colorOnBackground">#E0DEF4</item>
+        <item name="colorOnSurface">#E0DEF4</item>
+
+        <!-- System bars -->
+        <item name="android:statusBarColor">#191724</item>
+        <item name="android:navigationBarColor">#191724</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">#403D52</item>
+
+    </style>
+
+    <style name="Kanagawa" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">#7E9CD8</item>
+        <item name="colorOnPrimary">#1F1F28</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">#98BB6C</item>
+        <item name="colorOnSecondary">#1F1F28</item>
+
+        <!-- Backgrounds -->
+        <item name="backgroundColor">#1F1F28</item>
+        <item name="colorSurface">#2A2A37</item>
+        <item name="colorSurfaceVariant">#363646</item>
+
+        <!-- Text -->
+        <item name="colorOnBackground">#DCD7BA</item>
+        <item name="colorOnSurface">#DCD7BA</item>
+
+        <!-- System bars -->
+        <item name="android:statusBarColor">#1F1F28</item>
+        <item name="android:navigationBarColor">#1F1F28</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">#54546D</item>
+    </style>
+
+    <style name="Catppuccin" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">#89B4FA</item>
+        <item name="colorOnPrimary">#1E1E2E</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">#A6E3A1</item>
+        <item name="colorOnSecondary">#1E1E2E</item>
+
+        <!-- Backgrounds -->
+        <item name="backgroundColor">#1E1E2E</item>
+        <item name="colorSurface">#181825</item>
+        <item name="colorSurfaceVariant">#313244</item>
+
+        <!-- Text -->
+        <item name="colorOnBackground">#CDD6F4</item>
+        <item name="colorOnSurface">#CDD6F4</item>
+
+        <!-- System bars -->
+        <item name="android:statusBarColor">#1E1E2E</item>
+        <item name="android:navigationBarColor">#1E1E2E</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">#45475A</item>
     </style>
 
     <style name="CustomBottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">

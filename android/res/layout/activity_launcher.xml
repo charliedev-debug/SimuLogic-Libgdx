@@ -18,7 +18,6 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/background"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
         <LinearLayout
@@ -32,7 +31,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/colorPrimary"/>
+                android:background="?attr/colorOutline"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/settings"
                 style="@style/customButtonStyle"
@@ -40,6 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tint="@color/dividerColor"
+                android:drawableTint="?attr/colorOnSurface"
                 android:drawableLeft="@drawable/settings"
                 android:text="Settings"/>
             <com.google.android.material.button.MaterialButton
@@ -49,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tint="@color/dividerColor"
+                android:drawableTint="?attr/colorOnSurface"
                 android:drawableLeft="@drawable/about"
                 android:text="About"/>
         </LinearLayout>

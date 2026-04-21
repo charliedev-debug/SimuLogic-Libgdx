@@ -643,6 +643,10 @@ class DataTransferObject {
         return files
     }
 
+    fun getSampleProjectDetails(context: Context, path: String): ProjectOptions{
+        return readFileHeaderFromAsset(File(path),context.assets)
+    }
+
     fun fetchSampleProject(context: Context, projectOptions: ProjectOptions):ProjectOptions{
         val parentFolder = File(context.getExternalFilesDir(""), "projects")
         while(!parentFolder.exists())parentFolder.mkdirs()

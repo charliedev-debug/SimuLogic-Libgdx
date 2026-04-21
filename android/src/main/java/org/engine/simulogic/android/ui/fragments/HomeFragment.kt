@@ -3,22 +3,18 @@ package org.engine.simulogic.android.ui.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import org.engine.simulogic.R
-import org.engine.simulogic.android.SettingsActivity
 import org.engine.simulogic.android.SimulationActivity
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
@@ -30,7 +26,6 @@ import org.engine.simulogic.android.views.GridSpacingItemDecoration
 import org.engine.simulogic.android.views.dialogs.CreateProjectDialog
 import org.engine.simulogic.android.views.dialogs.ErrorDialog
 import java.io.File
-import java.io.IOException
 
 class HomeFragment : Fragment() {
 
@@ -151,9 +146,42 @@ class HomeFragment : Fragment() {
             shareEnabled = false
             dateEnabled = false
             fileLengthEnabled = false
-            DataTransferObject().listSampleProjects(requireContext()).onEach {
-                add(it.title,it.path, it.description, it.lastModified)
+            DataTransferObject().also{dto->
+                addHeader("Beginner", R.drawable.beginner)
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_CONNECTIONS.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_POWER ON & OFF.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_RANDOM.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_GROUPS.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                addHeader("Intermediate",R.drawable.intermediate)
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_CHANNEL.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Counter.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_ADDER.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Shift Register.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                addHeader("Advanced", R.drawable.advanced)
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_BCD DISPLAY (0-9).bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
             }
+            /*DataTransferObject().listSampleProjects(requireContext()).onEach {
+                add(it.title,it.path, it.description, it.lastModified)
+                println(it.path)
+            }*/
         }
 
         sampleProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{

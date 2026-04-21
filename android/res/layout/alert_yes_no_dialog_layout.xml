@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
-    app:cardBackgroundColor="@color/background3"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
     app:cardCornerRadius="20dp"
     style="@style/Widget.App.CardStyle">
     <LinearLayout
@@ -26,13 +26,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray"/>
+            android:background="?attr/colorOutline"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_horizontal"
             android:textSize="13dp"
+            android:textColor="?attr/colorOnSurface"
             android:text="message"
             android:padding="10dp" />
         <LinearLayout

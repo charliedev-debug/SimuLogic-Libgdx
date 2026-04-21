@@ -22,9 +22,9 @@
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:paddingRight="5dp"
-        app:cardBackgroundColor="@color/background3"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="12dp"
-        app:cardElevation="2dp">
+        app:cardElevation="0dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,6 +54,7 @@
                     android:maxLines="1"
                     android:text="Title"
                     android:textSize="12dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -71,6 +72,7 @@
                     android:paddingLeft="10dp"
                     android:text="01/12/2026"
                     android:textAlignment="center"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="10dp" />
 
                 <TextView
@@ -81,45 +83,63 @@
                     android:paddingLeft="10dp"
                     android:text="300kb"
                     android:textAlignment="viewEnd"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="10dp" />
             </LinearLayout>
 
         </RelativeLayout>
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:baselineAligned="false"
             android:padding="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/descriptionLayout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Description"
-                    android:textSize="10dp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/project_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="2"
-                    android:text="This is a sample description for this project created!"
-                    android:textSize="10dp"
-                    android:textStyle="italic" />
-
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/infoIcon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        app:srcCompat="@drawable/info" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/infoIcon"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:text="Description"
+                        android:textSize="11dp"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            <TextView
+                android:id="@+id/project_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="450dp"
+                android:maxLines="2"
+                android:text="This is a sample description for this project created!"
+                android:textSize="11dp"
+                android:textColor="?attr/colorOnBackground"
+                android:textStyle="italic" />
             </LinearLayout>
-
             <LinearLayout
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:orientation="horizontal">
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/delete"
@@ -137,14 +157,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    app:tint="@color/dividerColor"
+                    app:tint="?attr/colorOnSurface"
                     android:background="@drawable/icon_ripple_oval_normal"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/share"
                     android:visibility="visible" />
 
             </LinearLayout>
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
     <!--<View

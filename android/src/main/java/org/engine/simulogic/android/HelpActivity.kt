@@ -1,8 +1,10 @@
 package org.engine.simulogic.android
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Window
 import android.view.WindowInsets
 import androidx.activity.SystemBarStyle
@@ -25,7 +27,7 @@ class HelpActivity : AppCompatActivity() {
         setContentView(R.layout.activity_help)
         enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
             navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
-        setStatusBarColor(window, R.color.background_dark)
+        setStatusBarColor(window, getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             finish()
         }
@@ -278,29 +280,36 @@ class HelpActivity : AppCompatActivity() {
         }
     }
 
+    fun getThemeResourceID(context: Context, attr: Int): Int {
+        val value = TypedValue()
+        context.theme.resolveAttribute(attr, value, true)
+        return value.data
+    }
+
     fun setStatusBarColor(window: Window, color: Int) {
         window.decorView.setOnApplyWindowInsetsListener { view, insets ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
                 val statusBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
-                view.setBackgroundResource(color)
+                view.setBackgroundColor(color)
                 view.setPadding(statusBarInsets.left, statusBarInsets.top, statusBarInsets.right, statusBarInsets.bottom)
                 insets
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     val bars = insets.getInsets(WindowInsets.Type.systemBars())
-                    view.setBackgroundResource(color)
+                    view.setBackgroundColor(color)
                     view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
                     return@setOnApplyWindowInsetsListener insets
                 }else{
-                    window.statusBarColor = ContextCompat.getColor(this, color)
-                    window.navigationBarColor = ContextCompat.getColor(this, color)
+                    window.statusBarColor = color
+                    window.navigationBarColor = color
                     val insetsController = WindowInsetsControllerCompat(window, window.decorView)
                     insetsController.isAppearanceLightStatusBars = false
                     view.setPadding(insets.systemWindowInsetLeft,insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
-                    window.decorView.setBackgroundColor(ContextCompat.getColor(this, color))
+                    window.decorView.setBackgroundColor(color)
                     return@setOnApplyWindowInsetsListener insets
                 }
             }
+
         }
     }
 }
