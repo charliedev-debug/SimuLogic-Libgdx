@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.components.other.CLabel
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.min
@@ -28,6 +29,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
     private var labelsVisible = true
     private var gridVisible = true
     private var labelHeaderVisible = true
+    private var positionGridLine = false
     var refresh = false
     class GridLabel(font: BitmapFont, text:String,x:Float, y:Float, scene: PlayGroundScene): CLabel(font,25f, text, x, y, scene){
            var lineHeader = CLine(0f,0f, 0f, 0f,1f)
@@ -53,13 +55,17 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         labelHeaderVisible = false
     }
 
+    fun hidePositionGridLine(){
+        positionGridLine = false
+    }
+
     override fun update() {
 
         val factor = (1f/ camera.zoom)
         val viewPortWidth = (camera.viewportWidth / factor)
         val viewPortHeight = (camera.viewportHeight / factor)
-        val spacingX = CDefaults.GRID_WIDTH * 2
-        val spacingY = CDefaults.GRID_HEIGHT * 2
+        val spacingX = (CDefaults.GRID_WIDTH * 2)
+        val spacingY = (CDefaults.GRID_HEIGHT * 2)
         val labelSpacingX = (spacingX * 4).toInt()
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 0f
@@ -87,10 +93,10 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0  .. lineCountX ){
                 val x = originX + i * spacingX
                 CLine(x,originY,x,originY+ viewPortHeight, lineWidth).also { line->
-                    line.color = lineColor
+                    line.color = EnvironmentTheme.lineColor//lineColor
                     linesAxisX.add(line)
                     lineLayer.attachChild(line)
-                    line.isVisible = gridVisible
+                    line.isVisible = gridVisible && positionGridLine
                 }
             }
 
@@ -99,9 +105,9 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 val x = originX + i * labelSpacingX
                 val lx = round(x / labelSpacingX).toInt() * labelSpacingX
                 labelsX.add(GridLabel(font, "$lx", x, originY + viewPortHeight - labelOffsetY, scene).apply {
-                        color = labelColor
+                        color = EnvironmentTheme.labelHeaderColor//labelColor
                         lineHeader.updatePosition(x, getPosition().y, x, 0f )
-                        lineHeader.color = labelHeaderColor
+                        lineHeader.color = EnvironmentTheme.lineColor2// labelHeaderColor
                         lineHeader.lineWidth = lineWidth
                         fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                         lineLayer.attachChild(lineHeader)
@@ -113,10 +119,10 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0 .. lineCountY){
                 val y = originY + i * spacingY
                 CLine(originX, y, originX + viewPortWidth,y, lineWidth).also { line->
-                    line.color = lineColor
+                    line.color = EnvironmentTheme.lineColor // lineColor
                     linesAxisY.add(line)
                     lineLayer.attachChild(line)
-                    line.isVisible = gridVisible
+                    line.isVisible = gridVisible && positionGridLine
                 }
             }
 
@@ -125,9 +131,9 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 val y = originY + i * labelSpacingY
                 val ly = round(y / labelSpacingY).toInt() * labelSpacingY
                 labelsY.add(GridLabel(font, "$ly", originX + labelOffsetY, y, scene).apply {
-                    color = labelColor
+                    color = EnvironmentTheme.labelHeaderColor//labelColor
                     lineHeader.updatePosition(getPosition().x, y, viewPortWidth, y )
-                    lineHeader.color = labelHeaderColor
+                    lineHeader.color = EnvironmentTheme.lineColor2 //labelHeaderColor
                     lineHeader.lineWidth = lineWidth
                     fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                     lineLayer.attachChild(lineHeader)
@@ -144,7 +150,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val firstX = linesAxisX[0]
         linesAxisX.forEach {
             it.updatePosition(it.x1,originY, it.x2, originY + viewPortHeight)
-            it.isVisible = gridVisible
+            it.isVisible = gridVisible && positionGridLine
         }
         if(firstX.x1 > (originX+ spacingX)){
             val offsetX = firstX.x1 - spacingX
@@ -183,7 +189,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val firstY = linesAxisY[0]
         linesAxisY.forEach {
             it.updatePosition(originX, it.y1, originX + viewPortWidth, it.y2)
-            it.isVisible = gridVisible
+            it.isVisible = gridVisible && positionGridLine
         }
         if(firstY.y1 > (originY + spacingY)){
             val offsetY = firstY.y1 - spacingY

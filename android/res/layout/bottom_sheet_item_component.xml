@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Connect"
         android:textSize="@dimen/bottom_sheet_item_text_size"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorOnSurface"
         />
 
 </LinearLayout>

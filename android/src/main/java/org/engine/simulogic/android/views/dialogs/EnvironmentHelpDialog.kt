@@ -41,14 +41,17 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
                     R.id.modes->{
                         environmentHelpViewPagerAdapter.currentPage = 0
                         environmentHelpViewPagerAdapter.updateItemsAll()
+                        currentItem = 0
                     }
                     R.id.actions->{
                         environmentHelpViewPagerAdapter.currentPage = 1
                         environmentHelpViewPagerAdapter.updateItemsAll()
+                        currentItem = 0
                     }
                     R.id.components->{
                         environmentHelpViewPagerAdapter.currentPage = 2
                         environmentHelpViewPagerAdapter.updateItemsAll()
+                        currentItem = 0
                     }
                 }
             }
@@ -72,6 +75,7 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
                     next.visibility = if(position >= max - 1) View.INVISIBLE else View.VISIBLE
                     prev.visibility = if(position == 0) View.INVISIBLE else View.VISIBLE
                     currentPageView.text = textCurrentPage
+
                 }
             })
         }

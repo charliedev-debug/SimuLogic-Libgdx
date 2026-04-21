@@ -14,7 +14,7 @@
         android:padding="10dp"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:textColor="@color/dividerColor"
+        android:textColor="?attr/colorOnBackground"
         android:text=""/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,13 +43,13 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_margin="5dp"
-        app:cardBackgroundColor="@color/background3"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="20dp">
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/dividerColor"
+        android:textColor="?attr/colorOnSurface"
         android:layout_margin="10dp"
         android:textSize="15dp"
         android:text=""/>

@@ -26,6 +26,7 @@ import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.Executor
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.events.CollisionDetector
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.options.SimulationOptions
@@ -135,7 +136,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     }
 
     override fun render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f)
+        ScreenUtils.clear(EnvironmentTheme.background)
         if(isReady) {
             connection.update()
             gridDecorator.update()

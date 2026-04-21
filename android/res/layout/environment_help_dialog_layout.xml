@@ -13,7 +13,7 @@
     app:layout_constraintWidth_max="600dp"
     android:padding="10dp"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@color/background"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
     app:cardCornerRadius="20dp"
     style="@style/Widget.App.CardStyle">
     <androidx.core.widget.NestedScrollView
@@ -36,6 +36,7 @@
         android:padding="10dp"
         android:textSize="25dp"
         android:textStyle="bold"
+        android:textColor="?attr/colorOnSurface"
         android:text="Environment Guide"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/close"
@@ -52,7 +53,7 @@
             android:layout_below="@+id/close"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/dividerColor"/>
+            android:background="?attr/colorOutline"/>
     </RelativeLayout>
 
 
@@ -73,7 +74,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="MODES"
-                android:textColor="@color/dividerColor"
+                android:textColor="?attr/colorOnSurface"
                 android:gravity="center"
                 android:checked="true"/>
            <RadioButton
@@ -85,7 +86,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="ACTIONS"
-                android:textColor="@color/dividerColor"
+                android:textColor="?attr/colorOnSurface"
                 android:gravity="center"/>
             <RadioButton
                 android:id="@+id/components"
@@ -96,7 +97,7 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="COMPONENTS"
-                android:textColor="@color/dividerColor"
+                android:textColor="?attr/colorOnSurface"
                 android:gravity="center"/>
         </RadioGroup>
 
@@ -131,6 +132,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:maxLines="1"
+            android:textColor="?attr/colorOnSurface"
             android:text="1 / 10"/>
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/next"

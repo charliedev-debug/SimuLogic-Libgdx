@@ -32,7 +32,7 @@
         android:textSize="17dp"
         android:textStyle="bold"
         android:gravity="center_horizontal"
-        android:textColor="@color/white"/>
+        android:textColor="?attr/colorOnSurface"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +49,7 @@
                 android:text="Gates"
                 android:textSize="12dp"
                 android:textStyle="normal"
-                android:textColor="@color/white"/>
+                android:textColor="?attr/colorOnSurface"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/gates_component_list"
@@ -63,7 +63,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="#CCCCCC" />
+            android:background="?attr/colorOutline" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
                 android:text="Clock"
                 android:textSize="12dp"
                 android:textStyle="normal"
-                android:textColor="@color/white"/>
+                android:textColor="?attr/colorOnSurface"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/clock_component_list"
@@ -89,7 +89,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="#CCCCCC" />
+            android:background="?attr/colorOutline" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                 android:text="General"
                 android:textSize="12dp"
                 android:textStyle="normal"
-                android:textColor="@color/white"/>
+                android:textColor="?attr/colorOnSurface"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/general_component_list"
@@ -115,7 +115,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="#CCCCCC" />
+            android:background="?attr/colorOutline" />
         <LinearLayout
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                 android:text="Templates"
                 android:textSize="12dp"
                 android:textStyle="normal"
-                android:textColor="@color/white"/>
+                android:textColor="?attr/colorOnSurface"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/template_component_list"
