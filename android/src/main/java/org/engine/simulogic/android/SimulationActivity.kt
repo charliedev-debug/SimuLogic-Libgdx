@@ -123,8 +123,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 simulationOptions.autoSaveEnabled = it
             }
         }
-        // set simlation theme
-        simulationOptions.theme = "gruvbox"
+        // set simulation theme
+        simulationOptions.theme = "kanagawa"
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)

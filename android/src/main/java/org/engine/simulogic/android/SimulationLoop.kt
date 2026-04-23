@@ -95,6 +95,28 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
                 EnvironmentTheme.colorOnBackground = Color(235f/255f, 219f/255f, 178f/255f, 1f)
                 EnvironmentTheme.colorSecondary = Color(118f/255f, 199f/255f, 88f/255f, 1f)
             }
+            "tokyonight"->{
+                EnvironmentTheme.colorBackground = Color(  26f/255f, 27f/255f, 38f/255f, 1f)
+                EnvironmentTheme.colorOutline = Color(80f/255f, 73f/255f, 69f/255f, 1f)
+                EnvironmentTheme.colorPrimary = Color(122f/255f, 162f/255f, 247f/255f, 1f)
+                EnvironmentTheme.colorOnBackground = Color(192f/255f, 202f/255f, 245f/255f, 1f)
+                EnvironmentTheme.colorSecondary = Color(125f/255f, 207f/255f, 255f/255f, 1f)
+            }
+            "kanagawa"->{
+                EnvironmentTheme.colorBackground = Color(  31f/255f, 31f/255f, 40f/255f, 1f)
+                EnvironmentTheme.colorOutline = Color(84f/255f, 84f/255f, 109f/255f, 1f)
+                EnvironmentTheme.colorPrimary = Color(126f/255f, 156f/255f, 216f/255f, 1f)
+                EnvironmentTheme.colorOnBackground = Color(220f/255f, 215f/255f, 186f/255f, 1f)
+                EnvironmentTheme.colorSecondary = Color(152f/255f, 187f/255f, 108f/255f, 1f)
+            }
+            "catppuccin"->{
+                EnvironmentTheme.colorBackground = Color(  30f/255f, 30f/255f, 46f/255f, 1f)
+                EnvironmentTheme.colorOutline = Color(69f/255f, 71f/255f, 90f/255f, 1f)
+                EnvironmentTheme.colorPrimary = Color(137f/255f, 180f/255f, 250f/255f, 1f)
+                EnvironmentTheme.colorOnBackground = Color(205f/255f, 214f/255f, 244f/255f, 1f)
+                EnvironmentTheme.colorSecondary = Color(166f/255f, 227f/255f, 161f/255f, 1f)
+            }
+
         }
 
         val fontParameter = FreeTypeFontLoaderParameter()
