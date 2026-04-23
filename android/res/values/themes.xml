@@ -17,8 +17,6 @@
     <style name="customButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">?attr/colorSurface</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="android:outlineAmbientShadowColor">?attr/colorOutline</item>
-        <item name="android:outlineSpotShadowColor">?attr/colorOutline</item>
         <item name="rippleColor">@color/white</item>
     </style>
 

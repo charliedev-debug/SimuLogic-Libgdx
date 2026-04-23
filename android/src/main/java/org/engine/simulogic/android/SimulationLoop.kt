@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputAdapter
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -72,12 +73,29 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
         camera.zoom = 1.0f
         batch = SpriteBatch()
 
-        assetManager.load("component.atlas", TextureAtlas::class.java)
+        assetManager.load("${simulationOptions.theme}.atlas", TextureAtlas::class.java)
 
 
         assetManager.setLoader(FreeTypeFontGenerator::class.java,FreeTypeFontGeneratorLoader(assetManager.fileHandleResolver))
         assetManager.setLoader(BitmapFont::class.java, FreetypeFontLoader(assetManager.fileHandleResolver))
 
+        EnvironmentTheme.name = simulationOptions.theme
+        when(simulationOptions.theme){
+            "rosepine"->{
+                EnvironmentTheme.colorBackground = Color(  25f/255f, 23f/255f, 36f/255f, 1f)
+                EnvironmentTheme.colorOutline = Color(64f/255f, 61f/255f, 82f/255f, 1f)
+                EnvironmentTheme.colorPrimary = Color(235f/255f, 111f/255f, 146f/255f, 1f)
+                EnvironmentTheme.colorOnBackground = Color(224f/255f, 222f/255f, 244f/255f, 1f)
+                EnvironmentTheme.colorSecondary = Color(156f/255f, 207f/255f, 216f/255f, 1f)
+            }
+            "gruvbox"->{
+                EnvironmentTheme.colorBackground = Color(  29f/255f, 32f/255f, 33f/255f, 1f)
+                EnvironmentTheme.colorOutline = Color(80f/255f, 73f/255f, 69f/255f, 1f)
+                EnvironmentTheme.colorPrimary = Color(131f/255f, 165f/255f, 152f/255f, 1f)
+                EnvironmentTheme.colorOnBackground = Color(235f/255f, 219f/255f, 178f/255f, 1f)
+                EnvironmentTheme.colorSecondary = Color(118f/255f, 199f/255f, 88f/255f, 1f)
+            }
+        }
 
         val fontParameter = FreeTypeFontLoaderParameter()
             fontParameter.fontFileName = "fonts/RobotoMono-SemiBold.ttf"
@@ -136,7 +154,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     }
 
     override fun render() {
-        ScreenUtils.clear(EnvironmentTheme.background)
+        ScreenUtils.clear(EnvironmentTheme.colorBackground)
         if(isReady) {
             connection.update()
             gridDecorator.update()

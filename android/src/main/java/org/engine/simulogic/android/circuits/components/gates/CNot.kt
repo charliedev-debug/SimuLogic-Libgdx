@@ -2,7 +2,7 @@ package org.engine.simulogic.android.circuits.components.gates
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -17,7 +17,7 @@ class CNot(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroun
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("NOT-DARK")
         type = CTypes.NOT
         this.rotationDirection = rotationDirection

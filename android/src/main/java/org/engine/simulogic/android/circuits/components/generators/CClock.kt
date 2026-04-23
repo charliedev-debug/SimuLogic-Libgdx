@@ -8,6 +8,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.Timer
@@ -28,7 +29,7 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
     })
 
     init {
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("CLOCK")
         type = CTypes.CLOCK
         this.rotationDirection = rotationDirection

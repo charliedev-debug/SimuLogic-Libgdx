@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 
 class CNor(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
@@ -17,7 +18,7 @@ class CNor(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroun
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("NOR-DARK")
         type = CTypes.NOR
         this.rotationDirection = rotationDirection

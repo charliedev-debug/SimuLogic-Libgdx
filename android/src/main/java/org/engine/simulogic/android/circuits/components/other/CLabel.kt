@@ -11,8 +11,7 @@ import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
-import org.engine.simulogic.android.circuits.storage.AutoSave
-import org.engine.simulogic.android.scene.Entity
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -21,7 +20,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     private val layout = GlyphLayout()
     var color = Color.WHITE
     init {
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         type = CTypes.LABEL
         sprite = Sprite(spriteRegion)

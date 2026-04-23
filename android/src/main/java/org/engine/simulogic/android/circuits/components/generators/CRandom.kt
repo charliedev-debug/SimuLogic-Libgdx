@@ -9,6 +9,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.random.Random
@@ -20,7 +21,7 @@ class CRandom(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGr
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("RANDOM")
         type = CTypes.RANDOM
         this.rotationDirection = rotationDirection

@@ -4,12 +4,13 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 class CRect (x:Float, y:Float, width:Float, height:Float, var color: Color, private val scene: PlayGroundScene) : CNode(){
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x, y)

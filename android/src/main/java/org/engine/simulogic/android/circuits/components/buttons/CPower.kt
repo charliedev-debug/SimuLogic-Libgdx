@@ -9,6 +9,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -19,7 +20,7 @@ class CPower(signalValue:Int,x:Float, y:Float,rotationDirection:Int = ROTATE_RIG
     private var regionPowerOff:TextureAtlas.AtlasRegion
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
          regionPowerOn = textureAtlas.findRegion("POWER-ON")
          regionPowerOff = textureAtlas.findRegion("POWER-OFF")
         val spriteRegion = if(signalValue == SIGNAL_ACTIVE) regionPowerOn else  regionPowerOff

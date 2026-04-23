@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.components
 
 import com.badlogic.gdx.graphics.Color
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 
 class CDefaults {
     companion object{
@@ -26,10 +27,10 @@ class CDefaults {
         val INPUT_UNSELECTED_COLOR = Color.WHITE
         val GROUP_SELECTED_COLOR = Color(0.6f, 0.1f, 0.1f , 0.2f)
         val GROUP_UNSELECTED_COLOR = Color(1f, 1f, 1f , 0f)
-        val LINE_MARKER_ACTIVE = Color(136f/255f, 218f/255f, 248f/255f,1f)
-        val LINE_MARKER_INACTIVE = Color(1f,1f,1f,1f)
-        val SIGNAL_ACTIVE_COLOR = Color(76f/255f, 175f/255f, 80f/255f,1f)
-        val LED_INACTIVE_COLOR = Color(73f/255f, 73f/255f, 73f/255f, 1f)
+        val LINE_MARKER_ACTIVE = EnvironmentTheme.colorPrimary
+        val LINE_MARKER_INACTIVE = EnvironmentTheme.colorOnBackground
+        val SIGNAL_ACTIVE_COLOR = EnvironmentTheme.colorSecondary
+        val LED_INACTIVE_COLOR = EnvironmentTheme.colorOutline
         val LABEL_SELECTED_COLOR = Color(165f/255f, 66f/255f, 66f/255f,0.75f)
         val GRID_WIDTH = 50f
         val GRID_HEIGHT = 50f

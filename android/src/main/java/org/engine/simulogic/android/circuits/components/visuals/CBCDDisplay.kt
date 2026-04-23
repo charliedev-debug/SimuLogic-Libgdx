@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.other.CRect
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -18,7 +19,7 @@ class CBCDDisplay (x:Float, y:Float, private val scene: PlayGroundScene) : CNode
     private val segmentSignalList = mutableListOf<Int>()
     private val segColorOff = Color(51/255f, 51/255f, 51/255f, 1f)
     init {
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("SEVEN-SEGMENT-BACKGROUND")
         val width = CDefaults.segmentDisplayWidth * 7f
         val height = CDefaults.segmentDisplayHeight * 7f

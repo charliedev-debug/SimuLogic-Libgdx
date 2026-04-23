@@ -7,12 +7,13 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 
 open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, private val scene: PlayGroundScene) :
     CNode() {
     var parent: Entity? = null
     init {
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = when (type) {
             CTypes.SIGNAL_IN -> textureAtlas.findRegion("INPUT")
             CTypes.SIGNAL_OUT -> textureAtlas.findRegion("OUTPUT")

@@ -8,6 +8,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
@@ -19,7 +20,7 @@ class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, priv
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y,4, ROTATE_RIGHT, scene)
     init {
 
-        val textureAtlas = scene.assetManager.get("component.atlas", TextureAtlas::class.java)
+        val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("DATA-BUS")
         type = CTypes.DATA_BUS
         this.rotationDirection = rotationDirection
@@ -80,7 +81,9 @@ class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, priv
             for(i in 0 until MAX_POINTS step 2) {
                 val a = getChildAt(i)
                 val b = getChildAt(i+1)
-                lines.add(CLine(a.getPosition()!!.x,a.getPosition()!!.y,b.getPosition()!!.x, b.getPosition()!!.y, lineWidth))
+                lines.add(CLine(a.getPosition()!!.x,a.getPosition()!!.y,b.getPosition()!!.x, b.getPosition()!!.y, lineWidth).also {
+                    it.color = EnvironmentTheme.colorOnBackground
+                })
             }
             lines.forEach {
                 layer.attachChild(it)

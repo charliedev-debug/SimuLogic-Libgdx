@@ -74,7 +74,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:name="org.engine.simulogic.android.SettingsActivity"
         android:exported="true"
         android:label="@string/title_activity_settings"
-        android:theme="@style/AppTheme">
+        android:theme="@style/GruvBox">
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.OPENABLE" />

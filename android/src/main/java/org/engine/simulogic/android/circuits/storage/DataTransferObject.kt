@@ -32,6 +32,7 @@ import org.engine.simulogic.android.circuits.components.wireless.CChannel
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.io.BufferedInputStream
@@ -342,7 +343,9 @@ class DataTransferObject {
                                     x,
                                     y,
                                     scene
-                                )
+                                ).also{
+                                    it.color = EnvironmentTheme.colorOnBackground
+                                }
                             )
                         )
                     }
