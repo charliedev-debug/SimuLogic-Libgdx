@@ -12,7 +12,7 @@
             app:entryValues="@array/language_values"
             app:defaultValue="English"
             app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/language"/>
+            app:icon="@drawable/language" />
 
     </PreferenceCategory>
     <!--<PreferenceCategory

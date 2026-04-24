@@ -31,6 +31,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
@@ -39,14 +40,20 @@ import com.google.android.material.internal.EdgeToEdgeUtils
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.circuits.storage.UserSettings
+import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
@@ -76,11 +83,16 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     private val simulationOptions = SimulationOptions()
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
+        runBlocking{
+            ActivityHelpers.getTheme(userSettings, this@SimulationActivity).also{
+                simulationOptions.theme = it
+            }
+        }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
         enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
             navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
-        setStatusBarColor(window, getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
+        ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
         val toolBarWrapper = findViewById<View>(R.id.toolBarWrapper)
@@ -122,9 +134,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 autoSaveEnabledSwitch.isChecked = it
                 simulationOptions.autoSaveEnabled = it
             }
+
         }
-        // set simulation theme
-        simulationOptions.theme = "kanagawa"
 
         textFps = findViewById(R.id.fps_text)
         textLatency = findViewById(R.id.latency)
@@ -392,39 +403,6 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
         supportFragmentManager.beginTransaction()
             .add(R.id.simulation_fragment, simulationFragment).commit()
-    }
-
-    fun getThemeResourceID(context: Context, attr: Int): Int {
-        val value = TypedValue()
-        context.theme.resolveAttribute(attr, value, true)
-        return value.data
-    }
-
-    fun setStatusBarColor(window: Window, color: Int) {
-        window.decorView.setOnApplyWindowInsetsListener { view, insets ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                val statusBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
-                view.setBackgroundColor(color)
-                view.setPadding(statusBarInsets.left, statusBarInsets.top, statusBarInsets.right, statusBarInsets.bottom)
-                insets
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val bars = insets.getInsets(WindowInsets.Type.systemBars())
-                    view.setBackgroundColor(color)
-                    view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
-                    return@setOnApplyWindowInsetsListener insets
-                }else{
-                    window.statusBarColor = color
-                    window.navigationBarColor = color
-                    val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-                    insetsController.isAppearanceLightStatusBars = false
-                    view.setPadding(insets.systemWindowInsetLeft,insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
-                    window.decorView.setBackgroundColor(color)
-                    return@setOnApplyWindowInsetsListener insets
-                }
-            }
-
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

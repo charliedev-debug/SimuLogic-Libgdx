@@ -23,17 +23,23 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
+import org.engine.simulogic.android.circuits.storage.UserSettings
+import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.views.dialogs.AboutDialog
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 
 
 class LauncherActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
+private lateinit var appBarConfiguration: AppBarConfiguration
 private lateinit var binding: ActivityLauncherBinding
-
+private val userSettings = UserSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
+        runBlocking{
+            ActivityHelpers.getTheme(userSettings, this@LauncherActivity)
+        }
         super.onCreate(savedInstanceState)
 
      binding = ActivityLauncherBinding.inflate(layoutInflater)
@@ -41,7 +47,7 @@ private lateinit var binding: ActivityLauncherBinding
 
      enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
             navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
-        setStatusBarColor(window, getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
+     ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
 
      setSupportActionBar(binding.appBarLauncher.toolbar)
 
@@ -105,38 +111,5 @@ private lateinit var binding: ActivityLauncherBinding
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_launcher)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    fun getThemeResourceID(context: Context, attr: Int): Int {
-        val value = TypedValue()
-        context.theme.resolveAttribute(attr, value, true)
-        return value.data
-    }
-
-    fun setStatusBarColor(window: Window, color: Int) {
-        window.decorView.setOnApplyWindowInsetsListener { view, insets ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                val statusBarInsets = insets.getInsets(WindowInsets.Type.systemBars())
-                view.setBackgroundColor(color)
-                view.setPadding(statusBarInsets.left, statusBarInsets.top, statusBarInsets.right, statusBarInsets.bottom)
-                insets
-            } else {
-                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val bars = insets.getInsets(WindowInsets.Type.systemBars())
-                    view.setBackgroundColor(color)
-                    view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
-                   return@setOnApplyWindowInsetsListener insets
-                }else{
-                     window.statusBarColor = color
-                     window.navigationBarColor = color
-                     val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-                     insetsController.isAppearanceLightStatusBars = false
-                     view.setPadding(insets.systemWindowInsetLeft,insets.systemWindowInsetTop, insets.systemWindowInsetRight, insets.systemWindowInsetBottom)
-                     window.decorView.setBackgroundColor(color)
-                     return@setOnApplyWindowInsetsListener insets
-                }
-            }
-
-        }
     }
 }
