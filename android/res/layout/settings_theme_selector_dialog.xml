@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardCornerRadius="20dp"
+    style="@style/Widget.App.CardStyle">
+<LinearLayout
+    android:layout_margin="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="?attr/colorOnBackground"
+        android:text="Select Theme"
+        android:textStyle="bold"
+        android:textSize="18dp"/>
+
+    <RadioGroup
+        android:id="@+id/theme_group"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rosepine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RosePine"
+            android:textColor="?attr/colorOnSurface"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/tokyonight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TokyoNight"
+            android:textColor="?attr/colorOnSurface"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/kanagawa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kanagawa"
+            android:textColor="?attr/colorOnSurface"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/catppuccin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Catppuccin"
+            android:textColor="?attr/colorOnSurface"/>
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/gruvbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GruvBox"
+            android:textColor="?attr/colorOnSurface"/>
+    </RadioGroup>
+
+
+</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

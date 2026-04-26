@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/backgroundColor"
-                app:titleTextColor="?attr/colorOnBackground"
+                app:titleTextColor="?attr/colorPrimary"
                 app:navigationIcon="@drawable/exit"
                 app:popupTheme="@style/PopupOverlay" />
 

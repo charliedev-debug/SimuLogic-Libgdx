@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardCornerRadius="20dp"
+    style="@style/Widget.App.CardStyle">
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="?attr/colorOnBackground"
+            android:text="Select Language"
+            android:textStyle="bold"
+            android:textSize="18dp"/>
+
+        <RadioGroup
+            android:id="@+id/language_group"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/english"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="English"
+                android:textColor="?attr/colorOnSurface"/>
+        </RadioGroup>
+
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

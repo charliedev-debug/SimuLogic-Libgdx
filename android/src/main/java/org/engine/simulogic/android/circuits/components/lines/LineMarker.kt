@@ -134,6 +134,7 @@ class LineMarker(
                         })
                 } else {
                     val node = pathQueue.removeFirst()
+
                     signals.add(
                         CSignal(
                             node.x,

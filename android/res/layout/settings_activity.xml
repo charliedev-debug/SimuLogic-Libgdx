@@ -6,7 +6,11 @@
     android:layout_height="match_parent"
     android:background="?attr/backgroundColor"
     tools:context=".android.SettingsActivity">
+
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
@@ -19,7 +23,7 @@
         android:layout_width = "match_parent"
         android:layout_height = "?attr/actionBarSize"
         android:background="?attr/backgroundColor"
-        app:titleTextColor="?attr/colorOnBackground"
+        app:titleTextColor="?attr/colorPrimary"
         app:title="Settings"
         app:navigationIcon="@drawable/back"/>
     <View
@@ -28,10 +32,15 @@
         android:background="?attr/colorOutline"/>
     </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
-    <FrameLayout
-        android:id="@+id/settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/settingsList"
+        app:layout_constraintLeft_toLeftOf = "parent"
+        app:layout_constraintTop_toTopOf= "parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

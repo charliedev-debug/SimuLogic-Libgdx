@@ -1,21 +1,25 @@
 package org.engine.simulogic.android
 
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowInsets
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.preference.PreferenceFragmentCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.helpers.ActivityHelpers
+import org.engine.simulogic.android.ui.adapters.SettingsPrefAdapter
+import org.engine.simulogic.android.ui.models.SettingsOption
+import org.engine.simulogic.android.views.dialogs.LanguageSelectorDialog
+import org.engine.simulogic.android.views.dialogs.ThemeSelectorDialog
 
 class SettingsActivity : AppCompatActivity() {
     private val userSettings = UserSettings()
@@ -31,18 +35,38 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener {
             finish()
         }
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, SettingsFragment())
-                    .commit()
+        val scope = CoroutineScope(Dispatchers.Default)
+        val prefAdapter = SettingsPrefAdapter().apply {
+            insert(SettingsPrefAdapter.HEADER,"Language")
+            insert(SettingsPrefAdapter.BUTTON,"English", "",R.drawable.language , listener = object :
+                SettingsPrefAdapter.OnItemClickListener{
+                override fun onClick(item: SettingsOption) {
+                    LanguageSelectorDialog(this@SettingsActivity).show()
+                }
+            })
+            insert(SettingsPrefAdapter.HEADER,"Theme")
+            var currentTheme = ""
+            runBlocking {
+                currentTheme = userSettings.getDataString(this@SettingsActivity, UserSettings.THEME_STYLE).first()
+            }
+            insert(SettingsPrefAdapter.BUTTON,currentTheme, "",R.drawable.theme_palette , listener = object :
+                SettingsPrefAdapter.OnItemClickListener{
+                override fun onClick(item: SettingsOption) {
+                    ThemeSelectorDialog(this@SettingsActivity, userSettings,object:
+                        ThemeSelectorDialog.OnThemeClickListener{
+                        override fun onClick(value: String) {
+                            scope.launch {
+                                userSettings.saveStringPref(this@SettingsActivity, UserSettings.THEME_STYLE, value)
+                            }
+                        }
+                        }).show()
+                }
+           })
         }
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-    }
+        findViewById<RecyclerView>(R.id.settingsList).apply {
+            layoutManager = LinearLayoutManager(this@SettingsActivity, LinearLayoutManager.VERTICAL, false)
+            adapter = prefAdapter
+        }
 
-    class SettingsFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        }
     }
 }

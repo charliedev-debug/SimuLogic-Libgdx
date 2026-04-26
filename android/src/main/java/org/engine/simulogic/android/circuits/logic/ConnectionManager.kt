@@ -26,7 +26,7 @@ class ConnectionManager(
         validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
-        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN)
+        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN)
     }
 
     fun resolveConnection() {

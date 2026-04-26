@@ -32,7 +32,7 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
             setPosition(x - CDefaults.gateWidth / 2f,y - CDefaults.gateHeight / 2f)
         }
 
-        sprite.color = Color(1f,0f,0f,0.27f)
+        sprite.color = CDefaults.GROUP_SELECTED_COLOR // Color(1f,0f,0f,0.27f)
 
         signals.add(CRangePoint(0f ,0f, CTypes.SIGNAL_RANGE_POINT,0, scene).also { point->
                point.setSize(pointSize,pointSize)
