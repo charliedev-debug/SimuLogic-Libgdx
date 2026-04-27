@@ -171,6 +171,9 @@ class ListNode(val value : CNode,
         return lineMarkersChildren[lineMarkersChildren.size - 1]
     }
 
+    fun sortLinMarkersByDepth(){
+        lineMarkersChildren.sortBy { it.getNodeOriginFromDepth() }
+    }
     fun clone():ListNode{
         return ListNode(value.clone() as CNode)
     }

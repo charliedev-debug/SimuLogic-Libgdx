@@ -57,6 +57,7 @@ class SettingsActivity : AppCompatActivity() {
                         override fun onClick(value: String) {
                             scope.launch {
                                 userSettings.saveStringPref(this@SettingsActivity, UserSettings.THEME_STYLE, value)
+                                recreate()
                             }
                         }
                         }).show()

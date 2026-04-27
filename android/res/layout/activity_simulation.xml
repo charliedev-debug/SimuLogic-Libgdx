@@ -46,13 +46,15 @@
                         android:layout_height="20dp"
                         android:layout_marginRight="5dp"
                         android:text="Edit"
-                        app:tint="@color/dividerColor"
+                        app:tint="?attr/colorPrimary"
+                        android:textColor="?attr/colorOnBackground"
                         app:srcCompat="@drawable/statistics"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12dp"
                         android:textStyle="bold"
+                        android:textColor="?attr/colorOnBackground"
                         android:text="Simulation Stats"/>
                 </LinearLayout>
                 <LinearLayout
@@ -65,19 +67,21 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="@color/dividerColor"
+                        app:tint="?attr/colorPrimary"
                         app:srcCompat="@drawable/frame_rate_speed"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/fps_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
+                        android:textColor="?attr/colorOnBackground"
                         android:text="FPS: 0"
                         android:textSize="10dp"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/latency"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="?attr/colorOnBackground"
                         android:text="latency: 16ms"
                         android:textSize="10dp"/>
                 </LinearLayout>
@@ -91,12 +95,13 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="@color/dividerColor"
+                        app:tint="?attr/colorPrimary"
                         app:srcCompat="@drawable/components"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/components_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="?attr/colorOnBackground"
                         android:textSize="10dp"
                         android:text="Components: 0"/>
                 </LinearLayout>
@@ -110,12 +115,13 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="@color/dividerColor"
+                        app:tint="?attr/colorPrimary"
                         app:srcCompat="@drawable/connections"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/connection_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="?attr/colorOnBackground"
                         android:textSize="10dp"
                         android:text="Connections: 0"/>
                 </LinearLayout>
@@ -125,7 +131,7 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height=".5dp"
-                android:background="@color/dividerColor"/>
+                android:background="?attr/colorOutline"/>
 
             <LinearLayout
                 android:paddingTop="5dp"
@@ -138,12 +144,15 @@
                     android:layout_height="20dp"
                     android:layout_marginRight="5dp"
                     android:text="Edit"
+                    android:textColor="?attr/colorOnBackground"
+                    app:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/edit"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
                     android:textStyle="bold"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Project Metadata"/>
             </LinearLayout>
 
@@ -159,12 +168,14 @@
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"
                     android:textSize="12dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Title"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/project_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="ADDER"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -173,12 +184,14 @@
                     android:layout_marginBottom="5dp"
                     android:textStyle="bold"
                     android:textSize="12dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Description"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/project_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="10dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="This is the project description text"/>
                 <com.google.android.material.button.MaterialButton
                     style="@style/customButtonStyle"
@@ -186,6 +199,7 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Edit"/>
             </LinearLayout>
 
@@ -205,11 +219,14 @@
                     android:layout_height="24dp"
                     android:layout_marginRight="5dp"
                     android:text="Edit"
+                    android:textColor="?attr/colorOnBackground"
+                    app:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/grid"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Grid Settings"/>
             </LinearLayout>
 
@@ -222,6 +239,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Grid Visible"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/grid_enabled"
@@ -239,6 +257,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Label Enabled"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/label_enabled"
@@ -257,14 +276,14 @@
                     android:id="@+id/grid_style_a"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorSecondary"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Style A"
                     android:checked="true"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_b"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorSecondary"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Style B"
                     android:checked="false"/>
             </RadioGroup>
@@ -285,12 +304,13 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="5dp"
-                    app:tint="@color/dividerColor"
+                    app:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/toolbar"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Toolbar Settings"/>
             </LinearLayout>
 
@@ -303,6 +323,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Show TopBar"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/top_bar_enabled"
@@ -320,6 +341,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Show Menu"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/menu_bar_enabled"
@@ -344,12 +366,13 @@
                     android:layout_height="24dp"
                     android:layout_marginRight="5dp"
                     android:text="Edit"
-                    app:tint="@color/dividerColor"
+                    app:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/storage"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Storage"/>
             </LinearLayout>
             <LinearLayout
@@ -361,6 +384,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
+                    android:textColor="?attr/colorOnBackground"
                     android:text="Auto Save"/>
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/auto_save_enabled"

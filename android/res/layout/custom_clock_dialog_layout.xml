@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
-    app:cardBackgroundColor="@color/background3"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
     app:cardCornerRadius="20dp"
     style="@style/Widget.App.CardStyle">
     <LinearLayout
@@ -20,12 +20,13 @@
             android:paddingBottom="10dp"
             android:textStyle="bold"
             android:textSize="20dp"
+            android:textColor="?attr/colorOnSurface"
             android:text="Custom Clock"
             />
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/gray"/>
+            android:background="?attr/colorOutline"/>
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/clock"
             android:layout_width="match_parent"
