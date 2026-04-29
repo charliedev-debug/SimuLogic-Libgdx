@@ -10,6 +10,7 @@ class EnvironmentTheme {
         var colorBackground = Color.WHITE
         var colorPrimary = Color.WHITE
         var colorOutline = Color.WHITE
+        var colorOutline2 = Color.WHITE
         var colorSecondary = Color.WHITE
         var colorOnBackground = Color.WHITE
     }

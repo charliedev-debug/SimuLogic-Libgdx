@@ -74,7 +74,8 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="MODES"
-                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
                 android:gravity="center"
                 android:checked="true"/>
            <RadioButton
@@ -86,7 +87,8 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="ACTIONS"
-                android:textColor="?attr/colorOnSurface"
+               android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
                 android:gravity="center"/>
             <RadioButton
                 android:id="@+id/components"
@@ -97,7 +99,8 @@
                 android:button="@null"
                 android:layout_weight="1"
                 android:text="COMPONENTS"
-                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnBackground"
                 android:gravity="center"/>
         </RadioGroup>
 

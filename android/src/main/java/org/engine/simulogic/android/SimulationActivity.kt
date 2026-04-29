@@ -259,10 +259,19 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         gridStyleRadioButton.setOnCheckedChangeListener { _, id ->
-            if (id == R.id.grid_style_a) {
-                simulationFragment.simulationLoop.componentManager.setStyleA()
-            } else {
-                simulationFragment.simulationLoop.componentManager.setStyleB()
+            when (id) {
+                R.id.grid_style_a -> {
+                    simulationFragment.simulationLoop.componentManager.setStyleA()
+                }
+                R.id.grid_style_b -> {
+                    simulationFragment.simulationLoop.componentManager.setStyleB()
+                }
+                R.id.grid_style_c -> {
+                    simulationFragment.simulationLoop.componentManager.setStyleC()
+                }
+                else -> {
+                    simulationFragment.simulationLoop.componentManager.setStyleNone()
+                }
             }
         }
 

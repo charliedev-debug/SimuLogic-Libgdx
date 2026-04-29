@@ -184,15 +184,14 @@ class LineMarker(
         }
     }
 
-    fun getNodeOriginFromDepth():Int{
+    fun getNodeOriginDepth():Int{
         val node = from
         var depth = 0
         if (node.value !is CSignal) {
             return depth
         } else {
             var parent = node.value as CSignal
-            var origin = this
-
+            var origin: Entity
             while (parent.parent != null && parent.parent is LineMarker) {
                 origin = (parent.parent as LineMarker)
                 if (origin.from.value is CSignal) {
@@ -217,6 +216,7 @@ class LineMarker(
 
     // removes marker for the parent node
     fun removeSelf() {
+        println("called!")
         detachSelf()
         getNodeOriginFrom(from).from.removeMarker(this)
     }

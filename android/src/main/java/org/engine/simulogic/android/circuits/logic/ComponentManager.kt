@@ -282,9 +282,21 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
 
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
+        gestureListener.gridDecorator?.hidePositionGridLine()
     }
 
     fun setStyleB(){
+        gestureListener.gridDecorator?.showPositionGridLine()
+        gestureListener.gridDecorator?.showLabelHeader()
+    }
+
+    fun setStyleC(){
+        gestureListener.gridDecorator?.hideLabelHeader()
+        gestureListener.gridDecorator?.showPositionGridLine()
+    }
+
+    fun setStyleNone(){
+        gestureListener.gridDecorator?.hidePositionGridLine()
         gestureListener.gridDecorator?.hideLabelHeader()
     }
 

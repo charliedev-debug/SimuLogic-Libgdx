@@ -15,7 +15,7 @@
     </style>
 
     <style name="customButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="backgroundTint">?attr/colorSurfaceVariant</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="rippleColor">@color/white</item>
     </style>

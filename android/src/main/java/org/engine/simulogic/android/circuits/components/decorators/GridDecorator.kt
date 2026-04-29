@@ -59,6 +59,10 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         positionGridLine = false
     }
 
+    fun showPositionGridLine(){
+        positionGridLine = true
+    }
+
     override fun update() {
 
         val factor = (1f/ camera.zoom)
@@ -107,7 +111,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 labelsX.add(GridLabel(font, "$lx", x, originY + viewPortHeight - labelOffsetY, scene).apply {
                         color = EnvironmentTheme.colorOnBackground
                         lineHeader.updatePosition(x, getPosition().y, x, 0f )
-                        lineHeader.color = EnvironmentTheme.colorOutline
+                        lineHeader.color = EnvironmentTheme.colorOutline2
                         lineHeader.lineWidth = lineWidth
                         fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                         lineLayer.attachChild(lineHeader)
@@ -133,7 +137,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 labelsY.add(GridLabel(font, "$ly", originX + labelOffsetY, y, scene).apply {
                     color = EnvironmentTheme.colorOnBackground
                     lineHeader.updatePosition(getPosition().x, y, viewPortWidth, y )
-                    lineHeader.color = EnvironmentTheme.colorOutline
+                    lineHeader.color = EnvironmentTheme.colorOutline2
                     lineHeader.lineWidth = lineWidth
                     fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                     lineLayer.attachChild(lineHeader)

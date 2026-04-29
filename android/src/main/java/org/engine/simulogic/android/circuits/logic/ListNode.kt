@@ -2,12 +2,10 @@ package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CNode
-import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.storage.AutoSave
-import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 
@@ -43,7 +41,7 @@ class ListNode(val value : CNode,
     }
 
     fun removeMarker(marker: LineMarker){
-         next.removeIf { it == marker.from }
+         next.removeIf { it == marker.to }
          marker.from.value.reset()
          marker.to.value.reset()
          lineMarkersChildren.remove(marker)
@@ -51,7 +49,7 @@ class ListNode(val value : CNode,
     }
 
     fun insertMarker(marker: LineMarker){
-        next.add(marker.from)
+        next.add(marker.to)
         lineMarkersChildren.add(marker.apply { index = next.size - 1 })
         AutoSave.dataChanged = true
     }
@@ -76,6 +74,7 @@ class ListNode(val value : CNode,
                 val marker = iterator.next()
                 if(marker.to == node){
                     marker.detachSelf()
+                    next.remove(marker.to)
                     iterator.remove()
                     return marker
                 }
@@ -172,7 +171,7 @@ class ListNode(val value : CNode,
     }
 
     fun sortLinMarkersByDepth(){
-        lineMarkersChildren.sortBy { it.getNodeOriginFromDepth() }
+        lineMarkersChildren.sortBy { it.getNodeOriginDepth() }
     }
     fun clone():ListNode{
         return ListNode(value.clone() as CNode)

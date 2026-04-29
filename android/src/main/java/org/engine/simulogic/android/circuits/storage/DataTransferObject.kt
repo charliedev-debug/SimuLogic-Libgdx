@@ -66,8 +66,35 @@ class DataTransferObject {
         }
     }
 
+    data class NestedLineMarkerHelper(
+        val fromId: Int,
+        val markerSizeFrom: Int,
+        val index: Int,
+        val toId: Int,
+        val signalFromIndex: Int,
+        val signalToIndex: Int,
+        val signalSize: Int,
+        val linePointCountX: Int,
+        val linePointCountY: Int,
+        val originDepth: Int,
+        val fromSourceNode: Int,
+        val fromLineMarker: Int,
+        val sourceSignalIndex: Int,
+        val signals: MutableList<NestedCSignalHelper> = mutableListOf()
+    )
 
-    fun writeData(projectOptions: ProjectOptions,gestureListener:MotionGestureListener, connection: Connection) {
+    data class NestedCSignalHelper(
+        val signalIndex: Int,
+        val x: Float,
+        val y: Float
+    )
+
+
+    fun writeData(
+        projectOptions: ProjectOptions,
+        gestureListener: MotionGestureListener,
+        connection: Connection
+    ) {
         val title = projectOptions.title
         val description = projectOptions.description
         val file = Gdx.files.external("projects/${projectOptions.fileName}")
@@ -102,26 +129,31 @@ class DataTransferObject {
                 stream.writeFloat(component.getPosition().y)
                 stream.writeInt(component.rotationDirection)
                 // save label data
-                when(component){
-                    is CLabel->{
+                when (component) {
+                    is CLabel -> {
                         stream.writeInt(component.text.length)
                         stream.write(component.text.toByteArray(Charsets.UTF_8))
                         stream.writeFloat(component.fontSize)
                     }
-                    is CClock->{
+
+                    is CClock -> {
                         stream.writeFloat(component.freq)
                     }
-                    is CPower->{
+
+                    is CPower -> {
                         stream.writeInt(component.value)
                     }
-                    is CDataBus->{
+
+                    is CDataBus -> {
                         stream.writeInt(component.DATA_SIZE)
                     }
-                    is CFanOutBus->{
+
+                    is CFanOutBus -> {
                         stream.writeInt(component.inputSize)
                         stream.writeInt(component.segments)
                     }
-                    is CGroup->{
+
+                    is CGroup -> {
                         stream.writeFloat(component.getWidth())
                         stream.writeFloat(component.getHeight())
                         stream.writeInt(component.dataContainer.size())
@@ -129,7 +161,8 @@ class DataTransferObject {
                             stream.writeInt(item.value.id)
                         }
                     }
-                    is CChannel->{
+
+                    is CChannel -> {
                         stream.writeInt(component.channelId.length)
                         stream.write(component.channelId.toByteArray(Charsets.UTF_8))
                         stream.writeInt(component.channelType)
@@ -150,17 +183,18 @@ class DataTransferObject {
                     stream.writeInt(marker.signals.size)
                     stream.writeInt(marker.linePointCountX)
                     stream.writeInt(marker.linePointCountY)
+                    stream.writeInt(marker.getNodeOriginDepth())
                     // in case the connection is connected to another connection joint
-                    if(marker.isSourceSignal()){
-                     stream.writeInt(LineMarker.FROM_SIGNAL)
-                     // where this node is picking up a signal from
-                     stream.writeInt(marker.getNodeOriginFrom(marker.from).from.value.id)
-                      //which lineMarker it is connected to
-                     stream.writeInt(((marker.from.value as CSignal).parent as LineMarker).index)
-                    // which signal is it connected to
-                     stream.writeInt((marker.from.value as CSignal).signalIndex)
-                    }else{
-                     stream.writeInt(LineMarker.FROM_COMPONENT)
+                    if (marker.isSourceSignal()) {
+                        stream.writeInt(LineMarker.FROM_SIGNAL)
+                        // where this node is picking up a signal from
+                        stream.writeInt(marker.getNodeOriginFrom(marker.from).from.value.id)
+                        //which lineMarker it is connected to
+                        stream.writeInt(((marker.from.value as CSignal).parent as LineMarker).index)
+                        // which signal is it connected to
+                        stream.writeInt((marker.from.value as CSignal).signalIndex)
+                    } else {
+                        stream.writeInt(LineMarker.FROM_COMPONENT)
                     }
                     marker.signals.forEach { signal ->
                         stream.writeInt(signal.signalIndex)
@@ -236,7 +270,7 @@ class DataTransferObject {
                 labelText?.let {
                     stream.readFully(labelText)
                 }
-                val labelFontSize = if(type == CTypes.LABEL) stream.readFloat() else 0f
+                val labelFontSize = if (type == CTypes.LABEL) stream.readFloat() else 0f
                 // power generator signal value
                 val powerValue = if (type == CTypes.POWER) stream.readInt() else 0
                 // data bus size value
@@ -300,9 +334,11 @@ class DataTransferObject {
                     CTypes.LATCH -> {
                         connection.insertNode(ListNode(CLatch(x, y, rotation, scene)))
                     }
+
                     CTypes.FLIP_FLOP -> {
                         connection.insertNode(ListNode(CDFlipFlop(x, y, rotation, scene)))
                     }
+
                     CTypes.CLOCK -> {
                         connection.insertExecutionPoint(
                             ListNode(
@@ -329,7 +365,7 @@ class DataTransferObject {
                         connection.insertNode(ListNode(CSevenSegmentDisplay(x, y, scene)))
                     }
 
-                    CTypes.BCD_SEVEN_SEGMENT_DISPLAY->{
+                    CTypes.BCD_SEVEN_SEGMENT_DISPLAY -> {
                         connection.insertNode(ListNode(CBCDDisplay(x, y, scene)))
                     }
 
@@ -343,7 +379,7 @@ class DataTransferObject {
                                     x,
                                     y,
                                     scene
-                                ).also{
+                                ).also {
                                     it.color = EnvironmentTheme.colorOnBackground
                                 }
                             )
@@ -351,7 +387,17 @@ class DataTransferObject {
                     }
 
                     CTypes.POWER -> {
-                        connection.insertExecutionPoint(ListNode(CPower(powerValue, x, y,rotation, scene)))
+                        connection.insertExecutionPoint(
+                            ListNode(
+                                CPower(
+                                    powerValue,
+                                    x,
+                                    y,
+                                    rotation,
+                                    scene
+                                )
+                            )
+                        )
                     }
 
                     CTypes.DATA_BUS -> {
@@ -374,12 +420,22 @@ class DataTransferObject {
                     }
 
                     CTypes.GROUP -> {
-                        connection.insertNode(ListNode(CGroup(x, y,groupWidth, groupHeight, connection, scene).also { group ->
-                            group.setSize(groupWidth, groupHeight)
-                            group.componentGroupIds.addAll(groupMemberIds)
-                            group.gestureListener = gestureListener
-                            groups.add(group)
-                        }))
+                        connection.insertNode(
+                            ListNode(
+                                CGroup(
+                                    x,
+                                    y,
+                                    groupWidth,
+                                    groupHeight,
+                                    connection,
+                                    scene
+                                ).also { group ->
+                                    group.setSize(groupWidth, groupHeight)
+                                    group.componentGroupIds.addAll(groupMemberIds)
+                                    group.gestureListener = gestureListener
+                                    groups.add(group)
+                                })
+                        )
                     }
 
                     CTypes.CHANNEL -> {
@@ -422,51 +478,114 @@ class DataTransferObject {
                 it.loadFromIds(connection)
             }
 
-            while (true) {
-                val fromId = stream.readInt()
-                val markerSizeFrom = stream.readInt()
-                for (i in 0 until markerSizeFrom) {
-                    val index = stream.readInt()
-                    val toId = stream.readInt()
-                    val signalFromIndex = stream.readInt()
-                    val signalToIndex = stream.readInt()
-                    val signalSize = stream.readInt()
-                    val linePointCountX = stream.readInt()
-                    val linePointCountY = stream.readInt()
-                    if(version == VERSION_2){
-                        val sourceID = stream.readInt()
-                        if(sourceID == LineMarker.FROM_SIGNAL){
-                         val fromSourceNode = stream.readInt()
-                         val fromLineMarker = stream.readInt()
-                         val sourceSignalIndex = stream.readInt()
-                         CDefaults.linePointCountX = linePointCountX
-                         CDefaults.linePointCountY = linePointCountY
-                         connection.insertConnection(parent = connection[fromSourceNode],
-                             from = ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),
-                             to = connection[toId], signalFrom = sourceSignalIndex, signalTo = signalToIndex ,scene = scene).also{
-                                 marker->
-                             for (j in 0 until signalSize) {
-                                 val signalIndex = stream.readInt()
-                                 val x = stream.readFloat()
-                                 val y = stream.readFloat()
-                                 marker.signals[signalIndex].also { signal ->
-                                     signal.updatePosition(x, y)
-                                 }
-                             }
-                         }
-                         /*connection[fromSourceNode].insertChild(ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),connection[toId], signalFromIndex, signalToIndex,connection, scene).also{
-                                marker->
-                                for (j in 0 until signalSize) {
-                                    val signalIndex = stream.readInt()
-                                    val x = stream.readFloat()
-                                    val y = stream.readFloat()
-                                    marker.signals[signalIndex].also { signal ->
-                                        signal.updatePosition(x, y)
+            val nestedLineMarkerList = mutableListOf<NestedLineMarkerHelper>()
+            try {
+                while (true) {
+                    val fromId = stream.readInt()
+                    val markerSizeFrom = stream.readInt()
+                    for (i in 0 until markerSizeFrom) {
+                        val index = stream.readInt()
+                        val toId = stream.readInt()
+                        val signalFromIndex = stream.readInt()
+                        val signalToIndex = stream.readInt()
+                        val signalSize = stream.readInt()
+                        val linePointCountX = stream.readInt()
+                        val linePointCountY = stream.readInt()
+                        if (version == VERSION_2) {
+                            val originDepth = stream.readInt()
+                            val sourceID = stream.readInt()
+                            if (sourceID == LineMarker.FROM_SIGNAL) {
+                                val fromSourceNode = stream.readInt()
+                                val fromLineMarker = stream.readInt()
+                                val sourceSignalIndex = stream.readInt()
+                                /*CDefaults.linePointCountX = linePointCountX
+                                CDefaults.linePointCountY = linePointCountY
+                               connection.insertConnection(
+                                    parent = connection[fromSourceNode],
+                                    from = ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),
+                                    to = connection[toId],
+                                    signalFrom = sourceSignalIndex,
+                                    signalTo = signalToIndex,
+                                    scene = scene
+                                ).also { marker ->
+                                    for (j in 0 until signalSize) {
+                                        val signalIndex = stream.readInt()
+                                        val x = stream.readFloat()
+                                        val y = stream.readFloat()
+                                        marker.signals[signalIndex].also { signal ->
+                                            signal.updatePosition(x, y)
+                                        }
+                                    }
+                                }*/
+
+                                NestedLineMarkerHelper(
+                                    fromId = fromId,
+                                    markerSizeFrom = markerSizeFrom,
+                                    index = index,
+                                    toId = toId,
+                                    signalFromIndex = signalFromIndex,
+                                    signalToIndex = signalToIndex,
+                                    signalSize = signalSize,
+                                    linePointCountX = linePointCountX,
+                                    linePointCountY = linePointCountY,
+                                    originDepth = originDepth,
+                                    fromSourceNode = fromSourceNode,
+                                    fromLineMarker = fromLineMarker,
+                                    sourceSignalIndex = sourceSignalIndex
+                                ).also {
+                                    nestedLineMarkerList.add(it)
+                                }.signals.also {
+                                    for (j in 0 until signalSize) {
+                                        val signalIndex = stream.readInt()
+                                        val x = stream.readFloat()
+                                        val y = stream.readFloat()
+                                        it.add(
+                                            NestedCSignalHelper(
+                                                signalIndex = signalIndex,
+                                                x = x,
+                                                y = y
+                                            )
+                                        )
                                     }
                                 }
-                            }*/
 
-                        }else{
+                                /*connection[fromSourceNode].insertChild(ListNode(connection[fromSourceNode].getLineMarkerChildren()[fromLineMarker].signals[sourceSignalIndex]),connection[toId], signalFromIndex, signalToIndex,connection, scene).also{
+                                   marker->
+                                   for (j in 0 until signalSize) {
+                                       val signalIndex = stream.readInt()
+                                       val x = stream.readFloat()
+                                       val y = stream.readFloat()
+                                       marker.signals[signalIndex].also { signal ->
+                                           signal.updatePosition(x, y)
+                                       }
+                                   }
+                               }*/
+
+                            } else {
+                                LineMarker(
+                                    scene,
+                                    connection[fromId],
+                                    connection[toId],
+                                    signalFromIndex,
+                                    signalToIndex,
+                                    index,
+                                    linePointCountX,
+                                    linePointCountY
+                                ).also { marker ->
+                                    marker.initialize(scene)
+                                    for (j in 0 until signalSize) {
+                                        val signalIndex = stream.readInt()
+                                        val x = stream.readFloat()
+                                        val y = stream.readFloat()
+                                        marker.signals[signalIndex].also { signal ->
+                                            signal.updatePosition(x, y)
+                                        }
+                                    }
+                                    connection[fromId].insertChildUnmarked(connection[toId], marker)
+                                }
+
+                            }
+                        } else {
                             LineMarker(
                                 scene,
                                 connection[fromId],
@@ -488,33 +607,46 @@ class DataTransferObject {
                                 }
                                 connection[fromId].insertChildUnmarked(connection[toId], marker)
                             }
-
-                        }
-                    }else {
-                        LineMarker(
-                            scene,
-                            connection[fromId],
-                            connection[toId],
-                            signalFromIndex,
-                            signalToIndex,
-                            index,
-                            linePointCountX,
-                            linePointCountY
-                        ).also { marker ->
-                            marker.initialize(scene)
-                            for (j in 0 until signalSize) {
-                                val signalIndex = stream.readInt()
-                                val x = stream.readFloat()
-                                val y = stream.readFloat()
-                                marker.signals[signalIndex].also { signal ->
-                                    signal.updatePosition(x, y)
-                                }
-                            }
-                            connection[fromId].insertChildUnmarked(connection[toId], marker)
                         }
                     }
                 }
+            }catch (eof: EOFException){
+                //process nestedLines with depth
+                nestedLineMarkerList.sortBy { it.originDepth }
+                nestedLineMarkerList.onEach {
+                    println("Line Index ${it.originDepth}")
+                }
+                nestedLineMarkerList.onEach {
+                    CDefaults.linePointCountX = it.linePointCountX
+                    CDefaults.linePointCountY = it.linePointCountY
+                    println("connection size ${connection[it.fromSourceNode].getLineMarkerChildren().size}")
+                    println("connection requested ${it.fromLineMarker}")
+                    connection.insertConnection(
+                        parent = connection[it.fromSourceNode],
+                        from = ListNode(connection[it.fromSourceNode].
+                        getLineMarkerChildren()[it.fromLineMarker]
+                            .signals[it.sourceSignalIndex]),
+                        to = connection[it.toId],
+                        signalFrom = it.sourceSignalIndex,
+                        signalTo = it.signalToIndex,
+                        scene = scene
+                    ).also { marker ->
+                        for (j in 0 until it.signalSize) {
+                            val signalHelper = it.signals[j]
+                            val signalIndex = signalHelper.signalIndex
+                            val x = signalHelper.x
+                            val y = signalHelper.y
+                            marker.signals[signalIndex].also { signal ->
+                                signal.updatePosition(x, y)
+                            }
+                        }
+                    }
+                }
+                throw eof
             }
+
+
+
         } catch (eof: EOFException) {
             eof.printStackTrace()
             stream.close()
@@ -631,14 +763,14 @@ class DataTransferObject {
         return files
     }
 
-    fun listSampleProjects(context: Context):List<ProjectOptions>{
+    fun listSampleProjects(context: Context): List<ProjectOptions> {
         val files = mutableListOf<ProjectOptions>()
         val parent = "sample_projects"
         val assetManager = context.assets
-        assetManager.list("sample_projects")?.onEach {name->
+        assetManager.list("sample_projects")?.onEach { name ->
             try {
                 files.add(readFileHeaderFromAsset(File(parent, name), assetManager))
-            }catch (io:java.lang.Exception){
+            } catch (io: java.lang.Exception) {
                 //ignore the file and continue
             }
 
@@ -646,15 +778,15 @@ class DataTransferObject {
         return files
     }
 
-    fun getSampleProjectDetails(context: Context, path: String): ProjectOptions{
-        return readFileHeaderFromAsset(File(path),context.assets)
+    fun getSampleProjectDetails(context: Context, path: String): ProjectOptions {
+        return readFileHeaderFromAsset(File(path), context.assets)
     }
 
-    fun fetchSampleProject(context: Context, projectOptions: ProjectOptions):ProjectOptions{
+    fun fetchSampleProject(context: Context, projectOptions: ProjectOptions): ProjectOptions {
         val parentFolder = File(context.getExternalFilesDir(""), "projects")
-        while(!parentFolder.exists())parentFolder.mkdirs()
+        while (!parentFolder.exists()) parentFolder.mkdirs()
         val destinationFolder = File(parentFolder, File(projectOptions.path).name)
-        if(destinationFolder.exists() && destinationFolder.length() != 0L){
+        if (destinationFolder.exists() && destinationFolder.length() != 0L) {
             return readFileHeader(destinationFolder)
         }
         val assetManager = context.assets
@@ -667,7 +799,7 @@ class DataTransferObject {
             while (sourceStream.read(buffer).also { length = it } > 0) {
                 fileOutputStream.write(buffer, 0, length)
             }
-        }catch (io:IOException){
+        } catch (io: IOException) {
             io.printStackTrace()
             sourceStream.close()
             fileOutputStream.close()
