@@ -46,7 +46,7 @@
                         android:layout_height="20dp"
                         android:layout_marginRight="5dp"
                         android:text="Edit"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorOnBackground"
                         android:textColor="?attr/colorOnBackground"
                         app:srcCompat="@drawable/statistics"/>
                     <com.google.android.material.textview.MaterialTextView
@@ -67,7 +67,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorOnBackground"
                         app:srcCompat="@drawable/frame_rate_speed"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/fps_text"
@@ -95,7 +95,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorOnBackground"
                         app:srcCompat="@drawable/components"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/components_count"
@@ -115,7 +115,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginRight="5dp"
-                        app:tint="?attr/colorPrimary"
+                        app:tint="?attr/colorOnBackground"
                         app:srcCompat="@drawable/connections"/>
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/connection_count"
@@ -145,7 +145,7 @@
                     android:layout_marginRight="5dp"
                     android:text="Edit"
                     android:textColor="?attr/colorOnBackground"
-                    app:tint="?attr/colorPrimary"
+                    app:tint="?attr/colorOnBackground"
                     app:srcCompat="@drawable/edit"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -207,7 +207,7 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height=".5dp"
-                android:background="@color/dividerColor"/>
+                android:background="?attr/colorOutline"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -220,7 +220,7 @@
                     android:layout_marginRight="5dp"
                     android:text="Edit"
                     android:textColor="?attr/colorOnBackground"
-                    app:tint="?attr/colorPrimary"
+                    app:tint="?attr/colorOnBackground"
                     app:srcCompat="@drawable/grid"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
@@ -245,7 +245,7 @@
                     android:id="@+id/grid_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:checked="true"/>
             </LinearLayout>
             <LinearLayout
@@ -263,7 +263,7 @@
                     android:id="@+id/label_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:checked="true"/>
             </LinearLayout>
 
@@ -326,7 +326,7 @@
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height=".5dp"
-                android:background="@color/dividerColor"/>
+                android:background="?attr/colorOutline"/>
 
 
             <LinearLayout
@@ -338,7 +338,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginRight="5dp"
-                    app:tint="?attr/colorPrimary"
+                    app:tint="?attr/colorOnBackground"
                     app:srcCompat="@drawable/toolbar"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
@@ -363,7 +363,7 @@
                     android:id="@+id/top_bar_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:checked="true"/>
             </LinearLayout>
             <LinearLayout
@@ -381,14 +381,14 @@
                     android:id="@+id/menu_bar_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:checked="true"/>
             </LinearLayout>
             <View
                 android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height=".5dp"
-                android:background="@color/dividerColor"/>
+                android:background="?attr/colorOutline"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -400,7 +400,7 @@
                     android:layout_height="24dp"
                     android:layout_marginRight="5dp"
                     android:text="Edit"
-                    app:tint="?attr/colorPrimary"
+                    app:tint="?attr/colorOnBackground"
                     app:srcCompat="@drawable/storage"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"
@@ -424,7 +424,7 @@
                     android:id="@+id/auto_save_enabled"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?android:textColorPrimary"
+                    android:textColor="?attr/colorOnBackground"
                     android:checked="true"/>
             </LinearLayout>
         </LinearLayout>
