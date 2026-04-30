@@ -9,8 +9,13 @@ import android.view.Gravity
 import android.view.Menu
 import android.view.Window
 import android.view.WindowInsets
+import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -23,11 +28,18 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.views.dialogs.AboutDialog
+import org.engine.simulogic.android.views.dialogs.AlertDialog
+import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 
 
@@ -53,13 +65,80 @@ private val userSettings = UserSettings()
 
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
      val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
+     val updateActivityResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+          if(result.resultCode != RESULT_CANCELED){
 
-     findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
+              Toast.makeText(this@LauncherActivity, "update cancelled!", Toast.LENGTH_LONG).show()
+
+          }
+     }
+
+        AppUpdateManagerFactory.create(this@LauncherActivity).also{
+                appUpdateManager ->
+            appUpdateManager.appUpdateInfo.addOnSuccessListener {appUpdateInfo ->
+                if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE){
+                    AlertDialog(
+                        this@LauncherActivity,
+                        "Do you want to update app to latest version? This will improve user experience and performance.",
+                        object :
+                            AlertDialog.OnAlertListener {
+                            override fun accept() {
+                                appUpdateManager.startUpdateFlowForResult(
+                                    appUpdateInfo, updateActivityResult,
+                                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                                )
+                            }
+
+                            override fun cancel() {
+
+                            }
+                        }).show()
+                }
+            }}
+
+        findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.title) {
                 "help" -> {
                     Intent(this@LauncherActivity, HelpActivity::class.java).also { intent ->
                         startActivity(intent)
                     }
+                }
+
+                "update" ->{
+                    //FakeAppUpdateManager(this@LauncherActivity)
+                   AppUpdateManagerFactory.create(this@LauncherActivity).also{
+                        appUpdateManager ->
+                        appUpdateManager.appUpdateInfo.addOnSuccessListener {appUpdateInfo ->
+                            when(appUpdateInfo.updateAvailability()){
+
+                                UpdateAvailability.UPDATE_AVAILABLE->{
+                                    AlertDialog(this@LauncherActivity,"Do you want to update app to latest version? This will improve user experience and performance.",object :
+                                        AlertDialog.OnAlertListener{
+                                        override fun accept() {
+                                            appUpdateManager.startUpdateFlowForResult(appUpdateInfo,updateActivityResult,
+                                                AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build())
+                                        }
+
+                                        override fun cancel() {
+
+                                        }
+                                    }).show()
+
+                                }
+
+                                UpdateAvailability.UPDATE_NOT_AVAILABLE, UpdateAvailability.UNKNOWN ->{
+                                    InfoDialog(this@LauncherActivity,"No updates available!").show()
+                                }
+
+                                UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS->{
+                                    InfoDialog(this@LauncherActivity,"Update currently in progress!").show()
+                                }
+                            }
+
+                        }
+
+                    }
+
                 }
             }
             true

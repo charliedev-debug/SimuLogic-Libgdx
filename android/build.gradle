@@ -81,6 +81,7 @@ dependencies {
   implementation("androidx.viewpager2:viewpager2:1.1.0")
   implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.31")
   implementation("com.github.AtifSayings:ViewPager2-Transformers:1.0.1")
+  implementation("com.google.android.play:app-update-ktx:2.1.0")
   coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
   implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

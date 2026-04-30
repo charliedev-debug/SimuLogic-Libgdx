@@ -5,6 +5,10 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/vip_icon"
         android:title="premium" /> !-->
+    <item android:id="@+id/action_update"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/update"
+        android:title="update" />
 
     <item android:id="@+id/action_help"
         app:showAsAction="ifRoom"
