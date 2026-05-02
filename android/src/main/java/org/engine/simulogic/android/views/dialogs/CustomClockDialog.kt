@@ -51,8 +51,10 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
         // ignore the extension
         clock.setText(projectOptions.title)
         accept.setOnClickListener {
-            listener.success(1f / clock.text.toString().toFloat())
-            dismiss()
+               try {
+                listener.success(1f / clock.text.toString().toFloat())
+                dismiss()
+            }catch ( _: NumberFormatException){ }
         }
 
         cancel.setOnClickListener {

@@ -49,8 +49,10 @@ class CustomDataBusDialog  (context: Context, private val listener:OnEditProject
             filters = arrayOf(InputFilterMinMax(1, 64))
         }
         accept.setOnClickListener {
-            listener.success(pins.text.toString().toInt())
-            dismiss()
+            try {
+                listener.success(pins.text.toString().toInt())
+                dismiss()
+            }catch ( _: NumberFormatException){ }
         }
 
         cancel.setOnClickListener {

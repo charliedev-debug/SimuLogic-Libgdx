@@ -25,7 +25,10 @@ class ChannelDialog (context: Context, private val listener:OnChannelListener) :
             type = if(R.id.type_input == id) 0 else 1
         }
         accept.setOnClickListener {
-            if(!ChannelBuffer.isAvailable(channelId.text.toString()) || type == 1) {
+            if(channelId.text.toString().isEmpty()){
+                channelId.error = "Empty Id field!"
+            }else
+            if((!ChannelBuffer.isAvailable(channelId.text.toString()) || type == 1)) {
                 listener.success(channelId.text.toString(), type)
                 dismiss()
             }else{
