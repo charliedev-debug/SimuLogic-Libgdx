@@ -1,5 +1,6 @@
 package org.engine.simulogic.android
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
@@ -55,9 +56,13 @@ class SettingsActivity : AppCompatActivity() {
                     ThemeSelectorDialog(this@SettingsActivity, userSettings,object:
                         ThemeSelectorDialog.OnThemeClickListener{
                         override fun onClick(value: String) {
-                            scope.launch {
+                            scope.launch(Dispatchers.Main) {
                                 userSettings.saveStringPref(this@SettingsActivity, UserSettings.THEME_STYLE, value)
-                                recreate()
+                                val intent = Intent(this@SettingsActivity, LauncherActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                startActivity(intent)
+                                finishAffinity()
+                                Runtime.getRuntime().exit(0)
                             }
                         }
                         }).show()

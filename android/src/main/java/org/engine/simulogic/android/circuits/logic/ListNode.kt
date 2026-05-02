@@ -10,71 +10,51 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 
 class ListNode(val value : CNode,
-               val next: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
     private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
     var visited = false
     var callingRef = this
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
-        next.add(child)
         child.parent.add(this)
-        val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene, connection) }
+        val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = lineMarkersChildren.size ).apply { initialize(scene, connection) }
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
+        lineMarkersChildren.forEachIndexed { index, marker ->
+            marker.index = index
+        }
         return marker
     }
 
     fun insertChild(parent:ListNode, child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
-        next.add(child)
         child.parent.add(parent)
-        val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = next.size - 1).apply { initialize(scene, connection) }
+        val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = lineMarkersChildren.size).apply { initialize(scene, connection) }
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
+        lineMarkersChildren.forEachIndexed { index, marker ->
+            marker.index = index
+        }
         return marker
     }
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
-        next.add(child)
         child.parent.add(this)
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
     }
 
     fun removeMarker(marker: LineMarker){
-         next.removeIf { it == marker.to }
          marker.from.value.reset()
          marker.to.value.reset()
          lineMarkersChildren.remove(marker)
         AutoSave.dataChanged = true
     }
 
-    fun insertMarker(marker: LineMarker){
-        next.add(marker.to)
-        lineMarkersChildren.add(marker.apply { index = next.size - 1 })
-        AutoSave.dataChanged = true
-    }
-
-    fun removeConnection(node:ListNode){
-        next.removeIf { it == node }
-        lineMarkersChildren.listIterator().also { iterator->
-            while (iterator.hasNext()){
-                val marker = iterator.next()
-                 if(marker.to == node){
-                     marker.detachSelf()
-                     iterator.remove()
-                 }
-            }
-        }
-    }
-
     fun removeMarker(node:ListNode):LineMarker?{
-        next.removeIf { it == node }
         lineMarkersChildren.listIterator().also { iterator->
             while (iterator.hasNext()){
                 val marker = iterator.next()
                 if(marker.to == node){
                     marker.detachSelf()
-                    next.remove(marker.to)
                     iterator.remove()
                     return marker
                 }
@@ -91,22 +71,11 @@ class ListNode(val value : CNode,
                    iterator.remove()
                }
            }
-        next.clear()
         value.detachSelf()
     }
 
     fun attachSelf(){
         value.attachSelf()
-    }
-
-    fun clearConnections(){
-            lineMarkersChildren.listIterator().also { iterator->
-                while (iterator.hasNext()){
-                    iterator.next().detachSelf()
-                    iterator.remove()
-                }
-            }
-            next.clear()
     }
 
     override fun contains(x: Float, y: Float): CNode? {
@@ -166,13 +135,10 @@ class ListNode(val value : CNode,
         return lineMarkersChildren
     }
 
-    fun getLastMarkerChild():LineMarker{
-        return lineMarkersChildren[lineMarkersChildren.size - 1]
-    }
-
     fun sortLinMarkersByDepth(){
         lineMarkersChildren.sortBy { it.getNodeOriginDepth() }
     }
+
     fun clone():ListNode{
         return ListNode(value.clone() as CNode)
     }

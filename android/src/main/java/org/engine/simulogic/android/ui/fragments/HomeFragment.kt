@@ -76,6 +76,7 @@ class HomeFragment : Fragment() {
                                     putExtra("options",ProjectOptions(DataTransferObject.randomFileName(),
                                         title,
                                         description,"",0L,ProjectOptions.CREATE))
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     startActivity(this)
                                 }
                             }
@@ -124,6 +125,7 @@ class HomeFragment : Fragment() {
             override fun onClick(item: RecentItem) {
                 Intent(context,SimulationActivity::class.java).apply {
                     putExtra("options",ProjectOptions(File(item.path).name, item.title,item.description,item.path,item.lastModified,ProjectOptions.OPEN))
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(this)
                 }
             }
@@ -191,6 +193,7 @@ class HomeFragment : Fragment() {
                         item.path, item.lastModified, ProjectOptions.OPEN)).also {projectOptions ->
                         Intent(context,SimulationActivity::class.java).apply {
                             putExtra("options",projectOptions)
+                            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(this)
                         }
                     }

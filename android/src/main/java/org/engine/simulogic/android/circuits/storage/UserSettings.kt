@@ -42,7 +42,7 @@ class UserSettings {
         return context.dataStore.data.map { it[key]?:default }
     }
 
-    fun getDataString(context:Context, key: Preferences.Key<String>, default:String = "tokyonight"):Flow<String>{
+    fun getDataString(context:Context, key: Preferences.Key<String>, default:String = "rosepine"):Flow<String>{
         return context.dataStore.data.map { it[key]?:default }
     }
 }
