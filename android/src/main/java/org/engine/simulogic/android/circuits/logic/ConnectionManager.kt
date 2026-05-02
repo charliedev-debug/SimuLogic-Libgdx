@@ -1,6 +1,4 @@
 package org.engine.simulogic.android.circuits.logic
-
-import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
@@ -26,7 +24,7 @@ class ConnectionManager(
         validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
-        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN)
+        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.D_SIGNAL_IN)
     }
 
     fun resolveConnection() {
