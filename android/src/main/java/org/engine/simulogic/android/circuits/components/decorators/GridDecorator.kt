@@ -97,7 +97,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0  .. lineCountX ){
                 val x = originX + i * spacingX
                 CLine(x,originY,x,originY+ viewPortHeight, lineWidth).also { line->
-                    line.color = EnvironmentTheme.colorOutline//lineColor
+                    line.color = EnvironmentTheme.colorOutline2//lineColor
                     linesAxisX.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible = gridVisible && positionGridLine
@@ -111,7 +111,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 labelsX.add(GridLabel(font, "$lx", x, originY + viewPortHeight - labelOffsetY, scene).apply {
                         color = EnvironmentTheme.colorOnBackground
                         lineHeader.updatePosition(x, getPosition().y, x, 0f )
-                        lineHeader.color = EnvironmentTheme.colorOutline2
+                        lineHeader.color = EnvironmentTheme.colorOutline
                         lineHeader.lineWidth = lineWidth
                         fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                         lineLayer.attachChild(lineHeader)
@@ -123,7 +123,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0 .. lineCountY){
                 val y = originY + i * spacingY
                 CLine(originX, y, originX + viewPortWidth,y, lineWidth).also { line->
-                    line.color = EnvironmentTheme.colorOutline
+                    line.color = EnvironmentTheme.colorOutline2
                     linesAxisY.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible = gridVisible && positionGridLine
@@ -137,7 +137,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                 labelsY.add(GridLabel(font, "$ly", originX + labelOffsetY, y, scene).apply {
                     color = EnvironmentTheme.colorOnBackground
                     lineHeader.updatePosition(getPosition().x, y, viewPortWidth, y )
-                    lineHeader.color = EnvironmentTheme.colorOutline2
+                    lineHeader.color = EnvironmentTheme.colorOutline
                     lineHeader.lineWidth = lineWidth
                     fontSize =  min(labelFontSize * camera.zoom, labelFontSizeMax)
                     lineLayer.attachChild(lineHeader)

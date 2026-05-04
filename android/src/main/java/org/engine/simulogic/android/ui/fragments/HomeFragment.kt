@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
             adapter = projectOptionAdapter
         }
 
-         recentProjectAdapter = RecentAdapter()
+        recentProjectAdapter = RecentAdapter()
 
         recentProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
             override fun onClick(item: RecentItem) {

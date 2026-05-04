@@ -70,7 +70,6 @@ class CustomDataBusDialog  (context: Context, private val listener:OnEditProject
         window?.setBackgroundDrawableResource(R.color.transparent)
     }
 
-
     interface OnEditProjectClickListener{
         fun success(size:Int)
         fun failure(msg:String)
