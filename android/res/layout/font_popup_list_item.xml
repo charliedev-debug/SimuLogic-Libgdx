@@ -15,6 +15,7 @@
         android:textSize="13dp"
         android:padding="10dp"
         android:maxLines="1"
+        android:textColor="?attr/colorOnBackground"
         app:rippleColor="@color/colorPrimary"
         android:text=""
         />

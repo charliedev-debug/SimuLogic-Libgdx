@@ -9,35 +9,30 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/bottom_sheet_shape"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet_shape">
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMPONENTS"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="750dp">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/list_item_spacing_half"
-        android:paddingBottom="@dimen/list_item_spacing_half"
-        android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="COMPONENTS"
-        android:textSize="17dp"
-        android:textStyle="bold"
-        android:gravity="center_horizontal"
-        android:textColor="?attr/colorOnSurface"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,9 +53,9 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+      <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="?attr/colorOutline" />
@@ -85,8 +80,8 @@
 
         </LinearLayout>
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="?attr/colorOutline" />
@@ -111,10 +106,10 @@
 
         </LinearLayout>
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
             android:background="?attr/colorOutline" />
         <LinearLayout
             android:visibility="gone"
@@ -139,7 +134,6 @@
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

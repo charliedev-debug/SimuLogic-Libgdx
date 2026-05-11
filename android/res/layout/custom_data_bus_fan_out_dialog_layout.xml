@@ -32,6 +32,8 @@
             android:layout_height="50dp"
             android:hint="inputs"
             android:inputType="number"
+            android:textColor="?attr/colorOnBackground"
+            android:textColorHint="?attr/colorOutline"
             android:padding="10dp" />
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/segments"
@@ -39,6 +41,8 @@
             android:layout_height="50dp"
             android:hint="segments"
             android:inputType="number"
+            android:textColor="?attr/colorOnBackground"
+            android:textColorHint="?attr/colorOutline"
             android:padding="10dp" />
         <LinearLayout
             android:layout_width="match_parent"

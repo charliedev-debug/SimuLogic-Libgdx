@@ -36,6 +36,22 @@ class LineMarker(
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
+        fun getNodeOriginFromStatic(node: ListNode): ListNode? {
+            if (node.value !is CSignal) {
+                return node
+            } else {
+                var parent = node.value as CSignal
+                while (parent.parent != null && parent.parent is LineMarker) {
+                    val origin = (parent.parent as LineMarker)
+                    if (origin.from.value is CSignal) {
+                        parent = origin.from.value as CSignal
+                    } else {
+                        return origin.from
+                    }
+                }
+                return null
+            }
+        }
     }
     /*Connections can be made in 2 ways:-
     * 1. Through components with inputs and outputs.
@@ -206,6 +222,7 @@ class LineMarker(
     }
 
     override fun detachSelf() {
+        super.detachSelf()
         lines.forEach {
             it.detachSelf()
         }
@@ -216,12 +233,13 @@ class LineMarker(
 
     // removes marker for the parent node
     fun removeSelf() {
-        println("called!")
+
         detachSelf()
         getNodeOriginFrom(from).from.removeMarker(this)
     }
 
     override fun attachSelf() {
+        super.attachSelf()
         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
             lines.forEach {
                 it.isRemoved = false

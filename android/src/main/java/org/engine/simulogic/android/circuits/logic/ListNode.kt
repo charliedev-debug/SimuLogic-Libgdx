@@ -10,6 +10,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
 
 class ListNode(val value : CNode,
+               val child: MutableList<ListNode> = mutableListOf(),
                val parent: MutableList<ListNode> = mutableListOf()): ICollidable, IUpdate{
     private val lineMarkersChildren:MutableList<LineMarker> = Collections.synchronizedList(mutableListOf<LineMarker>())
     var visited = false
@@ -27,6 +28,7 @@ class ListNode(val value : CNode,
 
     fun insertChild(parent:ListNode, child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
         child.parent.add(parent)
+        parent.child.add(child)
         val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = lineMarkersChildren.size).apply { initialize(scene, connection) }
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
@@ -38,6 +40,12 @@ class ListNode(val value : CNode,
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
         child.parent.add(this)
+        lineMarkersChildren.add(marker)
+        AutoSave.dataChanged = true
+    }
+
+    fun insertChildUnmarked(parent: ListNode,child: ListNode, marker: LineMarker){
+        child.parent.add(parent)
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
     }

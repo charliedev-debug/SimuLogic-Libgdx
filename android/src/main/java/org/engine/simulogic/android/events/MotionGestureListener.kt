@@ -134,6 +134,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         collisionDetector.reset()
     }
 
+
     fun zoomValue():Float{
         return camera.zoom
     }

@@ -56,7 +56,6 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
                 dismiss()
             }catch ( _: NumberFormatException){ }
         }
-
         cancel.setOnClickListener {
             listener.cancel()
             dismiss()

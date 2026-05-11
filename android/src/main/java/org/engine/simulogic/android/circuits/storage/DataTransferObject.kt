@@ -614,13 +614,13 @@ class DataTransferObject {
                 //process nestedLines with depth
                 nestedLineMarkerList.sortBy { it.originDepth }
                 nestedLineMarkerList.onEach {
-                    println("Line Index ${it.originDepth}")
+                   // println("Line Index ${it.originDepth}")
                 }
                 nestedLineMarkerList.onEach {
                     CDefaults.linePointCountX = it.linePointCountX
                     CDefaults.linePointCountY = it.linePointCountY
-                    println("connection size ${connection[it.fromSourceNode].getLineMarkerChildren().size}")
-                    println("connection requested ${it.fromLineMarker}")
+                  //  println("connection size ${connection[it.fromSourceNode].getLineMarkerChildren().size}")
+                  //  println("connection requested ${it.fromLineMarker}")
                     connection.insertConnection(
                         parent = connection[it.fromSourceNode],
                         from = ListNode(connection[it.fromSourceNode].

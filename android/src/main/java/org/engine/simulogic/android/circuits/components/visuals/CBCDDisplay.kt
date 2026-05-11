@@ -78,17 +78,24 @@ class CBCDDisplay (x:Float, y:Float, private val scene: PlayGroundScene) : CNode
     override fun attachSelf() {
         super.attachSelf()
         scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
+            layer.attachChild(this)
             signals.forEach {
                 it.isRemoved = false
                 layer.attachChild(it)
             }
-            layer.attachChild(this)
+            segmentList.forEach {
+                it.isRemoved = false
+                layer.attachChild(it)
+            }
+
         }
+
     }
 
     override fun detachSelf() {
         super.detachSelf()
         signals.forEach { it.detachSelf() }
+        segmentList.forEach { it.detachSelf() }
     }
 
     override fun update() {
