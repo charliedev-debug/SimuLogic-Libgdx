@@ -2,6 +2,10 @@ package org.engine.simulogic.android.helpers
 
 import android.content.Context
 import android.os.Build
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Intent
+import android.widget.Toast
 import android.util.TypedValue
 import android.view.Window
 import android.view.WindowInsets
@@ -13,6 +17,20 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 class ActivityHelpers {
 
     companion object{
+        fun copyAndShareEmail(context: Context, text: String, subject:String) {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("shared_log", text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(context, "Log copied to clipboard", Toast.LENGTH_LONG).show()
+            val emailIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_EMAIL,arrayOf("ngaricharlesdev@gmail.com"))
+                putExtra(Intent.EXTRA_SUBJECT, subject)
+                putExtra(Intent.EXTRA_TEXT, text)
+            }
+            context.startActivity(Intent.createChooser(emailIntent, "Share via Email"))
+        }
+
         suspend fun getTheme(userSettings: UserSettings, context: Context): String{
             return userSettings.getDataString(context, UserSettings.THEME_STYLE)
                 .first().also {

@@ -13,6 +13,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.events.MotionGestureListener
+import org.engine.simulogic.android.helpers.ErrorLogs
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.ChannelDialog
@@ -21,6 +22,7 @@ import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.dialogs.LoadingDialog
+import org.engine.simulogic.android.views.dialogs.LogErrorDialog
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 import org.engine.simulogic.android.views.interfaces.ISimulationListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
@@ -48,6 +50,7 @@ class SimulationFragment(
                         LoadingDialog(requireContext(), "Loading...",
                             object : LoadingDialog.IDialogLoadingListener {
                                 override fun onLoad() {
+                                    ErrorLogs.reset()
                                     simulationLoop.componentManager.loadProject()
                                 }
                                 override fun onCancelled() {
@@ -57,6 +60,9 @@ class SimulationFragment(
 
                                 override fun onFinished() {
                                     simulationLoop.isReady = true
+                                    if(ErrorLogs.isNotEmpty()){
+                                        LogErrorDialog(requireContext(), ErrorLogs.last()).show()
+                                    }
                                 }
                             }).show()
                     }
