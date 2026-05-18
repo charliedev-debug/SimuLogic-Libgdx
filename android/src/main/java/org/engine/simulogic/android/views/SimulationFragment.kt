@@ -246,6 +246,18 @@ class SimulationFragment(
                     simulationLoop.componentManager.insertCDFlipFlop()
                 }
 
+                ComponentBottomSheet.SR_LATCH_COMPONENT -> {
+                    simulationLoop.componentManager.insertCSRLatch()
+                }
+
+                ComponentBottomSheet.JK_FLIP_FLOP_COMPONENT -> {
+                    simulationLoop.componentManager.insertCJKFlipFlop()
+                }
+
+                ComponentBottomSheet.T_FLIP_FLOP_COMPONENT -> {
+                    simulationLoop.componentManager.insertCTFlipFlop()
+                }
+
                 ComponentBottomSheet.LED_COMPONENT -> {
                     simulationLoop.componentManager.insertCLed()
                 }

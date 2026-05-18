@@ -35,6 +35,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventInsertGroupCommand
+import org.engine.simulogic.android.circuits.logic.events.EventJKFlipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLabelCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
@@ -49,7 +50,9 @@ import org.engine.simulogic.android.circuits.logic.events.EventRandomCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRedoCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRemoveGroupCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRotateCommand
+import org.engine.simulogic.android.circuits.logic.events.EventSRLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventSSDisplayCommand
+import org.engine.simulogic.android.circuits.logic.events.EventTFlipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventUndoCommand
 import org.engine.simulogic.android.circuits.logic.events.EventXnorCommand
 import org.engine.simulogic.android.circuits.logic.events.EventXorCommand
@@ -187,10 +190,32 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
+
+    fun insertCSRLatch() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventSRLatchCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
     fun insertCDFlipFlop(){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                eventBridge.insertCommand(EventFipFlopCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCTFlipFlop(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventTFlipFlopCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCJKFlipFlop(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventJKFlipFlopCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
             }
         }
     }

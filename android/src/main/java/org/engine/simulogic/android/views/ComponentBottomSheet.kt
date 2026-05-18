@@ -32,10 +32,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val CLOCK_COMPONENT_60HZ = "60Hz"
          const val CLOCK_COMPONENT_CUSTOM = "CUSTOM"
          const val D_LATCH_COMPONENT = "D-LATCH"
+         const val SR_LATCH_COMPONENT = "SR-LATCH"
          const val D_FLIP_FLOP_COMPONENT = "D-FLIP-FLOP"
+         const val JK_FLIP_FLOP_COMPONENT = "JK-FLIP-FLOP"
+         const val T_FLIP_FLOP_COMPONENT = "T-FLIP-FLOP"
          const val LED_COMPONENT = "LED"
          const val POWER_ON_COMPONENT = "POWER ON"
          const val POWER_OFF_COMPONENT = "POWER OFF"
+         const val PULSE_BUTTON_COMPONENT = "PULSE-BUTTON"
          const val RANDOM_COMPONENT = "RANDOM"
          const val TEXT_COMPONENT = "TEXT"
          const val SS_DISPLAY_COMPONENT = "SS-DISPLAY"
@@ -55,6 +59,8 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val mainView: View = inflater.inflate(R.layout.bottom_sheet_simulation, container, false)
         val gatesRecyclerview = mainView.findViewById<RecyclerView>(R.id.gates_component_list)
         val clockRecyclerview = mainView.findViewById<RecyclerView>(R.id.clock_component_list)
+        val displayRecyclerview = mainView.findViewById<RecyclerView>(R.id.display_component_list)
+        val memoryRecyclerview = mainView.findViewById<RecyclerView>(R.id.memory_component_list)
         val generalRecyclerview = mainView.findViewById<RecyclerView>(R.id.general_component_list)
         val templateRecyclerview = mainView.findViewById<RecyclerView>(R.id.template_component_list)
         val spanCount = 4
@@ -62,8 +68,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val includeEdge = false
         gatesRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         clockRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
+        memoryRecyclerview.layoutManager = GridLayoutManager(this.context, spanCount)
         generalRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         templateRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
+        displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
         val gatesAdapter = ComponentViewAdapter()
         gatesAdapter.insert(AND_COMPONENT, R.drawable.gate_and)
         gatesAdapter.insert(OR_COMPONENT, R.drawable.gate_or)
@@ -81,19 +89,25 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         clockAdapter.insert(CLOCK_COMPONENT_40HZ, R.drawable.clock_40hz)
         clockAdapter.insert(CLOCK_COMPONENT_60HZ, R.drawable.clock_60hz)
         clockAdapter.insert(CLOCK_COMPONENT_CUSTOM, R.drawable.clock_custom)
+        val displayAdapter = ComponentViewAdapter()
+        displayAdapter.insert(LED_COMPONENT, R.drawable.component_led)
+        displayAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
+        displayAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
+        val memoryAdapter = ComponentViewAdapter()
+        memoryAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
+        memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
+        memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
+        memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop)
+        memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)
         val generalAdapter = ComponentViewAdapter()
-        generalAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
-        generalAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
-        generalAdapter.insert(LED_COMPONENT, R.drawable.component_led)
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
+        generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
       //  generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
-        generalAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
-        generalAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
         val templateAdapter = ComponentViewAdapter()
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)
         templateAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
@@ -116,6 +130,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
             clockAdapter.addListener(onDismissListener)
         }
         listener?.also {
+            memoryAdapter.addListener(listener)
+            memoryAdapter.addListener(onDismissListener)
+        }
+        listener?.also {
+            displayAdapter.addListener(listener)
+            displayAdapter.addListener(onDismissListener)
+        }
+        listener?.also {
             templateAdapter.addListener(listener)
             templateAdapter.addListener(onDismissListener)
         }
@@ -124,10 +146,15 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         clockRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
         gatesRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         templateRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
+        memoryRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
+        displayRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, spacing, includeEdge))
         generalRecyclerview.adapter = generalAdapter
         clockRecyclerview.adapter = clockAdapter
         gatesRecyclerview.adapter = gatesAdapter
+        memoryRecyclerview.adapter = memoryAdapter
         templateRecyclerview.adapter = templateAdapter
+        displayRecyclerview.adapter = displayAdapter
         return mainView
     }
+
 }

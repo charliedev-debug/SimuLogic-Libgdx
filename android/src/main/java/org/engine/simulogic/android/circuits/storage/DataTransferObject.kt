@@ -11,6 +11,8 @@ import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
+import org.engine.simulogic.android.circuits.components.flipflops.CJKFlipFlop
+import org.engine.simulogic.android.circuits.components.flipflops.CTFlipFlop
 import org.engine.simulogic.android.circuits.components.gates.CAnd
 import org.engine.simulogic.android.circuits.components.gates.CNand
 import org.engine.simulogic.android.circuits.components.gates.CNor
@@ -22,6 +24,7 @@ import org.engine.simulogic.android.circuits.components.gates.CXor
 import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.latches.CLatch
+import org.engine.simulogic.android.circuits.components.latches.CSRLatch
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
@@ -336,8 +339,20 @@ class DataTransferObject {
                         connection.insertNode(ListNode(CLatch(x, y, rotation, scene)))
                     }
 
+                    CTypes.SR_LATCH -> {
+                        connection.insertNode(ListNode(CSRLatch(x, y, rotation, scene)))
+                    }
+
                     CTypes.FLIP_FLOP -> {
                         connection.insertNode(ListNode(CDFlipFlop(x, y, rotation, scene)))
+                    }
+
+                    CTypes.JK_FLIP_FLOP -> {
+                        connection.insertNode(ListNode(CJKFlipFlop(x, y, rotation, scene)))
+                    }
+
+                    CTypes.T_FLIP_FLOP -> {
+                        connection.insertNode(ListNode(CTFlipFlop(x, y, rotation, scene)))
                     }
 
                     CTypes.CLOCK -> {

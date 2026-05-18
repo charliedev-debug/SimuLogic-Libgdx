@@ -1,4 +1,5 @@
-package org.engine.simulogic.android.circuits.components.flipflops
+package org.engine.simulogic.android.circuits.components.latches
+
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -11,22 +12,21 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
-class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
+
+class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-    private var previousEdge = -1
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
-        val spriteRegion = textureAtlas.findRegion("D-FLIP-FLOP")
-        type = CTypes.FLIP_FLOP
+        val spriteRegion = textureAtlas.findRegion("SR-LATCH")
+        type = CTypes.SR_LATCH
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.latchWidth, CDefaults.latchHeight)
             setOriginCenter()
-            type = CTypes.FLIP_FLOP
             when(rotationDirection){
                 ROTATE_BOTTOM->{
                     rotation = 270f
@@ -79,10 +79,8 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         val outputQ = signals[0]
         val inputD = signals[1]
         val inputE = signals[2]
-        val hasEdge = previousEdge != inputE.value
-        if(hasEdge){
+        if(inputE.value == SIGNAL_ACTIVE){
             outputQ.value = inputD.value
-            previousEdge = inputE.value
         }
     }
 
@@ -218,7 +216,7 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun clone():CNode {
-        return CDFlipFlop(getPosition().x,getPosition().y, rotationDirection, scene )
+        return CLatch(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }

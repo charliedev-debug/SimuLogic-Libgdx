@@ -11,7 +11,7 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
-class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
+class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
     private var previousEdge = -1
@@ -19,14 +19,14 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
-        val spriteRegion = textureAtlas.findRegion("D-FLIP-FLOP")
-        type = CTypes.FLIP_FLOP
+        val spriteRegion = textureAtlas.findRegion("JK-FLIP-FLOP")
+        type = CTypes.JK_FLIP_FLOP
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
             setSize(CDefaults.latchWidth, CDefaults.latchHeight)
             setOriginCenter()
-            type = CTypes.FLIP_FLOP
+            type = CTypes.JK_FLIP_FLOP
             when(rotationDirection){
                 ROTATE_BOTTOM->{
                     rotation = 270f
