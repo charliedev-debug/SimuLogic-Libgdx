@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.ComponentViewAdapter
@@ -68,7 +70,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val includeEdge = false
         gatesRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         clockRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
-        memoryRecyclerview.layoutManager = GridLayoutManager(this.context, spanCount)
+        memoryRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
         generalRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         templateRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
@@ -96,13 +98,13 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val memoryAdapter = ComponentViewAdapter()
         memoryAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
         memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
-        memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
+       /* memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
         memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop)
-        memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)
+        memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
-        generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
+       // generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
@@ -156,5 +158,4 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         displayRecyclerview.adapter = displayAdapter
         return mainView
     }
-
 }

@@ -155,7 +155,12 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             finish()
         }
 
-        simulationFragment = SimulationFragment(projectOptions!!, simulationOptions)
+        simulationFragment = SimulationFragment().apply{
+            arguments = Bundle().also{ bundle->
+                bundle.putSerializable("projectOptions" , projectOptions)
+                bundle.putSerializable("simulationOptions", simulationOptions)
+            }
+        }
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
@@ -357,7 +362,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         projectMetaDataEditButton.setOnClickListener {
-            val oldFile = projectOptions.title
+            val oldFile = projectOptions!!.title
             drawerLayout.closeDrawer(Gravity.RIGHT)
             EditProjectDialog(
                 this,
@@ -384,7 +389,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
 
-        projectTitle.text = projectOptions.title
+        projectTitle.text = projectOptions!!.title
         projectDescription.text = projectOptions.description
 
         val scope = CoroutineScope(Dispatchers.Default)

@@ -691,12 +691,12 @@ class DataTransferObject {
     fun importProject(context: Context, uri: Uri): ProjectOptions? {
         val file = File(context.getExternalFilesDir(""), "projects/${randomFileName()}")
         val outputStream = FileOutputStream(file)
+        try {
         context.contentResolver?.openInputStream(uri).use { inputStream ->
             inputStream?.copyTo(outputStream)
         }
         outputStream.close()
-        try {
-            return readFileHeader(file)
+        return readFileHeader(file)
         } catch (io: IOException) {
             file.delete()
         }

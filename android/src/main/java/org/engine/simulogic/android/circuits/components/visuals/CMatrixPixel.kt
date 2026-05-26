@@ -1,7 +1,7 @@
-package org.engine.simulogic.android.circuits.components.flipflops
+package org.engine.simulogic.android.circuits.components.visuals
+
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -11,22 +11,21 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
-class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
+
+class CMatrixPixel(x:Float, y:Float,rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-    private var previousEdge = -1
     constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
-        val spriteRegion = textureAtlas.findRegion("JK-FLIP-FLOP")
-        type = CTypes.JK_FLIP_FLOP
+        val spriteRegion = textureAtlas.findRegion("BULB-ON")
+        type = CTypes.DOT_MATRIX_DISPLAY
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.latchWidth, CDefaults.latchHeight)
+            setSize(CDefaults.ledWidth, CDefaults.ledHeight)
             setOriginCenter()
-            type = CTypes.JK_FLIP_FLOP
             when(rotationDirection){
                 ROTATE_BOTTOM->{
                     rotation = 270f
@@ -41,13 +40,10 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.latchWidth / 2f,y - CDefaults.latchHeight / 2f)
+            setPosition(x - CDefaults.ledWidth / 2f,y - CDefaults.ledHeight / 2f)
         }
 
-        signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
-
+        signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.SIGNAL_IN,0, scene))
         signals.forEach {
             attachChild(it)
         }
@@ -62,13 +58,6 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
             getChildAt(0).getPosition()?.also { outputPosition ->
                 lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y,lineWidth))
             }
-            //input line segments
-            getChildAt(1).getPosition()?.also { outputPosition ->
-                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
-            }
-            getChildAt(2).getPosition()?.also { outputPosition ->
-                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
-            }
             lines.forEach {
                 layer.attachChild(it)
             }
@@ -76,15 +65,9 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
     }
 
     override fun execute() {
-        val outputQ = signals[0]
-        val inputD = signals[1]
-        val inputE = signals[2]
-        val hasEdge = previousEdge != inputE.value
-        if(hasEdge){
-            outputQ.value = inputD.value
-            previousEdge = inputE.value
-        }
+        //unused
     }
+
 
     override fun attachSelf() {
         super.attachSelf()
@@ -113,66 +96,34 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.LED_INACTIVE_COLOR)
         }
         when(rotationDirection){
             ROTATE_RIGHT->{
                 signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_LEFT->{
                 signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_TOP->{
                 signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
 
             ROTATE_BOTTOM->{
                 signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
         }
@@ -218,7 +169,7 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
     }
 
     override fun clone():CNode {
-        return CJKFlipFlop(getPosition().x,getPosition().y, rotationDirection, scene )
+        return CMatrixPixel(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }

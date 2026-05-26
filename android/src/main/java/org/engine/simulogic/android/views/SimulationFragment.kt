@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.views
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +29,9 @@ import org.engine.simulogic.android.views.interfaces.ISimulationListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
 import org.engine.simulogic.android.views.models.MenuViewModel
 
-class SimulationFragment(
-    private val projectOptions: ProjectOptions,
-    private val simulationOptions: SimulationOptions
-) : AndroidFragmentApplication() {
+class SimulationFragment : AndroidFragmentApplication() {
+    private lateinit var projectOptions: ProjectOptions
+    private lateinit var simulationOptions: SimulationOptions
     private val menuViewModel: MenuViewModel by activityViewModels()
     private val bottomSheetViewModel: BottomSheetViewModel by activityViewModels()
     lateinit var simulationLoop: SimulationLoop
@@ -43,6 +43,16 @@ class SimulationFragment(
         val configuration = AndroidApplicationConfiguration()
         configuration.useImmersiveMode = false // Recommended, but not required.
         configuration.useGL30 = true
+        projectOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("projectOptions", ProjectOptions::class.java)!!
+        }else{
+            arguments?.getSerializable("projectOptions") as ProjectOptions
+        }
+        simulationOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getSerializable("simulationOptions", SimulationOptions::class.java)!!
+        }else{
+            arguments?.getSerializable("simulationOptions", ) as SimulationOptions
+        }
         simulationLoop = SimulationLoop(projectOptions, simulationOptions, object : ISimulationListener {
                 override fun onCreate() {
                     runOnUiThread {

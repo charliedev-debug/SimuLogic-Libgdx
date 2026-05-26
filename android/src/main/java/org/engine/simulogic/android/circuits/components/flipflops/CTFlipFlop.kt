@@ -218,7 +218,7 @@ class CTFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun clone():CNode {
-        return CDFlipFlop(getPosition().x,getPosition().y, rotationDirection, scene )
+        return CTFlipFlop(getPosition().x,getPosition().y, rotationDirection, scene )
     }
 
 }
