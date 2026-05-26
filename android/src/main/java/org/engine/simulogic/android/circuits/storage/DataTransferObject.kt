@@ -49,13 +49,14 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.security.MessageDigest
 import java.util.UUID
+import kotlin.math.min
 
 class DataTransferObject {
 
     private val IDENTIFIER = 0xC145FF
     private val VERSION_1 = 1
     private val VERSION_2 = 2
-
+    private val DESCRIPTION_LENGTH_MAX_CHARACTERS = 512
     companion object {
         fun deleteFile(context: Context, title: String) {
             File(context.getExternalFilesDir(""), "projects/$title").delete()
@@ -105,12 +106,13 @@ class DataTransferObject {
         val temp = Gdx.files.external("projects/${projectOptions.fileName}.temp")
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(temp.write(false))
+        val descriptionLength = min(description.length,DESCRIPTION_LENGTH_MAX_CHARACTERS)
         stream.writeInt(IDENTIFIER)
         stream.writeInt(VERSION_2)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
-        stream.writeInt(description.length)
-        stream.write(description.toByteArray(Charsets.UTF_8))
+        stream.writeInt(descriptionLength)
+        stream.write(description.substring(0, descriptionLength).toByteArray(Charsets.UTF_8))
         // save camera state
         stream.writeFloat(gestureListener.camera.position.x)
         stream.writeFloat(gestureListener.camera.position.y)
@@ -222,7 +224,7 @@ class DataTransferObject {
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(file.write(false))
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION_1)
+        stream.writeInt(VERSION_2)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(description.length)

@@ -39,9 +39,11 @@ class ListNode(val value : CNode,
     }
 
     fun insertChildUnmarked(child: ListNode, marker: LineMarker){
-        child.parent.add(this)
-        lineMarkersChildren.add(marker)
-        AutoSave.dataChanged = true
+        if(!lineMarkersChildren.contains(marker)) {
+            child.parent.add(this)
+            lineMarkersChildren.add(marker)
+            AutoSave.dataChanged = true
+        }
     }
 
     fun insertChildUnmarked(parent: ListNode,child: ListNode, marker: LineMarker){
