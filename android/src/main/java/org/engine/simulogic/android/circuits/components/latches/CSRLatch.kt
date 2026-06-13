@@ -2,7 +2,6 @@ package org.engine.simulogic.android.circuits.components.latches
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -77,10 +76,24 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
 
     override fun execute() {
         val outputQ = signals[0]
-        val inputD = signals[1]
-        val inputE = signals[2]
-        if(inputE.value == SIGNAL_ACTIVE){
-            outputQ.value = inputD.value
+        val inputS = signals[1]
+        val inputR = signals[2]
+        when{
+            inputS.value == SIGNAL_ACTIVE && inputR.value == SIGNAL_ACTIVE->{
+                outputQ.value = value
+            }
+            inputS.value == SIGNAL_ACTIVE && inputR.value == SIGNAL_INACTIVE->{
+                outputQ.value = SIGNAL_INACTIVE
+                value = SIGNAL_INACTIVE
+            }
+            inputS.value == SIGNAL_INACTIVE && inputR.value == SIGNAL_ACTIVE->{
+                outputQ.value = SIGNAL_ACTIVE
+                value = SIGNAL_ACTIVE
+            }
+            else->{
+                outputQ.value = SIGNAL_INACTIVE
+                value = SIGNAL_INACTIVE
+            }
         }
     }
 
