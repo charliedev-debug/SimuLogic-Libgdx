@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.components.lines
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CDefaults
@@ -12,8 +13,11 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
+import org.engine.simulogic.android.circuits.components.other.CRangeLine
+import org.engine.simulogic.android.circuits.components.other.CRect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
+import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
@@ -32,6 +36,7 @@ class LineMarker(
 ) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
+    private val lineRect = mutableListOf<CRect>()
     var markerActive = false
     companion object{
         const val FROM_SIGNAL = 0
@@ -229,6 +234,9 @@ class LineMarker(
         signals.forEach {
             it.detachSelf()
         }
+        lineRect.forEach {
+            it.detachSelf()
+        }
     }
 
     // removes marker for the parent node
@@ -246,12 +254,22 @@ class LineMarker(
                 layer.attachChild(it)
             }
         }
+
+        lineRect.onEach {
+            it.isVisible = false
+            it.isRemoved = false
+            scene.getLayerById(LayerEnums.GATE_LAYER.name).also{ layer ->
+                layer.attachChild(it)
+            }
+        }
+
         scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
             signals.forEach {
                 it.isRemoved = false
                 layer.attachChild(it)
             }
         }
+
         getNodeOriginFrom(from).from.insertChildUnmarked(to, this)
     }
 
@@ -272,12 +290,26 @@ class LineMarker(
                     })
             }
         }
+        val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
+            a = 0.5f
+        }
+        for (i in 1 until signals.size - 2){
+            lineRect.add(CRangeLine(signals[i], signals[i + 1],colorRect, scene))
+        }
+
+        lineRect.onEach {
+            it.isVisible = false
+            scene.getLayerById(LayerEnums.GATE_LAYER.name).also{ layer ->
+                layer.attachChild(it)
+            }
+        }
         scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
             // to prevent collisions during touch don't attach the first and the last point
             for (i in 1 until signals.size - 1) {
                 layer.attachChild(signals[i])
             }
         }
+
     }
 
     private fun snapAlignOriginPoints() {
@@ -409,6 +441,11 @@ class LineMarker(
         if (markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
+
+        lineRect.onEach {
+            it.update()
+        }
+
     }
 
     fun isSourceSignal(): Boolean{
@@ -428,9 +465,20 @@ class LineMarker(
     }
 
     override fun contains(entity: CNode): CNode? {
+
         for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(entity)
             if (obj != null) {
+                return obj
+            }
+        }
+        lineRect.onEach {
+            it.isVisible = false
+        }
+        for(i in 0 until lineRect.size){
+            val obj = lineRect[i].contains(entity)
+            if(obj != null){
+                obj.isVisible = true
                 return obj
             }
         }
@@ -438,9 +486,20 @@ class LineMarker(
     }
 
     override fun contains(rect: Rectangle): CNode? {
+
         for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(rect)
             if (obj != null) {
+                return obj
+            }
+        }
+        lineRect.onEach {
+            it.isVisible = false
+        }
+        for(i in 0 until lineRect.size){
+            val obj = lineRect[i].contains(rect)
+            if(obj != null){
+                obj.isVisible = true
                 return obj
             }
         }

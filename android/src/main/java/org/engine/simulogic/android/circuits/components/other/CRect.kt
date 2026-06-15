@@ -7,7 +7,7 @@ import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.PlayGroundScene
 
-class CRect (x:Float, y:Float, width:Float, height:Float, var color: Color, private val scene: PlayGroundScene) : CNode(){
+open class CRect (x:Float, y:Float, width:Float, height:Float, var color: Color, private val scene: PlayGroundScene) : CNode(){
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
