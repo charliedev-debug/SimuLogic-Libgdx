@@ -98,6 +98,12 @@ private val userSettings = UserSettings()
 
         findViewById<Toolbar>(R.id.toolbar).setOnMenuItemClickListener { item ->
             when (item.title) {
+
+                "premium"->{
+                    Intent(this@LauncherActivity, PremiumPurchaseActivity::class.java).also{ intent->
+                        startActivity(intent)
+                    }
+                }
                 "help" -> {
                     Intent(this@LauncherActivity, HelpActivity::class.java).also { intent ->
                         startActivity(intent)

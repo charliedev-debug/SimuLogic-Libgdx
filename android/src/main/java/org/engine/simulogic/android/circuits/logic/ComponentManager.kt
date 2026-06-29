@@ -46,6 +46,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventNotCommand
 import org.engine.simulogic.android.circuits.logic.events.EventOrCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPasteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPowerCommand
+import org.engine.simulogic.android.circuits.logic.events.EventPulseButtonCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRandomCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRedoCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRemoveGroupCommand
@@ -230,6 +231,13 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
               eventBridge.insertCommand(EventPowerCommand(Vector2(coordinates),signalValue, connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertPulseButton(){
+        gestureListener.rectPointer.getPosition().also { position->
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                eventBridge.insertCommand(EventPulseButtonCommand(Vector2(coordinates),connection, gestureListener.commandHistory,scene))
             }
         }
     }

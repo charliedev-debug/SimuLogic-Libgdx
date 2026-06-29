@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
+import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
 import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
@@ -343,10 +344,20 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
         //double tap to enable and disable groups
-        if(count > 1)
+        if(count > 1) {
+            collisionDetector.selectedItems.forEach {
+                if (it.subject is CGroup) {
+                    it.subject.collectableChildren = !it.subject.collectableChildren
+                }
+                if (it.subject is CPulseButton) {
+                    it.subject.toggleAction()
+                }
+            }
+        }
+        //touch up event
         collisionDetector.selectedItems.forEach {
-            if(it.subject is CGroup){
-                it.subject.collectableChildren = !it.subject.collectableChildren
+            if(it.subject is CPulseButton){
+                it.subject.resetAction()
             }
         }
         return true

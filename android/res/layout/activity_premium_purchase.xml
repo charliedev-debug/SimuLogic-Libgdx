@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
+    android:orientation="vertical">
+<com.google.android.material.card.MaterialCardView
+    style="@style/Widget.App.CardStyle"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    android:layout_margin="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp">
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textSize="11sp"
+            android:textColor="?attr/colorPrimary"
+            android:text="PRO-LIFETIME" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:textColor="?attr/colorSecondary"
+            android:text="$ 6.99"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="11dp"
+            android:textStyle="normal"
+            android:text="No recurring subscriptions. Buy once own forever." />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/tick"/>
+        <TextView
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="- Unlock all available and future examples."
+            android:textSize="11dp"
+            android:textColor="?attr/colorOnBackground"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/tick"/>
+        <TextView
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="- Unlock all elements and lifetime updates."
+            android:textSize="11dp"
+            android:textColor="?attr/colorOnBackground"/>
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/tick"/>
+        <TextView
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="- Better editing experience."
+            android:textSize="11dp"
+            android:textColor="?attr/colorOnBackground"/>
+    </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/unlockPremium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="15dp"
+        android:text="Unlock Pro - $ 6.99"
+        android:textAllCaps="false"
+        style="@style/customButtonStyle"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/advanced"/>
+
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+     <LinearLayout
+         android:gravity="center"
+         android:layout_alignParentBottom="true"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="20dp"
+         android:layout_marginBottom="20dp"
+         android:orientation="horizontal">
+         <com.google.android.material.textview.MaterialTextView
+             android:id="@+id/privacyPolicy"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:gravity="center"
+             android:textColor="?attr/colorOnBackground"
+             android:textSize="11dp"
+             android:textStyle="normal"
+             android:layout_weight="1"
+             android:linksClickable="true"
+             android:clickable="true"
+             android:focusable="true"
+             android:text="Privacy Policy" />
+
+         <com.google.android.material.button.MaterialButton
+             android:id="@+id/restorePurchase"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center_horizontal"
+             android:layout_marginEnd="15dp"
+             android:layout_marginStart="15dp"
+             android:text="Restore Purchase"
+             android:textAllCaps="false"
+             style="@style/customButtonStyle"
+             android:textColor="?attr/colorOnSecondary"
+             android:textStyle="bold"
+             android:textSize="11dp"
+             android:backgroundTint="?attr/colorSecondary"/>
+
+         <com.google.android.material.textview.MaterialTextView
+             android:id="@+id/termsOfService"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:gravity="center"
+             android:textColor="?attr/colorOnBackground"
+             android:textSize="11dp"
+             android:textStyle="normal"
+             android:layout_weight="1"
+             android:clickable="true"
+             android:linksClickable="true"
+             android:focusable="true"
+             android:text="Terms of Services" />
+     </LinearLayout>
+ </RelativeLayout>
+
+</LinearLayout>

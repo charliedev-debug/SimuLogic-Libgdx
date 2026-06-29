@@ -1,4 +1,5 @@
-package org.engine.simulogic.android.circuits.components.flipflops
+package org.engine.simulogic.android.circuits.components.buttons
+
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
@@ -11,22 +12,25 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
-class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
+
+class CPulseButton(x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
-    private var previousEdge = -1
-    constructor(x:Float, y:Float, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, scene)
+    private var regionPowerOn:TextureAtlas.AtlasRegion
+    private var regionPowerOff:TextureAtlas.AtlasRegion
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
-        val spriteRegion = textureAtlas.findRegion("D-FLIP-FLOP")
-        type = CTypes.FLIP_FLOP
+        regionPowerOn = textureAtlas.findRegion("PULSE-BUTTON-ON")
+        regionPowerOff = textureAtlas.findRegion("PULSE-BUTTON-OFF")
+        val spriteRegion = regionPowerOff
+        value = 0
+        type = CTypes.PULSE_BUTTON
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.latchWidth, CDefaults.latchHeight)
+            setSize(CDefaults.clockWidth, CDefaults.clockHeight)
             setOriginCenter()
-            type = CTypes.FLIP_FLOP
             when(rotationDirection){
                 ROTATE_BOTTOM->{
                     rotation = 270f
@@ -41,13 +45,10 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.latchWidth / 2f,y - CDefaults.latchHeight / 2f)
+            setPosition(x - CDefaults.clockWidth / 2f,y - CDefaults.clockHeight / 2f)
         }
 
-        signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
-
+        signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.SIGNAL_OUT,0, scene))
         signals.forEach {
             attachChild(it)
         }
@@ -62,30 +63,26 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
             getChildAt(0).getPosition()?.also { outputPosition ->
                 lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y,lineWidth))
             }
-            //input line segments
-            getChildAt(1).getPosition()?.also { outputPosition ->
-                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
-            }
-            getChildAt(2).getPosition()?.also { outputPosition ->
-                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
-            }
             lines.forEach {
                 layer.attachChild(it)
             }
         }
+        signals[0].value = value
     }
 
     override fun execute() {
-        val outputQ = signals[0]
-        val inputD = signals[1]
-        val inputE = signals[2]
-        val hasEdge = previousEdge != inputE.value
-        if(hasEdge && inputE.value == SIGNAL_ACTIVE){
-            outputQ.value = inputD.value
-            previousEdge = inputE.value
-        }else{
-            previousEdge = inputE.value
-        }
+        // save this value for save state
+         signals[0].value = value
+    }
+
+    override fun toggleAction() {
+        value = SIGNAL_ACTIVE
+        sprite.setRegion(regionPowerOn)
+    }
+
+    fun resetAction(){
+        value = SIGNAL_INACTIVE
+        sprite.setRegion(regionPowerOff)
     }
 
     override fun attachSelf() {
@@ -112,69 +109,33 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun update() {
-        if(selected){
-            updateColor(CDefaults.GATE_SELECTED_COLOR)
-        }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
-        }
+        updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
         when(rotationDirection){
             ROTATE_RIGHT->{
                 signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_LEFT->{
                 signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_TOP->{
                 signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
 
             ROTATE_BOTTOM->{
                 signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
-                }
-                getChildAt(1).getPosition()?.also { outputPosition ->
-                    lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
-                }
-                getChildAt(2).getPosition()?.also { outputPosition ->
-                    lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
         }
@@ -183,6 +144,9 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         }
     }
 
+    override fun reset() {
+        //do nothing
+    }
     override fun contains(entity: CNode): CNode? {
         val parentCollides = super.contains(entity)
         if(parentCollides != null){
@@ -220,7 +184,7 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun clone():CNode {
-        return CDFlipFlop(getPosition().x,getPosition().y, rotationDirection, scene )
+        return CPulseButton(getPosition().x,getPosition().y,rotationDirection, scene )
     }
 
 }

@@ -28,6 +28,7 @@ enum class CTypes {
     LINE_MARKER,
     LABEL,
     POWER,
+    PULSE_BUTTON,
     DATA_BUS,
     DATA_BUS_FAN_OUT,
     GROUP,

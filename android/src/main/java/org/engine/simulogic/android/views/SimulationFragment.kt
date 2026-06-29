@@ -280,6 +280,10 @@ class SimulationFragment : AndroidFragmentApplication() {
                     simulationLoop.componentManager.insertCPower(CNode.SIGNAL_INACTIVE)
                 }
 
+                ComponentBottomSheet.PULSE_BUTTON_COMPONENT ->{
+                    simulationLoop.componentManager.insertPulseButton()
+                }
+
                 ComponentBottomSheet.RANDOM_COMPONENT -> {
                     simulationLoop.componentManager.insertCRandom()
                 }

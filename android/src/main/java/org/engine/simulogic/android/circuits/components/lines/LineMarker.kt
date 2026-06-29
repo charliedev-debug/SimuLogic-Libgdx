@@ -153,6 +153,7 @@ class LineMarker(
                         ).apply {
                             parent = this@LineMarker
                         })
+
                 } else {
                     val node = pathQueue.removeFirst()
 

@@ -104,7 +104,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
-       // generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
+        generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)

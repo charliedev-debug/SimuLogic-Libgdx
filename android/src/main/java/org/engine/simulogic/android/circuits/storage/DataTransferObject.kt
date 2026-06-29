@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
+import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
 import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CJKFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CTFlipFlop
@@ -409,6 +410,19 @@ class DataTransferObject {
                             ListNode(
                                 CPower(
                                     powerValue,
+                                    x,
+                                    y,
+                                    rotation,
+                                    scene
+                                )
+                            )
+                        )
+                    }
+
+                    CTypes.PULSE_BUTTON -> {
+                        connection.insertExecutionPoint(
+                            ListNode(
+                                CPulseButton(
                                     x,
                                     y,
                                     rotation,

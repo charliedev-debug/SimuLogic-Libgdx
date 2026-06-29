@@ -20,6 +20,7 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_premium_purchase">Premium</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

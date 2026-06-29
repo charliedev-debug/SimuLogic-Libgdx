@@ -2,6 +2,7 @@ package org.engine.simulogic.android.events
 
 import org.engine.simulogic.android.circuits.algorithms.QuadTree
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
@@ -36,6 +37,9 @@ class CollisionDetector(private val connection: Connection) {
         selectedItems.forEach {
             it.subject.selected = false
             it.caller.value.selected = false
+            if(it.subject is CPulseButton){
+                it.subject.resetAction()
+            }
         }
         clear()
     }
