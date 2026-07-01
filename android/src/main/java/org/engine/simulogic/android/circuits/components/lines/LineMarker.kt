@@ -128,6 +128,8 @@ class LineMarker(
             val startNode = pathQueue.removeFirst()
             val endNode = pathQueue.removeLast()
             var signalIndex = 0
+            val directionX = sign(startNode.x - endNode.x)
+            val directionY = sign(startNode.y - endNode.y)
             signals.add(
                 CSignal(
                     startNode.x,
@@ -143,7 +145,7 @@ class LineMarker(
             while (countPoint > 0) {
                 if (pathQueue.size == 1) {
                     val node = pathQueue[0]
-                    signals.add(
+                     signals.add(
                         CSignal(
                             node.x,
                             node.y,
@@ -153,14 +155,15 @@ class LineMarker(
                         ).apply {
                             parent = this@LineMarker
                         })
-
                 } else {
                     val node = pathQueue.removeFirst()
+                    val x =  node.x
+                    val y =  node.y
 
                     signals.add(
                         CSignal(
-                            node.x,
-                            node.y,
+                            x,
+                            y,
                             CTypes.SIGNAL_RANGE_POINT,
                             signalIndex,
                             scene
@@ -174,8 +177,8 @@ class LineMarker(
 
             signals.add(
                 CSignal(
-                    endNode.x,
-                    endNode.y,
+                    endNode.x ,
+                    endNode.y ,
                     CTypes.SIGNAL_RANGE_POINT,
                     signalIndex,
                     scene
@@ -183,7 +186,29 @@ class LineMarker(
                     parent = this@LineMarker
                 })
 
+            /* enables user to access the wire nodes easily without moving the components they are connected to
+            * this is because sometimes the nodes overlaps with the components. So we make sure the nodes are not
+            * overlapping the components by moving in by a small offset just enough for the user to move the nodes independently*/
+            for(i in 1 until signals.size - 2){
+                val current = signals[i]
+                val next = signals[i + 1]
+                val prev = signals[i - 1]
+                val offsetX = 60f
+                val offsetY = 60f
+                if(current.getPosition().x == next.getPosition().x &&
+                    current.getPosition().y == next.getPosition().y &&
+                    endNode.x == current.getPosition().x && endNode.y == current.getPosition().y){
+                    val directionX = sign(prev.getPosition().x - current.getPosition().x)
+                    val directionY = sign(prev.getPosition().y - current.getPosition().y)
+                    val x = current.getPosition().x + offsetX * directionX
+                    val y = current.getPosition().y + offsetY * directionY
+                    current.updatePosition(x, y)
+                }
+            }
+
         }
+
+
         //initialize(scene)
         createMarker(scene)
     }

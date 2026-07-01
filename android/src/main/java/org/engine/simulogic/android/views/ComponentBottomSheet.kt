@@ -70,7 +70,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val includeEdge = false
         gatesRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         clockRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
-        memoryRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
+        memoryRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
         generalRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         templateRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
@@ -98,8 +98,8 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val memoryAdapter = ComponentViewAdapter()
         memoryAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
         memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
-       /* memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
         memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop)
+       /* memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
         memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)

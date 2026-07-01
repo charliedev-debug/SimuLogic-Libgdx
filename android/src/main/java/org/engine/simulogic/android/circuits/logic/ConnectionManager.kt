@@ -19,12 +19,16 @@ class ConnectionManager(
     init {
         validationMap[CTypes.SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.SIGNAL_RANGE_POINT)
         validationMap[CTypes.SIGNAL_OUT] =
-            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
+            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.T_SIGNAL_IN)
         validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
+        validationMap[CTypes.CLK_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
+        validationMap[CTypes.T_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
-            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN)
-        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.D_SIGNAL_IN)
+            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.T_SIGNAL_IN,
+                CTypes.CLK_SIGNAL_IN)
+        validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.D_SIGNAL_IN,
+            CTypes.T_SIGNAL_IN, CTypes.CLK_SIGNAL_IN)
     }
 
     fun resolveConnection() {

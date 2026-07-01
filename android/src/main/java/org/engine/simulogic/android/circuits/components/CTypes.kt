@@ -19,6 +19,8 @@ enum class CTypes {
     SIGNAL_IN,
     SIGNAL_OUT,
     D_SIGNAL_IN,
+    T_SIGNAL_IN,
+    CLK_SIGNAL_IN,
     Q_SIGNAL_OUT,
     E_SIGNAL_IN,
     SIGNAL_RANGE_POINT,

@@ -1,7 +1,6 @@
 package org.engine.simulogic.android.circuits.components.flipflops
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
@@ -45,8 +44,8 @@ class CTFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         }
 
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.T_SIGNAL_IN, 1, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.CLK_SIGNAL_IN, 2, scene))
 
         signals.forEach {
             attachChild(it)
@@ -77,13 +76,20 @@ class CTFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
 
     override fun execute() {
         val outputQ = signals[0]
-        val inputD = signals[1]
-        val inputE = signals[2]
-        val hasEdge = previousEdge != inputE.value
-        if(hasEdge){
-            outputQ.value = inputD.value
-            previousEdge = inputE.value
+        val inputT = signals[1]
+        val inputCLK = signals[2]
+        val hasEdge = previousEdge != inputCLK.value
+        if(hasEdge && inputCLK.value == SIGNAL_ACTIVE){
+            if(inputT.value == SIGNAL_ACTIVE && outputQ.value == SIGNAL_INACTIVE){
+                outputQ.value = SIGNAL_ACTIVE
+            }else if(inputT.value == SIGNAL_ACTIVE && outputQ.value == SIGNAL_ACTIVE){
+                outputQ.value = SIGNAL_INACTIVE
+            }
+            previousEdge = inputCLK.value
+        }else{
+            previousEdge = inputCLK.value
         }
+
     }
 
     override fun attachSelf() {

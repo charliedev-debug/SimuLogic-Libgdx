@@ -2,9 +2,12 @@ package org.engine.simulogic.android
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.android.billingclient.api.AcknowledgePurchaseParams
@@ -58,6 +61,8 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
 
         val priceTextView = findViewById<MaterialTextView>(R.id.price)
+        val unlockPremiumButton = findViewById<MaterialButton>(R.id.unlockPremium)
+        val priceInfoLoaderProgress = findViewById<ProgressBar>(R.id.priceInfoLoader)
         billingClient = BillingClient.newBuilder(this)
             .setListener(purchaseUpdatedListener).enablePendingPurchases(PendingPurchasesParams.newBuilder()
                 .enableOneTimeProducts().build()).enableAutoServiceReconnection().build()
@@ -80,15 +85,19 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                            premiumProductDetails.clear()
                            productDetailsResult.productDetailsList.forEach {
                                priceTextView.text = "${it.oneTimePurchaseOfferDetails?.formattedPrice}"
+                               unlockPremiumButton.text = buildString {
+                                   append("Unlock Pro - ")
+                                   append(it.oneTimePurchaseOfferDetails?.formattedPrice) }
                                premiumProductDetails.add(it)
                            }
+                           priceInfoLoaderProgress.visibility = View.INVISIBLE
                        }
                    }
                }
             }
 
         })
-        findViewById<MaterialButton>(R.id.unlockPremium).setOnClickListener {
+       unlockPremiumButton.setOnClickListener {
             premiumProductDetails.forEach {
                 purchasePremium(this,it)
             }
@@ -104,6 +113,10 @@ class PremiumPurchaseActivity : AppCompatActivity() {
 
         findViewById<MaterialTextView>(R.id.privacyPolicy).setOnClickListener {
 
+        }
+
+        findViewById<AppCompatImageButton>(R.id.closeActivity).setOnClickListener {
+            finish()
         }
        /* ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
