@@ -10,14 +10,32 @@
     android:clickable="true"
     android:focusable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/component_icon"
-        android:layout_width="@dimen/bottom_sheet_item_width"
-        android:layout_height="@dimen/bottom_sheet_item_width"
-        android:padding="5dp"
-        android:layout_gravity="center"
-        app:srcCompat="@drawable/gate_and"
-        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/component_icon"
+            android:layout_width="@dimen/bottom_sheet_item_width"
+            android:layout_height="@dimen/bottom_sheet_item_width"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/gate_and"
+            />
+        <TextView
+            android:id="@+id/isPremium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_alignEnd="@id/component_icon"
+            android:text="PRO"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:textSize="@dimen/bottom_sheet_item_text_size"
+            android:textColor="?attr/colorOnBackground"
+            android:background="@drawable/icon_rounded_corner_premium"
+            />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/component_header"
         android:layout_width="wrap_content"

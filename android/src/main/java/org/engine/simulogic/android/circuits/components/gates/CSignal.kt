@@ -20,6 +20,8 @@ open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, priv
             CTypes.E_SIGNAL_IN -> textureAtlas.findRegion("E-ENABLE")
             CTypes.D_SIGNAL_IN -> textureAtlas.findRegion("D-INPUT")
             CTypes.Q_SIGNAL_OUT -> textureAtlas.findRegion("Q-OUTPUT")
+            CTypes.S_SIGNAL_IN -> textureAtlas.findRegion("S-INPUT")
+            CTypes.R_SIGNAL_IN -> textureAtlas.findRegion("R-INPUT")
             CTypes.T_SIGNAL_IN -> textureAtlas.findRegion("T-INPUT")
             CTypes.CLK_SIGNAL_IN ->textureAtlas.findRegion("CLK-INPUT")
             CTypes.SIGNAL_RANGE_POINT->textureAtlas.findRegion("MOVE-INPUT")

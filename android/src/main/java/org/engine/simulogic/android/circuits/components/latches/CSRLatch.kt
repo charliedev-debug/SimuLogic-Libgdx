@@ -44,8 +44,8 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
         }
 
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.S_SIGNAL_IN, 1, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.R_SIGNAL_IN, 2, scene))
 
         signals.forEach {
             attachChild(it)
@@ -89,10 +89,6 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
             inputS.value == SIGNAL_INACTIVE && inputR.value == SIGNAL_ACTIVE->{
                 outputQ.value = SIGNAL_ACTIVE
                 value = SIGNAL_ACTIVE
-            }
-            else->{
-                outputQ.value = SIGNAL_INACTIVE
-                value = SIGNAL_INACTIVE
             }
         }
     }

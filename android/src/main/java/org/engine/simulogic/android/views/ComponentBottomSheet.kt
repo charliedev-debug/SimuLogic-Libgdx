@@ -97,14 +97,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         displayAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
         val memoryAdapter = ComponentViewAdapter()
         memoryAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
+        memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch,isPremium = true)
         memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
-        memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop)
-       /* memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch)
-        memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
+        memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop,isPremium = true)
+       /* memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
-        generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off)
+        generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off,isPremium = true)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)

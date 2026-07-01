@@ -18,6 +18,13 @@ class ComponentViewAdapter : RecyclerView.Adapter<ComponentViewAdapter.Component
         fun initView(component: ComponentItem){
             itemView.findViewById<ImageView>(R.id.component_icon).setImageResource(component.res)
             itemView.findViewById<TextView>(R.id.component_header).text = component.title
+            itemView.findViewById<TextView>(R.id.isPremium).also { textView ->
+                if(component.isPremium) {
+                    textView.visibility = View.VISIBLE
+                }else{
+                    textView.visibility = View.GONE
+                }
+            }
             itemView.setOnClickListener {
                 listeners.forEach {it.onClickComponent(component) }
             }
@@ -25,8 +32,8 @@ class ComponentViewAdapter : RecyclerView.Adapter<ComponentViewAdapter.Component
     }
 
 
-    fun insert(title:String, res:Int){
-        itemList.add(ComponentItem(title, res))
+    fun insert(title:String, res:Int,isPremium: Boolean = false){
+        itemList.add(ComponentItem(title, res,isPremium))
     }
 
     fun addListener(listener: IComponentAdapterListener){
