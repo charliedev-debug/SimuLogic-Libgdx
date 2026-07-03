@@ -33,6 +33,7 @@ import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.appupdate.testing.FakeAppUpdateManager
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.UserSettings
@@ -41,12 +42,14 @@ import org.engine.simulogic.android.views.dialogs.AboutDialog
 import org.engine.simulogic.android.views.dialogs.AlertDialog
 import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.databinding.ActivityLauncherBinding
+import androidx.core.view.get
 
 
 class LauncherActivity : AppCompatActivity() {
 
 private lateinit var appBarConfiguration: AppBarConfiguration
 private lateinit var binding: ActivityLauncherBinding
+private var isPremiumUser = false
 private val userSettings = UserSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking{
@@ -63,6 +66,9 @@ private val userSettings = UserSettings()
 
      setSupportActionBar(binding.appBarLauncher.toolbar)
 
+        runBlocking {
+            isPremiumUser = userSettings.getDataBoolean(this@LauncherActivity, UserSettings.PREMIUM_USER,false).first()
+        }
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
      val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
      val updateActivityResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
@@ -191,6 +197,12 @@ private val userSettings = UserSettings()
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.launcher, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        //only show premium menu if user has no premium access
+        menu?.get(0)?.isVisible = !isPremiumUser
+        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onSupportNavigateUp(): Boolean {

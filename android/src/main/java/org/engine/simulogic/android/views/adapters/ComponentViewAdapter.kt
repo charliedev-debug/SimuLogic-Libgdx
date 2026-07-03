@@ -14,14 +14,15 @@ class ComponentViewAdapter : RecyclerView.Adapter<ComponentViewAdapter.Component
 
     private val itemList = mutableListOf<ComponentItem>()
     private val listeners:MutableList<IComponentAdapterListener> = mutableListOf()
+    var showPremiumIndicator = true
     inner class ComponentViewHolder( item: View): RecyclerView.ViewHolder(item){
         fun initView(component: ComponentItem){
             itemView.findViewById<ImageView>(R.id.component_icon).setImageResource(component.res)
             itemView.findViewById<TextView>(R.id.component_header).text = component.title
             itemView.findViewById<TextView>(R.id.isPremium).also { textView ->
-                if(component.isPremium) {
+                if(component.isPremium && showPremiumIndicator){
                     textView.visibility = View.VISIBLE
-                }else{
+                } else{
                     textView.visibility = View.GONE
                 }
             }

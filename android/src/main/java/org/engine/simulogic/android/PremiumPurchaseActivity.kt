@@ -1,5 +1,6 @@
 package org.engine.simulogic.android
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -23,12 +24,16 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.views.dialogs.ErrorDialog
 import org.engine.simulogic.android.views.dialogs.InfoDialog
+import org.engine.simulogic.android.views.dialogs.SuccessDialog
 
 class PremiumPurchaseActivity : AppCompatActivity() {
     private val userSettings = UserSettings()
@@ -41,10 +46,12 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                 acknowledgePurchase(it)
             }
         }else if(billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED){
-            InfoDialog(this@PremiumPurchaseActivity, "You have cancelled the purchase!")
+            InfoDialog(this@PremiumPurchaseActivity, "You have cancelled the purchase!").show()
         }else if(billingResult.responseCode == BillingClient.BillingResponseCode.NETWORK_ERROR){
             ErrorDialog(this@PremiumPurchaseActivity,"Could not complete purchase due to a network issue!").show()
-        }else{
+        } else if(billingResult.responseCode == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE || billingResult.responseCode == BillingClient.BillingResponseCode.DEVELOPER_ERROR){
+            ErrorDialog(this@PremiumPurchaseActivity,"Billing unavailable for this application!").show()
+        } else{
             ErrorDialog(this@PremiumPurchaseActivity, "An unknown error occurred!").show()
         }
     }
@@ -74,7 +81,6 @@ class PremiumPurchaseActivity : AppCompatActivity() {
 
             override fun onBillingSetupFinished(result: BillingResult) {
                if(result.responseCode == BillingClient.BillingResponseCode.OK){
-
                    val queryProductsDetailsParams = QueryProductDetailsParams.newBuilder()
                        .setProductList(listOf(QueryProductDetailsParams.Product.newBuilder().setProductId("unlock_premium").setProductType(
                            BillingClient.ProductType.INAPP).build())).build()
@@ -146,7 +152,20 @@ class PremiumPurchaseActivity : AppCompatActivity() {
             billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     unlockPremiumFeatures()
-                    InfoDialog(this@PremiumPurchaseActivity, "Congratulations you are now a premium user!").show()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        userSettings.saveBooleanPref(this@PremiumPurchaseActivity,UserSettings.PREMIUM_USER,true)
+                        SuccessDialog(this@PremiumPurchaseActivity, "You are now a premium user").also{
+                            it.listener = object : SuccessDialog.OnCloseDialogListener{
+                                override fun onClick() {
+                                    val intent = Intent(this@PremiumPurchaseActivity, LauncherActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                    startActivity(intent)
+                                    finishAffinity()
+                                }
+                            }
+                            it.show()
+                        }
+                    }
                 }
             }
         }
@@ -158,11 +177,58 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                 .setProductType(BillingClient.ProductType.INAPP)
                 .build()
         ) { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchases.forEach { purchase ->
-                    if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                        unlockPremiumFeatures()
-                        InfoDialog(this@PremiumPurchaseActivity, "Congratulations you are now a premium user!").show()
+            when (billingResult.responseCode) {
+
+                BillingClient.BillingResponseCode.OK -> {
+
+                    if(purchases.isEmpty()){
+                        CoroutineScope(Dispatchers.Main).launch {
+                            InfoDialog(
+                                this@PremiumPurchaseActivity,
+                                "You don't have any previous purchase!"
+                            ).show()
+                        }
+                    }else {
+                        purchases.forEach { purchase ->
+                            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                                unlockPremiumFeatures()
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    userSettings.saveBooleanPref(
+                                        this@PremiumPurchaseActivity,
+                                        UserSettings.PREMIUM_USER,
+                                        true
+                                    )
+                                    SuccessDialog(
+                                        this@PremiumPurchaseActivity,
+                                        "Your previous purchase has been restored!"
+                                    ).also {
+                                        it.listener = object : SuccessDialog.OnCloseDialogListener {
+                                            override fun onClick() {
+                                                finish()
+                                            }
+                                        }
+                                        it.show()
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+                BillingClient.BillingResponseCode.NETWORK_ERROR -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        ErrorDialog(
+                            this@PremiumPurchaseActivity,
+                            "Could not complete purchase due to a network issue!"
+                        ).show()
+                    }
+                }
+                else -> {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        ErrorDialog(
+                            this@PremiumPurchaseActivity,
+                            "An unknown error occurred!"
+                        ).show()
                     }
                 }
             }

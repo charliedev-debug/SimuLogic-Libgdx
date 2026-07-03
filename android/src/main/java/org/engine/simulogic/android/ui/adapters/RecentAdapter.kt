@@ -26,6 +26,7 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
     var shareEnabled = true
     var dateEnabled = true
     var fileLengthEnabled  = true
+    var showPremiumIndicator = true
     inner class RecentViewHolder(view: View) : RecyclerView.ViewHolder(view){
         fun initView(position:Int){
             val item = dataList[position]
@@ -42,6 +43,13 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                     itemView.findViewById<TextView>(R.id.file_size).apply {
                         visibility = if(fileLengthEnabled) View.VISIBLE else View.INVISIBLE
                         text = ConvertUtils.kb2FitMemorySize(File(item.path).length(),2)
+                    }
+                    itemView.findViewById<TextView>(R.id.premium).apply {
+                        visibility = if(item.ispremium && showPremiumIndicator){
+                            View.VISIBLE
+                        }else{
+                            View.GONE
+                        }
                     }
                     itemView.findViewById<AppCompatImageButton>(R.id.delete).apply {
                         visibility = if(item.enableDelete) View.VISIBLE else View.INVISIBLE
@@ -64,9 +72,11 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
                 RecentItem.VIEW_HEADER->{
                     itemView.findViewById<TextView>(R.id.title).text = item.title
                     itemView.findViewById<ImageView>(R.id.icon).setImageResource(item.icon)
-                    itemView.findViewById<ImageView>(R.id.premium).apply {
-                        if(item.ispremium){
-                            visibility = View.VISIBLE
+                    itemView.findViewById<TextView>(R.id.premium).apply {
+                        visibility = if(item.ispremium && showPremiumIndicator){
+                            View.VISIBLE
+                        }else{
+                            View.GONE
                         }
                     }
                 }
@@ -82,8 +92,8 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
         dataList.add(RecentItem(title, path,description,lastModified, type,ispremium,canDelete))
     }
 
-    fun addHeader(title: String, icon:Int){
-        dataList.add(RecentItem(title,path = "", description = "", type = RecentItem.VIEW_HEADER, ispremium = false, icon = icon))
+    fun addHeader(title: String, icon:Int,isPremium: Boolean = false){
+        dataList.add(RecentItem(title,path = "", description = "", type = RecentItem.VIEW_HEADER, ispremium = isPremium, icon = icon))
     }
 
     override fun getItemViewType(position: Int): Int {

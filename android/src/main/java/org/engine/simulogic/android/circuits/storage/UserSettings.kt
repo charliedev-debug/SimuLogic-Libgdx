@@ -20,6 +20,7 @@ class UserSettings {
         val TOOLBAR_ENABLED = booleanPreferencesKey("TOOLBAR_ENABLED")
         val AUTO_SAVE_ENABLED = booleanPreferencesKey("AUTO_SAVE_ENABLED")
         val THEME_STYLE = stringPreferencesKey("THEME")
+        val PREMIUM_USER = booleanPreferencesKey("PREMIUM_USER")
     }
 
     fun prepare(){

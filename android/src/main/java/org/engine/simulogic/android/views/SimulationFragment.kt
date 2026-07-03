@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.views
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +10,14 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.engine.simulogic.android.PremiumPurchaseActivity
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
+import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.helpers.ErrorLogs
 import org.engine.simulogic.android.options.SimulationOptions
@@ -34,7 +39,9 @@ class SimulationFragment : AndroidFragmentApplication() {
     private lateinit var simulationOptions: SimulationOptions
     private val menuViewModel: MenuViewModel by activityViewModels()
     private val bottomSheetViewModel: BottomSheetViewModel by activityViewModels()
+    private val userSettings = UserSettings()
     lateinit var simulationLoop: SimulationLoop
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,6 +59,10 @@ class SimulationFragment : AndroidFragmentApplication() {
             arguments?.getSerializable("simulationOptions", SimulationOptions::class.java)!!
         }else{
             arguments?.getSerializable("simulationOptions", ) as SimulationOptions
+        }
+        var isPremiumUser = true
+        runBlocking {
+            isPremiumUser = userSettings.getDataBoolean(requireContext(), UserSettings.PREMIUM_USER,false).first()
         }
         simulationLoop = SimulationLoop(projectOptions, simulationOptions, object : ISimulationListener {
                 override fun onCreate() {
@@ -170,6 +181,13 @@ class SimulationFragment : AndroidFragmentApplication() {
 
         bottomSheetViewModel.message.observe(viewLifecycleOwner) { item ->
 
+            if(item.isPremium && !isPremiumUser){
+                // open payment activity
+                Intent(this.activity, PremiumPurchaseActivity::class.java).also{ intent->
+                    startActivity(intent)
+                }
+                return@observe
+            }
             when (item.title) {
                 ComponentBottomSheet.AND_COMPONENT -> {
                     simulationLoop.componentManager.insertAND()

@@ -14,10 +14,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.R
+import org.engine.simulogic.android.PremiumPurchaseActivity
 import org.engine.simulogic.android.SimulationActivity
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
+import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.ui.adapters.ProjectOptionsAdapter
 import org.engine.simulogic.android.ui.adapters.RecentAdapter
 import org.engine.simulogic.android.ui.models.ProjectOption
@@ -32,6 +36,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var recentProjectAdapter: RecentAdapter
     private lateinit var recentProjectAlert:TextView
+    private var isPremiumUser = false
+    private val userSettings = UserSettings()
     private val MAX_RECENT_ITEMS = 6
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +55,9 @@ class HomeFragment : Fragment() {
             add("Open Project",R.drawable.open_project)
             add("Import Project", R.drawable.import_project)
             add("Manage Project", R.drawable.manage_projects)
+        }
+        runBlocking {
+            isPremiumUser = userSettings.getDataBoolean(requireContext(), UserSettings.PREMIUM_USER,false).first()
         }
         val importProjectActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result->
             if(result.resultCode == Activity.RESULT_OK && result.data != null){
@@ -148,6 +157,7 @@ class HomeFragment : Fragment() {
             shareEnabled = false
             dateEnabled = false
             fileLengthEnabled = false
+            showPremiumIndicator = !isPremiumUser
             DataTransferObject().also{dto->
                 addHeader("Beginner", R.drawable.beginner)
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_CONNECTIONS.bin").also{
@@ -175,9 +185,9 @@ class HomeFragment : Fragment() {
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Shift Register.bin").also{
                     add(it.title,it.path, it.description, it.lastModified)
                 }
-                addHeader("Advanced", R.drawable.advanced)
+                addHeader("Advanced", R.drawable.advanced,)
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_BCD DISPLAY (0-9).bin").also{
-                    add(it.title,it.path, it.description, it.lastModified)
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
                 }
             }
             /*DataTransferObject().listSampleProjects(requireContext()).onEach {
@@ -188,6 +198,13 @@ class HomeFragment : Fragment() {
 
         sampleProjectAdapter.addListener(object : RecentAdapter.OnItemClickListener{
             override fun onClick(item: RecentItem) {
+                if(item.ispremium && !isPremiumUser){
+                    // open payment activity
+                    Intent(this@HomeFragment.activity, PremiumPurchaseActivity::class.java).also{ intent->
+                        startActivity(intent)
+                    }
+                    return
+                }
                 DataTransferObject().fetchSampleProject(requireContext(),
                     ProjectOptions(File(item.path).name,item.title, item.description,
                         item.path, item.lastModified, ProjectOptions.OPEN)).also {projectOptions ->

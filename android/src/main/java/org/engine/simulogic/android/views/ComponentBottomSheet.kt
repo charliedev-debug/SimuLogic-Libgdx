@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.ComponentViewAdapter
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
@@ -51,13 +54,17 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val DATA_BUS_FAN_OUT_COMPONENT = "FAN-OUT-BUS"
          const val CHANNEL_COMPONENT = "CHANNEL"
     }
+    private var isPremiumUser = false
+    private val userSettings = UserSettings()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.CustomBottomSheetDialogTheme)
-
+        runBlocking {
+            isPremiumUser = userSettings.getDataBoolean(requireContext(), UserSettings.PREMIUM_USER,false).first()
+        }
         val mainView: View = inflater.inflate(R.layout.bottom_sheet_simulation, container, false)
         val gatesRecyclerview = mainView.findViewById<RecyclerView>(R.id.gates_component_list)
         val clockRecyclerview = mainView.findViewById<RecyclerView>(R.id.clock_component_list)
@@ -82,6 +89,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         gatesAdapter.insert(NOT_COMPONENT, R.drawable.gate_not)
         gatesAdapter.insert(NAND_COMPONENT, R.drawable.gate_nand)
         gatesAdapter.insert(XNOR_COMPONENT, R.drawable.gate_xnor)
+        gatesAdapter.showPremiumIndicator = !isPremiumUser
         val clockAdapter = ComponentViewAdapter()
         clockAdapter.insert(CLOCK_COMPONENT_1HZ, R.drawable.clock_1hz)
         clockAdapter.insert(CLOCK_COMPONENT_5HZ, R.drawable.clock_5hz)
@@ -91,15 +99,18 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         clockAdapter.insert(CLOCK_COMPONENT_40HZ, R.drawable.clock_40hz)
         clockAdapter.insert(CLOCK_COMPONENT_60HZ, R.drawable.clock_60hz)
         clockAdapter.insert(CLOCK_COMPONENT_CUSTOM, R.drawable.clock_custom)
+        clockAdapter.showPremiumIndicator = !isPremiumUser
         val displayAdapter = ComponentViewAdapter()
         displayAdapter.insert(LED_COMPONENT, R.drawable.component_led)
         displayAdapter.insert(SS_DISPLAY_COMPONENT, R.drawable.ss_display)
         displayAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
+        displayAdapter.showPremiumIndicator = !isPremiumUser
         val memoryAdapter = ComponentViewAdapter()
         memoryAdapter.insert(D_LATCH_COMPONENT, R.drawable.d_latch)
         memoryAdapter.insert(SR_LATCH_COMPONENT, R.drawable.sr_latch,isPremium = true)
         memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
         memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop,isPremium = true)
+        memoryAdapter.showPremiumIndicator = !isPremiumUser
        /* memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
@@ -110,9 +121,11 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
       //  generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
+        generalAdapter.showPremiumIndicator = !isPremiumUser
         val templateAdapter = ComponentViewAdapter()
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)
         templateAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
+        templateAdapter.showPremiumIndicator = !isPremiumUser
         // dismisses the dialog once a component item has been clicked
         val onDismissListener = object :IComponentAdapterListener{
             override fun onClickComponent(item: ComponentItem) {

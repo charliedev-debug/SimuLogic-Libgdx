@@ -85,6 +85,18 @@
                     android:textAlignment="viewEnd"
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="10dp" />
+                <TextView
+                    android:id="@+id/premium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="PRO"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:textSize="@dimen/bottom_sheet_item_text_size"
+                    android:textColor="?attr/colorOnBackground"
+                    android:background="@drawable/icon_rounded_corner_premium"
+                    />
             </LinearLayout>
 
         </RelativeLayout>

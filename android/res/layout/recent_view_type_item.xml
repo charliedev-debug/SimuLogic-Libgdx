@@ -10,10 +10,9 @@
     android:layout_margin="4dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp">
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
     <androidx.appcompat.widget.AppCompatImageView
@@ -21,25 +20,33 @@
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:layout_marginStart="10dp"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:src="@drawable/beginner"/>
     <TextView
         android:id="@+id/title"
+        android:layout_toEndOf="@id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+       android:layout_centerVertical="true"
         android:padding="5dp"
         android:text=""
         android:textSize="16dp"
         android:textStyle="bold"
         android:textColor="?attr/colorOnBackground"/>
-    <androidx.appcompat.widget.AppCompatImageView
+    <TextView
         android:id="@+id/premium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_alignParentEnd="true"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
+        android:text="PRO"
+        android:textStyle="bold"
         android:visibility="gone"
-        android:src="@drawable/vip_icon"/>
-</LinearLayout>
+        android:textSize="@dimen/bottom_sheet_item_text_size"
+        android:textColor="?attr/colorOnBackground"
+        android:background="@drawable/icon_rounded_corner_premium"
+        />
+</RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
