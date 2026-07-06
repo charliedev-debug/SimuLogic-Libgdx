@@ -38,6 +38,7 @@ class LineMarker(
     private val lines = mutableListOf<CLine>()
     private val lineRect = mutableListOf<CRect>()
     var markerActive = false
+    var hasChildren = false
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
@@ -267,7 +268,6 @@ class LineMarker(
 
     // removes marker for the parent node
     fun removeSelf() {
-
         detachSelf()
         getNodeOriginFrom(from).from.removeMarker(this)
     }

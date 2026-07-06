@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
@@ -18,7 +19,7 @@ class ListNode(val value : CNode,
     fun insertChild(child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
         child.parent.add(this)
         val marker = LineMarker(scene,this, child,signalFrom, signalTo, index = lineMarkersChildren.size ).apply { initialize(scene, connection) }
-        lineMarkersChildren.add(marker)
+        lineMarkersChildren.add(0,marker)
         AutoSave.dataChanged = true
         lineMarkersChildren.forEachIndexed { index, marker ->
             marker.index = index
@@ -55,7 +56,10 @@ class ListNode(val value : CNode,
     fun removeMarker(marker: LineMarker){
          marker.from.value.reset()
          marker.to.value.reset()
-         lineMarkersChildren.remove(marker)
+        lineMarkersChildren.remove(marker)
+        lineMarkersChildren.forEachIndexed { index, marker ->
+            marker.index = index
+        }
         AutoSave.dataChanged = true
     }
 

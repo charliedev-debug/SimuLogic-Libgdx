@@ -643,9 +643,9 @@ class DataTransferObject {
             } catch (eof: EOFException) {
                 //process nestedLines with depth
                 nestedLineMarkerList.sortBy { it.originDepth }
-                nestedLineMarkerList.onEach {
-                    // println("Line Index ${it.originDepth}")
-                }
+               /* nestedLineMarkerList.onEach {
+                     println("Line Index ${it.originDepth}")
+                }*/
 
                 nestedLineMarkerList.onEach {
                     CDefaults.linePointCountX = it.linePointCountX

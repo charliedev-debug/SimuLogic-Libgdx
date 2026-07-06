@@ -172,8 +172,12 @@ class HomeFragment : Fragment() {
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_GROUPS.bin").also{
                     add(it.title,it.path, it.description, it.lastModified)
                 }
-                addHeader("Intermediate",R.drawable.intermediate)
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_CHANNEL.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+
+                addHeader("Intermediate",R.drawable.intermediate)
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_LOGIC GATES.bin").also{
                     add(it.title,it.path, it.description, it.lastModified)
                 }
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Counter.bin").also{
@@ -185,8 +189,54 @@ class HomeFragment : Fragment() {
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Shift Register.bin").also{
                     add(it.title,it.path, it.description, it.lastModified)
                 }
-                addHeader("Advanced", R.drawable.advanced,)
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_BCD DISPLAY (0-9).bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_2x1Multiplexer .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_4 x 1 Multiplexer .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_4x1 Multiplexer .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_8 x 1 Multiplexer .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                addHeader("Advanced", R.drawable.advanced,)
+
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_2-Bit Counter.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_2-Bit Counter D.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_3-Bit Counter.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_3-Bit Counter .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_4-Bit Counter .bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_4 Bit Program Counter.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_4 Bit Program Counter 2.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_8 Bit Program Counter.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_8 Bit Program Counter 2.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_8 Bit Program Counter 3.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified, ispremium = true)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_16 Bit Program Counter.bin").also{
                     add(it.title,it.path, it.description, it.lastModified, ispremium = true)
                 }
             }

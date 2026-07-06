@@ -47,7 +47,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     var gridDecorator:GridDecorator? = null
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
-         const val MAX_ZOOM_FACTOR = 6.5f
+         const val MAX_ZOOM_FACTOR = 15.5f
         //move objects around and perform single element selection
         const val TOUCH_MODE = 1
 

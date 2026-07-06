@@ -2,6 +2,7 @@ package org.engine.simulogic.android
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -34,6 +35,7 @@ import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.views.dialogs.ErrorDialog
 import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.android.views.dialogs.SuccessDialog
+import androidx.core.net.toUri
 
 class PremiumPurchaseActivity : AppCompatActivity() {
     private val userSettings = UserSettings()
@@ -114,11 +116,15 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialTextView>(R.id.termsOfService).setOnClickListener {
-
+            val url = "https://sites.google.com/view/simulogic/home"
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            startActivity(intent)
         }
 
         findViewById<MaterialTextView>(R.id.privacyPolicy).setOnClickListener {
-
+            val url = "https://sites.google.com/view/laborisapps/home"
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            startActivity(intent)
         }
 
         findViewById<AppCompatImageButton>(R.id.closeActivity).setOnClickListener {
