@@ -286,6 +286,10 @@ class SimulationFragment : AndroidFragmentApplication() {
                     simulationLoop.componentManager.insertCTFlipFlop()
                 }
 
+                ComponentBottomSheet.POINT_COMPONENT -> {
+                    simulationLoop.componentManager.insertPoint()
+                }
+
                 ComponentBottomSheet.LED_COMPONENT -> {
                     simulationLoop.componentManager.insertCLed()
                 }

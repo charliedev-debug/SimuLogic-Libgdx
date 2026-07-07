@@ -41,6 +41,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val D_FLIP_FLOP_COMPONENT = "D-FLIP-FLOP"
          const val JK_FLIP_FLOP_COMPONENT = "JK-FLIP-FLOP"
          const val T_FLIP_FLOP_COMPONENT = "T-FLIP-FLOP"
+         const val POINT_COMPONENT = "POINT"
          const val LED_COMPONENT = "LED"
          const val POWER_ON_COMPONENT = "POWER ON"
          const val POWER_OFF_COMPONENT = "POWER OFF"
@@ -116,6 +117,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
         generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off,isPremium = true)
+        generalAdapter.insert(POINT_COMPONENT, R.drawable.point_component)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)

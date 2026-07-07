@@ -13,6 +13,7 @@ enum class CTypes {
     FLIP_FLOP,
     T_FLIP_FLOP,
     JK_FLIP_FLOP,
+    POINT,
     WIRE,
     RANDOM,
     LED,

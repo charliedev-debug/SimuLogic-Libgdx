@@ -45,6 +45,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventNorCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNotCommand
 import org.engine.simulogic.android.circuits.logic.events.EventOrCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPasteCommand
+import org.engine.simulogic.android.circuits.logic.events.EventPointCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPowerCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPulseButtonCommand
 import org.engine.simulogic.android.circuits.logic.events.EventRandomCommand
@@ -217,6 +218,13 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                 eventBridge.insertCommand(EventJKFlipFlopCommand(Vector2(coordinates),connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertPoint() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventPointCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }

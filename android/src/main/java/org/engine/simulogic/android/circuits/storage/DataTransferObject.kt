@@ -29,6 +29,7 @@ import org.engine.simulogic.android.circuits.components.latches.CSRLatch
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
+import org.engine.simulogic.android.circuits.components.other.CPoint
 import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
@@ -356,6 +357,10 @@ class DataTransferObject {
 
                     CTypes.T_FLIP_FLOP -> {
                         connection.insertNode(ListNode(CTFlipFlop(x, y, rotation, scene)))
+                    }
+
+                    CTypes.POINT -> {
+                        connection.insertNode(ListNode(CPoint(x, y, rotation, scene)))
                     }
 
                     CTypes.CLOCK -> {
