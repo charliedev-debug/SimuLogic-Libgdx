@@ -30,7 +30,10 @@ class ListNode(val value : CNode,
     fun insertChild(parent:ListNode, child: ListNode, signalFrom: Int, signalTo: Int,connection:Connection, scene: PlayGroundScene):LineMarker {
         child.parent.add(parent)
         parent.child.add(child)
-        val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = lineMarkersChildren.size).apply { initialize(scene, connection) }
+        val marker = LineMarker(scene,parent, child,signalFrom, signalTo, index = lineMarkersChildren.size).apply {
+            initialize(scene, connection)
+            hasParentMarker = true
+        }
         lineMarkersChildren.add(marker)
         AutoSave.dataChanged = true
         lineMarkersChildren.forEachIndexed { index, marker ->
@@ -39,7 +42,10 @@ class ListNode(val value : CNode,
         return marker
     }
 
-    fun insertChildUnmarked(child: ListNode, marker: LineMarker){
+
+    /* The insert order should be markers with no children at the top then markers with children at the bottom
+    * This aids us when trying to save data to a file and resolving delete, undo, redo and copy operations*/
+    fun insertChildUnmarkedEnd(child: ListNode, marker: LineMarker){
         if(!lineMarkersChildren.contains(marker)) {
             child.parent.add(this)
             lineMarkersChildren.add(marker)
@@ -47,10 +53,19 @@ class ListNode(val value : CNode,
         }
     }
 
-    fun insertChildUnmarked(parent: ListNode,child: ListNode, marker: LineMarker){
-        child.parent.add(parent)
-        lineMarkersChildren.add(marker)
-        AutoSave.dataChanged = true
+    fun insertChildUnmarked(child: ListNode, marker: LineMarker, insertTop: Boolean = false){
+        if(!lineMarkersChildren.contains(marker)) {
+            child.parent.add(this)
+            /*if this marker was removed by any chance, and it has no children move it to the top.
+             *This help in resolving ordering issues if the marker was deleted, and then added later.
+             */
+            if(insertTop && !marker.hasParentMarker){
+                lineMarkersChildren.add(0,marker)
+            }else {
+                lineMarkersChildren.add(marker)
+            }
+            AutoSave.dataChanged = true
+        }
     }
 
     fun removeMarker(marker: LineMarker){

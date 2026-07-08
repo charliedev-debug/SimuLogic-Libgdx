@@ -5,9 +5,16 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CRangeLine(private val start: CSignal, private val end: CSignal, color: Color, private val scene: PlayGroundScene)
+class CRangeLine( val start: CSignal,  val end: CSignal,  color: Color, private val scene: PlayGroundScene)
     : CRect(0f,0f, CDefaults.signalIconRadius, CDefaults.signalIconRadius,color,scene) {
     var direction = 0
+
+    fun setVisibility(visible: Boolean){
+        isVisible = visible
+        start.selected = visible
+        end.selected = visible
+    }
+
     override fun update() {
         super.update()
         direction = if(start.getPosition().x == end.getPosition().x) 0 else if ( start.getPosition().y == end.getPosition().y) 1 else -1

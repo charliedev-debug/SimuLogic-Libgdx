@@ -137,10 +137,6 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         }*/
     }
 
-    private fun unlockPremiumFeatures(){
-
-    }
-
     private fun purchasePremium(activity: PremiumPurchaseActivity, productDetails: ProductDetails){
         val productDetailsParams = listOf(BillingFlowParams
             .ProductDetailsParams.newBuilder().setProductDetails(productDetails).build())
@@ -157,7 +153,6 @@ class PremiumPurchaseActivity : AppCompatActivity() {
 
             billingClient.acknowledgePurchase(acknowledgePurchaseParams) { billingResult ->
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    unlockPremiumFeatures()
                     CoroutineScope(Dispatchers.Main).launch {
                         userSettings.saveBooleanPref(this@PremiumPurchaseActivity,UserSettings.PREMIUM_USER,true)
                         SuccessDialog(this@PremiumPurchaseActivity, "You are now a premium user").also{
@@ -197,7 +192,6 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                     }else {
                         purchases.forEach { purchase ->
                             if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                                unlockPremiumFeatures()
                                 CoroutineScope(Dispatchers.Main).launch {
                                     userSettings.saveBooleanPref(
                                         this@PremiumPurchaseActivity,
@@ -210,7 +204,10 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                                     ).also {
                                         it.listener = object : SuccessDialog.OnCloseDialogListener {
                                             override fun onClick() {
-                                                finish()
+                                                val intent = Intent(this@PremiumPurchaseActivity, LauncherActivity::class.java)
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                                startActivity(intent)
+                                                finishAffinity()
                                             }
                                         }
                                         it.show()

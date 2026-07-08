@@ -177,6 +177,15 @@ class DataTransferObject {
                     }
                 }
             }
+
+            /* Sort all the lines in order, this will make loading the data easier
+            * Parent -> Children since every child will have a higher origin depth.*/
+            connection.forEach { listNode ->
+                listNode.getLineMarkerChildren().sortedBy { it.getNodeOriginDepth() }
+                listNode.getLineMarkerChildren().forEachIndexed { index, marker ->
+                    marker.index = index
+                }
+            }
             connection.forEach { listNode ->
                 val component = listNode.value
                 //from id
@@ -597,7 +606,7 @@ class DataTransferObject {
                                             signal.updatePosition(x, y)
                                         }
                                     }
-                                    connection[fromId].insertChildUnmarked(connection[toId], marker)
+                                    connection[fromId].insertChildUnmarkedEnd(connection[toId], marker)
                                 }
                             }catch(e:Exception){
                                 ErrorLogs.add(e.stackTraceToString())
@@ -631,7 +640,7 @@ class DataTransferObject {
                                             signal.updatePosition(x, y)
                                         }
                                     }
-                                    connection[fromId].insertChildUnmarked(connection[toId], marker)
+                                    connection[fromId].insertChildUnmarkedEnd(connection[toId], marker)
                                 }
                             }catch(e:Exception){
                                 ErrorLogs.add(e.stackTraceToString())
@@ -647,7 +656,7 @@ class DataTransferObject {
                 }
             } catch (eof: EOFException) {
                 //process nestedLines with depth
-                nestedLineMarkerList.sortBy { it.originDepth }
+              //  nestedLineMarkerList.sortBy { it.originDepth }
                /* nestedLineMarkerList.onEach {
                      println("Line Index ${it.originDepth}")
                 }*/

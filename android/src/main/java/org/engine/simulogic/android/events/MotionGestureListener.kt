@@ -1,5 +1,4 @@
 package org.engine.simulogic.android.events
-
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.MathUtils
@@ -13,6 +12,7 @@ import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CPointer
+import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ConnectionManager
@@ -125,6 +125,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 if(item.subject is CSignal && item.subject.parent is LineMarker){
                     dataContainer.insert(ListNode(item.subject))
                 }
+                // must be a ranged line highlight marker
+                else if(item.subject is CRangeLine && item.subject.start.parent is LineMarker){
+                    dataContainer.insert(ListNode(item.subject))
+                }
                 // deletes the whole component
                 else {
                     dataContainer.insert(item.caller)
@@ -134,7 +138,6 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         deleteTool.execute()
         collisionDetector.reset()
     }
-
 
     fun zoomValue():Float{
         return camera.zoom
@@ -232,7 +235,11 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     private fun sendRangeItemsToDataContainer(){
         rangeSelect.rangeItems.forEach {
-            dataContainer.insert(it.caller)
+            if(it.subject is CRangeLine){
+                dataContainer.insert(ListNode(it.subject.start))
+            }else {
+                dataContainer.insert(it.caller)
+            }
         }
     }
 

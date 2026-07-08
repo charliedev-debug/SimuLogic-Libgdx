@@ -1,7 +1,6 @@
 package org.engine.simulogic.android.circuits.components.lines
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CDefaults
@@ -14,7 +13,6 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.other.CRangeLine
-import org.engine.simulogic.android.circuits.components.other.CRect
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
@@ -36,9 +34,9 @@ class LineMarker(
 ) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
-    private val lineRect = mutableListOf<CRect>()
+    private val lineRect = mutableListOf<CRangeLine>()
     var markerActive = false
-    var hasChildren = false
+    var hasParentMarker = false
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
@@ -208,8 +206,6 @@ class LineMarker(
             }
 
         }
-
-
         //initialize(scene)
         createMarker(scene)
     }
@@ -296,7 +292,9 @@ class LineMarker(
             }
         }
 
-        getNodeOriginFrom(from).from.insertChildUnmarked(to, this)
+        getNodeOriginFrom(from).also { marker ->
+            marker.from.insertChildUnmarked(to, this,!marker.hasParentMarker)
+        }
     }
 
     private fun createMarker(scene: PlayGroundScene) {
@@ -491,7 +489,6 @@ class LineMarker(
     }
 
     override fun contains(entity: CNode): CNode? {
-
         for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(entity)
             if (obj != null) {
@@ -499,12 +496,13 @@ class LineMarker(
             }
         }
         lineRect.onEach {
-            it.isVisible = false
+            it.setVisibility(false)
         }
         for(i in 0 until lineRect.size){
+            val rect = lineRect[i]
             val obj = lineRect[i].contains(entity)
             if(obj != null){
-                obj.isVisible = true
+                rect.setVisibility(true)
                 return obj
             }
         }
@@ -512,7 +510,6 @@ class LineMarker(
     }
 
     override fun contains(rect: Rectangle): CNode? {
-
         for (i in 1 until signals.size - 1) {
             val obj = signals[i].contains(rect)
             if (obj != null) {
@@ -520,12 +517,13 @@ class LineMarker(
             }
         }
         lineRect.onEach {
-            it.isVisible = false
+           it.setVisibility(false)
         }
         for(i in 0 until lineRect.size){
-            val obj = lineRect[i].contains(rect)
+            val rect = lineRect[i]
+            val obj = rect.contains(rect)
             if(obj != null){
-                obj.isVisible = true
+                rect.setVisibility(true)
                 return obj
             }
         }
