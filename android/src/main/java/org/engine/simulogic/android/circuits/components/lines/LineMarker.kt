@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.components.lines
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.algorithms.WirePathRouter
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_ACTIVE
@@ -37,6 +38,8 @@ class LineMarker(
     private val lineRect = mutableListOf<CRangeLine>()
     var markerActive = false
     var hasParentMarker = false
+    var previousFromPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
+    var previousToPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
@@ -116,6 +119,8 @@ class LineMarker(
         }
 
         createMarker(scene)
+        previousFromPosition.set(from.value.getPosition())
+        previousToPosition.set(to.value.getPosition())
     }
 
     fun initialize(scene: PlayGroundScene, connection: Connection) {
@@ -208,6 +213,8 @@ class LineMarker(
         }
         //initialize(scene)
         createMarker(scene)
+        previousFromPosition.set(from.value.getPosition())
+        previousToPosition.set(to.value.getPosition())
     }
 
     fun getNodeOriginFrom(node: ListNode): LineMarker {
@@ -388,7 +395,44 @@ class LineMarker(
             signals[i].update()
         }
 
+
+        val snapAlignOriginPoints =
+            to.value.snapAlignOriginPoints || from.value.snapAlignOriginPoints
+        if(previousToPosition.x != Float.NEGATIVE_INFINITY && previousToPosition.x != to.value.getPosition().x && snapAlignOriginPoints){
+            val offsetX = to.value.getPosition().x - previousToPosition.x
+            for (i in 1 until signals.size - 1) {
+                val signal = signals[i]
+                signal.updatePosition(signal.getPosition().x + offsetX, signal.getPosition().y)
+            }
+        } else
+       if(previousFromPosition.x != Float.NEGATIVE_INFINITY && previousFromPosition.x != from.value.getPosition().x && snapAlignOriginPoints){
+            val offsetX = from.value.getPosition().x - previousFromPosition.x
+            for (i in 1 until signals.size - 1) {
+                val signal = signals[i]
+                signal.updatePosition(signal.getPosition().x + offsetX, signal.getPosition().y)
+            }
+        }
+
+        if(previousFromPosition.y != Float.NEGATIVE_INFINITY && previousFromPosition.y != from.value.getPosition().y && snapAlignOriginPoints){
+            val offsetY = from.value.getPosition().y - previousFromPosition.y
+            for (i in 1 until signals.size - 1) {
+                val signal = signals[i]
+                signal.updatePosition(signal.getPosition().x, signal.getPosition().y + offsetY)
+            }
+        }else
+        if(previousToPosition.y != Float.NEGATIVE_INFINITY && previousToPosition.y != to.value.getPosition().y && snapAlignOriginPoints){
+            val offsetY = to.value.getPosition().y - previousToPosition.y
+            for (i in 1 until signals.size - 1) {
+                val signal = signals[i]
+                signal.updatePosition(signal.getPosition().x , signal.getPosition().y + offsetY)
+            }
+        }
+
+
+        previousFromPosition.set(from.value.getPosition())
+        previousToPosition.set(to.value.getPosition())
         snapAlignOriginPoints()
+       /* snapAlignOriginPoints()
 
         //snap align body
         var index = 1
@@ -426,7 +470,7 @@ class LineMarker(
                 }
             }
             index++
-        }
+        }*/
 
         signals.forEach {
             it.snapAlignOriginPoints = false
