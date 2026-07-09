@@ -132,6 +132,19 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.rotateRight()
                     }
 
+                    "T-Anchor"->{
+                        LabelDialog(requireContext(), object : IDialogLabelListener {
+                            override fun onCompleted(text: String, fontSize:Int) {
+                                simulationLoop.componentManager.insertCAnchorLabel(text,fontSize)
+                            }
+
+                            override fun onCancelled() {
+
+                            }
+
+                        }).show()
+                    }
+
                     "Group" ->{
                         simulationLoop.componentManager.insertGroup()
                     }

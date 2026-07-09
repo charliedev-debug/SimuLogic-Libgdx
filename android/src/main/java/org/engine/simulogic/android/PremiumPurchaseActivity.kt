@@ -65,8 +65,8 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
        /* enableEdgeToEdge()*/
         setContentView(R.layout.activity_premium_purchase)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
-            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
         ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
 
         val priceTextView = findViewById<MaterialTextView>(R.id.price)

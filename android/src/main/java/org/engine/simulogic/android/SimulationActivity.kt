@@ -92,8 +92,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
-            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
         ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val appBarLayout = findViewById<AppBarLayout>(R.id.appBarLayout)
@@ -221,6 +221,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
+            //insert("T-Anchor", "T-Anchor", false, R.drawable.text_anchor)
             insert("Group", "Group", false, R.drawable.group)
             insert("UnGroup", "UnGroup", false, R.drawable.ungroup)
             insert("Undo", "Undo", false, R.drawable.undo)

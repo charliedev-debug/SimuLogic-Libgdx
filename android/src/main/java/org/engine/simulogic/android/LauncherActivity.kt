@@ -60,8 +60,8 @@ private val userSettings = UserSettings()
      binding = ActivityLauncherBinding.inflate(layoutInflater)
      setContentView(binding.root)
 
-     enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
-            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+     enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
      ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
 
      setSupportActionBar(binding.appBarLauncher.toolbar)

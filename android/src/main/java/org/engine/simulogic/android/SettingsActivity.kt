@@ -30,8 +30,8 @@ class SettingsActivity : AppCompatActivity() {
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
-            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
         ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
         findViewById<MaterialToolbar>(R.id.toolbar).setNavigationOnClickListener {
             finish()

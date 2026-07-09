@@ -31,8 +31,8 @@ private val userSettings = UserSettings()
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_help)
-        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.WHITE),
-            navigationBarStyle = SystemBarStyle.dark(scrim = Color.WHITE))
+        enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
         ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener {
             finish()
