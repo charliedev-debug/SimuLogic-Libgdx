@@ -94,6 +94,14 @@ abstract class Entity {
     open fun getCenter():Vector2?{
         return null
     }
+    open fun getWidth():Float{
+        return 0f
+    }
+
+    open fun getHeight():Float{
+        return 0f
+    }
+
     open fun getChildAt(index:Int):Entity{
         return data[index]
     }

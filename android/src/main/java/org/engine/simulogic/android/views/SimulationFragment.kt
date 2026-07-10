@@ -26,9 +26,11 @@ import org.engine.simulogic.android.views.dialogs.ChannelDialog
 import org.engine.simulogic.android.views.dialogs.CustomBroadCastBusDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
+import org.engine.simulogic.android.views.dialogs.LabelAnchorDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.dialogs.LoadingDialog
 import org.engine.simulogic.android.views.dialogs.LogErrorDialog
+import org.engine.simulogic.android.views.interfaces.IDialogLabelAnchorListener
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 import org.engine.simulogic.android.views.interfaces.ISimulationListener
 import org.engine.simulogic.android.views.models.BottomSheetViewModel
@@ -91,6 +93,13 @@ class SimulationFragment : AndroidFragmentApplication() {
             })
 
         menuViewModel.message.observe(viewLifecycleOwner) { item ->
+            if(item.isPremium && !isPremiumUser){
+                // open payment activity
+                Intent(this.activity, PremiumPurchaseActivity::class.java).also{ intent->
+                    startActivity(intent)
+                }
+                return@observe
+            }
             if (simulationLoop.isReady) {
                 when (item.id) {
                     "Origin" -> {
@@ -132,10 +141,10 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.rotateRight()
                     }
 
-                    "T-Anchor"->{
-                        LabelDialog(requireContext(), object : IDialogLabelListener {
-                            override fun onCompleted(text: String, fontSize:Int) {
-                                simulationLoop.componentManager.insertCAnchorLabel(text,fontSize)
+                    "A-Label"->{
+                        LabelAnchorDialog(requireContext(), object : IDialogLabelAnchorListener {
+                            override fun onCompleted(text: String, fontSize:Int,alignment:Int) {
+                                simulationLoop.componentManager.insertCAnchorLabel(text,fontSize,alignment)
                             }
 
                             override fun onCancelled() {

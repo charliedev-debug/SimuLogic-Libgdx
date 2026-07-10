@@ -10,6 +10,7 @@ import org.engine.simulogic.android.circuits.components.decorators.GridDecorator
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CAnchor
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeLine
@@ -89,6 +90,22 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                dataContainer.insert(item.caller)
             }
         }
+    }
+
+    fun createAnchors(alignment: Int):List<CAnchor>{
+        val anchorList = mutableListOf<CAnchor>()
+
+        if(collisionDetector.mode == RANGED_SELECTION_MODE){
+            rangeSelect.rangeItems.forEach {
+                anchorList.add(CAnchor(it.caller.value,alignment))
+            }
+        }else{
+            collisionDetector.selectedItems.forEach { item ->
+                anchorList.add(CAnchor(item.caller.value,alignment))
+            }
+        }
+        collisionDetector.reset()
+        return anchorList
     }
 
     fun copy(){

@@ -27,6 +27,7 @@ import org.engine.simulogic.android.circuits.components.generators.CRandom
 import org.engine.simulogic.android.circuits.components.latches.CLatch
 import org.engine.simulogic.android.circuits.components.latches.CSRLatch
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CAnchor
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.other.CPoint
@@ -58,6 +59,7 @@ class DataTransferObject {
     private val IDENTIFIER = 0xC145FF
     private val VERSION_1 = 1
     private val VERSION_2 = 2
+    private val VERSION_3 = 3
     private val DESCRIPTION_LENGTH_MAX_CHARACTERS = 512
     companion object {
         fun deleteFile(context: Context, title: String) {
@@ -96,6 +98,7 @@ class DataTransferObject {
         val y: Float
     )
 
+    data class LabelAnchorHelper(val label: CLabel, val anchorEntityId:Int, val alignment:Int)
 
     fun writeData(
         projectOptions: ProjectOptions,
@@ -110,7 +113,7 @@ class DataTransferObject {
         val stream = DataOutputStream(temp.write(false))
         val descriptionLength = min(description.length,DESCRIPTION_LENGTH_MAX_CHARACTERS)
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION_2)
+        stream.writeInt(VERSION_3)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(descriptionLength)
@@ -142,6 +145,13 @@ class DataTransferObject {
                         stream.writeInt(component.text.length)
                         stream.write(component.text.toByteArray(Charsets.UTF_8))
                         stream.writeFloat(component.fontSize)
+                       if(component.anchor != null){
+                           stream.writeInt(component.anchor!!.alignment)
+                           stream.writeInt(component.anchor!!.anchorEntity.id)
+                       }else{
+                           stream.writeInt(-1)
+                           stream.writeInt(-1)
+                       }
                     }
 
                     is CClock -> {
@@ -235,7 +245,7 @@ class DataTransferObject {
         // println("Saving file.... ${file.file()?.path} : ${file.file().exists()}")
         val stream = DataOutputStream(file.write(false))
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION_2)
+        stream.writeInt(VERSION_3)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(description.length)
@@ -255,6 +265,7 @@ class DataTransferObject {
         // println("${projectOptions.title} = ${file.file().path}")
         val stream = DataInputStream(BufferedInputStream(file.read()))
         val groups = mutableListOf<CGroup>()
+        val textAnchors = mutableListOf<LabelAnchorHelper>()
         try {
             val identifier = stream.readInt()
             if (identifier != IDENTIFIER) throw IOException("Corrupt or Not a circuit file")
@@ -288,6 +299,8 @@ class DataTransferObject {
                     stream.readFully(labelText)
                 }
                 val labelFontSize = if (type == CTypes.LABEL) stream.readFloat() else 0f
+                val labelAnchorAlignment = if(type == CTypes.LABEL && version >= VERSION_3) stream.readInt() else -1
+                val labelAnchorID = if(type == CTypes.LABEL && version >= VERSION_3) stream.readInt() else -1
                 // power generator signal value
                 val powerValue = if (type == CTypes.POWER) stream.readInt() else 0
                 // data bus size value
@@ -414,6 +427,9 @@ class DataTransferObject {
                                     scene
                                 ).also {
                                     it.color = EnvironmentTheme.colorOnBackground
+                                    if(labelAnchorID != -1){
+                                        textAnchors.add(LabelAnchorHelper(it,labelAnchorID,labelAnchorAlignment))
+                                    }
                                 }
                             )
                         )
@@ -523,7 +539,9 @@ class DataTransferObject {
             groups.forEach {
                 it.loadFromIds(connection)
             }
-
+            textAnchors.onEach {data->
+                data.label.anchor = CAnchor(connection[data.anchorEntityId].value,data.alignment)
+            }
             val nestedLineMarkerList = mutableListOf<NestedLineMarkerHelper>()
             try {
                 while (true) {
@@ -537,7 +555,7 @@ class DataTransferObject {
                         val signalSize = stream.readInt()
                         val linePointCountX = stream.readInt()
                         val linePointCountY = stream.readInt()
-                        if (version == VERSION_2) {
+                        if (version >= VERSION_2) {
                             val originDepth = stream.readInt()
                             val sourceID = stream.readInt()
                             if (sourceID == LineMarker.FROM_SIGNAL) {

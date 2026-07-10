@@ -12,6 +12,7 @@ class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
     private val dataList = mutableListOf<MenuAdapterItem>()
     var listener:IMenuAdapterListener? = null
     var selectedMode = 0
+    var showPremiumIndicator = true
     inner class MenuViewHolder(item:View):RecyclerView.ViewHolder(item){
 
         fun initView(position: Int){
@@ -23,6 +24,13 @@ class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
                 selected.visibility = if(selectedMode == position) View.VISIBLE else View.INVISIBLE
             }else{
                 selected.visibility = View.INVISIBLE
+            }
+            itemView.findViewById<TextView>(R.id.premium).also { premiumTextview->
+                if(showPremiumIndicator && item.isPremium){
+                    premiumTextview.visibility = View.VISIBLE
+                }else{
+                    premiumTextview.visibility = View.GONE
+                }
             }
             itemView.setOnClickListener {
                 listener?.onClickListener(item)
@@ -39,8 +47,8 @@ class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
     fun insert(item: MenuAdapterItem){
         dataList.add(item)
     }
-    fun insert(id:String,title:String,isMode:Boolean,res:Int){
-        insert(MenuAdapterItem(id,title, isMode, res))
+    fun insert(id:String,title:String,isMode:Boolean,res:Int,isPremium: Boolean = false){
+        insert(MenuAdapterItem(id,title, isMode, res,isPremium))
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuViewHolder {
         val  view = LayoutInflater.from(parent.context).inflate(R.layout.menu_item_simulation,parent,false)

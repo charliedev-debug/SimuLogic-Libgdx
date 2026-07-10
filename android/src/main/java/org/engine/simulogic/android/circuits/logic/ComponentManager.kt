@@ -36,6 +36,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventInsertGroupCommand
 import org.engine.simulogic.android.circuits.logic.events.EventJKFlipFlopCommand
+import org.engine.simulogic.android.circuits.logic.events.EventLabelAnchorCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLabelCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
@@ -278,6 +279,15 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
+
+    fun insertCAnchorLabel(text:String, fontSize:Int,alignment:Int) {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventLabelAnchorCommand(Vector2(coordinates),text, fontSize.toFloat(), font, alignment, connection, gestureListener,scene))
+            }
+        }
+    }
+
     fun insertCDataBus(size:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->

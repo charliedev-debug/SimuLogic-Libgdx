@@ -66,9 +66,6 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
         }
     }
 
-    override fun detachSelf() {
-        super.detachSelf()
-    }
     override fun contains(entity: CNode): CNode? {
         val parentCollides = super.contains(entity)
         if(parentCollides != null){

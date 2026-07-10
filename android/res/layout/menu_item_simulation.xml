@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/icon_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <LinearLayout
         android:orientation="vertical"
         android:gravity="center"
@@ -36,5 +37,18 @@
             android:paddingRight="2dp"
             android:layout_height="4dp"/>
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/premium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:text="PRO"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textSize="8sp"
+        android:textColor="?attr/colorOnBackground"
+        android:background="@drawable/icon_rounded_corner_premium"
+        />
 </RelativeLayout>

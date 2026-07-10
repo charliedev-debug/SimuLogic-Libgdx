@@ -81,6 +81,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
     private lateinit var jobStateRoutine: Job
     private lateinit var simulationFragment: SimulationFragment
+    private var isPremiumUser = false
     private val userSettings = UserSettings()
     private val simulationOptions = SimulationOptions()
     @SuppressLint("SetTextI18n")
@@ -89,6 +90,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             ActivityHelpers.getTheme(userSettings, this@SimulationActivity).also{
                 simulationOptions.theme = it
             }
+            isPremiumUser = userSettings.getDataBoolean(this@SimulationActivity, UserSettings.PREMIUM_USER,false).first()
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_simulation)
@@ -221,7 +223,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
-            //insert("T-Anchor", "T-Anchor", false, R.drawable.text_anchor)
+            insert("A-Label", "A-Label", false, R.drawable.text_anchor,true)
             insert("Group", "Group", false, R.drawable.group)
             insert("UnGroup", "UnGroup", false, R.drawable.ungroup)
             insert("Undo", "Undo", false, R.drawable.undo)
@@ -231,6 +233,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Paste", "Paste", false, R.drawable.paste)
             insert("Delete", "Delete", false, R.drawable.delete)
             selectedMode = 1
+            showPremiumIndicator = !isPremiumUser
         }
 
         menuRecyclerView.adapter = menuAdapter
