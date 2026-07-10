@@ -25,6 +25,7 @@ import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDis
 import org.engine.simulogic.android.circuits.components.wireless.CChannel
 import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
+import org.engine.simulogic.android.circuits.logic.events.EventAndThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventBcdDisplayCommand
 import org.engine.simulogic.android.circuits.logic.events.EventBridge
 import org.engine.simulogic.android.circuits.logic.events.EventChannelCommand
@@ -42,9 +43,12 @@ import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
 import org.engine.simulogic.android.circuits.logic.events.EventModeCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNandCommand
+import org.engine.simulogic.android.circuits.logic.events.EventNandThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNorCommand
+import org.engine.simulogic.android.circuits.logic.events.EventNorThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNotCommand
 import org.engine.simulogic.android.circuits.logic.events.EventOrCommand
+import org.engine.simulogic.android.circuits.logic.events.EventOrThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPasteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPointCommand
 import org.engine.simulogic.android.circuits.logic.events.EventPowerCommand
@@ -131,6 +135,38 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
        gestureListener.rectPointer.getPosition().also {position->
             snapAlign.getSnapCoordinates(position).also { coordinates->
                 eventBridge.insertCommand(EventAndCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
+            }
+        }
+    }
+
+    fun insertANDThreeInput(){
+        gestureListener.rectPointer.getPosition().also {position->
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                eventBridge.insertCommand(EventAndThreeInputCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
+            }
+        }
+    }
+
+    fun insertOrThreeInput(){
+        gestureListener.rectPointer.getPosition().also {position->
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                eventBridge.insertCommand(EventOrThreeInputCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
+            }
+        }
+    }
+
+    fun insertNorThreeInput(){
+        gestureListener.rectPointer.getPosition().also {position->
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                eventBridge.insertCommand(EventNorThreeInputCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
+            }
+        }
+    }
+
+    fun insertNandThreeInput(){
+        gestureListener.rectPointer.getPosition().also {position->
+            snapAlign.getSnapCoordinates(position).also { coordinates->
+                eventBridge.insertCommand(EventNandThreeInputCommand(Vector2(coordinates),connection,gestureListener.commandHistory,scene))
             }
         }
     }

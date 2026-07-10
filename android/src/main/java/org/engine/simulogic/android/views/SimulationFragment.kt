@@ -239,6 +239,22 @@ class SimulationFragment : AndroidFragmentApplication() {
                     simulationLoop.componentManager.insertNOT()
                 }
 
+                ComponentBottomSheet.AND_THREE_INPUT_COMPONENT->{
+                    simulationLoop.componentManager.insertANDThreeInput()
+                }
+
+                ComponentBottomSheet.NAND_THREE_INPUT_COMPONENT->{
+                    simulationLoop.componentManager.insertNandThreeInput()
+                }
+
+                ComponentBottomSheet.OR_THREE_INPUT_COMPONENT->{
+                    simulationLoop.componentManager.insertOrThreeInput()
+                }
+
+                ComponentBottomSheet.NOR_THREE_INPUT_COMPONENT->{
+                    simulationLoop.componentManager.insertNorThreeInput()
+                }
+
                 ComponentBottomSheet.CLOCK_COMPONENT_1HZ -> {
                     simulationLoop.componentManager.insertCClock(1f)
                 }

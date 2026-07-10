@@ -15,10 +15,14 @@ import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CJKFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CTFlipFlop
 import org.engine.simulogic.android.circuits.components.gates.CAnd
+import org.engine.simulogic.android.circuits.components.gates.CAndThreeInput
 import org.engine.simulogic.android.circuits.components.gates.CNand
+import org.engine.simulogic.android.circuits.components.gates.CNandThreeInput
 import org.engine.simulogic.android.circuits.components.gates.CNor
+import org.engine.simulogic.android.circuits.components.gates.CNorThreeInput
 import org.engine.simulogic.android.circuits.components.gates.CNot
 import org.engine.simulogic.android.circuits.components.gates.COr
+import org.engine.simulogic.android.circuits.components.gates.COrThreeInput
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.gates.CXnor
 import org.engine.simulogic.android.circuits.components.gates.CXor
@@ -359,6 +363,22 @@ class DataTransferObject {
 
                     CTypes.XOR -> {
                         connection.insertNode(ListNode(CXor(x, y, rotation, scene)))
+                    }
+
+                    CTypes.AND_THREE_INPUT -> {
+                        connection.insertNode(ListNode(CAndThreeInput(x, y, rotation, scene)))
+                    }
+
+                    CTypes.NAND_THREE_INPUT -> {
+                        connection.insertNode(ListNode(CNandThreeInput(x, y, rotation, scene)))
+                    }
+
+                    CTypes.OR_THREE_INPUT -> {
+                        connection.insertNode(ListNode(COrThreeInput(x, y, rotation, scene)))
+                    }
+
+                    CTypes.NOR_THREE_INPUT -> {
+                        connection.insertNode(ListNode(CNorThreeInput(x, y, rotation, scene)))
                     }
 
                     CTypes.LATCH -> {

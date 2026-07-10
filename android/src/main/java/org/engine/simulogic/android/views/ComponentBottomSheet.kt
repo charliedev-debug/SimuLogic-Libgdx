@@ -41,6 +41,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val D_FLIP_FLOP_COMPONENT = "D-FLIP-FLOP"
          const val JK_FLIP_FLOP_COMPONENT = "JK-FLIP-FLOP"
          const val T_FLIP_FLOP_COMPONENT = "T-FLIP-FLOP"
+         const val AND_THREE_INPUT_COMPONENT = "AND-3"
+         const val NAND_THREE_INPUT_COMPONENT = "NAND-3"
+         const val OR_THREE_INPUT_COMPONENT = "OR-3"
+         const val NOR_THREE_INPUT_COMPONENT = "NOR-3"
          const val POINT_COMPONENT = "POINT"
          const val LED_COMPONENT = "LED"
          const val POWER_ON_COMPONENT = "POWER ON"
@@ -68,6 +72,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         }
         val mainView: View = inflater.inflate(R.layout.bottom_sheet_simulation, container, false)
         val gatesRecyclerview = mainView.findViewById<RecyclerView>(R.id.gates_component_list)
+        val spaceOptimizationRecyclerview = mainView.findViewById<RecyclerView>(R.id.space_optimization_component_list)
         val clockRecyclerview = mainView.findViewById<RecyclerView>(R.id.clock_component_list)
         val displayRecyclerview = mainView.findViewById<RecyclerView>(R.id.display_component_list)
         val memoryRecyclerview = mainView.findViewById<RecyclerView>(R.id.memory_component_list)
@@ -82,6 +87,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         templateRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
+        spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
         val gatesAdapter = ComponentViewAdapter()
         gatesAdapter.insert(AND_COMPONENT, R.drawable.gate_and)
         gatesAdapter.insert(OR_COMPONENT, R.drawable.gate_or)
@@ -91,6 +97,13 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         gatesAdapter.insert(NAND_COMPONENT, R.drawable.gate_nand)
         gatesAdapter.insert(XNOR_COMPONENT, R.drawable.gate_xnor)
         gatesAdapter.showPremiumIndicator = !isPremiumUser
+        val spaceOptimizationAdapter = ComponentViewAdapter()
+        spaceOptimizationAdapter.insert(AND_THREE_INPUT_COMPONENT, R.drawable.and_three_input,isPremium = true)
+        spaceOptimizationAdapter.insert(NAND_THREE_INPUT_COMPONENT, R.drawable.nand_three_input,isPremium = true)
+        spaceOptimizationAdapter.insert(OR_THREE_INPUT_COMPONENT, R.drawable.or_three_input,isPremium = true)
+        spaceOptimizationAdapter.insert(NOR_THREE_INPUT_COMPONENT, R.drawable.nor_three_input,isPremium = true)
+        spaceOptimizationAdapter.insert(POINT_COMPONENT, R.drawable.point_component, isPremium = true)
+        spaceOptimizationAdapter.showPremiumIndicator = !isPremiumUser
         val clockAdapter = ComponentViewAdapter()
         clockAdapter.insert(CLOCK_COMPONENT_1HZ, R.drawable.clock_1hz)
         clockAdapter.insert(CLOCK_COMPONENT_5HZ, R.drawable.clock_5hz)
@@ -117,7 +130,6 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
         generalAdapter.insert(PULSE_BUTTON_COMPONENT, R.drawable.pulse_button_off,isPremium = true)
-        generalAdapter.insert(POINT_COMPONENT, R.drawable.point_component, isPremium = true)
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
@@ -137,6 +149,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         listener?.also {
             gatesAdapter.addListener(listener)
             gatesAdapter.addListener(onDismissListener)
+        }
+        listener?.also {
+            spaceOptimizationAdapter.addListener(listener)
+            spaceOptimizationAdapter.addListener(onDismissListener)
         }
         listener?.also {
             generalAdapter.addListener(listener)
@@ -165,12 +181,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         templateRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
         memoryRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         displayRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, spacing, includeEdge))
+        spaceOptimizationRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         generalRecyclerview.adapter = generalAdapter
         clockRecyclerview.adapter = clockAdapter
         gatesRecyclerview.adapter = gatesAdapter
         memoryRecyclerview.adapter = memoryAdapter
         templateRecyclerview.adapter = templateAdapter
         displayRecyclerview.adapter = displayAdapter
+        spaceOptimizationRecyclerview.adapter = spaceOptimizationAdapter
         return mainView
     }
 }
