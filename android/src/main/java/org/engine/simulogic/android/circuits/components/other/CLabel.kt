@@ -12,12 +12,14 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
+import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:String, x:Float, y:Float, private val scene: PlayGroundScene, private  val layerId: LayerEnums = LayerEnums.GRID_LAYER_LABELS):CNode() {
     private val position = Vector2(x,y)
     private val layout = GlyphLayout()
+    var anchor: CAnchor? = null
     var color = Color.WHITE
     init {
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
@@ -48,6 +50,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun update() {
+        anchor?.apply(this)
         // this helps when resolving for collisions
         sprite.setOrigin(position.x , position.y)
         sprite.setSize(layout.width * 1.1f , layout.height * 2f )
@@ -56,6 +59,16 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
         sprite.setPosition(position.x - sprite.width /2f,position.y - sprite.height)
     }
 
+    override fun attachSelf() {
+        super.attachSelf()
+        scene.getLayerById(layerId.name).also {  layer->
+            layer.attachChild(this)
+        }
+    }
+
+    override fun detachSelf() {
+        super.detachSelf()
+    }
     override fun contains(entity: CNode): CNode? {
         val parentCollides = super.contains(entity)
         if(parentCollides != null){
