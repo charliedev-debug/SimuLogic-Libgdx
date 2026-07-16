@@ -141,6 +141,19 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.rotateRight()
                     }
 
+                    "EditText"->{
+                        LabelDialog(requireContext(), object : IDialogLabelListener {
+                            override fun onCompleted(text: String, fontSize:Int) {
+                                simulationLoop.componentManager.editCLabel(text,fontSize)
+                            }
+
+                            override fun onCancelled() {
+
+                            }
+
+                        },"Edit Label").show()
+                    }
+
                     "A-Label"->{
                         LabelAnchorDialog(requireContext(), object : IDialogLabelAnchorListener {
                             override fun onCompleted(text: String, fontSize:Int,alignment:Int) {

@@ -20,7 +20,7 @@ class CPoint(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGro
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("POINT")
-        type = CTypes.NOT
+        type = CTypes.POINT
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)

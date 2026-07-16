@@ -83,7 +83,7 @@ class CNorThreeInput(x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, priv
         val inputA = signals[1]
         val inputB = signals[2]
         val inputC = signals[3]
-        output.value = inputA.value.and(inputB.value)
+        output.value = if(inputA.value.or(inputB.value).or(inputC.value) == 1) 0 else 1
     }
 
     override fun attachSelf() {

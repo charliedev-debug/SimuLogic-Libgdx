@@ -34,8 +34,8 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     override fun draw(spriteBatch: SpriteBatch) {
         font.color = color
         font.data.setScale(fontSize / CDefaults.MAX_FONT_RESOLUTION)
-        layout.setText(font,text)
         if(text.isNotEmpty()) {
+            layout.setText(font,text)
             if(selected) {
                 sprite.draw(spriteBatch)
             }
@@ -57,6 +57,14 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
         sprite.setOriginCenter()
         sprite.color = CDefaults.LABEL_SELECTED_COLOR
         sprite.setPosition(position.x - sprite.width /2f,position.y - sprite.height)
+        // to make things easier self detach or attach if the anchor is available on delete, undo or redo
+        anchor?.also {
+            if(it.anchorEntity.isRemoved){
+                detachSelf()
+            }else if(!it.anchorEntity.isRemoved && isRemoved){
+                attachSelf()
+            }
+        }
     }
 
     override fun attachSelf() {

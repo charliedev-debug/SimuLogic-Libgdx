@@ -24,7 +24,7 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.latchWidth, CDefaults.latchHeight)
+            setSize(CDefaults.latchWidth* 1.5f , CDefaults.latchHeight* 1.5f )
             setOriginCenter()
             type = CTypes.JK_FLIP_FLOP
             when(rotationDirection){
@@ -41,13 +41,13 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.latchWidth / 2f,y - CDefaults.latchHeight / 2f)
+            setPosition(x - CDefaults.latchWidth * 1.5f / 2f,y - CDefaults.latchHeight * 1.5f / 2f)
         }
 
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
-        signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
-
+        signals.add(CSignal(x - sprite.width * 0.8125f, y + sprite.height/ 2f - sprite.height * 0.1875f ,CTypes.J_SIGNAL_IN, 1, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y - sprite.height / 2f +  sprite.height * 0.1875f ,CTypes.K_SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x - sprite.width * 0.8125f, y ,CTypes.CLK_SIGNAL_IN, 3, scene))
         signals.forEach {
             attachChild(it)
         }
@@ -69,6 +69,9 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
             getChildAt(2).getPosition()?.also { outputPosition ->
                 lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
             }
+            getChildAt(3).getPosition()?.also { outputPosition ->
+                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
+            }
             lines.forEach {
                 layer.attachChild(it)
             }
@@ -77,12 +80,25 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
 
     override fun execute() {
         val outputQ = signals[0]
-        val inputD = signals[1]
-        val inputE = signals[2]
-        val hasEdge = previousEdge != inputE.value
-        if(hasEdge){
-            outputQ.value = inputD.value
-            previousEdge = inputE.value
+        val inputJ = signals[1]
+        val inputK = signals[2]
+        val inputCLK = signals[3]
+        val hasEdge = previousEdge != inputCLK.value
+        if(hasEdge && inputCLK.value == SIGNAL_ACTIVE){
+            when {
+                inputJ.value == SIGNAL_ACTIVE && inputK.value == SIGNAL_INACTIVE -> {
+                    outputQ.value = SIGNAL_ACTIVE
+                }
+                inputJ.value == SIGNAL_INACTIVE && inputK.value == SIGNAL_ACTIVE -> {
+                    outputQ.value = SIGNAL_INACTIVE
+                }
+                inputJ.value == SIGNAL_ACTIVE && inputK.value == SIGNAL_ACTIVE -> {
+                    outputQ.value = if (outputQ.value == SIGNAL_ACTIVE) SIGNAL_INACTIVE else SIGNAL_ACTIVE
+                }
+            }
+            previousEdge = inputCLK.value
+        }else{
+            previousEdge = inputCLK.value
         }
     }
 
@@ -118,8 +134,9 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
         when(rotationDirection){
             ROTATE_RIGHT->{
                 signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
+                signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1f)
+                signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1f)
+                signals[3].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
                 }
@@ -128,13 +145,17 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_LEFT->{
                 signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
-                signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
-                signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
+                signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1f)
+                signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1f)
+                signals[3].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
                 }
@@ -144,12 +165,16 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
             }
 
             ROTATE_TOP->{
                 signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
+                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1f , getPosition().y - sprite.width * 0.8125f)
+                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1f , getPosition().y - sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x, getPosition().y - sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
                 }
@@ -158,13 +183,17 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
 
             ROTATE_BOTTOM->{
                 signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
-                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
-                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
+                signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1f , getPosition().y + sprite.width * 0.8125f)
+                signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1f , getPosition().y + sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x, getPosition().y + sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
                     lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
                 }
@@ -173,6 +202,9 @@ class CJKFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pl
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
         }

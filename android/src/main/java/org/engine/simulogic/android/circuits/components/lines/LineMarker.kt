@@ -432,8 +432,6 @@ class LineMarker(
         previousFromPosition.set(from.value.getPosition())
         previousToPosition.set(to.value.getPosition())
         snapAlignOriginPoints()
-       /* snapAlignOriginPoints()
-
         //snap align body
         var index = 1
         while (index < signals.size - 2) {
@@ -470,7 +468,7 @@ class LineMarker(
                 }
             }
             index++
-        }*/
+        }
 
         signals.forEach {
             it.snapAlignOriginPoints = false

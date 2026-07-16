@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.ListPopupWindow
@@ -18,7 +19,7 @@ import org.engine.simulogic.R
 import org.engine.simulogic.android.views.interfaces.IDialogLabelListener
 
 
-class LabelDialog(context: Context, private val listener:IDialogLabelListener) : Dialog(context) {
+class LabelDialog(context: Context, private val listener:IDialogLabelListener,private val title:String = "Label") : Dialog(context) {
 
 
     class CustomFontAdapter(context: Context,items:Array<String>):ArrayAdapter<String>(context, 0, items){
@@ -37,6 +38,7 @@ class LabelDialog(context: Context, private val listener:IDialogLabelListener) :
         val view = layoutInflater.inflate(R.layout.dialog_label_name,null)
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         val save = view.findViewById<AppCompatButton>(R.id.save)
+        view.findViewById<MaterialTextView>(R.id.title).apply { text = title }
         val editTextFileName = view.findViewById<TextInputEditText>(R.id.fileName)
         val fontDropDownEditText = view.findViewById<TextInputEditText>(R.id.fontDropDown)
         val fontPopupButton = view.findViewById<AppCompatImageButton>(R.id.showPopup)

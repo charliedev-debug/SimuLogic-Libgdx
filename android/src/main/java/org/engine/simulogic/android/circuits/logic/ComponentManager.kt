@@ -34,6 +34,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventCopyCommand
 import org.engine.simulogic.android.circuits.logic.events.EventCutCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
+import org.engine.simulogic.android.circuits.logic.events.EventEditTextCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventInsertGroupCommand
 import org.engine.simulogic.android.circuits.logic.events.EventJKFlipFlopCommand
@@ -308,6 +309,11 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
+
+    fun editCLabel(text:String,fontSize: Int){
+        eventBridge.insertCommand(EventEditTextCommand(text, fontSize.toFloat(), gestureListener))
+    }
+
     fun insertCLabel(text:String, fontSize:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->

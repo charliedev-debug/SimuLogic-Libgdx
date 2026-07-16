@@ -125,7 +125,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         memoryAdapter.insert(D_FLIP_FLOP_COMPONENT, R.drawable.d_flip_flop)
         memoryAdapter.insert(T_FLIP_FLOP_COMPONENT, R.drawable.t_flip_flop,isPremium = true)
         memoryAdapter.showPremiumIndicator = !isPremiumUser
-       /* memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop)*/
+        memoryAdapter.insert(JK_FLIP_FLOP_COMPONENT, R.drawable.jk_flip_flop, isPremium = true)
         val generalAdapter = ComponentViewAdapter()
         generalAdapter.insert(POWER_ON_COMPONENT, R.drawable.power_on)
         generalAdapter.insert(POWER_OFF_COMPONENT, R.drawable.power_off)
