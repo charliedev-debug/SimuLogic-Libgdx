@@ -223,7 +223,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
-            insert("EditText", "Edit-Text", false, R.drawable.text_edit)
+            insert("EditText", "Edit-Text", false, R.drawable.text_edit, true)
             insert("A-Label", "A-Label", false, R.drawable.text_anchor,true)
             insert("Group", "Group", false, R.drawable.group)
             insert("UnGroup", "UnGroup", false, R.drawable.ungroup)

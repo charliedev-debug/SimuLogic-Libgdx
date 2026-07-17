@@ -1,15 +1,22 @@
 package org.engine.simulogic.android.circuits.logic
 
+import com.badlogic.gdx.Gdx
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.IExecutable
+import org.engine.simulogic.android.utilities.TimerManager
 import java.util.LinkedList
 import java.util.Queue
 
-class Executor(private val connection:Connection):IExecutable {
+class Executor(private val connection: Connection) : IExecutable {
+    private val STEP = 0.001f
     var isActive = true
-    override fun execute(){
-        if(!isActive) return
-            if(connection.executionPoints.isEmpty()) return
+    override fun execute() {
+        if (connection.executionPoints.isEmpty() || !isActive) {
+            return
+        }
+
+        var accumulator = Gdx.graphics.deltaTime
+        while (accumulator >= STEP) {
             val executableNodes: Queue<ListNode> = LinkedList()
             connection.executionPoints.forEach {
                 executableNodes.add(it)
@@ -17,34 +24,41 @@ class Executor(private val connection:Connection):IExecutable {
             val visitedNodes = mutableListOf<ListNode>()
             while (executableNodes.isNotEmpty()) {
                 executableNodes.poll()?.also { node ->
-                            node.getLineMarkerChildren().forEach { marker ->
-                                if(marker.from.value !is CSignal && marker.to.value !is CSignal) {
-                                    marker.to.value.signals[marker.signalTo].value =
-                                        node.value.signals[marker.signalFrom].value
-                                    if (!marker.to.visited) {
-                                        executableNodes.offer(marker.to)
-                                    } else {
-                                        marker.to.value.execute()
-                                    }
-                                }else {
-                                    marker.getNodeOriginFrom(marker.from).also { originFrom ->
-                                        marker.to.value.signals[marker.signalTo].value =
-                                            originFrom.from.value.signals[originFrom.signalFrom].value
-                                        if (!marker.to.visited) {
-                                            executableNodes.offer(marker.to)
-                                        } else {
-                                            marker.to.value.execute()
-                                        }
-                                    }
+                    node.getLineMarkerChildren().forEach { marker ->
+                        if (marker.from.value !is CSignal && marker.to.value !is CSignal) {
+                            marker.to.value.signals[marker.signalTo].value =
+                                node.value.signals[marker.signalFrom].value
+                            if (!marker.to.visited) {
+                                executableNodes.offer(marker.to)
+                            } else {
+                                marker.to.value.execute()
+                            }
+                        } else {
+                            marker.getNodeOriginFrom(marker.from).also { originFrom ->
+                                marker.to.value.signals[marker.signalTo].value =
+                                    originFrom.from.value.signals[originFrom.signalFrom].value
+
+                                if (!marker.to.visited) {
+                                    executableNodes.offer(marker.to)
+                                } else {
+                                    marker.to.value.execute()
                                 }
+                            }
                         }
-                        node.value.execute()
+                    }
+                    node.value.execute()
                     visitedNodes.add(node.apply { visited = true })
                 }
             }
             visitedNodes.forEach {
                 it.visited = false
             }
+            accumulator -= STEP
+            TimerManager.getInstance().apply {
+                elapsedTime = STEP
+                update()
+            }
+        }
 
     }
 

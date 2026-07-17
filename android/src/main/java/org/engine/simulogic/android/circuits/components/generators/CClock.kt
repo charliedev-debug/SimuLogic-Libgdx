@@ -20,10 +20,10 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
     constructor(x:Float, y:Float,freq:Float = 1/60f, scene: PlayGroundScene):this(x, y,freq, ROTATE_RIGHT, scene)
     private val timer = Timer(freq, object :Timer.ITimerListener{
         override fun onTick(hasReset:Boolean) {
-            if(hasReset){
-                value = 0
+            value = if(hasReset){
+                0
             }else {
-                value = (value + 1) % 2
+                (value + 1) % 2
             }
         }
     })

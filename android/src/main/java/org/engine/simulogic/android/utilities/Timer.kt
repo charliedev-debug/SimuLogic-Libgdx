@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 class Timer(private val limit:Float, private val listener: ITimerListener) {
     private var elapsedTime = 0f
     fun update(hasReset: Boolean = false){
-        elapsedTime+= Gdx.graphics.deltaTime
+        elapsedTime+= TimerManager.getInstance().elapsedTime
         if (elapsedTime >= limit) {
             listener.onTick(hasReset)
             elapsedTime = 0f

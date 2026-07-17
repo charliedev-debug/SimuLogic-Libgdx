@@ -46,7 +46,7 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
         val cancel = view.findViewById<AppCompatButton>(R.id.cancel)
         val accept = view.findViewById<AppCompatButton>(R.id.accept)
         val clock = view.findViewById<TextInputEditText>(R.id.clock).apply {
-            filters = arrayOf(InputFilterMinMax(0.0f, 60f))
+            filters = arrayOf(InputFilterMinMax(0.0f, 1000f))
         }
         // ignore the extension
         clock.setText(projectOptions.title)

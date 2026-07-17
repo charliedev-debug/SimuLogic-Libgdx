@@ -6,6 +6,7 @@ import java.util.Collections
 class TimerManager {
     private val timers = Collections.synchronizedList(mutableListOf<Timer>())
     private var resetTick = false
+    var elapsedTime = 0f
     fun insert(timer:Timer){
         synchronized(timers) {
             timers.add(timer)
