@@ -283,6 +283,12 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.toggleAction()
             }
+        }else
+        if(collisionDetector.mode == RANGED_SELECTION_MODE) {
+            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
+                rangeSelect.collisionDetector.contains(rectPointer)
+            }
+
         }
 
         return false
@@ -373,10 +379,6 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 snapAlign.getSnapCoordinates(touch).also { coord ->
                     moveCommand.oldPosition.set(coord.x, coord.y)
                 }
-            }
-
-            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
-                rangeSelect.collisionDetector.contains(rectPointer)
             }
         }
         //double tap to enable and disable groups
