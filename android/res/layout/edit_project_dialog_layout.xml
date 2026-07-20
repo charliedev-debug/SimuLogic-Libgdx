@@ -41,7 +41,7 @@
             android:layout_height="50dp"
             android:hint="description"
             android:textColor="?attr/colorOnBackground"
-            android:textColorHint="?attr/colorOutline"
+            android:textColorHint="?attr/colorOnSurface"
             android:padding="10dp" />
         <LinearLayout
             android:layout_width="match_parent"
