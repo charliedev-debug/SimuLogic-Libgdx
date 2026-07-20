@@ -242,6 +242,9 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         menuAdapter.listener = object : IMenuAdapterListener {
             override fun onClickListener(item: MenuAdapterItem) {
                 menuViewModel.onModeChanged(item)
+                if(item.title == "Paste"){
+                    menuAdapter.setMode(1)
+                }
             }
         }
         val bottomSheet = ComponentBottomSheet(object : IComponentAdapterListener {

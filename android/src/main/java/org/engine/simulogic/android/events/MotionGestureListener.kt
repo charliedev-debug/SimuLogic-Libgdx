@@ -130,6 +130,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         }
         dataContainer.clear()
         collisionDetector.reset()
+        setMode(TOUCH_MODE)
         //  println("Data Size: ${connection.size()}")
     }
 

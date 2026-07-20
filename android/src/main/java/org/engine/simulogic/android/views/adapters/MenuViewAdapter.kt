@@ -44,6 +44,12 @@ class MenuViewAdapter:RecyclerView.Adapter<MenuViewAdapter.MenuViewHolder>() {
         }
     }
 
+    fun setMode(value: Int){
+        val previous = selectedMode
+        selectedMode = value
+        notifyItemChanged(previous)
+        notifyItemChanged(selectedMode)
+    }
     fun insert(item: MenuAdapterItem){
         dataList.add(item)
     }
