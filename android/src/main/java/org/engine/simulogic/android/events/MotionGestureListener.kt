@@ -283,18 +283,6 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.toggleAction()
             }
-        }else {
-            collisionDetector.contains(rectPointer)?.also { collisionItem ->
-                collisionItem.subject.selected = collisionItem.subject.selected.not()
-                // this might be moved in the future
-                snapAlign.getSnapCoordinates(touch).also { coord->
-                    moveCommand.oldPosition.set(coord.x, coord.y)
-                }
-            }
-
-            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
-                rangeSelect.collisionDetector.contains(rectPointer)
-            }
         }
 
         return false
@@ -311,31 +299,41 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         if(collisionDetector.mode == TOUCH_MODE) {
             if (collisionDetector.isNotEmpty()) {
                 val snapCoordinates = snapAlign.getSnapCoordinates(touch)
+                var hasMovement = false
                 collisionDetector.selectedItems.forEach {
-                    it.subject.also { subject ->
-                        moveCommand.apply {
-                            node = ListNode(subject)
-                            when(subject){
-                                is CGroup->{
-                                    snapAlign.getSnapCoordinates(touch.x - moveCommand.oldPosition.x, touch.y - moveCommand.oldPosition.y)
-                                    subject.translate( snapCoordinates.x, snapCoordinates.y)
-                                    newPosition.set(subject.getPosition())
-                                }
+                    // to prevent teleportation move the object within a limited range
+                    if (it.subject.getPosition().dst(rectPointer.getPosition()) < 500f) {
+                        it.subject.also { subject ->
+                            moveCommand.apply {
+                                node = ListNode(subject)
+                                when (subject) {
+                                    is CGroup -> {
+                                        snapAlign.getSnapCoordinates(
+                                            touch.x - moveCommand.oldPosition.x,
+                                            touch.y - moveCommand.oldPosition.y
+                                        )
+                                        subject.translate(snapCoordinates.x, snapCoordinates.y)
+                                        newPosition.set(subject.getPosition())
+                                    }
 
-                                is CSignal->{
-                                    newPosition.set(snapCoordinates.x, snapCoordinates.y)
-                                    subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
-                                    subject.snapAlignOriginPoints = true
-                                }
+                                    is CSignal -> {
+                                        newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                        subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                        subject.snapAlignOriginPoints = true
+                                    }
 
-                                else->{
-                                    newPosition.set(snapCoordinates.x, snapCoordinates.y)
-                                    subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
-                                    subject.snapAlignOriginPoints = true
+                                    else -> {
+                                        newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                        subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                        subject.snapAlignOriginPoints = true
+                                    }
                                 }
                             }
                         }
-
+                        hasMovement = true
+                    }
+                    if(!hasMovement){
+                        camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
                     }
                 }
             } else {
@@ -367,6 +365,20 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
+        // for better editing experience handle on touch events when the finger is off the element
+        if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE) {
+            collisionDetector.contains(rectPointer)?.also { collisionItem ->
+                collisionItem.subject.selected = collisionItem.subject.selected.not()
+                // this might be moved in the future
+                snapAlign.getSnapCoordinates(touch).also { coord ->
+                    moveCommand.oldPosition.set(coord.x, coord.y)
+                }
+            }
+
+            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
+                rangeSelect.collisionDetector.contains(rectPointer)
+            }
+        }
         //double tap to enable and disable groups
         if(count > 1) {
             collisionDetector.selectedItems.forEach {
@@ -378,6 +390,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 }
             }
         }
+
         //touch up event
         collisionDetector.selectedItems.forEach {
             if(it.subject is CPulseButton){

@@ -118,7 +118,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun clone(): CLabel{
-        return CLabel(font,fontSize,text,position.x, position.y, scene, layerId)
+        return CLabel(font,fontSize,text,position.x, position.y, scene, layerId).also{ it.color = color }
     }
 
 }
