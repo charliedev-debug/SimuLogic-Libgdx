@@ -286,9 +286,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             }
         }else
         if(collisionDetector.mode == RANGED_SELECTION_MODE) {
-            if (collisionDetector.mode == RANGED_SELECTION_MODE) {
-                rangeSelect.collisionDetector.contains(rectPointer)
-            }
+            rangeSelect.collisionDetector.contains(rectPointer)
 
         }
 
@@ -373,7 +371,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
         // for better editing experience handle on touch events when the finger is off the element
-        if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE) {
+        if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE||collisionDetector.mode == CONNECTION_MODE) {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
                 // this might be moved in the future

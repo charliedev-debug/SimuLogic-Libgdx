@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
+import org.engine.simulogic.android.circuits.components.arithmetic.CFullAdder
+import org.engine.simulogic.android.circuits.components.arithmetic.CHalfAdder
 import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
@@ -549,7 +551,12 @@ class DataTransferObject {
                             )
                         }
                     }
-
+                    CTypes.ARITHMETIC_FULL_ADDER -> {
+                        connection.insertNode(ListNode(CFullAdder(x, y, rotation, scene)))
+                    }
+                    CTypes.ARITHMETIC_HALF_ADDER -> {
+                        connection.insertNode(ListNode(CHalfAdder(x, y, rotation, scene)))
+                    }
                     else -> {
                         throw IOException("Unknown component exception $type")
                     }

@@ -168,6 +168,32 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Arithmetic Units"
+                android:textSize="12dp"
+                android:textStyle="normal"
+                android:textColor="?attr/colorOnSurface"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/arithmetic_units_component_list"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="?attr/colorOutline" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="General"
                 android:textSize="12dp"
                 android:textStyle="normal"

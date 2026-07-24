@@ -58,6 +58,8 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val DATA_BUS_COMPONENT = "DATA-BUS"
          const val DATA_BUS_FAN_OUT_COMPONENT = "FAN-OUT-BUS"
          const val CHANNEL_COMPONENT = "CHANNEL"
+         const val FULL_ADDER_COMPONENT = "FULL-ADDER"
+         const val  HALF_ADDER_COMPONENT = "HALF-ADDER"
     }
     private var isPremiumUser = false
     private val userSettings = UserSettings()
@@ -78,6 +80,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val memoryRecyclerview = mainView.findViewById<RecyclerView>(R.id.memory_component_list)
         val generalRecyclerview = mainView.findViewById<RecyclerView>(R.id.general_component_list)
         val templateRecyclerview = mainView.findViewById<RecyclerView>(R.id.template_component_list)
+        val arithmeticUnitsRecyclerview = mainView.findViewById<RecyclerView>(R.id.arithmetic_units_component_list)
         val spanCount = 4
         val spacing = 10
         val includeEdge = false
@@ -86,6 +89,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         memoryRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
         generalRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         templateRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
+        arithmeticUnitsRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
         displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
         spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
         val gatesAdapter = ComponentViewAdapter()
@@ -140,6 +144,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         templateAdapter.insert(CUSTOM_COMPONENT, R.drawable.template)
         templateAdapter.insert(BCD_DISPLAY_COMPONENT, R.drawable.bcd_display)
         templateAdapter.showPremiumIndicator = !isPremiumUser
+        val arithmeticUnitAdapter = ComponentViewAdapter()
+        arithmeticUnitAdapter.insert(FULL_ADDER_COMPONENT,R.drawable.full_adder,isPremium = true)
+        arithmeticUnitAdapter.insert(HALF_ADDER_COMPONENT,R.drawable.half_adder,isPremium = true)
+        arithmeticUnitAdapter.showPremiumIndicator = !isPremiumUser
         // dismisses the dialog once a component item has been clicked
         val onDismissListener = object :IComponentAdapterListener{
             override fun onClickComponent(item: ComponentItem) {
@@ -174,6 +182,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
             templateAdapter.addListener(listener)
             templateAdapter.addListener(onDismissListener)
         }
+        listener?.also {
+            arithmeticUnitAdapter.addListener(listener)
+            arithmeticUnitAdapter.addListener(onDismissListener)
+        }
 
         generalRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         clockRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
@@ -182,12 +194,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         memoryRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         displayRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, spacing, includeEdge))
         spaceOptimizationRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
+        arithmeticUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(2,spacing,includeEdge))
         generalRecyclerview.adapter = generalAdapter
         clockRecyclerview.adapter = clockAdapter
         gatesRecyclerview.adapter = gatesAdapter
         memoryRecyclerview.adapter = memoryAdapter
         templateRecyclerview.adapter = templateAdapter
         displayRecyclerview.adapter = displayAdapter
+        arithmeticUnitsRecyclerview.adapter = arithmeticUnitAdapter
         spaceOptimizationRecyclerview.adapter = spaceOptimizationAdapter
         return mainView
     }

@@ -425,6 +425,13 @@ class SimulationFragment : AndroidFragmentApplication() {
 
                     }).show()
                 }
+                ComponentBottomSheet.FULL_ADDER_COMPONENT -> {
+                    simulationLoop.componentManager.insertCFullAdder()
+                }
+
+                ComponentBottomSheet.HALF_ADDER_COMPONENT->{
+                    simulationLoop.componentManager.insertCHalfAdder()
+                }
             }
         }
         return initializeForView(simulationLoop, configuration)

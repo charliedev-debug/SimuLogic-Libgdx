@@ -36,6 +36,8 @@ import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventEditTextCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
+import org.engine.simulogic.android.circuits.logic.events.EventFullAdderCommand
+import org.engine.simulogic.android.circuits.logic.events.EventHalfAdderCommand
 import org.engine.simulogic.android.circuits.logic.events.EventInsertGroupCommand
 import org.engine.simulogic.android.circuits.logic.events.EventJKFlipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLabelAnchorCommand
@@ -372,7 +374,34 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
-
+    fun insertCFullAdder(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(
+                    EventFullAdderCommand(
+                        Vector2(coordinates),
+                        connection,
+                        gestureListener.commandHistory,
+                        scene
+                    )
+                )
+            }
+        }
+    }
+    fun insertCHalfAdder(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(
+                    EventHalfAdderCommand(
+                        Vector2(coordinates),
+                        connection,
+                        gestureListener.commandHistory,
+                        scene
+                    )
+                )
+            }
+        }
+    }
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
         gestureListener.gridDecorator?.hidePositionGridLine()

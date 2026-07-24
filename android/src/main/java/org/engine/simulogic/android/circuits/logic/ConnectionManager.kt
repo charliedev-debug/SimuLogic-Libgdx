@@ -22,17 +22,25 @@ class ConnectionManager(
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.T_SIGNAL_IN,
                 CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
                 CTypes.J_SIGNAL_IN)
-        validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.CLK_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.T_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.S_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.R_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.J_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
-        validationMap[CTypes.K_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT)
+        validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.CLK_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.T_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.S_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.R_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.J_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.K_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.T_SIGNAL_IN,
                 CTypes.CLK_SIGNAL_IN, CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
+                CTypes.J_SIGNAL_IN)
+        validationMap[CTypes.S_SIGNAL_OUT] =
+            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.T_SIGNAL_IN,
+                CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
+                CTypes.J_SIGNAL_IN)
+        validationMap[CTypes.C_SIGNAL_OUT] =
+            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.T_SIGNAL_IN,
+                CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
                 CTypes.J_SIGNAL_IN)
         validationMap[CTypes.SIGNAL_RANGE_POINT] = listOf(CTypes.SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.D_SIGNAL_IN,
             CTypes.T_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
