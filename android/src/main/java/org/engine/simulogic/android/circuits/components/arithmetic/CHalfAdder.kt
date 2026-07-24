@@ -78,10 +78,12 @@ class CHalfAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun execute() {
-        val outputQ = signals[0]
-        val inputJ = signals[1]
-        val inputK = signals[2]
-
+        val outputS = signals[0]
+        val outputC = signals[1]
+        val inputA = signals[2]
+        val inputB = signals[3]
+        outputS.value = inputB.value.xor(inputA.value)
+        outputC.value = inputB.value.and(inputA.value)
     }
 
     override fun attachSelf() {
@@ -111,7 +113,7 @@ class CHalfAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+            updateColor(if(signals[2].value == SIGNAL_ACTIVE|| signals[3].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
         }
         when(rotationDirection){
             ROTATE_RIGHT->{

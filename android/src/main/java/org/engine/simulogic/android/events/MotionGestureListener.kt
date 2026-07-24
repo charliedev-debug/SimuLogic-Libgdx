@@ -155,6 +155,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         }
         deleteTool.execute()
         collisionDetector.reset()
+        setMode(TOUCH_MODE)
     }
 
     fun zoomValue():Float{

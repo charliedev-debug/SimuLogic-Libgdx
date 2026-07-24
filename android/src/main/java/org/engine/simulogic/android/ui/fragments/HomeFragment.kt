@@ -204,6 +204,12 @@ class HomeFragment : Fragment() {
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_8 x 1 Multiplexer .bin").also{
                     add(it.title,it.path, it.description, it.lastModified)
                 }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Decoder 3-8.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
+                dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_Decoder 4-10.bin").also{
+                    add(it.title,it.path, it.description, it.lastModified)
+                }
                 addHeader("Advanced", R.drawable.advanced,)
 
                 dto.getSampleProjectDetails(requireContext(),"sample_projects/simulogic_examples_2-Bit Counter.bin").also{

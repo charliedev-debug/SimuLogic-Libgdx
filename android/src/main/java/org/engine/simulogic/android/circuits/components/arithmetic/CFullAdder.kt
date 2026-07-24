@@ -82,27 +82,16 @@ class CFullAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun execute() {
-        val outputQ = signals[0]
-        val inputJ = signals[1]
-        val inputK = signals[2]
-        val inputCLK = signals[3]
-        val hasEdge = previousEdge != inputCLK.value
-        if(hasEdge && inputCLK.value == SIGNAL_ACTIVE){
-            when {
-                inputJ.value == SIGNAL_ACTIVE && inputK.value == SIGNAL_INACTIVE -> {
-                    outputQ.value = SIGNAL_ACTIVE
-                }
-                inputJ.value == SIGNAL_INACTIVE && inputK.value == SIGNAL_ACTIVE -> {
-                    outputQ.value = SIGNAL_INACTIVE
-                }
-                inputJ.value == SIGNAL_ACTIVE && inputK.value == SIGNAL_ACTIVE -> {
-                    outputQ.value = if (outputQ.value == SIGNAL_ACTIVE) SIGNAL_INACTIVE else SIGNAL_ACTIVE
-                }
-            }
-            previousEdge = inputCLK.value
-        }else{
-            previousEdge = inputCLK.value
-        }
+        val outputS = signals[0]
+        val outputC = signals[1]
+        val inputA = signals[2]
+        val inputB = signals[3]
+        val inputC = signals[4]
+        val va = inputA.value
+        val vb = inputB.value
+        val vc = inputC.value
+        outputS.value = va.xor(vb).xor(vc)
+        outputC.value = va.xor(vb).and(vc).or(va.and(vb))
     }
 
     override fun attachSelf() {
