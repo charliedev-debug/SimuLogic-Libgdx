@@ -23,6 +23,7 @@
             android:textColor="?attr/colorOnSurface"
             android:text="Custom Clock"
             />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -54,6 +55,17 @@
                 android:text="HZ"
                 />
         </LinearLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingStart="2dp"
+            android:paddingBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="11dp"
+            android:textColor="?attr/colorOnSurface"
+            android:text="Max Frequency Supported 1000 HZ"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,11 +1,14 @@
 package org.engine.simulogic.android.circuits.components.other
 import com.badlogic.gdx.graphics.Color
 import org.engine.simulogic.android.circuits.components.CDefaults
+import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.gates.CSignal
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-class CRangeLine( val start: CSignal,  val end: CSignal,  color: Color, private val scene: PlayGroundScene)
+class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  color: Color, private val scene: PlayGroundScene)
     : CRect(0f,0f, CDefaults.signalIconRadius, CDefaults.signalIconRadius,color,scene) {
     var direction = 0
 

@@ -35,8 +35,8 @@ class DeleteTool (private val dataContainer: DataContainer, private val connecti
                 commandHistory.execute(deleteLine)
             }
             // it must be a line range highlight marker
-            else if(node.value is CRangeLine && node.value.start.parent is LineMarker){
-                val selectedMarker = node.value.start.parent as LineMarker
+            else if(node.value is CRangeLine){
+                val selectedMarker = node.value.parentLine
                 val parentComponent = selectedMarker.getNodeOriginFrom(selectedMarker.from)
                 //Delete the items in a separate list, this prevents concurrent modification exceptions
                 val markedLines = mutableListOf<LineMarker>()

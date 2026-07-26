@@ -324,8 +324,10 @@ class LineMarker(
         val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
             a = 0.5f
         }
+        //lineRect.add(CRangeLine(from.value,signals[1],this,colorRect,scene))
+       // lineRect.add(CRangeLine(to.value,signals[signals.size-2],this,colorRect,scene))
         for (i in 1 until signals.size - 2){
-            lineRect.add(CRangeLine(signals[i], signals[i + 1],colorRect, scene))
+            lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
         }
 
         lineRect.onEach {

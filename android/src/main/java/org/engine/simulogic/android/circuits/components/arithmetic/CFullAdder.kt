@@ -121,7 +121,7 @@ class CFullAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
+            updateColor(if(signals[2].value == SIGNAL_ACTIVE || signals[3].value == SIGNAL_ACTIVE || signals[4].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.GATE_UNSELECTED_COLOR)
         }
         when(rotationDirection){
             ROTATE_RIGHT->{

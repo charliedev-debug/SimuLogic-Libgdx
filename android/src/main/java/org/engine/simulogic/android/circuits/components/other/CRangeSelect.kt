@@ -115,7 +115,10 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
             it.subject.selected = false
             it.caller.value.selected = false
         }
+        sprite.setSize(200f,200f)
+        adjustView()
     }
+
     override fun update() {
         val signalTopLeft = signals[0] as CRangePoint
         val signalTopRight = signals[1] as CRangePoint

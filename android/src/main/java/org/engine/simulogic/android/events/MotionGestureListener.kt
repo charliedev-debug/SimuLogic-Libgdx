@@ -2,6 +2,7 @@ package org.engine.simulogic.android.events
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
@@ -36,6 +37,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
     val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
+    val movePointer = Rectangle(0f,0f,200f,200f)
     private var touch = Vector3(0f, 0f, 0f)
     val commandHistory = CommandHistory()
     private val dataContainer = DataContainer()
@@ -94,7 +96,6 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     fun createAnchors(alignment: Int):List<CAnchor>{
         val anchorList = mutableListOf<CAnchor>()
-
         if(collisionDetector.mode == RANGED_SELECTION_MODE){
             rangeSelect.rangeItems.forEach {
                 anchorList.add(CAnchor(it.caller.value,alignment))
@@ -140,16 +141,18 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         }else {
             collisionDetector.selectedItems.forEach { item ->
                 // it must be a line
-                if(item.subject is CSignal && item.subject.parent is LineMarker){
-                    dataContainer.insert(ListNode(item.subject))
-                }
-                // must be a ranged line highlight marker
-                else if(item.subject is CRangeLine && item.subject.start.parent is LineMarker){
-                    dataContainer.insert(ListNode(item.subject))
-                }
-                // deletes the whole component
-                else {
-                    dataContainer.insert(item.caller)
+                when (item.subject) {
+                    is CSignal if item.subject.parent is LineMarker -> {
+                        dataContainer.insert(ListNode(item.subject))
+                    }
+                    // must be a ranged line highlight marker
+                    is CRangeLine if true -> {
+                        dataContainer.insert(ListNode(item.subject))
+                    }
+                    // deletes the whole component
+                    else -> {
+                        dataContainer.insert(item.caller)
+                    }
                 }
             }
         }
@@ -233,6 +236,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         rangeSelect.reset()
         rangeSelect.isVisible = false
         dataContainer.clear()
+        setMode(TOUCH_MODE)
     }
 
     fun removeGroup(){
@@ -281,6 +285,8 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         touch.set(x,y, 0f)
         camera.unproject(touch)
         rectPointer.updatePosition(touch.x, touch.y)
+        moveCommand.newPosition.set(touch.x,touch.y)
+        moveCommand.oldPosition.set(touch.x,touch.y)
         if(collisionDetector.mode == INTERACT_MODE){
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.toggleAction()
@@ -302,13 +308,14 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         touch.set(x,y, 0f)
         camera.unproject(touch)
         rectPointer.updatePosition(touch.x, touch.y)
+        movePointer.setPosition(touch.x, touch.y)
         if(collisionDetector.mode == TOUCH_MODE) {
             if (collisionDetector.isNotEmpty()) {
                 val snapCoordinates = snapAlign.getSnapCoordinates(touch)
                 var hasMovement = false
                 collisionDetector.selectedItems.forEach {
                     // to prevent teleportation move the object within a limited range
-                    if (it.subject.getPosition().dst(rectPointer.getPosition()) < 500f) {
+                    if (it.subject.contains(rectPointer) != null|| it.subject.getPosition().dst(rectPointer.getPosition()) < 100f) {
                         it.subject.also { subject ->
                             moveCommand.apply {
                                 node = ListNode(subject)
@@ -340,6 +347,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                     }
                     if(!hasMovement){
                         camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
+                        moveCommand.oldPosition.set(touch.x,touch.y)
                     }
                 }
             } else {

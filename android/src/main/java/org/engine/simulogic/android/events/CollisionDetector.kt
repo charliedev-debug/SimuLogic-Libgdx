@@ -137,21 +137,26 @@ class CollisionDetector(private val connection: Connection) {
             val collidedObject = node.contains(entity)
             if (collidedObject != null && node.value.isVisible) {
                 // for connections only return touch events for input and output signals
-                if (mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && /*collidedObject.parent !is LineMarker &&*/ node.value !is CGroup) {
-                    return CollisionItem(node, collidedObject).also { item ->
-                        selectedItems.add(item)
+                when (mode) {
+                    MotionGestureListener.CONNECTION_MODE if collidedObject is CSignal && /*collidedObject.parent !is LineMarker &&*/ node.value !is CGroup -> {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
                     }
-                } else if (mode == MotionGestureListener.INTERACT_MODE || mode == MotionGestureListener.TOUCH_MODE) {
-                    return CollisionItem(node, collidedObject).also { item ->
-                        selectedItems.add(item)
+                    MotionGestureListener.INTERACT_MODE, MotionGestureListener.TOUCH_MODE -> {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
                     }
-                } else if (mode == MotionGestureListener.SELECTION_MODE && collidedObject !is CSignal) {
-                    return CollisionItem(node, collidedObject).also { item ->
-                        selectedItems.add(item)
+                    MotionGestureListener.SELECTION_MODE if collidedObject !is CSignal -> {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
                     }
-                } else if (mode == MotionGestureListener.RANGED_SELECTION_MODE) {
-                    return CollisionItem(node, collidedObject).also { item ->
-                        selectedItems.add(item)
+                    MotionGestureListener.RANGED_SELECTION_MODE -> {
+                        return CollisionItem(node, collidedObject).also { item ->
+                            selectedItems.add(item)
+                        }
                     }
                 }
             }
