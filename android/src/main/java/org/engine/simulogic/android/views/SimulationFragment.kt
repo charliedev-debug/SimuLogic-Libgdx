@@ -432,6 +432,13 @@ class SimulationFragment : AndroidFragmentApplication() {
                 ComponentBottomSheet.HALF_ADDER_COMPONENT->{
                     simulationLoop.componentManager.insertCHalfAdder()
                 }
+
+                ComponentBottomSheet.MULTIPLEXER_COMPONENT->{
+                    simulationLoop.componentManager.insertCMultiplexer()
+                }
+                ComponentBottomSheet.DEMULTIPLEXER_COMPONENT->{
+                    simulationLoop.componentManager.insertCDeMultiplexer()
+                }
             }
         }
         return initializeForView(simulationLoop, configuration)

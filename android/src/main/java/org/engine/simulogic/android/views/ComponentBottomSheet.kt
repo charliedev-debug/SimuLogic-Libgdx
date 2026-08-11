@@ -60,6 +60,8 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val CHANNEL_COMPONENT = "CHANNEL"
          const val FULL_ADDER_COMPONENT = "FULL-ADDER"
          const val  HALF_ADDER_COMPONENT = "HALF-ADDER"
+         const val MULTIPLEXER_COMPONENT = "MULTIPLEXER"
+         const val DEMULTIPLEXER_COMPONENT = "DEMULTIPLEXER"
     }
     private var isPremiumUser = false
     private val userSettings = UserSettings()
@@ -137,6 +139,8 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
+        generalAdapter.insert(MULTIPLEXER_COMPONENT,R.drawable.data_bus)
+        generalAdapter.insert(DEMULTIPLEXER_COMPONENT,R.drawable.data_bus)
       //  generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
         generalAdapter.showPremiumIndicator = !isPremiumUser

@@ -17,21 +17,25 @@ class ConnectionManager(
     private val validationMap = mutableMapOf<CTypes, List<CTypes>>()
 
     init {
-        validationMap[CTypes.SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.SIGNAL_RANGE_POINT,
+        validationMap[CTypes.SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.SIGNAL_RANGE_POINT,
             CTypes.C_SIGNAL_OUT, CTypes.S_SIGNAL_OUT)
         validationMap[CTypes.SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.CLK_SIGNAL_IN, CTypes.T_SIGNAL_IN,
                 CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
                 CTypes.J_SIGNAL_IN)
-        validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.CLK_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.T_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.S_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.R_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.J_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
-        validationMap[CTypes.K_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.E_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.D_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.CLK_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.T_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.S_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.R_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.J_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
+        validationMap[CTypes.K_SIGNAL_IN] = listOf(CTypes.SIGNAL_OUT, CTypes.Q_SIGNAL_OUT, CTypes.Q_NOT_SIGNAL_OUT, CTypes.C_SIGNAL_OUT,CTypes.S_SIGNAL_OUT)
         validationMap[CTypes.Q_SIGNAL_OUT] =
+            listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.T_SIGNAL_IN,
+                CTypes.CLK_SIGNAL_IN, CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
+                CTypes.J_SIGNAL_IN)
+        validationMap[CTypes.Q_NOT_SIGNAL_OUT] =
             listOf(CTypes.SIGNAL_IN, CTypes.D_SIGNAL_IN, CTypes.E_SIGNAL_IN, CTypes.T_SIGNAL_IN,
                 CTypes.CLK_SIGNAL_IN, CTypes.S_SIGNAL_IN, CTypes.R_SIGNAL_IN,CTypes.K_SIGNAL_IN,
                 CTypes.J_SIGNAL_IN)
@@ -84,7 +88,7 @@ class ConnectionManager(
                 return
             }
 
-            if (a.subject.type == CTypes.SIGNAL_OUT || a.subject.type == CTypes.Q_SIGNAL_OUT || a.subject.type == CTypes.C_SIGNAL_OUT || a.subject.type == CTypes.S_SIGNAL_OUT) {
+            if (a.subject.type == CTypes.SIGNAL_OUT || a.subject.type == CTypes.Q_SIGNAL_OUT || a.subject.type == CTypes.Q_NOT_SIGNAL_OUT || a.subject.type == CTypes.C_SIGNAL_OUT || a.subject.type == CTypes.S_SIGNAL_OUT) {
                 connection.insertConnection(
                     a.caller,
                     b.caller,

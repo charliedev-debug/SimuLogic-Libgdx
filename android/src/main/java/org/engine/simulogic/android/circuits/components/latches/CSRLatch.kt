@@ -46,6 +46,7 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
         signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.S_SIGNAL_IN, 1, scene))
         signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.R_SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x + sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f + CDefaults.gateHeight * 0.1875f ,CTypes.Q_NOT_SIGNAL_OUT,3, scene))
 
         signals.forEach {
             attachChild(it)
@@ -68,6 +69,9 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
             getChildAt(2).getPosition()?.also { outputPosition ->
                 lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
             }
+            getChildAt(3).getPosition()?.also { outputPosition ->
+                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
+            }
             lines.forEach {
                 layer.attachChild(it)
             }
@@ -78,15 +82,16 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
         val outputQ = signals[0]
         val inputS = signals[1]
         val inputR = signals[2]
-        when{
-            inputS.value == SIGNAL_ACTIVE && inputR.value == SIGNAL_ACTIVE->{
+        signals[3].value = outputQ.value.inv()
+        when (inputS.value) {
+            SIGNAL_ACTIVE if inputR.value == SIGNAL_ACTIVE -> {
                 outputQ.value = value
             }
-            inputS.value == SIGNAL_ACTIVE && inputR.value == SIGNAL_INACTIVE->{
+            SIGNAL_ACTIVE if inputR.value == SIGNAL_INACTIVE -> {
                 outputQ.value = SIGNAL_INACTIVE
                 value = SIGNAL_INACTIVE
             }
-            inputS.value == SIGNAL_INACTIVE && inputR.value == SIGNAL_ACTIVE->{
+            SIGNAL_INACTIVE if inputR.value == SIGNAL_ACTIVE -> {
                 outputQ.value = SIGNAL_ACTIVE
                 value = SIGNAL_ACTIVE
             }
@@ -124,26 +129,31 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
         }
         when(rotationDirection){
             ROTATE_RIGHT->{
-                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
+                signals[3].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_LEFT->{
-                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
+                signals[3].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
@@ -151,35 +161,46 @@ class CSRLatch(x:Float, y:Float, rotationDirection:Int, private val scene: PlayG
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
             }
 
             ROTATE_TOP->{
-                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                signals[0].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f, getPosition().y + sprite.width * 0.8125f)
                 signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
 
             ROTATE_BOTTOM->{
-                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                signals[0].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f, getPosition().y - sprite.width * 0.8125f)
                 signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
                 signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
         }

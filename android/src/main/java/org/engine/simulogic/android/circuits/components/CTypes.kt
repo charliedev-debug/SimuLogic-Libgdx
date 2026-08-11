@@ -27,6 +27,7 @@ enum class CTypes {
     T_SIGNAL_IN,
     CLK_SIGNAL_IN,
     Q_SIGNAL_OUT,
+    Q_NOT_SIGNAL_OUT,
     E_SIGNAL_IN,
     S_SIGNAL_IN,
     R_SIGNAL_IN,
@@ -48,5 +49,9 @@ enum class CTypes {
     CHANNEL,
     ARITHMETIC_FULL_ADDER,
     ARITHMETIC_HALF_ADDER,
+    MULTIPLEXER,
+    DEMULTIPLEXER,
+    ENCODER,
+    DECODER,
     NONE
 }

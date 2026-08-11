@@ -47,6 +47,7 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         signals.add(CSignal(x + sprite.width * 0.8125f, y ,CTypes.Q_SIGNAL_OUT,0, scene))
         signals.add(CSignal(x - sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.D_SIGNAL_IN, 1, scene))
         signals.add(CSignal(x - sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f +  CDefaults.gateHeight * 0.1875f ,CTypes.E_SIGNAL_IN, 2, scene))
+        signals.add(CSignal(x + sprite.width * 0.8125f, y - CDefaults.gateHeight / 2f + CDefaults.gateHeight * 0.1875f ,CTypes.Q_NOT_SIGNAL_OUT,3, scene))
 
         signals.forEach {
             attachChild(it)
@@ -69,6 +70,9 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
             getChildAt(2).getPosition()?.also { outputPosition ->
                 lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
             }
+            getChildAt(3).getPosition()?.also { outputPosition ->
+                lines.add(CLine(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y,lineWidth))
+            }
             lines.forEach {
                 layer.attachChild(it)
             }
@@ -80,6 +84,7 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         val inputD = signals[1]
         val inputE = signals[2]
         val hasEdge = previousEdge != inputE.value
+        signals[3].value = outputQ.value.inv()
         if(hasEdge && inputE.value == SIGNAL_ACTIVE){
             outputQ.value = inputD.value
             previousEdge = inputE.value
@@ -119,26 +124,31 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         }
         when(rotationDirection){
             ROTATE_RIGHT->{
-                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y)
+                signals[0].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[1].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[2].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
+                signals[3].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f +  sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
             }
 
             ROTATE_LEFT->{
-                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y)
+                signals[0].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[1].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y + sprite.height / 2f - sprite.height * 0.1875f)
                 signals[2].updatePosition(getPosition().x + sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
+                signals[3].updatePosition(getPosition().x - sprite.width * 0.8125f, getPosition().y - sprite.height / 2f + sprite.height * 0.1875f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
@@ -146,35 +156,46 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
                 }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,outputPosition.y)
+                }
             }
 
             ROTATE_TOP->{
-                signals[0].updatePosition(getPosition().x , getPosition().y + sprite.width * 0.8125f)
+                signals[0].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f, getPosition().y + sprite.width * 0.8125f)
                 signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f, getPosition().y + sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
 
             ROTATE_BOTTOM->{
-                signals[0].updatePosition(getPosition().x , getPosition().y - sprite.width * 0.8125f)
+                signals[0].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y - sprite.width * 0.8125f)
                 signals[1].updatePosition(getPosition().x + sprite.height / 2f - sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
                 signals[2].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f , getPosition().y + sprite.width * 0.8125f)
+                signals[3].updatePosition(getPosition().x - sprite.height / 2f + sprite.height * 0.1875f, getPosition().y - sprite.width * 0.8125f)
                 getChildAt(0).getPosition()?.also { outputPosition ->
-                    lines[0].updatePosition(outputPosition.x,outputPosition.y,getPosition().x,getPosition().y)
+                    lines[0].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(1).getPosition()?.also { outputPosition ->
                     lines[1].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
                 getChildAt(2).getPosition()?.also { outputPosition ->
                     lines[2].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
+                }
+                getChildAt(3).getPosition()?.also { outputPosition ->
+                    lines[3].updatePosition(outputPosition.x,outputPosition.y,outputPosition.x,getPosition().y)
                 }
             }
         }

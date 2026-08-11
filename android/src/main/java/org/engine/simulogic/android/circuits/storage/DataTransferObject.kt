@@ -13,6 +13,8 @@ import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
+import org.engine.simulogic.android.circuits.components.combinational.CDeMultiplexer
+import org.engine.simulogic.android.circuits.components.combinational.CMultiplexer
 import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CJKFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CTFlipFlop
@@ -556,6 +558,12 @@ class DataTransferObject {
                     }
                     CTypes.ARITHMETIC_HALF_ADDER -> {
                         connection.insertNode(ListNode(CHalfAdder(x, y, rotation, scene)))
+                    }
+                    CTypes.MULTIPLEXER->{
+                        connection.insertNode(ListNode(CMultiplexer(x, y, rotation, "MUXER 8-1", font,connection,scene)))
+                    }
+                    CTypes.DEMULTIPLEXER->{
+                        connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-16", font,connection,scene)))
                     }
                     else -> {
                         throw IOException("Unknown component exception $type")

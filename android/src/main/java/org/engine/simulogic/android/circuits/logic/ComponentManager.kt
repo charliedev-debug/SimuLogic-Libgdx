@@ -33,6 +33,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventClockCommand
 import org.engine.simulogic.android.circuits.logic.events.EventCopyCommand
 import org.engine.simulogic.android.circuits.logic.events.EventCutCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
+import org.engine.simulogic.android.circuits.logic.events.EventDeMultiplexerCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventEditTextCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
@@ -45,6 +46,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventLabelCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
 import org.engine.simulogic.android.circuits.logic.events.EventModeCommand
+import org.engine.simulogic.android.circuits.logic.events.EventMultiplexerCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNandCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNandThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNorCommand
@@ -399,6 +401,20 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
                         scene
                     )
                 )
+            }
+        }
+    }
+    fun insertCMultiplexer() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font, connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDeMultiplexer() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font, connection, gestureListener.commandHistory, scene))
             }
         }
     }
