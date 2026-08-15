@@ -559,10 +559,28 @@ class DataTransferObject {
                     CTypes.ARITHMETIC_HALF_ADDER -> {
                         connection.insertNode(ListNode(CHalfAdder(x, y, rotation, scene)))
                     }
-                    CTypes.MULTIPLEXER->{
+                    CTypes.MULTIPLEXER_2_1->{
+                        connection.insertNode(ListNode(CMultiplexer(x, y, rotation, "MUXER 2-1", font,connection,scene)))
+                    }
+                    CTypes.MULTIPLEXER_4_1->{
+                        connection.insertNode(ListNode(CMultiplexer(x, y, rotation, "MUXER 4-1", font,connection,scene)))
+                    }
+                    CTypes.MULTIPLEXER_8_1->{
                         connection.insertNode(ListNode(CMultiplexer(x, y, rotation, "MUXER 8-1", font,connection,scene)))
                     }
-                    CTypes.DEMULTIPLEXER->{
+                    CTypes.MULTIPLEXER_16_1->{
+                        connection.insertNode(ListNode(CMultiplexer(x, y, rotation, "MUXER 16-1", font,connection,scene)))
+                    }
+                    CTypes.DEMULTIPLEXER_1_2->{
+                        connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-2", font,connection,scene)))
+                    }
+                    CTypes.DEMULTIPLEXER_1_4->{
+                        connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-4", font,connection,scene)))
+                    }
+                    CTypes.DEMULTIPLEXER_1_8->{
+                        connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-8", font,connection,scene)))
+                    }
+                    CTypes.DEMULTIPLEXER_1_16->{
                         connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-16", font,connection,scene)))
                     }
                     else -> {

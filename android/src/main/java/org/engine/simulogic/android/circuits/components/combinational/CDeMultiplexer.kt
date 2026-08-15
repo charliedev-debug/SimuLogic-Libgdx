@@ -17,6 +17,8 @@ import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.max
+import kotlin.math.pow
 
 class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:String, private val font: BitmapFont, private val connection: Connection, private val scene: PlayGroundScene) :CNode(){
 
@@ -29,19 +31,20 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
     private var textTitleLabel: ListNode?= null
     private var centerLabelBanner : CSprite? = null
     private var centerLabelTexture = "1-2"
+    private var previousActiveOutput: CSignal? = null
     constructor(x:Float, y:Float, title:String,font: BitmapFont,connection: Connection, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, title, font,connection, scene)
     init {
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         val lineWidth = 2f
-        type = CTypes.DEMULTIPLEXER
+        type = CTypes.DEMULTIPLEXER_1_2
         when(title){
             "DEMUXER 1-16"->{
                 inputDataCount = 1
                 inputSelectorCount = 4
                 outputDataCount = 16
                 centerLabelTexture = "1-16"
-                type = CTypes.DEMULTIPLEXER
+                type = CTypes.DEMULTIPLEXER_1_16
             }
 
             "DEMUXER 1-8"->{
@@ -49,7 +52,7 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
                 inputSelectorCount = 3
                 outputDataCount = 8
                 centerLabelTexture = "1-8"
-                type = CTypes.DEMULTIPLEXER
+                type = CTypes.DEMULTIPLEXER_1_8
             }
 
             "DEMUXER 1-4"->{
@@ -57,7 +60,7 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
                 inputSelectorCount = 2
                 outputDataCount = 4
                 centerLabelTexture = "1-4"
-                type = CTypes.DEMULTIPLEXER
+                type = CTypes.DEMULTIPLEXER_1_4
             }
 
             "DEMUXER 1-2"->{
@@ -65,43 +68,66 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
                 inputSelectorCount = 1
                 outputDataCount = 2
                 centerLabelTexture = "1-2"
-                type = CTypes.DEMULTIPLEXER
+                type = CTypes.DEMULTIPLEXER_1_2
             }
         }
-        val maxWidth = outputDataCount * CDefaults.muxerSignalSpacing
-        val maxInputWidth = inputDataCount * CDefaults.muxerSignalSpacing
-        val inputDataWidth = maxWidth
-        val selectorHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+        var maxWidth = 0f
+        var maxHeight = 0f
         this.rotationDirection = rotationDirection
+        when(rotationDirection){
+            ROTATE_RIGHT->{
+                maxWidth = outputDataCount * CDefaults.muxerSignalSpacing
+                maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+            }
+            ROTATE_LEFT->{
+                maxWidth = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
+                maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+            }
+            ROTATE_TOP->{
+                maxWidth = max(inputSelectorCount * CDefaults.muxerSignalSpacing , inputDataCount * CDefaults.muxerSignalSpacing)
+                maxHeight = outputDataCount * CDefaults.muxerSignalSpacing
+            }
+            ROTATE_BOTTOM->{
+                maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
+                maxHeight = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
+            }
+        }
+        // change the rotation direction for later processing but don't transform the sprite
+        this.enableRotation = false
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(inputDataWidth, selectorHeight)
+            setSize(maxWidth, maxHeight)
             setOriginCenter()
-            when(rotationDirection){
-                ROTATE_BOTTOM->{
-                    rotation = 270f
-                }
-                ROTATE_TOP->{
-                    rotation = 90f
-                }
-                ROTATE_LEFT->{
-                    rotation = 180f
-                }
-                ROTATE_RIGHT->{
-                    rotation = 0f
+            if(enableRotation) {
+                when (rotationDirection) {
+                    ROTATE_BOTTOM -> {
+                        rotation = 270f
+                    }
+
+                    ROTATE_TOP -> {
+                        rotation = 90f
+                    }
+
+                    ROTATE_LEFT -> {
+                        rotation = 180f
+                    }
+
+                    ROTATE_RIGHT -> {
+                        rotation = 0f
+                    }
                 }
             }
-            setPosition(x - inputDataWidth / 2f,y - selectorHeight / 2f)
+            setPosition(x - maxWidth / 2f,y - maxHeight / 2f)
         }
 
 
-        val offsetLeft = (sprite.width - sprite.width * 0.5f / inputDataCount ) / inputDataCount + maxInputWidth / 2f
-        val offsetTop = (sprite.height - sprite.height / inputSelectorCount) / inputSelectorCount
+        val offsetLeft = (sprite.width - sprite.width * 0.5f / inputDataCount ) / inputDataCount + maxWidth / 2f
+        val offsetTop = (sprite.height - sprite.height * 0.5f / inputSelectorCount) / inputSelectorCount
         val offsetCenterX = sprite.width * 0.5f / outputDataCount
         // create input data
         for( i in 0 until inputDataCount){
             CSignal(getCenter().x + i * sprite.width / inputDataCount + offsetLeft / 2f,
-                getCenter().y + selectorHeight + CDefaults.muxerSignalSpacing, CTypes.SIGNAL_IN,i,scene).also { signal ->
+                getCenter().y + maxHeight + CDefaults.muxerSignalSpacing, CTypes.SIGNAL_IN,i,scene).also { signal ->
                 signals.add(signal)
                 ListNode(CLabel(font, 25f, "${i+1}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
@@ -116,8 +142,8 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
 
         // create input selector
         for( i in 0 until inputSelectorCount){
-            CSignal(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + i * sprite.height / inputSelectorCount + offsetTop / 2f,
-                CTypes.SIGNAL_IN,signals.size + i,scene).also { signal->
+            CSignal(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + i * sprite.height / inputSelectorCount + offsetTop,
+                CTypes.SIGNAL_IN,inputDataCount + i,scene).also { signal->
                 signals.add(signal)
                 ListNode(CLabel(font, 25f, "S${i+1}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
@@ -133,7 +159,7 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         // create output data
         for( i in 0 until outputDataCount){
             CSignal(getCenter().x + i * CDefaults.muxerSignalSpacing + offsetCenterX,
-                getCenter().y - CDefaults.muxerSignalSpacing, CTypes.SIGNAL_OUT,i,scene).also { signal ->
+                getCenter().y - CDefaults.muxerSignalSpacing, CTypes.SIGNAL_OUT,inputDataCount + inputSelectorCount + i,scene).also { signal ->
                 signals.add(signal)
                 ListNode(CLabel(font, 25f, "${i+1}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
@@ -161,13 +187,13 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
 
         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer->
             // bottom line
-            lines.add(CLine(getCenter().x, getCenter().y, getCenter().x + inputDataWidth,getCenter().y,lineWidth * 2f))
+            lines.add(CLine(getCenter().x, getCenter().y, getCenter().x + maxWidth,getCenter().y,lineWidth * 2f))
             // top line
-            lines.add(CLine(getCenter().x,getCenter().y + selectorHeight,getCenter().x + inputDataWidth,getCenter().y + selectorHeight,lineWidth * 2f))
+            lines.add(CLine(getCenter().x,getCenter().y + maxHeight,getCenter().x + maxWidth,getCenter().y + maxHeight,lineWidth * 2f))
             // left line
-            lines.add(CLine(getCenter().x ,getCenter().y,getCenter().x , getCenter().y + selectorHeight,lineWidth * 2f))
+            lines.add(CLine(getCenter().x ,getCenter().y,getCenter().x , getCenter().y + maxHeight,lineWidth * 2f))
             // right line
-            lines.add(CLine(getCenter().x + inputDataWidth,getCenter().y,getCenter().x + inputDataWidth, getCenter().y + selectorHeight,lineWidth * 2f))
+            lines.add(CLine(getCenter().x + maxWidth,getCenter().y,getCenter().x + maxWidth, getCenter().y + maxHeight,lineWidth * 2f))
 
             for(i in 0 until inputDataCount){
                 val signal = signals[i]
@@ -202,12 +228,34 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
             node.value.collidable = false
             textTitleLabel = node
         }
+
+    }
+
+    infix fun Int.pow(exponent: Int): Int {
+        return this.toDouble().pow(exponent.toDouble()).toInt()
+    }
+
+    private fun getActiveIndex():Int{
+        var activeIndex = 0
+        for((counter,i) in (inputDataCount  until inputDataCount + inputSelectorCount).withIndex() ){
+            signals[i].also{value->
+                activeIndex +=  2.pow(counter) * value.value
+
+            }
+        }
+        return activeIndex
     }
 
     override fun execute() {
-        //unused
+        val inputValue = signals[0]
+        previousActiveOutput?.value = 0
+        getActiveIndex().also { activeIndex->
+           signals[inputDataCount + inputSelectorCount + activeIndex].also {
+               it.value = inputValue.value
+               previousActiveOutput = it
+           }
+        }
     }
-
 
     override fun attachSelf() {
         super.attachSelf()
@@ -233,6 +281,10 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         }
     }
 
+    override fun rotateRight() {
+        rotationDirection = (rotationDirection + 1) % 4
+    }
+
     override fun detachSelf() {
         super.detachSelf()
         lines.forEach { it.detachSelf() }
@@ -248,51 +300,61 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{
-            updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else  CDefaults.LED_INACTIVE_COLOR)
+            updateColor(CDefaults.LED_INACTIVE_COLOR)
         }
-        val maxWidth = outputDataCount * CDefaults.muxerSignalSpacing
-        val selectorHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+
+        var maxWidth = 0f
+        var selectorHeight = 0f
         val zoomOffset = lines[0].zoomFactor * lines[0].lineWidth / 2f
         when(rotationDirection){
             ROTATE_RIGHT->{
-
-                val offsetLeft = (sprite.width + zoomOffset - sprite.width * 0.5f / inputDataCount ) / inputDataCount
-                val offsetTop = (sprite.height - sprite.height / inputSelectorCount) / inputSelectorCount
-                val offsetCenterX = sprite.width * 0.5f / outputDataCount
+                 maxWidth = outputDataCount * CDefaults.muxerSignalSpacing
+                 selectorHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+                resizeLayout(maxWidth, selectorHeight)
                 // update input data input
-                for( i in 0 until inputDataCount){
-                    val signal = signals[i]
-                    signal.updatePosition(getCenter().x + i * CDefaults.muxerSignalSpacing + offsetLeft,getCenter().y + selectorHeight + CDefaults.muxerSignalSpacing)
-                    signalLineMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x, signal.getPosition().y - CDefaults.muxerSignalSpacing * 2f)
-                }
+                arrangeIOTop(signalLineMarkers,0,inputDataCount)
                 // update input selectors
-                for((counter, i) in (inputDataCount until inputDataCount + inputSelectorCount).withIndex()){
-                    val signal = signals[i]
-                    signal.updatePosition(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + counter * sprite.height / inputSelectorCount + offsetTop / 2f)
-                    signalLineMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x + CDefaults.muxerSignalSpacing * 2f, signal.getPosition().y )
-                }
+                arrangeIOLeft(signalLineMarkers,inputDataCount,inputDataCount + inputSelectorCount)
                 // update data output
-                for( (counter, i) in (inputDataCount + inputSelectorCount  until inputDataCount + inputSelectorCount + outputDataCount).withIndex()){
-                    val signal = signals[i]
-                    signal.updatePosition(getCenter().x + counter * CDefaults.muxerSignalSpacing + offsetCenterX,getCenter().y - CDefaults.muxerSignalSpacing)
-                    signalLineMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x, signal.getPosition().y + CDefaults.muxerSignalSpacing * 2f)
-                }
+                arrangeIOBottom(signalLineMarkers,inputDataCount + inputSelectorCount, inputDataCount + inputSelectorCount + outputDataCount)
+            }
+
+            ROTATE_TOP->{
+                maxWidth = max(inputSelectorCount * CDefaults.muxerSignalSpacing , inputDataCount * CDefaults.muxerSignalSpacing)
+                selectorHeight = outputDataCount * CDefaults.muxerSignalSpacing
+                resizeLayout(maxWidth,selectorHeight)
+                // update input data input
+                arrangeIORight(signalLineMarkers,0,inputDataCount)
+                // update input selectors
+                arrangeIOTop(signalLineMarkers,inputDataCount,inputDataCount + inputSelectorCount)
+                // update data output
+                arrangeIOLeft(signalLineMarkers,inputDataCount + inputSelectorCount, inputDataCount + inputSelectorCount + outputDataCount)
 
             }
 
             ROTATE_LEFT->{
-
-
-            }
-
-            ROTATE_TOP->{
-
+                maxWidth = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
+                selectorHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
+                resizeLayout(maxWidth,selectorHeight)
+                // update input data input
+                arrangeIOBottom(signalLineMarkers,0,inputDataCount)
+                // update input selectors
+                arrangeIORight(signalLineMarkers,inputDataCount,inputDataCount + inputSelectorCount)
+                // update data output
+                arrangeIOTop(signalLineMarkers,inputDataCount + inputSelectorCount, inputDataCount + inputSelectorCount + outputDataCount)
 
             }
 
             ROTATE_BOTTOM->{
-
-
+                maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
+                selectorHeight = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
+                resizeLayout(maxWidth,selectorHeight)
+                // update input data input
+                arrangeIOLeft(signalLineMarkers,0,inputDataCount)
+                // update input selectors
+                arrangeIOBottom(signalLineMarkers,inputDataCount,inputDataCount + inputSelectorCount)
+                // update data output
+                arrangeIORight(signalLineMarkers,inputDataCount + inputSelectorCount, inputDataCount + inputSelectorCount + outputDataCount)
             }
         }
         // bottom line
@@ -313,6 +375,52 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         centerLabelBanner?.updatePosition(getPosition())
         signalSignalLabelMarker.onEach {
             it.update()
+        }
+    }
+
+    fun resizeLayout(layoutWidth: Float, layoutHeight: Float){
+       setSize(layoutWidth,layoutHeight)
+       //updatePosition(getPosition())
+    }
+
+    fun arrangeIOTop(dataMarkers: MutableList<CLine>,start:Int, end:Int){
+        val range = end - start
+        val offsetLeft = (sprite.width / range) / 2f
+        // update input data input
+        for( (counter, i) in (start until end).withIndex()){
+            val signal = signals[i]
+            signal.updatePosition(getCenter().x + counter * CDefaults.muxerSignalSpacing + offsetLeft,getCenter().y + sprite.height  + CDefaults.muxerSignalSpacing)
+            dataMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x, signal.getPosition().y - CDefaults.muxerSignalSpacing * 2f)
+        }
+    }
+
+    fun arrangeIOLeft(dataMarkers: MutableList<CLine>,start:Int, end:Int){
+        val range = end - start
+        val offsetTop =  (sprite.height / range ) / 2f
+        for((counter, i) in (start until end).withIndex()){
+            val signal = signals[i]
+            signal.updatePosition(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + counter * CDefaults.muxerSignalSpacing + offsetTop )
+            dataMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x + CDefaults.muxerSignalSpacing * 2f, signal.getPosition().y )
+        }
+    }
+
+    fun arrangeIORight(dataMarkers: MutableList<CLine>,start:Int, end:Int){
+        val range = end - start
+        val offsetTop =  (sprite.height / range ) / 2f
+        for((counter, i) in (start until end).withIndex()){
+            val signal = signals[i]
+            signal.updatePosition(getCenter().x + sprite.width + CDefaults.muxerSignalSpacing,getCenter().y + counter * CDefaults.muxerSignalSpacing + offsetTop)
+            dataMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x - CDefaults.muxerSignalSpacing * 2f, signal.getPosition().y )
+        }
+    }
+
+    fun arrangeIOBottom(dataMarkers: MutableList<CLine>,start:Int, end:Int){
+        val range = end - start
+        val offsetCenterX = (sprite.width / range) / 2f
+        for( (counter, i) in (start  until end).withIndex()){
+            val signal = signals[i]
+            signal.updatePosition(getCenter().x + counter * CDefaults.muxerSignalSpacing + offsetCenterX,getCenter().y - CDefaults.muxerSignalSpacing)
+            dataMarkers[i].updatePosition(signal.getPosition().x, signal.getPosition().y,signal.getPosition().x, signal.getPosition().y + CDefaults.muxerSignalSpacing * 2f)
         }
     }
 

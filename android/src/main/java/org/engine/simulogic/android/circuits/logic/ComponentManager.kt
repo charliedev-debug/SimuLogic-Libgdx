@@ -1,29 +1,8 @@
 package org.engine.simulogic.android.circuits.logic
 
-import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.math.Vector
 import com.badlogic.gdx.math.Vector2
-import org.engine.simulogic.android.circuits.components.buses.CDataBus
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
-import org.engine.simulogic.android.circuits.components.buttons.CPower
-import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
-import org.engine.simulogic.android.circuits.components.gates.CAnd
-import org.engine.simulogic.android.circuits.components.gates.CNand
-import org.engine.simulogic.android.circuits.components.gates.CNor
-import org.engine.simulogic.android.circuits.components.gates.CNot
-import org.engine.simulogic.android.circuits.components.gates.COr
-import org.engine.simulogic.android.circuits.components.gates.CXnor
-import org.engine.simulogic.android.circuits.components.gates.CXor
-import org.engine.simulogic.android.circuits.components.latches.CLatch
-import org.engine.simulogic.android.circuits.components.visuals.CLed
-import org.engine.simulogic.android.circuits.components.generators.CClock
-import org.engine.simulogic.android.circuits.components.generators.CRandom
-import org.engine.simulogic.android.circuits.components.other.CLabel
-import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
-import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
-import org.engine.simulogic.android.circuits.components.wireless.CChannel
-import org.engine.simulogic.android.circuits.components.wireless.ChannelBuffer
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
 import org.engine.simulogic.android.circuits.logic.events.EventAndThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventBcdDisplayCommand
@@ -68,13 +47,10 @@ import org.engine.simulogic.android.circuits.logic.events.EventTFlipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventUndoCommand
 import org.engine.simulogic.android.circuits.logic.events.EventXnorCommand
 import org.engine.simulogic.android.circuits.logic.events.EventXorCommand
-import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
-import org.engine.simulogic.android.circuits.tools.CommandHistory
 import org.engine.simulogic.android.circuits.tools.InsertCommand
 import org.engine.simulogic.android.events.MotionGestureListener
-import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 
 class ComponentManager(private val projectOptions: ProjectOptions,private val font: BitmapFont, private val connection:Connection, private  val scene: PlayGroundScene, private val gestureListener: MotionGestureListener) {
@@ -404,17 +380,59 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
-    fun insertCMultiplexer() {
+    fun insertCMultiplexer21() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font, connection, gestureListener.commandHistory, scene))
+                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font,"MUXER 2-1", connection, gestureListener.commandHistory, scene))
             }
         }
     }
-    fun insertCDeMultiplexer() {
+    fun insertCMultiplexer41() {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
-                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font, connection, gestureListener.commandHistory, scene))
+                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font, "MUXER 4-1",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCMultiplexer81() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font,"MUXER 8-1", connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCMultiplexer161() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventMultiplexerCommand(Vector2(coordinates),font, "MUXER 16-1",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDeMultiplexer12() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font, "DEMUXER 1-2",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDeMultiplexer14() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font, "DEMUXER 1-4",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDeMultiplexer18() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font,"DEMUXER 1-8",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDeMultiplexer116() {
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDeMultiplexerCommand(Vector2(coordinates),font, "DEMUXER 1-16",connection, gestureListener.commandHistory, scene))
             }
         }
     }

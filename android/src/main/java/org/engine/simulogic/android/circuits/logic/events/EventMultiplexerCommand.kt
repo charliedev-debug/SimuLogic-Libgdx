@@ -12,12 +12,13 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 
 class EventMultiplexerCommand (private val position: Vector2,
                                private val font: BitmapFont,
+                               private val id:String,
                                private val connection: Connection,
                                private val commandHistory: CommandHistory,
                                private val scene: PlayGroundScene) : Command(){
 
     override fun execute() {
-        ListNode(CMultiplexer(position.x, position.y,"MUXER 16-1",font,connection, scene)).also{ node->
+        ListNode(CMultiplexer(position.x, position.y,id,font,connection, scene)).also{ node->
             connection.insertNode(node)
             commandHistory.execute(InsertCommand(node, connection))
         }

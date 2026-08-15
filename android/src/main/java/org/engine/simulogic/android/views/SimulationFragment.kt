@@ -433,11 +433,29 @@ class SimulationFragment : AndroidFragmentApplication() {
                     simulationLoop.componentManager.insertCHalfAdder()
                 }
 
-                ComponentBottomSheet.MULTIPLEXER_COMPONENT->{
-                    simulationLoop.componentManager.insertCMultiplexer()
+                ComponentBottomSheet.MULTIPLEXER_1_2_COMPONENT->{
+                    simulationLoop.componentManager.insertCMultiplexer21()
                 }
-                ComponentBottomSheet.DEMULTIPLEXER_COMPONENT->{
-                    simulationLoop.componentManager.insertCDeMultiplexer()
+                ComponentBottomSheet.MULTIPLEXER_1_4_COMPONENT->{
+                    simulationLoop.componentManager.insertCMultiplexer41()
+                }
+                ComponentBottomSheet.MULTIPLEXER_1_8_COMPONENT->{
+                    simulationLoop.componentManager.insertCMultiplexer81()
+                }
+                ComponentBottomSheet.MULTIPLEXER_1_16_COMPONENT->{
+                    simulationLoop.componentManager.insertCMultiplexer161()
+                }
+                ComponentBottomSheet.DEMULTIPLEXER_2_1_COMPONENT->{
+                    simulationLoop.componentManager.insertCDeMultiplexer12()
+                }
+                ComponentBottomSheet.DEMULTIPLEXER_4_1_COMPONENT->{
+                    simulationLoop.componentManager.insertCDeMultiplexer14()
+                }
+                ComponentBottomSheet.DEMULTIPLEXER_8_1_COMPONENT->{
+                    simulationLoop.componentManager.insertCDeMultiplexer18()
+                }
+                ComponentBottomSheet.DEMULTIPLEXER_16_1_COMPONENT->{
+                    simulationLoop.componentManager.insertCDeMultiplexer116()
                 }
             }
         }

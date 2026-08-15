@@ -22,23 +22,29 @@ open class CNode : Entity(), ICollidable,IExecutable{
         val SIGNAL_INACTIVE = 0
     }
     private val centerPosition = Vector2()
+    var enableRotation = true
     override fun updatePosition(x: Float, y: Float) {
         sprite.apply {
             setOrigin(x, y)
             setSize(sprite.width, sprite.height)
             setOriginCenter()
-            when(rotationDirection){
-                ROTATE_BOTTOM->{
-                    rotation = 270f
-                }
-                ROTATE_TOP->{
-                    rotation = 90f
-                }
-                ROTATE_LEFT->{
-                    rotation = 180f
-                }
-                ROTATE_RIGHT->{
-                    rotation = 0f
+            if(enableRotation) {
+                when (rotationDirection) {
+                    ROTATE_BOTTOM -> {
+                        rotation = 270f
+                    }
+
+                    ROTATE_TOP -> {
+                        rotation = 90f
+                    }
+
+                    ROTATE_LEFT -> {
+                        rotation = 180f
+                    }
+
+                    ROTATE_RIGHT -> {
+                        rotation = 0f
+                    }
                 }
             }
             setPosition(x - sprite.width / 2f, y - sprite.height / 2f)
@@ -49,7 +55,7 @@ open class CNode : Entity(), ICollidable,IExecutable{
             sprite.setSize(width, height)
     }
 
-    fun rotateRight(){
+    open fun rotateRight(){
         rotationDirection = (rotationDirection + 1) % 4
         updatePosition(getPosition().x, getPosition().y)
     }

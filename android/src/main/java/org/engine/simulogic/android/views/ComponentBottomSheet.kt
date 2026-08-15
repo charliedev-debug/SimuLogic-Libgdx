@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -60,8 +58,14 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
          const val CHANNEL_COMPONENT = "CHANNEL"
          const val FULL_ADDER_COMPONENT = "FULL-ADDER"
          const val  HALF_ADDER_COMPONENT = "HALF-ADDER"
-         const val MULTIPLEXER_COMPONENT = "MULTIPLEXER"
-         const val DEMULTIPLEXER_COMPONENT = "DEMULTIPLEXER"
+         const val MULTIPLEXER_1_2_COMPONENT = "MUXER 1-2"
+         const val DEMULTIPLEXER_2_1_COMPONENT = "DEMUXER 2-1"
+        const val MULTIPLEXER_1_4_COMPONENT = "MUXER 1-4"
+        const val DEMULTIPLEXER_4_1_COMPONENT = "DEMUXER 4-1"
+        const val MULTIPLEXER_1_8_COMPONENT = "MUXER 1-8"
+        const val DEMULTIPLEXER_8_1_COMPONENT = "DEMUXER 8-1"
+        const val MULTIPLEXER_1_16_COMPONENT = "MUXER 1-16"
+        const val DEMULTIPLEXER_16_1_COMPONENT = "DEMUXER 16-1"
     }
     private var isPremiumUser = false
     private val userSettings = UserSettings()
@@ -83,6 +87,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         val generalRecyclerview = mainView.findViewById<RecyclerView>(R.id.general_component_list)
         val templateRecyclerview = mainView.findViewById<RecyclerView>(R.id.template_component_list)
         val arithmeticUnitsRecyclerview = mainView.findViewById<RecyclerView>(R.id.arithmetic_units_component_list)
+        val combinationalUnitsRecyclerview = mainView.findViewById<RecyclerView>(R.id.combinational_units_component_list)
         val spanCount = 4
         val spacing = 10
         val includeEdge = false
@@ -94,6 +99,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         arithmeticUnitsRecyclerview.layoutManager = GridLayoutManager(this.context, 2)
         displayRecyclerview.layoutManager = GridLayoutManager(this.context,3)
         spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(this.context, 3)
+        combinationalUnitsRecyclerview.layoutManager = GridLayoutManager(this.context,spanCount)
         val gatesAdapter = ComponentViewAdapter()
         gatesAdapter.insert(AND_COMPONENT, R.drawable.gate_and)
         gatesAdapter.insert(OR_COMPONENT, R.drawable.gate_or)
@@ -139,8 +145,6 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         generalAdapter.insert(RANDOM_COMPONENT, R.drawable.random)
         generalAdapter.insert(TEXT_COMPONENT, R.drawable.text)
         generalAdapter.insert(DATA_BUS_COMPONENT, R.drawable.data_bus)
-        generalAdapter.insert(MULTIPLEXER_COMPONENT,R.drawable.data_bus)
-        generalAdapter.insert(DEMULTIPLEXER_COMPONENT,R.drawable.data_bus)
       //  generalAdapter.insert(DATA_BUS_FAN_OUT_COMPONENT, R.drawable.data_bus)
         generalAdapter.insert(CHANNEL_COMPONENT, R.drawable.channel)
         generalAdapter.showPremiumIndicator = !isPremiumUser
@@ -152,6 +156,16 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         arithmeticUnitAdapter.insert(FULL_ADDER_COMPONENT,R.drawable.full_adder,isPremium = true)
         arithmeticUnitAdapter.insert(HALF_ADDER_COMPONENT,R.drawable.half_adder,isPremium = true)
         arithmeticUnitAdapter.showPremiumIndicator = !isPremiumUser
+        val combinationalUnitAdapter = ComponentViewAdapter()
+        combinationalUnitAdapter.insert(MULTIPLEXER_1_2_COMPONENT,R.drawable.mulitplexer_1_2, isPremium = true)
+        combinationalUnitAdapter.insert(MULTIPLEXER_1_4_COMPONENT,R.drawable.mulitplexer_1_4, isPremium = true)
+        combinationalUnitAdapter.insert(MULTIPLEXER_1_8_COMPONENT,R.drawable.mulitplexer_1_8, isPremium = true)
+        combinationalUnitAdapter.insert(MULTIPLEXER_1_16_COMPONENT,R.drawable.mulitplexer_1_16, isPremium = true)
+        combinationalUnitAdapter.insert(DEMULTIPLEXER_2_1_COMPONENT,R.drawable.demultiplexer_2_1, isPremium = true)
+        combinationalUnitAdapter.insert(DEMULTIPLEXER_4_1_COMPONENT,R.drawable.demultiplexer_4_1, isPremium = true)
+        combinationalUnitAdapter.insert(DEMULTIPLEXER_8_1_COMPONENT,R.drawable.demultiplexer_8_1, isPremium = true)
+        combinationalUnitAdapter.insert(DEMULTIPLEXER_16_1_COMPONENT,R.drawable.demultiplexer_16_1, isPremium = true)
+        combinationalUnitAdapter.showPremiumIndicator = !isPremiumUser
         // dismisses the dialog once a component item has been clicked
         val onDismissListener = object :IComponentAdapterListener{
             override fun onClickComponent(item: ComponentItem) {
@@ -190,6 +204,10 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
             arithmeticUnitAdapter.addListener(listener)
             arithmeticUnitAdapter.addListener(onDismissListener)
         }
+        listener?.also {
+            combinationalUnitAdapter.addListener(listener)
+            combinationalUnitAdapter.addListener(onDismissListener)
+        }
 
         generalRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         clockRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
@@ -199,6 +217,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         displayRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, spacing, includeEdge))
         spaceOptimizationRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         arithmeticUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(2,spacing,includeEdge))
+        combinationalUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing,includeEdge))
         generalRecyclerview.adapter = generalAdapter
         clockRecyclerview.adapter = clockAdapter
         gatesRecyclerview.adapter = gatesAdapter
@@ -207,6 +226,7 @@ class ComponentBottomSheet(private val listener: IComponentAdapterListener? = nu
         displayRecyclerview.adapter = displayAdapter
         arithmeticUnitsRecyclerview.adapter = arithmeticUnitAdapter
         spaceOptimizationRecyclerview.adapter = spaceOptimizationAdapter
+        combinationalUnitsRecyclerview.adapter = combinationalUnitAdapter
         return mainView
     }
 }
