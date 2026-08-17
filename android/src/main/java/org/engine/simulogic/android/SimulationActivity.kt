@@ -242,7 +242,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         menuAdapter.listener = object : IMenuAdapterListener {
             override fun onClickListener(item: MenuAdapterItem) {
                 menuViewModel.onModeChanged(item)
-                if(item.title == "Paste"||item.title == "Delete" || item.title == "Group"){
+                if(item.title == "Paste"||item.title == "Delete" || item.title == "Group"|| item.title == "UnGroup"){
                     menuAdapter.setMode(1)
                 }
             }

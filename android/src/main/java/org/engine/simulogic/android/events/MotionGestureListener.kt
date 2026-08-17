@@ -214,23 +214,25 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             collisionDetector.selectedItems.forEach { item ->
                 dataContainer.insert(item.caller)
             }
-            connection.insertNode(
-                ListNode(
-                    CGroup(
-                        rectPointer.getPosition().x,
-                        rectPointer.getPosition().y,
-                        200f,
-                        200f,
-                        connection,
-                        scene
-                    ).also { group ->
-                        group.insert(dataContainer)
-                        group.gestureListener = this
+            if(dataContainer.isNotEmpty()) {
+                connection.insertNode(
+                    ListNode(
+                        CGroup(
+                            rectPointer.getPosition().x,
+                            rectPointer.getPosition().y,
+                            200f,
+                            200f,
+                            connection,
+                            scene
+                        ).also { group ->
+                            group.insert(dataContainer)
+                            group.gestureListener = this
+                        }
+                    ).also { node ->
+                        commandHistory.execute(GroupInsertCommand(node, connection))
                     }
-                ).also { node->
-                    commandHistory.execute(GroupInsertCommand(node,connection))
-                }
-            )
+                )
+            }
         }
         collisionDetector.reset()
         rangeSelect.reset()
@@ -249,6 +251,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             }
         }
         collisionDetector.reset()
+        rangeSelect.reset()
+        rangeSelect.isVisible = false
+        dataContainer.clear()
+        setMode(TOUCH_MODE)
     }
 
     override fun update() {

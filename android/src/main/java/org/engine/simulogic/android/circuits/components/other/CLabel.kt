@@ -32,10 +32,10 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun draw(spriteBatch: SpriteBatch) {
+     if(text.isNotEmpty()) {
         font.color = color
         font.data.setScale(fontSize / CDefaults.MAX_FONT_RESOLUTION)
-        if(text.isNotEmpty()) {
-            layout.setText(font,text)
+          layout.setText(font,text)
             if(selected) {
                 sprite.draw(spriteBatch)
             }

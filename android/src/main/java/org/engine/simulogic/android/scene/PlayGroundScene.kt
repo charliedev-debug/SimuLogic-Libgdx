@@ -1,17 +1,14 @@
 package org.engine.simulogic.android.scene
-
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.graphics.profiling.GLProfiler
-
+//import com.badlogic.gdx.graphics.profiling.GLProfiler
 
 class PlayGroundScene (private val spriteBatch: SpriteBatch,
                        private val camera: OrthographicCamera, val assetManager:AssetManager) : Layer(LayerEnums.SCENE.name){
 
-    private val shapeRenderer = ShapeRenderer(10000)
+    private val shapeRenderer by lazy { ShapeRenderer(10000) }
  //  private  val profiler = GLProfiler(Gdx.graphics).apply { enable() }
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))

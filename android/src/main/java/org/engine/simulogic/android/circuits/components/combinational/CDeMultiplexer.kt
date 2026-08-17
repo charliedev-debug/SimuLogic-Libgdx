@@ -240,7 +240,6 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         for((counter,i) in (inputDataCount  until inputDataCount + inputSelectorCount).withIndex() ){
             signals[i].also{value->
                 activeIndex +=  2.pow(counter) * value.value
-
             }
         }
         return activeIndex
