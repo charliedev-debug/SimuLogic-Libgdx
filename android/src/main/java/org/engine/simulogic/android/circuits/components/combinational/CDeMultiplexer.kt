@@ -247,10 +247,13 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
 
     override fun execute() {
         val inputValue = signals[0]
-        previousActiveOutput?.value = 0
+        previousActiveOutput?.also {
+            it.updateColor(CDefaults.GATE_UNSELECTED_COLOR)
+        }
         getActiveIndex().also { activeIndex->
            signals[inputDataCount + inputSelectorCount + activeIndex].also {
                it.value = inputValue.value
+               it.updateColor(CDefaults.SIGNAL_ACTIVE_COLOR)
                previousActiveOutput = it
            }
         }

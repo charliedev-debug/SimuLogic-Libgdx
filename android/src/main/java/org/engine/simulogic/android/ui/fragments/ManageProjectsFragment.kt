@@ -53,9 +53,10 @@ class ManageProjectsFragment : Fragment() {
               DeleteProjectDialog(requireContext(), item.title,object :DeleteProjectDialog.OnDeleteProjectClickListener{
                   override fun accept() {
                       File(item.path).delete()
-                      if(projectListAdapter.itemCount < index) {
+                      if(projectListAdapter.itemCount > index) {
                           projectListAdapter.remove(index)
                           projectListAdapter.notifyItemRemoved(index)
+                          projectListAdapter.notifyItemRangeChanged(0, projectListAdapter.size())
                       }else{
                           projectListAdapter.notifyItemRangeChanged(0,projectListAdapter.itemCount)
                       }

@@ -108,6 +108,10 @@ class RecentAdapter : RecyclerView.Adapter<RecentAdapter.RecentViewHolder>() {
         dataList.removeAt(position)
     }
 
+    fun size(): Int{
+        return dataList.size
+    }
+
     fun isEmpty():Boolean{
         return dataList.isEmpty()
     }

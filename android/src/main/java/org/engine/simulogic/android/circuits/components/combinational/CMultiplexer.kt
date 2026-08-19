@@ -367,6 +367,11 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
         signalSignalLabelMarker.onEach {
             it.update()
         }
+        // output signal color
+       signals[inputDataCount + inputSelectorCount].also { output->
+           output.updateColor(if(output.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+        }
+
     }
 
     fun arrangeIOTop(dataMarkers: MutableList<CLine>,start:Int, end:Int){
