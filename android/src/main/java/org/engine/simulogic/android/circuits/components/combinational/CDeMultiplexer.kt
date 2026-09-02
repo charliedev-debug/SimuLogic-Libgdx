@@ -253,7 +253,6 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         getActiveIndex().also { activeIndex->
            signals[inputDataCount + inputSelectorCount + activeIndex].also {
                it.value = inputValue.value
-               it.updateColor(CDefaults.SIGNAL_ACTIVE_COLOR)
                previousActiveOutput = it
            }
         }
@@ -377,6 +376,9 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
         centerLabelBanner?.updatePosition(getPosition())
         signalSignalLabelMarker.onEach {
             it.update()
+        }
+        previousActiveOutput?.also {
+            it.updateColor(CDefaults.SIGNAL_ACTIVE_COLOR)
         }
     }
 

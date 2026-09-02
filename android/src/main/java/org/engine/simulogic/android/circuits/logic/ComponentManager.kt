@@ -310,6 +310,14 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         }
     }
 
+    fun isCAnchorLabelValid(): Boolean{
+        return gestureListener.collisionDetector.isNotEmpty()
+    }
+
+    fun isCLabelEditValid():Boolean{
+        return gestureListener.collisionDetector.isNotEmpty()
+    }
+
     fun insertCDataBus(size:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->

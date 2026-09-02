@@ -21,11 +21,13 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.helpers.ErrorLogs
 import org.engine.simulogic.android.options.SimulationOptions
+import org.engine.simulogic.android.utilities.ReviewHelper
 import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.ChannelDialog
 import org.engine.simulogic.android.views.dialogs.CustomBroadCastBusDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
+import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.android.views.dialogs.LabelAnchorDialog
 import org.engine.simulogic.android.views.dialogs.LabelDialog
 import org.engine.simulogic.android.views.dialogs.LoadingDialog
@@ -142,29 +144,47 @@ class SimulationFragment : AndroidFragmentApplication() {
                     }
 
                     "EditText"->{
-                        LabelDialog(requireContext(), object : IDialogLabelListener {
-                            override fun onCompleted(text: String, fontSize:Int) {
-                                simulationLoop.componentManager.editCLabel(text,fontSize)
-                            }
+                        if(simulationLoop.componentManager.isCLabelEditValid()) {
+                            LabelDialog(requireContext(), object : IDialogLabelListener {
+                                override fun onCompleted(text: String, fontSize: Int) {
+                                    simulationLoop.componentManager.editCLabel(text, fontSize)
+                                }
 
-                            override fun onCancelled() {
+                                override fun onCancelled() {
 
-                            }
+                                }
 
-                        },"Edit Label").show()
+                            }, "Edit Label").show()
+                        }else{
+                            InfoDialog(requireContext(),"You must select a text to edit!", "Invalid").show()
+                        }
                     }
 
                     "A-Label"->{
-                        LabelAnchorDialog(requireContext(), object : IDialogLabelAnchorListener {
-                            override fun onCompleted(text: String, fontSize:Int,alignment:Int) {
-                                simulationLoop.componentManager.insertCAnchorLabel(text,fontSize,alignment)
-                            }
+                        if(simulationLoop.componentManager.isCAnchorLabelValid()) {
+                            LabelAnchorDialog(
+                                requireContext(),
+                                object : IDialogLabelAnchorListener {
+                                    override fun onCompleted(
+                                        text: String,
+                                        fontSize: Int,
+                                        alignment: Int
+                                    ) {
+                                        simulationLoop.componentManager.insertCAnchorLabel(
+                                            text,
+                                            fontSize,
+                                            alignment
+                                        )
+                                    }
 
-                            override fun onCancelled() {
+                                    override fun onCancelled() {
 
-                            }
+                                    }
 
-                        }).show()
+                                }).show()
+                        }else{
+                            InfoDialog(requireContext(),"You must select a component!", "Invalid").show()
+                        }
                     }
 
                     "Group" ->{
@@ -208,6 +228,7 @@ class SimulationFragment : AndroidFragmentApplication() {
                                     //unused
                                 }
                             }).show()
+                        ReviewHelper.seedReviewFlow()
                         //  simulationLoop.componentManager.saveProject()
                     }
                 }
@@ -223,6 +244,7 @@ class SimulationFragment : AndroidFragmentApplication() {
                 }
                 return@observe
             }
+            ReviewHelper.seedReviewFlow()
             when (item.title) {
                 ComponentBottomSheet.AND_COMPONENT -> {
                     simulationLoop.componentManager.insertAND()

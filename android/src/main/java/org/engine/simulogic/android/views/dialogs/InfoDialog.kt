@@ -8,14 +8,16 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import org.engine.simulogic.R
 
-class InfoDialog(context: Context, private val message:String) : Dialog(context) {
+class InfoDialog(context: Context, private val message:String,private val title:String = "Info") : Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val view = layoutInflater.inflate(R.layout.info_dialog_layout,null)
         val close = view.findViewById<AppCompatButton>(R.id.close)
         val messageTextView = view.findViewById<TextView>(R.id.message)
+        val titleTextView = view.findViewById<TextView>(R.id.title)
         messageTextView.text = message
+        titleTextView.text = title
         close.setOnClickListener {
             dismiss()
         }

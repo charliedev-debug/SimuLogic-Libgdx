@@ -43,20 +43,28 @@ import org.engine.simulogic.android.views.dialogs.AlertDialog
 import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.databinding.ActivityLauncherBinding
 import androidx.core.view.get
+import com.google.android.gms.tasks.Task
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.testing.FakeReviewManager
+import org.engine.simulogic.android.utilities.ReviewHelper
 
 
 class LauncherActivity : AppCompatActivity() {
 
 private lateinit var appBarConfiguration: AppBarConfiguration
 private lateinit var binding: ActivityLauncherBinding
+private lateinit var reviewManager: ReviewManager
+private var reviewInfo: ReviewInfo? = null
 private var isPremiumUser = false
 private val userSettings = UserSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         runBlocking{
             ActivityHelpers.getTheme(userSettings, this@LauncherActivity)
         }
-        super.onCreate(savedInstanceState)
-
+      super.onCreate(savedInstanceState)
+     reviewManager = ReviewManagerFactory.create(this)
      binding = ActivityLauncherBinding.inflate(layoutInflater)
      setContentView(binding.root)
 
@@ -71,6 +79,11 @@ private val userSettings = UserSettings()
         }
      val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
      val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
+       ReviewHelper.requestReviewFlow(reviewManager).addOnCompleteListener { task->
+            if(task.isSuccessful){
+                reviewInfo = task.result
+            }
+        }
      val updateActivityResult = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
           if(result.resultCode != RESULT_CANCELED){
 
@@ -78,7 +91,6 @@ private val userSettings = UserSettings()
 
           }
      }
-
         AppUpdateManagerFactory.create(this@LauncherActivity).also{
                 appUpdateManager ->
             appUpdateManager.appUpdateInfo.addOnSuccessListener {appUpdateInfo ->
@@ -190,6 +202,13 @@ private val userSettings = UserSettings()
                     }
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        reviewInfo?.also {
+            ReviewHelper.launchReviewFlow(this,reviewManager,it)
         }
     }
 

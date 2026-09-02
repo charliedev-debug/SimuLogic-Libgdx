@@ -40,6 +40,10 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.internal.EdgeToEdgeUtils
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.play.core.review.testing.FakeReviewManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -57,6 +61,7 @@ import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.options.SimulationOptions
+import org.engine.simulogic.android.utilities.ReviewHelper
 import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.ComponentItem
@@ -81,6 +86,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
     private val bottomSheetViewModel: BottomSheetViewModel by viewModels()
     private lateinit var jobStateRoutine: Job
     private lateinit var simulationFragment: SimulationFragment
+    private lateinit var reviewManager: ReviewManager
+    private var reviewInfo: ReviewInfo? = null
     private var isPremiumUser = false
     private val userSettings = UserSettings()
     private val simulationOptions = SimulationOptions()
@@ -115,8 +122,14 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val exitLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.exit_minimized)
         val saveLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.save_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
+        reviewManager = ReviewManagerFactory.create(this)
         toolBarWrapper.doOnPreDraw {
             SimulationLoop.offsetTop = toolBarWrapper.height.toFloat()
+        }
+        ReviewHelper.requestReviewFlow(reviewManager).addOnCompleteListener { task->
+            if(task.isSuccessful){
+                reviewInfo = task.result
+            }
         }
 
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
@@ -245,11 +258,17 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 if(item.title == "Paste"||item.title == "Delete" || item.title == "Group"|| item.title == "UnGroup"){
                     menuAdapter.setMode(1)
                 }
+                // launch a review flow but do it discretely
+                ReviewHelper.seedReviewFlow()
+                reviewInfo?.also {
+                    ReviewHelper.launchReviewFlow(this@SimulationActivity,reviewManager,it)
+                }
             }
         }
         val bottomSheet = ComponentBottomSheet(object : IComponentAdapterListener {
             override fun onClickComponent(item: ComponentItem) {
                 bottomSheetViewModel.onComponentTriggered(item)
+                ReviewHelper.seedReviewFlow()
             }
 
         })
@@ -310,6 +329,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                     0
                 )
             )
+            ReviewHelper.seedReviewFlow()
         }
 
         simulationToggleButton.setOnClickListener {
@@ -323,6 +343,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                     "Exit without saving data?",
                     object : AlertDialog.OnAlertListener {
                         override fun accept() {
+                            ReviewHelper.seedReviewFlow()
                             finish()
                         }
 
