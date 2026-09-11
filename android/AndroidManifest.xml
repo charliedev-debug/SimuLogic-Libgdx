@@ -29,7 +29,6 @@ xmlns:tools="http://schemas.android.com/tools">
             android:name="android.support.FILE_PROVIDER_PATHS"
             android:resource="@xml/filepaths" />
     </provider>
-
     <!-- <activity
         android:name="org.engine.simulogic.android.AndroidLauncher"
         android:label="@string/app_name"
@@ -93,6 +92,11 @@ xmlns:tools="http://schemas.android.com/tools">
     <intent-filter>
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.OPENABLE" />
+    </intent-filter>
+    <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="https" />
     </intent-filter>
         </activity>
 

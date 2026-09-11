@@ -1,11 +1,13 @@
 package org.engine.simulogic.android
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -118,13 +120,23 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         findViewById<MaterialTextView>(R.id.termsOfService).setOnClickListener {
             val url = "https://sites.google.com/view/simulogic/home"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-            startActivity(intent)
+            try{
+                startActivity(intent)
+            }catch (e: ActivityNotFoundException){
+                Toast.makeText(this@PremiumPurchaseActivity,
+                    "No browser found to open this link!", Toast.LENGTH_LONG).show()
+            }
         }
 
         findViewById<MaterialTextView>(R.id.privacyPolicy).setOnClickListener {
             val url = "https://sites.google.com/view/laborisapps/home"
             val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-            startActivity(intent)
+            try{
+                startActivity(intent)
+            }catch (e: ActivityNotFoundException){
+                Toast.makeText(this@PremiumPurchaseActivity,
+                    "No browser found to open this link!", Toast.LENGTH_LONG).show()
+            }
         }
 
         findViewById<AppCompatImageButton>(R.id.closeActivity).setOnClickListener {

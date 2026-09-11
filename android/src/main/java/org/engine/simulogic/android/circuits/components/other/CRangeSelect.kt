@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.circuits.components.other
 
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -15,21 +16,23 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-open class CRangeSelect(x:Float, y:Float, val connection: Connection, private val scene: PlayGroundScene, protected val layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
+open class CRangeSelect(initialX: Float, initialY: Float,private val camera: OrthographicCamera? = null, val connection: Connection, private val scene: PlayGroundScene, protected val layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
 
     private val pointSize = 30f
+    private var previousZoom = 1f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()
     var collisionDetector = CollisionDetector(connection)
     var enableDragMotion = false
+
     init {
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         sprite = Sprite(spriteRegion).apply {
-            setOrigin(x , y)
+            setOrigin(initialX , initialY)
             setSize(200f, 200f)
             setOriginCenter()
             rotation = 0f
-            setPosition(x - CDefaults.gateWidth / 2f,y - CDefaults.gateHeight / 2f)
+            setPosition(initialX - 100f,initialY - 100f)
         }
 
         sprite.color = CDefaults.GROUP_SELECTED_COLOR // Color(1f,0f,0f,0.27f)
@@ -81,6 +84,7 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
             layer.attachChild(this)
         }
         isVisible = false
+        previousZoom = camera?.zoom?:1f
     }
 
     fun adjustView(){
@@ -125,23 +129,35 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
         val signalBottomLeft = signals[2] as CRangePoint
         var updated = false
         signals.forEach {
-            (it as CRangePoint).apply {
-                updated= isUpdated || updated
-                if(isUpdated) {
-                    childX?.also { child ->
-                        child.updatePosition(child.getPosition().x, getPosition().y)
+            (it as CRangePoint).also { point->
+                updated= point.isUpdated || updated
+                if(point.isUpdated) {
+                    point.childX?.also { child ->
+                        child.updatePosition(child.getPosition().x, point.getPosition().y)
                         child.isUpdated = false
                     }
-                    childY?.also { child ->
-                        child.updatePosition(getPosition().x, child.getPosition().y)
+                    point.childY?.also { child ->
+                        child.updatePosition(point.getPosition().x, child.getPosition().y)
                         child.isUpdated = false
                     }
-                    isUpdated = false
+                    point.isUpdated = false
                 }
 
             }
         }
-        if(updated) {
+
+        signals.forEach {
+            (it as CRangePoint).also { point ->
+                camera?.also { value ->
+                    point.setWidth(CDefaults.signalIconRadius * value.zoom)
+                    point.setHeight(CDefaults.signalIconRadius * value.zoom)
+                    point.updatePosition(point.getPosition())
+                    point.isUpdated = false
+                }
+            }
+
+        }
+        if(updated || previousZoom != camera?.zoom) {
             // update the range background size and position
             val width = (signalTopRight.getPosition().x - signalTopLeft.getPosition().x)
             val height = (signalTopLeft.getPosition().y - signalBottomLeft.getPosition().y)
@@ -151,6 +167,7 @@ open class CRangeSelect(x:Float, y:Float, val connection: Connection, private va
                 signalTopLeft.getPosition().y - height / 2f
             )
         }
+        previousZoom = camera?.zoom?:1f
     }
 
     override fun draw(spriteBatch: SpriteBatch) {

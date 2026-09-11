@@ -13,9 +13,11 @@ class ReviewHelper {
     companion object{
         private var showReviewDialog = false
         private var hasShown = false
+        private var counter = 0
         fun seedReviewFlow(){
           if(showReviewDialog) return
-            showReviewDialog = true//Random(50).nextInt() >= 50 && !hasShown
+            showReviewDialog = counter > 10 &&  !hasShown
+            counter++
         }
 
         fun requestReviewFlow(reviewManager: ReviewManager): Task<ReviewInfo>{

@@ -35,7 +35,7 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 class MotionGestureListener(val camera:OrthographicCamera, private val connection: Connection, val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
 
     private var initialZoom = 1f
-    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
+    private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,camera,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
     val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
     val movePointer = Rectangle(0f,0f,200f,200f)
     private var touch = Vector3(0f, 0f, 0f)
@@ -259,6 +259,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun update() {
        // rangeSelect.connection.update()
+        rangeSelect.update()
         connectionManager.resolveConnection()
     }
 

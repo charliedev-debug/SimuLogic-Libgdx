@@ -62,7 +62,7 @@ class SimulationFragment : AndroidFragmentApplication() {
         simulationOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getSerializable("simulationOptions", SimulationOptions::class.java)!!
         }else{
-            arguments?.getSerializable("simulationOptions", ) as SimulationOptions
+            arguments?.getSerializable("simulationOptions") as SimulationOptions
         }
         var isPremiumUser = true
         runBlocking {

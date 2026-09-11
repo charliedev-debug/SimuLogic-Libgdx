@@ -23,7 +23,7 @@ class CGroup(
     private val initialHeight: Float,
     connection: Connection,
     private val scene: PlayGroundScene
-) : CRangeSelect(initialX, initialY, connection, scene, LayerEnums.GATE_LAYER.name) {
+) : CRangeSelect(initialX, initialY,null, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX, initialY)
     private var previousSnapPosition = Vector2()
