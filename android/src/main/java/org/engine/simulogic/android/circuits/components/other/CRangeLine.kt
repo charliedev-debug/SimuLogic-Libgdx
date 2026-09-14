@@ -44,12 +44,13 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
             when(direction){
                 0 ->{
                     super.updatePosition(x, getPosition().y)
+                    // move the component and the node or simply move the nodes only
                     when (start) {
                         parentLine.signals.first() -> {
                             parentLine.from.value.also {
                                 start.updatePosition(
                                     it.getPosition().x + (x - start.getPosition().x),
-                                    start.getPosition().y
+                                    it.getPosition().y
                                 )
                                 it.updatePosition(start.getPosition())
                             }
@@ -59,7 +60,7 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
                             parentLine.to.value.also {
                                 start.updatePosition(
                                     it.getPosition().x + (x - start.getPosition().x),
-                                    start.getPosition().y
+                                    it.getPosition().y
                                 )
                                 it.updatePosition(start.getPosition())
                             }
@@ -74,21 +75,22 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
 
                 1 ->{
                     super.updatePosition(getPosition().x, y)
+                    // move the component and the node or simply move the nodes only
                     when (start) {
-                        parentLine.from.value -> {
+                        parentLine.signals.first()-> {
                             parentLine.from.value.also {
                                 start.updatePosition(
-                                    start.getPosition().x,
+                                    it.getPosition().x,
                                     it.getPosition().y + (y - start.getPosition().y)
                                 )
                                 it.updatePosition(start.getPosition())
                             }
                             end.updatePosition(end.getPosition().x, y)
                         }
-                        parentLine.to.value -> {
+                        parentLine.signals.last() -> {
                             parentLine.to.value.also {
                                 start.updatePosition(
-                                    start.getPosition().x,
+                                    it.getPosition().x,
                                     it.getPosition().y + (y - start.getPosition().y)
                                 )
                                 it.updatePosition(start.getPosition())
