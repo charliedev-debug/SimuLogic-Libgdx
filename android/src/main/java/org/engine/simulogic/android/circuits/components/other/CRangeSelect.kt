@@ -16,10 +16,10 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 
-open class CRangeSelect(initialX: Float, initialY: Float,private val camera: OrthographicCamera? = null, val connection: Connection, private val scene: PlayGroundScene, protected val layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
+open class CRangeSelect(initialX: Float, initialY: Float,protected val camera: OrthographicCamera? = null, val connection: Connection, private val scene: PlayGroundScene, protected val layerId:String = LayerEnums.SCREEN_LAYER.name)  : CNode() {
 
-    private val pointSize = 30f
-    private var previousZoom = 1f
+    protected var pointSize = 30f
+    protected var previousZoom = 1f
     var rangeItems = mutableListOf<CollisionDetector.CollisionItem>()
     var collisionDetector = CollisionDetector(connection)
     var enableDragMotion = false
@@ -149,14 +149,14 @@ open class CRangeSelect(initialX: Float, initialY: Float,private val camera: Ort
         signals.forEach {
             (it as CRangePoint).also { point ->
                 camera?.also { value ->
-                    point.setWidth(CDefaults.signalIconRadius * value.zoom)
-                    point.setHeight(CDefaults.signalIconRadius * value.zoom)
+                    point.setWidth(pointSize * value.zoom)
+                    point.setHeight(pointSize * value.zoom)
                     point.updatePosition(point.getPosition())
                     point.isUpdated = false
                 }
             }
-
         }
+
         if(updated || previousZoom != camera?.zoom) {
             // update the range background size and position
             val width = (signalTopRight.getPosition().x - signalTopLeft.getPosition().x)

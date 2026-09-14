@@ -44,14 +44,63 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
             when(direction){
                 0 ->{
                     super.updatePosition(x, getPosition().y)
-                    start.updatePosition(x, start.getPosition().y)
-                    end.updatePosition(x, end.getPosition().y)
+                    when (start) {
+                        parentLine.signals.first() -> {
+                            parentLine.from.value.also {
+                                start.updatePosition(
+                                    it.getPosition().x + (x - start.getPosition().x),
+                                    start.getPosition().y
+                                )
+                                it.updatePosition(start.getPosition())
+                            }
+                            end.updatePosition(x, end.getPosition().y)
+                        }
+                        parentLine.signals.last() -> {
+                            parentLine.to.value.also {
+                                start.updatePosition(
+                                    it.getPosition().x + (x - start.getPosition().x),
+                                    start.getPosition().y
+                                )
+                                it.updatePosition(start.getPosition())
+                            }
+                            end.updatePosition(x, end.getPosition().y)
+                        }
+                        else -> {
+                            start.updatePosition(x, start.getPosition().y)
+                            end.updatePosition(x, end.getPosition().y)
+                        }
+                    }
                 }
 
                 1 ->{
                     super.updatePosition(getPosition().x, y)
-                    start.updatePosition(start.getPosition().x, y)
-                    end.updatePosition(end.getPosition().x, y)
+                    when (start) {
+                        parentLine.from.value -> {
+                            parentLine.from.value.also {
+                                start.updatePosition(
+                                    start.getPosition().x,
+                                    it.getPosition().y + (y - start.getPosition().y)
+                                )
+                                it.updatePosition(start.getPosition())
+                            }
+                            end.updatePosition(end.getPosition().x, y)
+                        }
+                        parentLine.to.value -> {
+                            parentLine.to.value.also {
+                                start.updatePosition(
+                                    start.getPosition().x,
+                                    it.getPosition().y + (y - start.getPosition().y)
+                                )
+                                it.updatePosition(start.getPosition())
+                            }
+                            end.updatePosition(end.getPosition().x, y)
+                        }
+                        else -> {
+                            start.updatePosition(start.getPosition().x, y)
+                            end.updatePosition(end.getPosition().x, y)
+                        }
+                    }
+
                 }
 
             }

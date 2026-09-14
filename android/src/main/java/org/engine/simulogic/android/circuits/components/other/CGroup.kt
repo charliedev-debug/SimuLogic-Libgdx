@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.circuits.components.other
 
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
@@ -21,9 +22,10 @@ class CGroup(
     private val initialY: Float,
     private val initialWidth: Float,
     private val initialHeight: Float,
+    camera: OrthographicCamera?,
     connection: Connection,
     private val scene: PlayGroundScene
-) : CRangeSelect(initialX, initialY,null, connection, scene, LayerEnums.GATE_LAYER.name) {
+) : CRangeSelect(initialX, initialY,camera, connection, scene, LayerEnums.GATE_LAYER.name) {
     val dataContainer = DataContainer()
     private var previousPosition = Vector2(initialX, initialY)
     private var previousSnapPosition = Vector2()
@@ -36,6 +38,7 @@ class CGroup(
     var collectableChildren = true
     var deleteChildrenOnDetach = true
     init {
+        pointSize = 60f
         type = CTypes.GROUP
         sprite.color = CDefaults.GROUP_SELECTED_COLOR
         previousPosition.set(getPosition().x, getPosition().y)
@@ -203,23 +206,25 @@ class CGroup(
             gestureListener?.collisionDetector?.also { collisionDetector ->
                 it.isVisible = collisionDetector.mode != MotionGestureListener.INTERACT_MODE
             }
-            (it as CRangePoint).apply {
-                updated = isUpdated || updated
-                if (isUpdated) {
-                    childX?.also { child ->
-                        child.updatePosition(child.getPosition().x, getPosition().y)
+
+            (it as CRangePoint).also { point->
+                updated = point.isUpdated || updated
+                if (point.isUpdated) {
+                    point.childX?.also { child ->
+                        child.updatePosition(child.getPosition().x, point.getPosition().y)
                         child.isUpdated = false
                     }
-                    childY?.also { child ->
-                        child.updatePosition(getPosition().x, child.getPosition().y)
+                    point.childY?.also { child ->
+                        child.updatePosition(point.getPosition().x, child.getPosition().y)
                         child.isUpdated = false
                     }
-                    isUpdated = false
+                    point.isUpdated = false
                 }
 
             }
             it.update()
         }
+
 
         lines[0].also {
             gestureListener?.collisionDetector?.also { collisionDetector ->
@@ -317,6 +322,7 @@ class CGroup(
             position.y,
             getWidth(),
             getHeight(),
+            camera,
             connection,
             scene
         ).also { clone -> clone.gestureListener = gestureListener }

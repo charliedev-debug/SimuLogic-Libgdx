@@ -198,6 +198,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                             rectPointer.getPosition().y,
                             200f,
                             200f,
+                            camera,
                             connection,
                             scene
                         ).also { group ->
@@ -222,6 +223,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                             rectPointer.getPosition().y,
                             200f,
                             200f,
+                            camera,
                             connection,
                             scene
                         ).also { group ->

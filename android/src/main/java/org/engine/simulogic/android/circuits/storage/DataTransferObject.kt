@@ -513,6 +513,7 @@ class DataTransferObject {
                                     y,
                                     groupWidth,
                                     groupHeight,
+                                    gestureListener.camera,
                                     connection,
                                     scene
                                 ).also { group ->

@@ -324,11 +324,13 @@ class LineMarker(
         val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
             a = 0.5f
         }
-        //lineRect.add(CRangeLine(from.value,signals[1],this,colorRect,scene))
+
        // lineRect.add(CRangeLine(to.value,signals[signals.size-2],this,colorRect,scene))
         for (i in 1 until signals.size - 2){
             lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
         }
+        lineRect.add(0,CRangeLine(signals[0],signals[1],this,colorRect,scene))
+        lineRect.add(CRangeLine(signals[signals.size - 1],signals[signals.size - 2],this,colorRect,scene))
 
         lineRect.onEach {
             it.isVisible = false
@@ -396,7 +398,6 @@ class LineMarker(
         for (i in 1 until signals.size - 1) {
             signals[i].update()
         }
-
 
         val snapAlignOriginPoints =
             to.value.snapAlignOriginPoints || from.value.snapAlignOriginPoints
