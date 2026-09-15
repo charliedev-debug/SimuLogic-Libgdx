@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.AutoSave
 
@@ -22,10 +23,12 @@ class AutoSaveDialog (context: Context, private val title:String, private val li
         CoroutineScope(Dispatchers.Default).launch {
             launch(Dispatchers.IO) {
                 AutoSave.instance.forceSave()
-            }
-            launch(Dispatchers.Main){
-               listener.onCancelled()
-                dismiss()
+                println("saving")
+                launch(Dispatchers.Main){
+                    println("saved")
+                    listener.onCancelled()
+                    dismiss()
+                }
             }
         }
         this.setContentView(view)

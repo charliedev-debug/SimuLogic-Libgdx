@@ -748,7 +748,7 @@ class DataTransferObject {
                             to = connection[it.toId],
                             signalFrom = it.sourceSignalIndex,
                             signalTo = it.signalToIndex,
-                            scene = scene
+                            scene = scene, pathFind = false
                         ).also { marker ->
                             for (j in 0 until it.signalSize) {
                                 val signalHelper = it.signals[j]
