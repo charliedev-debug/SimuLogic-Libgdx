@@ -33,14 +33,14 @@ android {
   }
   defaultConfig {
     applicationId 'org.engine.simulogic'
-    minSdkVersion 23
+    minSdkVersion 24
     targetSdkVersion 36
-    versionCode 11434
-    versionName "1.14.34"
+    versionCode 11435
+    versionName "1.14.35"
   }
   compileOptions {
-    sourceCompatibility "8"
-    targetCompatibility "8"
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
     coreLibraryDesugaringEnabled = true
   }
   buildTypes {
@@ -54,7 +54,7 @@ android {
     viewBinding true
   }
   kotlinOptions {
-    jvmTarget = '1.8'
+    setJvmTarget("11")
   }
   androidResources {
     noCompress 'bin'
@@ -70,18 +70,18 @@ configurations { natives }
 
 dependencies {
   implementation("com.android.billingclient:billing:9.1.0")
-  implementation 'androidx.appcompat:appcompat:1.7.1'
-  implementation 'com.google.android.material:material:1.4.0'
-  implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.10.0'
-  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0'
-  implementation 'androidx.navigation:navigation-fragment-ktx:2.9.6'
-  implementation 'androidx.navigation:navigation-ui-ktx:2.9.6'
+  implementation 'androidx.appcompat:appcompat:1.8.0'
+  implementation 'com.google.android.material:material:1.14.0'
+  implementation 'androidx.constraintlayout:constraintlayout:2.2.2'
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.11.0'
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.11.0'
+  implementation 'androidx.navigation:navigation-fragment-ktx:2.10.1'
+  implementation 'androidx.navigation:navigation-ui-ktx:2.10.1'
   implementation("androidx.datastore:datastore-preferences:1.2.1")
   implementation ('com.google.android.play:review-ktx:2.0.2')
   implementation 'androidx.preference:preference:1.2.1'
   implementation("androidx.viewpager2:viewpager2:1.1.0")
-  implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.31")
+  implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.32")
   implementation("com.github.AtifSayings:ViewPager2-Transformers:1.0.1")
   implementation("com.google.android.play:app-update-ktx:2.1.0")
   implementation 'androidx.activity:activity:1.13.0'
