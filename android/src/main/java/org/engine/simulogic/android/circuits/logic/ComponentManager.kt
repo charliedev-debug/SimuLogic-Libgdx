@@ -14,6 +14,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventCutCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeMultiplexerCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
+import org.engine.simulogic.android.circuits.logic.events.EventEditClockCommand
 import org.engine.simulogic.android.circuits.logic.events.EventEditTextCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFullAdderCommand
@@ -294,6 +295,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         eventBridge.insertCommand(EventEditTextCommand(text, fontSize.toFloat(), gestureListener))
     }
 
+    fun editCClock(freq: Float){
+        eventBridge.insertCommand(EventEditClockCommand(freq,gestureListener))
+    }
+
     fun insertCLabel(text:String, fontSize:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
@@ -315,6 +320,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
     }
 
     fun isCLabelEditValid():Boolean{
+        return gestureListener.collisionDetector.isNotEmpty()
+    }
+
+    fun isCClockEditValid():Boolean{
         return gestureListener.collisionDetector.isNotEmpty()
     }
 

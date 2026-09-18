@@ -143,6 +143,28 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.rotateRight()
                     }
 
+                    "EditClock"->{
+                        if(simulationLoop.componentManager.isCClockEditValid()){
+                            CustomClockDialog(requireContext(),object : CustomClockDialog.OnEditProjectClickListener{
+                                override fun success(freq: Float) {
+                                    simulationLoop.componentManager.editCClock(freq)
+                                }
+
+                                override fun failure(msg: String) {
+
+                                }
+
+                                override fun cancel() {
+
+                                }
+
+                            }).show()
+                        }else{
+                            InfoDialog(requireContext(),"You must select a Clock to edit!", "Invalid").show()
+                        }
+
+                    }
+
                     "EditText"->{
                         if(simulationLoop.componentManager.isCLabelEditValid()) {
                             LabelDialog(requireContext(), object : IDialogLabelListener {
@@ -321,7 +343,6 @@ class SimulationFragment : AndroidFragmentApplication() {
                 ComponentBottomSheet.CLOCK_COMPONENT_CUSTOM -> {
                     CustomClockDialog(
                         requireContext(),
-                        projectOptions,
                         object : CustomClockDialog.OnEditProjectClickListener {
                             override fun success(freq: Float) {
                                 simulationLoop.componentManager.insertCClock(freq)

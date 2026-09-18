@@ -11,7 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 
-class CustomClockDialog (context: Context, private val projectOptions: ProjectOptions, private val listener:OnEditProjectClickListener) : Dialog(context) {
+class CustomClockDialog (context: Context, private val listener:OnEditProjectClickListener) : Dialog(context) {
 
 
     class InputFilterMinMax: InputFilter {
@@ -48,8 +48,6 @@ class CustomClockDialog (context: Context, private val projectOptions: ProjectOp
         val clock = view.findViewById<TextInputEditText>(R.id.clock).apply {
             filters = arrayOf(InputFilterMinMax(0.0f, 1000f))
         }
-        // ignore the extension
-        clock.setText(projectOptions.title)
         accept.setOnClickListener {
                try {
                 listener.success(1f / clock.text.toString().toFloat())

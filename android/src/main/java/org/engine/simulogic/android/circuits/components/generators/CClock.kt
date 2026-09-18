@@ -14,11 +14,11 @@ import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.utilities.Timer
 import org.engine.simulogic.android.utilities.TimerManager
 
-class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
+class CClock(x:Float, y:Float, var freq:Float = 1/ 60f, rotationDirection:Int, private val scene: PlayGroundScene) :CNode(){
 
     private val lines = mutableListOf<CLine>()
     constructor(x:Float, y:Float,freq:Float = 1/60f, scene: PlayGroundScene):this(x, y,freq, ROTATE_RIGHT, scene)
-    private val timer = Timer(freq, object :Timer.ITimerListener{
+    val timer = Timer(freq, object :Timer.ITimerListener{
         override fun onTick(hasReset:Boolean) {
             value = if(hasReset){
                 0
@@ -76,6 +76,10 @@ class CClock(x:Float, y:Float, val freq:Float = 1/ 60f, rotationDirection:Int, p
         TimerManager.getInstance().insert(timer)
     }
 
+    fun setFrequency(freq: Float){
+        this.freq = freq
+        this.timer.limit = freq
+    }
 
     override fun attachSelf() {
         super.attachSelf()

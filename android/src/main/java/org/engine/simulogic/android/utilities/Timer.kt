@@ -1,11 +1,10 @@
 package org.engine.simulogic.android.utilities
 
-import com.badlogic.gdx.Gdx
-
-class Timer(private val limit:Float, private val listener: ITimerListener) {
+class Timer(var limit:Float, private val listener: ITimerListener) {
     private var elapsedTime = 0f
+    var dt = 0f
     fun update(hasReset: Boolean = false){
-        elapsedTime+= TimerManager.getInstance().elapsedTime
+        elapsedTime+= dt
         if (elapsedTime >= limit) {
             listener.onTick(hasReset)
             elapsedTime = 0f

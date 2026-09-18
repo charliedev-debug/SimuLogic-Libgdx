@@ -1,4 +1,5 @@
 package org.engine.simulogic.android.scene
+//import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -9,7 +10,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
                        private val camera: OrthographicCamera, val assetManager:AssetManager) : Layer(LayerEnums.SCENE.name){
 
     private val shapeRenderer by lazy { ShapeRenderer(10000) }
- //  private  val profiler = GLProfiler(Gdx.graphics).apply { enable() }
+   //private  val profiler = GLProfiler(Gdx.graphics).apply { enable() }
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
         addLayer(LayerLines(LayerEnums.DEBUG_LAYER.name))
@@ -35,7 +36,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
             }
     }
     override fun draw() {
-       // profiler.reset()
+        //profiler.reset()
         camera.update()
         spriteBatch.projectionMatrix = camera.combined
         spriteBatch.begin()
@@ -72,7 +73,7 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
             }
         spriteBatch.end()
 
-       // println("render calls ${profiler.drawCalls} number of layers ${data.size} text count ${(data[2] as Layer).bucketLength()}")
+      //  println("render calls ${profiler.drawCalls} number of layers ${data.size} text count ${(data[2] as Layer).bucketLength()}")
     }
 
 }
