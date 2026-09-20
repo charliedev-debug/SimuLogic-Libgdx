@@ -6,6 +6,7 @@ import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CGroup
+import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.components.other.CRangePoint
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
 import org.engine.simulogic.android.circuits.logic.Connection
@@ -37,6 +38,9 @@ class CollisionDetector(private val connection: Connection) {
         selectedItems.forEach {
             it.subject.selected = false
             it.caller.value.selected = false
+            if(it.subject is CRangeLine){
+                it.subject.reset()
+            }else
             if(it.subject is CPulseButton){
                 it.subject.resetAction()
             }
@@ -102,21 +106,26 @@ class CollisionDetector(private val connection: Connection) {
                 val collidedObject = collided.value
                 if (node.value.isVisible) {
                     // for connections only return touch events for input and output signals
-                    if (mode == MotionGestureListener.CONNECTION_MODE && collidedObject is CSignal && collidedObject.parent !is LineMarker && node.value !is CGroup) {
-                        return CollisionItem(node, collidedObject).also { item ->
-                            selectedItems.add(item)
+                    when (mode) {
+                        MotionGestureListener.CONNECTION_MODE if collidedObject is CSignal && collidedObject.parent !is LineMarker && node.value !is CGroup -> {
+                            return CollisionItem(node, collidedObject).also { item ->
+                                selectedItems.add(item)
+                            }
                         }
-                    } else if (mode == MotionGestureListener.INTERACT_MODE || mode == MotionGestureListener.TOUCH_MODE) {
-                        return CollisionItem(node, collidedObject).also { item ->
-                            selectedItems.add(item)
+                        MotionGestureListener.INTERACT_MODE, MotionGestureListener.TOUCH_MODE -> {
+                            return CollisionItem(node, collidedObject).also { item ->
+                                selectedItems.add(item)
+                            }
                         }
-                    } else if (mode == MotionGestureListener.SELECTION_MODE && collidedObject !is CSignal) {
-                        return CollisionItem(node, collidedObject).also { item ->
-                            selectedItems.add(item)
+                        MotionGestureListener.SELECTION_MODE if collidedObject !is CSignal -> {
+                            return CollisionItem(node, collidedObject).also { item ->
+                                selectedItems.add(item)
+                            }
                         }
-                    } else if (mode == MotionGestureListener.RANGED_SELECTION_MODE) {
-                        return CollisionItem(node, collidedObject).also { item ->
-                            selectedItems.add(item)
+                        MotionGestureListener.RANGED_SELECTION_MODE -> {
+                            return CollisionItem(node, collidedObject).also { item ->
+                                selectedItems.add(item)
+                            }
                         }
                     }
                 }

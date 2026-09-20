@@ -18,6 +18,12 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
         end.selected = visible
     }
 
+    override fun reset() {
+        isVisible = false
+        start.selected = false
+        end.selected = false
+    }
+
     override fun update() {
         super.update()
         direction = if(start.getPosition().x == end.getPosition().x) 0 else if ( start.getPosition().y == end.getPosition().y) 1 else -1
