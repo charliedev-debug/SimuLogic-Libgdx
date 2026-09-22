@@ -44,7 +44,8 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
         }
     }
     companion object{
-        fun build(connection:Connection, scene: PlayGroundScene):QuadTree{
+
+        fun build(connection:Connection, scene: PlayGroundScene, includeSignals: Boolean = true):QuadTree{
             val values = mutableListOf<ListNode>()
             connection.forEach { node->
                 if(node.value !is CRangeSelect) {
@@ -52,13 +53,15 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
                 }else if(node.value is CGroup){
                     values.add(node)
                 }
-                node.getLineMarkerChildren().forEach {
-                    for( i in 1 until  it.signals.size - 1){
-                        values.add(ListNode(it.signals[i]).apply { callingRef = node })
+                if(includeSignals) {
+                    node.getLineMarkerChildren().forEach {
+                        for (i in 1 until it.signals.size - 1) {
+                            values.add(ListNode(it.signals[i]).apply { callingRef = node })
+                        }
                     }
-                }
-                node.value.signals.forEach {
-                    values.add(ListNode(it).apply { callingRef = node })
+                    node.value.signals.forEach {
+                        values.add(ListNode(it).apply { callingRef = node })
+                    }
                 }
 
             }
@@ -223,4 +226,5 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
     fun contains(box: Rectangle):Boolean{
         return box.overlaps(rect.getBoundingBox())
     }
+
 }

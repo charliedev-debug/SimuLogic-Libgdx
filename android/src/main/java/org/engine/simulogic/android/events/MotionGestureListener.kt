@@ -36,7 +36,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,camera,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
-    val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,scene)
+    val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,camera, connection, scene)
     val movePointer = Rectangle(0f,0f,200f,200f)
     private var touch = Vector3(0f, 0f, 0f)
     val commandHistory = CommandHistory()
@@ -262,6 +262,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     override fun update() {
        // rangeSelect.connection.update()
         rangeSelect.update()
+        rectPointer.execute()
         connectionManager.resolveConnection()
     }
 
@@ -296,14 +297,22 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         rectPointer.updatePosition(touch.x, touch.y)
         moveCommand.newPosition.set(touch.x,touch.y)
         moveCommand.oldPosition.set(touch.x,touch.y)
-        if(collisionDetector.mode == INTERACT_MODE){
-            collisionDetector.contains(rectPointer)?.also { collisionItem ->
-                collisionItem.subject.toggleAction()
+        when (collisionDetector.mode) {
+            INTERACT_MODE -> {
+                collisionDetector.contains(rectPointer)?.also { collisionItem ->
+                    collisionItem.subject.toggleAction()
+                }
             }
-        }else
-        if(collisionDetector.mode == RANGED_SELECTION_MODE) {
-            rangeSelect.collisionDetector.contains(rectPointer)
-
+            RANGED_SELECTION_MODE -> {
+                rangeSelect.collisionDetector.contains(rectPointer)
+            }
+            TOUCH_MODE -> {
+                rectPointer.selectedNode?.also { node ->
+                    if (node.contains(rectPointer) == null) {
+                        rectPointer.selectedNode = null
+                    }
+                }
+            }
         }
 
         return false
@@ -360,6 +369,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                     }
                 }
             } else {
+                rectPointer.selectedNode = null
                 camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
             }
         }else if(collisionDetector.mode == RANGED_SELECTION_MODE){
@@ -392,6 +402,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
         if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE||collisionDetector.mode == CONNECTION_MODE) {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
                 collisionItem.subject.selected = collisionItem.subject.selected.not()
+                rectPointer.selectedNode = collisionItem.subject
                 // this might be moved in the future
                 snapAlign.getSnapCoordinates(touch).also { coord ->
                     moveCommand.oldPosition.set(coord.x, coord.y)

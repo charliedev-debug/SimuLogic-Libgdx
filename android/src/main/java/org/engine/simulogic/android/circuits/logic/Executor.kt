@@ -33,6 +33,14 @@ class Executor(private val connection: Connection) : IExecutable {
                 propagationQueue.offer(node)
                 while (propagationQueue.isNotEmpty()){
                     propagationQueue.poll()?.also { propNode->
+                        if(propNode.value is CClock){
+                            propNode.value.timer.dt = accumulator
+                            timerManager.update()
+                            propNode.value.execute()
+                            propNode.value.timer.dt = 0f
+                        }else {
+                            propNode.value.execute()
+                        }
                         propNode.getLineMarkerChildren().forEach { marker ->
                             if (marker.from.value !is CSignal && marker.to.value !is CSignal) {
                                 marker.to.value.signals[marker.signalTo].value =
@@ -56,7 +64,7 @@ class Executor(private val connection: Connection) : IExecutable {
                         }
                         propagationVisited.add(propNode.apply { visited = true })
                         visitedNodes.add(propNode)
-                        propNode.value.execute()
+
                     }
                 }
                 val propNode = propagationVisited.first()
@@ -75,12 +83,12 @@ class Executor(private val connection: Connection) : IExecutable {
                             timeElapsed += timerManager.STEP
                         }
                     }else{
-                        propagationVisited.forEach {
+                      /*  propagationVisited.forEach {
                             it.value.execute()
                         }
                         propNode.value.timer.dt = timeElapsed
                         timerManager.update()
-                        propNode.value.timer.dt = 0f
+                        propNode.value.timer.dt = 0f*/
                     }
                 }
 

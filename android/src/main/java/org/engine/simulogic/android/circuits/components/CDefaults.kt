@@ -35,6 +35,8 @@ class CDefaults {
         val LABEL_SELECTED_COLOR = Color(EnvironmentTheme.colorPrimary.r, EnvironmentTheme.colorPrimary.g, EnvironmentTheme.colorPrimary.b,0.75f)//Color(165f/255f, 66f/255f, 66f/255f,0.75f)
         val GRID_WIDTH = 50f
         val GRID_HEIGHT = 50f
+        val SNAP_GRID_WIDTH = 30f
+        val SNAP_GRID_HEIGHT = 30f
         val GRID_LINE_COLOR_B = Color(0.411f,0.411f,0.411f ,1f)
         val GRID_LINE_COLOR_A = Color(0.711f,0.711f,0.711f ,1f)
         val RANGED_ICON_RADIUS = 30f

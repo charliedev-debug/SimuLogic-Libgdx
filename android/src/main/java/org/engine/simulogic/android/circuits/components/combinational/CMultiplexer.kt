@@ -267,6 +267,7 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
             }
             layer.attachChild(this)
             centerLabelBanner?.also {
+                it.attachSelf()
                 layer.attachChild(it)
             }
         }
@@ -368,9 +369,11 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
             it.update()
         }
         // output signal color
-       signals[inputDataCount + inputSelectorCount].also { output->
-           output.updateColor(if(output.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
-        }
+       signals[inputDataCount + inputSelectorCount].also { output ->
+           if (!output.selected) {
+               output.updateColor(if (output.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
+           }
+       }
 
     }
 

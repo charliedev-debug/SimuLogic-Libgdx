@@ -84,7 +84,7 @@ class CDFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         val inputD = signals[1]
         val inputE = signals[2]
         val hasEdge = previousEdge != inputE.value
-        signals[3].value = outputQ.value.inv()
+        signals[3].value = if(outputQ.value == SIGNAL_ACTIVE) SIGNAL_INACTIVE else SIGNAL_ACTIVE
         if(hasEdge && inputE.value == SIGNAL_ACTIVE){
             outputQ.value = inputD.value
             previousEdge = inputE.value

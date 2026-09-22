@@ -6,7 +6,7 @@ import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.events.CollisionDetector
 import kotlin.math.round
 
-class SnapAlign(private val offsetX:Float = CDefaults.GRID_WIDTH, private val offsetY:Float = CDefaults.GRID_HEIGHT) {
+class SnapAlign(private val offsetX:Float = CDefaults.SNAP_GRID_WIDTH, private val offsetY:Float = CDefaults.SNAP_GRID_HEIGHT) {
     private val position = Vector2()
     fun getSnapCoordinates(coordinates:Vector2):Vector2{
         return getSnapCoordinates(coordinates.x, coordinates.y)

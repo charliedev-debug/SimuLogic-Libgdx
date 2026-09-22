@@ -1,14 +1,31 @@
 package org.engine.simulogic.android.circuits.components.other
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import org.engine.simulogic.android.circuits.algorithms.QuadTree
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.logic.Connection
+import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.abs
 
-class CPointer (x:Float, y:Float, scene: PlayGroundScene) : CNode() {
+class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection: Connection,val scene: PlayGroundScene) : CNode() {
 
+    private val linesVertical = mutableListOf<CLine>()
+    private val linesHorizontal = mutableListOf<CLine>()
+    private val collidedItems = mutableListOf<ListNode>()
+    private var collideRangeCenterY: CRect
+    private var collideRangeCenterX: CRect
+    private var collideRangeViewPort: CRect
+    private var previousX = 0f
+    private var previousY = 0f
+    private var pSelectedNode: CNode? = null
+    var selectedNode: CNode? = null
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
@@ -23,8 +40,125 @@ class CPointer (x:Float, y:Float, scene: PlayGroundScene) : CNode() {
             setPosition(x - width / 2f, y - height / 2f)
         }
 
+        collideRangeCenterY = CRect(0f,0f,0f,0f, Color(1f,1f,1f,0.4f),scene)
+        collideRangeCenterX = CRect(0f,0f,0f,0f, Color(1f,1f,1f,0.4f),scene)
+        collideRangeViewPort= CRect(0f,0f,0f,0f, Color(0f,1f,0f,0.2f),scene)
         scene.getLayerById(LayerEnums.SCREEN_LAYER.name).also { layer ->
             layer.attachChild(this)
+           //@debug layer.attachChild(collideRangeViewPort)
+          //@debug layer.attachChild(collideRangeCenterY)
+          //@debug layer.attachChild(collideRangeCenterX)
         }
+
+    }
+
+    private fun createLineVertical(): CLine{
+      return  CLine(0f,0f,0f,0f,1f).also {
+            scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+               it.color = Color.RED
+               layer.attachChild(it)
+            }
+      }
+    }
+
+    override fun execute() {
+
+        selectedNode?.also { node ->
+            if (previousX != getPosition().x || previousY != getPosition().y || pSelectedNode != selectedNode) {
+                linesVertical.onEach {
+                    it.isVisible = false
+                }
+                linesHorizontal.onEach {
+                    it.isVisible = false
+                }
+
+                collideRangeCenterX.setSize(camera.viewportWidth * camera.zoom, node.getHeight())
+                collideRangeCenterX.updatePosition(camera.position.x,node.getPosition().y)
+
+                collideRangeCenterY.setSize(node.getWidth(), camera.viewportHeight * camera.zoom)
+                collideRangeCenterY.updatePosition(node.getPosition().x, camera.position.y)
+
+                collideRangeViewPort.setSize(camera.viewportWidth * camera.zoom, camera.viewportHeight * camera.zoom)
+                collideRangeViewPort.updatePosition(camera.position)
+
+                QuadTree.build(connection, scene, includeSignals = false).also { tree ->
+                    // perform acrossY
+                    tree.searchMultiple(collideRangeCenterY.getBoundingBox(), collidedItems)
+                    // filter out components that are off-screen & exclude origin
+                    collidedItems.removeIf { it.value == selectedNode && it.value.contains(collideRangeViewPort) != null}
+                    if(collidedItems.isNotEmpty()){
+                        collidedItems.sortBy { abs( node.getPosition().y - it.value.getPosition().y)  }
+                        collidedItems.onEachIndexed { index, data ->
+                            if(linesVertical.size <= index){
+                                createLineVertical().also {line->
+                                    scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+                                        layer.attachChild(line)
+                                    }
+                                    linesVertical.add(line)
+                                }
+                            }
+                            linesVertical[index].also { line ->
+                                line.updatePosition(
+                                    node.getPosition().x,
+                                    data.value.getPosition().y,
+                                    node.getPosition().x,
+                                    node.getPosition().y
+                                )
+                                line.isVisible = abs(node.getPosition().x - data.value.getPosition().x) <= 2f
+                            }
+                        }
+                    }else{
+                        linesVertical.onEach { line ->
+                            line.isVisible = false
+                        }
+                    }
+
+                    collidedItems.clear()
+                      // perform acrossX
+                    tree.searchMultiple(collideRangeCenterX.getBoundingBox(), collidedItems)
+                    // filter out components that are off-screen & exclude origin
+                    collidedItems.removeIf { it.value == selectedNode && it.value.contains(collideRangeViewPort) != null}
+                    if(collidedItems.isNotEmpty()){
+                        collidedItems.sortBy { abs( node.getPosition().x - it.value.getPosition().x) }
+                        collidedItems.onEachIndexed { index, data ->
+                            if(linesHorizontal.size <= index){
+                                createLineVertical().also {line->
+                                    scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+                                        layer.attachChild(line)
+                                    }
+                                    linesHorizontal.add(line)
+                                }
+                            }
+                            linesHorizontal[index].also { line ->
+                                line.updatePosition(
+                                    node.getPosition().x,
+                                    node.getPosition().y,
+                                    data.value.getPosition().x,
+                                    node.getPosition().y
+                                )
+                                line.isVisible = abs(node.getPosition().y - data.value.getPosition().y) <= 2f
+                            }
+                        }
+                    }else{
+                        linesHorizontal.onEach { line ->
+                            line.isVisible = false
+                        }
+                    }
+
+                    collidedItems.clear()
+                }
+            }
+        }
+        if(selectedNode== null){
+            linesVertical.onEach {
+                it.isVisible = false
+            }
+            linesHorizontal.onEach {
+                it.isVisible = false
+            }
+        }
+        previousX = getPosition().x
+        previousY = getPosition().y
+        pSelectedNode = selectedNode
     }
 }
