@@ -14,6 +14,7 @@ import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
+import kotlin.math.sign
 
 class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection: Connection,val scene: PlayGroundScene) : CNode() {
 
@@ -92,6 +93,8 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                         for(index in 0 until collidedItems.size - 1){
                             val first = collidedItems[index].value
                             val second = collidedItems[index + 1].value
+                            val dirY = sign(first.getPosition().y - second.getPosition().y)
+                            val markerOffset = 30f
                             if(linesVertical.size <= index){
                                 createLineVertical().also {line->
                                     scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
@@ -104,9 +107,9 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                             linesVertical[index].also { line ->
                                 line.updatePosition(
                                     first.getPosition().x,
-                                    second.getPosition().y,
+                                    second.getPosition().y + dirY * second.getHeight() / 2f + markerOffset * dirY,
                                     first.getPosition().x,
-                                    first.getPosition().y
+                                    first.getPosition().y  +  dirY * first.getHeight() / 2f * -1f + dirY * -markerOffset
                                 )
                                 // it must be in relation to the selected node
                                 line.isVisible = abs(node.getPosition().x - second.getPosition().x) <= 2f &&
@@ -129,6 +132,8 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                         for(index in 0 until collidedItems.size -1){
                             val first = collidedItems[index].value
                             val second = collidedItems[index + 1].value
+                            val dirX = sign(second.getPosition().x - first.getPosition().x)
+                            val markerOffset = 30f
                             if(linesHorizontal.size <= index){
                                 createLineVertical().also {line->
                                     scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
@@ -139,9 +144,9 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                             }
                             linesHorizontal[index].also { line ->
                                 line.updatePosition(
-                                    first.getPosition().x ,
+                                    first.getPosition().x + dirX * first.getWidth() / 2f + markerOffset * dirX,
                                     first.getPosition().y,
-                                    second.getPosition().x,
+                                    second.getPosition().x +  dirX * first.getWidth() / 2f * -1f + dirX * -markerOffset,
                                     first.getPosition().y
                                 )
                                 // it must be in relation to the selected node
