@@ -329,8 +329,8 @@ class LineMarker(
         for (i in 1 until signals.size - 2){
             lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
         }
-        lineRect.add(0,CRangeLine(signals[0],signals[1],this,colorRect,scene))
-        lineRect.add(CRangeLine(signals[signals.size - 1],signals[signals.size - 2],this,colorRect,scene))
+       // lineRect.add(0,CRangeLine(signals[0],signals[1],this,colorRect,scene))
+       // lineRect.add(CRangeLine(signals[signals.size - 1],signals[signals.size - 2],this,colorRect,scene))
 
         lineRect.onEach {
             it.isVisible = false
@@ -399,7 +399,8 @@ class LineMarker(
             signals[i].update()
         }
 
-        val snapAlignOriginPoints =
+
+       /* val snapAlignOriginPoints =
             to.value.snapAlignOriginPoints || from.value.snapAlignOriginPoints
         if(previousToPosition.x != Float.NEGATIVE_INFINITY && previousToPosition.x != to.value.getPosition().x && snapAlignOriginPoints){
             val offsetX = to.value.getPosition().x - previousToPosition.x
@@ -429,14 +430,42 @@ class LineMarker(
                 val signal = signals[i]
                 signal.updatePosition(signal.getPosition().x , signal.getPosition().y + offsetY)
             }
+        }*/
+
+
+        for(i in 1 until signals.size - 1) {
+            val a = signals[i - 1]
+            val b = signals[i]
+            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y){
+                val distX = abs(b.getPosition().x - a.getPosition().x)
+                val distY = abs(b.getPosition().y - a.getPosition().y)
+                if( distX < distY){
+                    b.updatePosition(a.getPosition().x, b.getPosition().y)
+                }else{
+                    b.updatePosition(b.getPosition().x, a.getPosition().y)
+                }
+            }
         }
 
+        for(i in signals.size - 1 downTo 2) {
+            val a = signals[i]
+            val b = signals[i - 1]
+            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y){
+                val distX = abs(b.getPosition().x - a.getPosition().x)
+                val distY = abs(b.getPosition().y - a.getPosition().y)
+                if( distX < distY){
+                    b.updatePosition(a.getPosition().x, b.getPosition().y)
+                }else{
+                    b.updatePosition(b.getPosition().x, a.getPosition().y)
+                }
+            }
+        }
 
         previousFromPosition.set(from.value.getPosition())
         previousToPosition.set(to.value.getPosition())
         snapAlignOriginPoints()
         //snap align body
-        var index = 1
+      /*  var index = 1
         while (index < signals.size - 2) {
             val prevSignal = signals[index]
             val nextSignal = signals[index + 1]
@@ -471,7 +500,7 @@ class LineMarker(
                 }
             }
             index++
-        }
+        }*/
 
         signals.forEach {
             it.snapAlignOriginPoints = false
@@ -510,7 +539,6 @@ class LineMarker(
         if (markerActive) {
             updateColor(LINE_MARKER_ACTIVE)
         }
-
         lineRect.onEach {
             it.update()
         }

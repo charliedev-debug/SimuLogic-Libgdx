@@ -96,9 +96,7 @@ class CGroup(
 
     fun loadFromIds(connection: Connection) {
         componentGroupIds.forEach { index ->
-            dataContainer.insert(connection[index].also { node ->
-                node.value.collidable = false
-            })
+            dataContainer.insert(connection[index])
         }
         previousPosition.setZero()
         setSize(initialWidth, initialHeight)
@@ -157,7 +155,6 @@ class CGroup(
         super.detachSelf()
         deleteCommand.reset()
         dataContainer.forEach { node ->
-            node.value.collidable = true
             if(deleteChildrenOnDetach) {
                 deleteCommand.insert(DeleteCommand.DeleteItem(node))
             }
@@ -176,9 +173,6 @@ class CGroup(
         }
         scene.getLayerById(layerId).also { layer ->
             layer.attachChild(this)
-        }
-        dataContainer.forEach { node ->
-            node.value.collidable = false
         }
         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
             lines.forEach {
@@ -277,7 +271,19 @@ class CGroup(
     }
 
     override fun contains(entity: CNode): CNode? {
-        if (collectableChildren) {
+        if(collectableChildren){
+            dataContainer.forEach {
+                val childCollides = it.contains(entity)
+                if (childCollides != null) {
+                    return childCollides
+                }
+            }
+        }
+        val parentCollides = super.contains(entity)
+        if (parentCollides != null) {
+            return parentCollides
+        }
+       /* if (collectableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(entity)
@@ -290,13 +296,27 @@ class CGroup(
         val parentCollides = super.contains(entity)
         if (parentCollides != null) {
             return parentCollides
-        }
+        }*/
 
         return null
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        if (collectableChildren) {
+
+        if(collectableChildren){
+            dataContainer.forEach {
+                val childCollides = it.contains(rect)
+                if (childCollides != null) {
+                    return childCollides
+                }
+            }
+       }
+
+        val parentCollides = super.contains(rect)
+        if (parentCollides != null) {
+            return parentCollides
+        }
+       /* if (collectableChildren) {
             dataContainer.forEach {
                 it.value.collidable = true
                 val childCollides = it.contains(rect)
@@ -309,7 +329,7 @@ class CGroup(
         val parentCollides = super.contains(rect)
         if (parentCollides != null) {
             return parentCollides
-        }
+        }*/
 
         return null
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import org.engine.simulogic.android.circuits.algorithms.QuadTree
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
@@ -85,26 +86,31 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                     // perform acrossY
                     tree.searchMultiple(collideRangeCenterY.getBoundingBox(), collidedItems)
                     // filter out components that are off-screen & exclude origin
-                    collidedItems.removeIf { it.value == selectedNode && it.value.contains(collideRangeViewPort) != null}
+                    collidedItems.removeIf { it.value.contains(collideRangeViewPort) == null}
                     if(collidedItems.isNotEmpty()){
                         collidedItems.sortBy { abs( node.getPosition().y - it.value.getPosition().y)  }
-                        collidedItems.onEachIndexed { index, data ->
+                        for(index in 0 until collidedItems.size - 1){
+                            val first = collidedItems[index].value
+                            val second = collidedItems[index + 1].value
                             if(linesVertical.size <= index){
                                 createLineVertical().also {line->
                                     scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
                                         layer.attachChild(line)
                                     }
+                                    line.isVisible = false
                                     linesVertical.add(line)
                                 }
                             }
                             linesVertical[index].also { line ->
                                 line.updatePosition(
-                                    node.getPosition().x,
-                                    data.value.getPosition().y,
-                                    node.getPosition().x,
-                                    node.getPosition().y
+                                    first.getPosition().x,
+                                    second.getPosition().y,
+                                    first.getPosition().x,
+                                    first.getPosition().y
                                 )
-                                line.isVisible = abs(node.getPosition().x - data.value.getPosition().x) <= 2f
+                                // it must be in relation to the selected node
+                                line.isVisible = abs(node.getPosition().x - second.getPosition().x) <= 2f &&
+                                    abs(node.getPosition().x - first.getPosition().x) <= 2f
                             }
                         }
                     }else{
@@ -117,10 +123,12 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                       // perform acrossX
                     tree.searchMultiple(collideRangeCenterX.getBoundingBox(), collidedItems)
                     // filter out components that are off-screen & exclude origin
-                    collidedItems.removeIf { it.value == selectedNode && it.value.contains(collideRangeViewPort) != null}
+                    collidedItems.removeIf { it.value.contains(collideRangeViewPort) == null}
                     if(collidedItems.isNotEmpty()){
-                        collidedItems.sortBy { abs( node.getPosition().x - it.value.getPosition().x) }
-                        collidedItems.onEachIndexed { index, data ->
+                        collidedItems.sortBy { it.value.getPosition().x }
+                        for(index in 0 until collidedItems.size -1){
+                            val first = collidedItems[index].value
+                            val second = collidedItems[index + 1].value
                             if(linesHorizontal.size <= index){
                                 createLineVertical().also {line->
                                     scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
@@ -131,12 +139,14 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                             }
                             linesHorizontal[index].also { line ->
                                 line.updatePosition(
-                                    node.getPosition().x,
-                                    node.getPosition().y,
-                                    data.value.getPosition().x,
-                                    node.getPosition().y
+                                    first.getPosition().x ,
+                                    first.getPosition().y,
+                                    second.getPosition().x,
+                                    first.getPosition().y
                                 )
-                                line.isVisible = abs(node.getPosition().y - data.value.getPosition().y) <= 2f
+                                // it must be in relation to the selected node
+                                line.isVisible = abs(node.getPosition().y - second.getPosition().y) <= 2f &&
+                                    abs(node.getPosition().y - first.getPosition().y) <= 2f
                             }
                         }
                     }else{
@@ -149,7 +159,9 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                 }
             }
         }
-        if(selectedNode== null){
+
+        if(selectedNode== null|| selectedNode?.selected == false || selectedNode?.isRemoved == true
+            || selectedNode is CSignal || selectedNode is CRangeLine){
             linesVertical.onEach {
                 it.isVisible = false
             }

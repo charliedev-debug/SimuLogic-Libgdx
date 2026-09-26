@@ -7,6 +7,7 @@ import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
+import kotlin.math.sign
 
 class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  color: Color, private val scene: PlayGroundScene)
     : CRect(0f,0f, CDefaults.signalIconRadius, CDefaults.signalIconRadius,color,scene) {
@@ -29,10 +30,25 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
         direction = if(start.getPosition().x == end.getPosition().x) 0 else if ( start.getPosition().y == end.getPosition().y) 1 else -1
         when (direction) {
             0 -> {
-                setSize(CDefaults.signalIconRadius, abs(start.getPosition().y - end.getPosition().y))
+                val distanceY = abs(start.getPosition().y - end.getPosition().y )
+                val offsetY = abs(start.getHeight() / 2f + end.getHeight() / 2f)
+                if(distanceY > offsetY) {
+                    setSize(
+                        CDefaults.signalIconRadius,
+                        distanceY - offsetY
+                    )
+                }else{
+                    setSize(CDefaults.signalIconRadius, distanceY)
+                }
             }
             1 -> {
-                setSize(abs(start.getPosition().x - end.getPosition().x), CDefaults.signalIconRadius)
+                val distanceX = abs(start.getPosition().x - end.getPosition().x)
+                val offsetX= abs(start.getWidth() / 2f + end.getWidth() / 2f)
+                if(distanceX > offsetX){
+                    setSize(distanceX - offsetX, CDefaults.signalIconRadius)
+                }else {
+                    setSize(distanceX, CDefaults.signalIconRadius)
+                }
             }
             else -> isVisible = false
 

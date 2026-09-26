@@ -9,7 +9,7 @@ import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 
-open class CSignal(x: Float, y: Float,  type: CTypes, val signalIndex: Int, private val scene: PlayGroundScene) :
+open class CSignal(x: Float, y: Float, type: CTypes, var signalIndex: Int, private val scene: PlayGroundScene) :
     CNode() {
     var parent: Entity? = null
     init {
