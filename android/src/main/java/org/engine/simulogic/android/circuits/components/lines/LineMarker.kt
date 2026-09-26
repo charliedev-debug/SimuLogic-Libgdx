@@ -395,43 +395,10 @@ class LineMarker(
             signals[0].updatePosition(pFrom.x, pFrom.y)
             signals[signals.size - 1].updatePosition(pTo.x, pTo.y)
         }
+
         for (i in 1 until signals.size - 1) {
             signals[i].update()
         }
-
-
-       /* val snapAlignOriginPoints =
-            to.value.snapAlignOriginPoints || from.value.snapAlignOriginPoints
-        if(previousToPosition.x != Float.NEGATIVE_INFINITY && previousToPosition.x != to.value.getPosition().x && snapAlignOriginPoints){
-            val offsetX = to.value.getPosition().x - previousToPosition.x
-            for (i in 1 until signals.size - 1) {
-                val signal = signals[i]
-                signal.updatePosition(signal.getPosition().x + offsetX, signal.getPosition().y)
-            }
-        } else
-       if(previousFromPosition.x != Float.NEGATIVE_INFINITY && previousFromPosition.x != from.value.getPosition().x && snapAlignOriginPoints){
-            val offsetX = from.value.getPosition().x - previousFromPosition.x
-            for (i in 1 until signals.size - 1) {
-                val signal = signals[i]
-                signal.updatePosition(signal.getPosition().x + offsetX, signal.getPosition().y)
-            }
-        }
-
-        if(previousFromPosition.y != Float.NEGATIVE_INFINITY && previousFromPosition.y != from.value.getPosition().y && snapAlignOriginPoints){
-            val offsetY = from.value.getPosition().y - previousFromPosition.y
-            for (i in 1 until signals.size - 1) {
-                val signal = signals[i]
-                signal.updatePosition(signal.getPosition().x, signal.getPosition().y + offsetY)
-            }
-        }else
-        if(previousToPosition.y != Float.NEGATIVE_INFINITY && previousToPosition.y != to.value.getPosition().y && snapAlignOriginPoints){
-            val offsetY = to.value.getPosition().y - previousToPosition.y
-            for (i in 1 until signals.size - 1) {
-                val signal = signals[i]
-                signal.updatePosition(signal.getPosition().x , signal.getPosition().y + offsetY)
-            }
-        }*/
-
 
         for(i in 1 until signals.size - 1) {
             val a = signals[i - 1]
@@ -444,6 +411,7 @@ class LineMarker(
                 }else{
                     b.updatePosition(b.getPosition().x, a.getPosition().y)
                 }
+
             }
         }
 
@@ -463,44 +431,6 @@ class LineMarker(
 
         previousFromPosition.set(from.value.getPosition())
         previousToPosition.set(to.value.getPosition())
-        snapAlignOriginPoints()
-        //snap align body
-      /*  var index = 1
-        while (index < signals.size - 2) {
-            val prevSignal = signals[index]
-            val nextSignal = signals[index + 1]
-            val prev = prevSignal.getPosition()
-            val next = nextSignal.getPosition()
-            val offsetX = prev.x - next.x
-            val offsetY = prev.y - next.y
-            val distanceFromPrevX = abs(pFrom.x - prev.x)
-            val distanceFromPrevY = abs(pFrom.y - prev.y)
-            val distanceToPrevX = abs(pTo.x - prev.x)
-            val distanceToPrevY = abs(pTo.y - prev.y)
-            val snapAlignOriginPoints =
-                prevSignal.snapAlignOriginPoints || nextSignal.snapAlignOriginPoints
-            // ignore the first and the last elements since we can't modify them directly since it's the source
-            if (snapAlignOriginPoints && (distanceFromPrevX < distanceToPrevX || index == 0)) {
-                if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
-                    nextSignal.updatePosition(prev.x, next.y)
-                }
-            } else if (snapAlignOriginPoints && (distanceFromPrevX > distanceToPrevX)) {
-                if (abs(offsetX) <= CDefaults.GRID_WIDTH) {
-                    prevSignal.updatePosition(next.x, prev.y)
-                }
-            }
-
-            if (snapAlignOriginPoints && (distanceFromPrevY < distanceToPrevY || (index + 1) == signals.size - 1)) {
-                if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
-                    nextSignal.updatePosition(next.x, prev.y)
-                }
-            } else if (snapAlignOriginPoints && (distanceFromPrevY > distanceToPrevY)) {
-                if (abs(offsetY) <= CDefaults.GRID_HEIGHT) {
-                    prevSignal.updatePosition(prev.x, next.y)
-                }
-            }
-            index++
-        }*/
 
         signals.forEach {
             it.snapAlignOriginPoints = false
