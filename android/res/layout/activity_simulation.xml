@@ -39,7 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12dp"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:textColor="?attr/colorPrimary"
                     android:text="Simulation Stats"/>
                 <LinearLayout
@@ -122,7 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textColor="?attr/colorPrimary"
                 android:text="Project Metadata"/>
 
@@ -182,7 +182,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textColor="?attr/colorPrimary"
                 android:text="Grid Settings"/>
 
@@ -238,7 +238,7 @@
                     android:textStyle="bold"
                     android:textSize="12dp"
                     android:textColor="?attr/colorOnBackground"
-                    android:text="Style"/>
+                    android:text="Grid Styles"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_a"
                     android:layout_width="match_parent"
@@ -298,7 +298,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textColor="?attr/colorPrimary"
                 android:text="Toolbar Settings"/>
 
@@ -347,7 +347,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:textStyle="normal"
                 android:textColor="?attr/colorPrimary"
                 android:text="Storage"/>
 

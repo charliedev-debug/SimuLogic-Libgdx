@@ -273,7 +273,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
        val componentFloatingBottomSheet = ComponentFloatingBottomSheet( object : IComponentAdapterListener {
             override fun onClickComponent(item: ComponentItem) {
-
+                bottomSheetViewModel.onComponentTriggered(item)
+                ReviewHelper.seedReviewFlow()
             } }).apply {
                 initViews(this@SimulationActivity)
                onDismissListener = object : ComponentFloatingBottomSheet.OnDismissListener{
@@ -285,8 +286,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
         val bottomSheet = ComponentBottomSheet(object : IComponentAdapterListener {
             override fun onClickComponent(item: ComponentItem) {
-                bottomSheetViewModel.onComponentTriggered(item)
-                ReviewHelper.seedReviewFlow()
+                //bottomSheetViewModel.onComponentTriggered(item)
+               // ReviewHelper.seedReviewFlow()
             }
 
         })
