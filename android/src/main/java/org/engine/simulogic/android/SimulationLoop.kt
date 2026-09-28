@@ -183,10 +183,11 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     override fun render() {
         ScreenUtils.clear(EnvironmentTheme.colorBackground)
         if(isReady) {
+            componentManager.eventBridge.evaluate()
             connection.update()
             gridDecorator.update()
             gestureListener.update()
-            componentManager.eventBridge.evaluate()
+
 
             scene.update()
             scene.draw()

@@ -74,10 +74,10 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                     it.isVisible = false
                 }
 
-                collideRangeCenterX.setSize(camera.viewportWidth * camera.zoom, node.getHeight())
+                collideRangeCenterX.setSize(camera.viewportWidth * camera.zoom, node.getHeight() )
                 collideRangeCenterX.updatePosition(camera.position.x,node.getPosition().y)
 
-                collideRangeCenterY.setSize(node.getWidth(), camera.viewportHeight * camera.zoom)
+                collideRangeCenterY.setSize(node.getWidth() , camera.viewportHeight * camera.zoom)
                 collideRangeCenterY.updatePosition(node.getPosition().x, camera.position.y)
 
                 collideRangeViewPort.setSize(camera.viewportWidth * camera.zoom, camera.viewportHeight * camera.zoom)
@@ -105,6 +105,7 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                                 }
                             }
                             linesVertical[index].also { line ->
+                                // test center
                                 line.updatePosition(
                                     first.getPosition().x,
                                     second.getPosition().y + dirY * second.getHeight() / 2f + markerOffset * dirY,

@@ -347,44 +347,60 @@ class LineMarker(
 
     }
 
-    private fun snapAlignOriginPoints() {
-        // snap align start and end points
-        val startFrom = signals[0]
-        val startSnapFrom = signals[1]
-        val endTo = signals[signals.size - 1]
-        val endSnapTo = signals[signals.size - 2]
-        val offsetFromX = abs(startFrom.getPosition().x - startSnapFrom.getPosition().x)
-        val offsetFromY = abs(startFrom.getPosition().y - startSnapFrom.getPosition().y)
-        val offsetToX = abs(endTo.getPosition().x - endSnapTo.getPosition().x)
-        val offsetToY = abs(endTo.getPosition().y - endSnapTo.getPosition().y)
-        val snapFromOrigin = from.value.snapAlignOriginPoints || startSnapFrom.snapAlignOriginPoints
-        val snapToOrigin = to.value.snapAlignOriginPoints || endSnapTo.snapAlignOriginPoints
-
-        if (snapFromOrigin) {
-            if (offsetFromX <= CDefaults.GRID_WIDTH) {
-                startSnapFrom.updatePosition(
-                    startFrom.getPosition().x,
-                    startSnapFrom.getPosition().y
-                )
-            } else
-                if (offsetFromY <= CDefaults.GRID_HEIGHT) {
-                    startSnapFrom.updatePosition(
-                        startSnapFrom.getPosition().x,
-                        startFrom.getPosition().y
-                    )
+    fun insertSplitNode(insertIndex:Int, fromIndex:Int,toIndex:Int,colorRect: Color): CSignal{
+        val node = signals[fromIndex]
+       return CSignal(node.getPosition().x, node.getPosition().y,
+            CTypes.SIGNAL_RANGE_POINT,0, scene).also { signal->
+                signal.parent = node.parent
+            scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
+                layer.attachChild(node)
+            }
+            scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+                CLine(
+                    node.getPosition().x,
+                    node.getPosition().y,
+                    signal.getPosition().x,
+                    signal.getPosition().y,
+                    CDefaults.lineWeight
+                ).also { line ->
+                    layer.attachChild(line)
+                    lines.add(line)
                 }
-        }
-
-        if (snapToOrigin) {
-            if (offsetToX <= CDefaults.GRID_WIDTH) {
-                endSnapTo.updatePosition(endTo.getPosition().x, endSnapTo.getPosition().y)
-            } else
-                if (offsetToY <= CDefaults.GRID_HEIGHT) {
-                    endSnapTo.updatePosition(endSnapTo.getPosition().x, endTo.getPosition().y)
+            }
+            CRangeLine(node,signals[toIndex], this,colorRect, scene).also { rangeLine->
+                rangeLine.isVisible = false
+                scene.getLayerById(LayerEnums.GATE_LAYER.name).also{ layer ->
+                    layer.attachChild(rangeLine)
                 }
+                lineRect.add(rangeLine)
+            }
+            signals.add(insertIndex, signal)
         }
     }
-
+    fun splitNode(startIndex: Int){
+        val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
+            a = 0.5f
+        }
+        if(startIndex - 1 == 0){
+           insertSplitNode(0 ,0,1,colorRect)
+           insertSplitNode(0,0,1,colorRect)
+            signals.onEachIndexed { index, signal ->
+                signal.signalIndex = index
+            }
+        } else if( startIndex + 1 == signals.size - 1){
+            insertSplitNode(signals.size, signals.size - 1,signals.size - 2,colorRect)
+            insertSplitNode(signals.size,signals.size - 1,signals.size - 2,colorRect)
+            signals.onEachIndexed { index, signal ->
+                signal.signalIndex = index
+            }
+        }else{
+            insertSplitNode(startIndex - 1,startIndex,startIndex,colorRect)
+            insertSplitNode(startIndex - 1 ,startIndex,startIndex,colorRect)
+            signals.onEachIndexed { index, signal ->
+                signal.signalIndex = index
+            }
+        }
+    }
     override fun update() {
         val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
         val signalTo =  if (isDestinationSignal()) to.value else to.value.signals[signalTo]
@@ -396,10 +412,11 @@ class LineMarker(
             signals[signals.size - 1].updatePosition(pTo.x, pTo.y)
         }
 
-        for (i in 1 until signals.size - 1) {
+        for (i in 0 until signals.size) {
             signals[i].update()
         }
 
+        // autocorrects the line segments positions
         for(i in 1 until signals.size - 1) {
             val a = signals[i - 1]
             val b = signals[i]
@@ -425,6 +442,28 @@ class LineMarker(
                     b.updatePosition(a.getPosition().x, b.getPosition().y)
                 }else{
                     b.updatePosition(b.getPosition().x, a.getPosition().y)
+                }
+            }
+        }
+
+        for( i in 0  until signals.size){
+            signals[i].also { a->
+                if(i + 2 < signals.size){
+                   val b = signals[i + 1]
+                   val c = signals[i + 2]
+                   if(a.getPosition().x == b.getPosition().x && a.getPosition().x == c.getPosition().x){
+                       if(b.getPosition().y > a.getPosition().y && b.getPosition().y > c.getPosition().y){
+                           b.updatePosition(b.getPosition().x, a.getPosition().y)
+                       }else if(b.getPosition().y < c.getPosition().y && b.getPosition().y < a.getPosition().y){
+                           b.updatePosition(b.getPosition().x, c.getPosition().y)
+                       }
+                   }else if(a.getPosition().y == b.getPosition().y && a.getPosition().y == c.getPosition().y){
+                       if(b.getPosition().x > a.getPosition().x && b.getPosition().x > c.getPosition().x){
+                           b.updatePosition(a.getPosition().x, b.getPosition().y)
+                       }else if(b.getPosition().x < c.getPosition().x && b.getPosition().x < a.getPosition().x){
+                           b.updatePosition(c.getPosition().x, b.getPosition().y)
+                       }
+                   }
                 }
             }
         }

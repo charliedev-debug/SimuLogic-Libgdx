@@ -139,6 +139,10 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
                     }
 
+                    "Split-Node"->{
+                        simulationLoop.componentManager.splitConnectionNode()
+                    }
+
                     "Rotate" -> {
                         simulationLoop.componentManager.rotateRight()
                     }

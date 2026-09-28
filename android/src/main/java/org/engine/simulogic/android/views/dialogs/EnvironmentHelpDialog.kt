@@ -41,17 +41,17 @@ class EnvironmentHelpDialog(context:Context) : Dialog(context) {
                     R.id.modes->{
                         environmentHelpViewPagerAdapter.currentPage = 0
                         environmentHelpViewPagerAdapter.updateItemsAll()
-                        currentItem = 0
+                        setCurrentItem(0, true)
                     }
                     R.id.actions->{
                         environmentHelpViewPagerAdapter.currentPage = 1
                         environmentHelpViewPagerAdapter.updateItemsAll()
-                        currentItem = 0
+                        setCurrentItem(0, true)
                     }
                     R.id.components->{
                         environmentHelpViewPagerAdapter.currentPage = 2
                         environmentHelpViewPagerAdapter.updateItemsAll()
-                        currentItem = 0
+                        setCurrentItem(0, true)
                     }
                 }
             }

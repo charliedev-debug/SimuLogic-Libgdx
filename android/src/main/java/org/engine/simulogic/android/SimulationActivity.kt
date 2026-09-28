@@ -33,6 +33,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
@@ -63,6 +64,7 @@ import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.utilities.ReviewHelper
 import org.engine.simulogic.android.views.ComponentBottomSheet
+import org.engine.simulogic.android.views.ComponentFloatingBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.MenuAdapterItem
@@ -121,6 +123,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         val drawerLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.drawer_minimized)
         val exitLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.exit_minimized)
         val saveLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.save_minimized)
+        val helpLayoutButtonMinimized = findViewById<AppCompatImageButton>(R.id.help_minimized)
         val autoSaveEnabledSwitch = findViewById<SwitchMaterial>(R.id.auto_save_enabled)
         reviewManager = ReviewManagerFactory.create(this)
         toolBarWrapper.doOnPreDraw {
@@ -222,8 +225,8 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
-            layoutManager =
-                LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.HORIZONTAL, false)
+          //  layoutManager = LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
         }
 
         val menuAdapter = MenuViewAdapter().apply {
@@ -235,6 +238,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect2", "Connect", true, R.drawable.connect_2_node)
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
+            insert("Split-Node","Split-Node",false, R.drawable.split, true)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
             insert("EditClock","Edit-Clock",false, R.drawable.edit_clock, true)
             insert("EditText", "Edit-Text", false, R.drawable.text_edit, true)
@@ -266,6 +270,19 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 }
             }
         }
+
+       val componentFloatingBottomSheet = ComponentFloatingBottomSheet( object : IComponentAdapterListener {
+            override fun onClickComponent(item: ComponentItem) {
+
+            } }).apply {
+                initViews(this@SimulationActivity)
+               onDismissListener = object : ComponentFloatingBottomSheet.OnDismissListener{
+                   override fun dismiss() {
+                       bottomSheetButton.visibility = View.VISIBLE
+                   }
+               }
+            }
+
         val bottomSheet = ComponentBottomSheet(object : IComponentAdapterListener {
             override fun onClickComponent(item: ComponentItem) {
                 bottomSheetViewModel.onComponentTriggered(item)
@@ -273,10 +290,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             }
 
         })
+
         bottomSheetButton.setOnClickListener {
-            if (!bottomSheet.isVisible) {
-                bottomSheet.show(supportFragmentManager, "COMPONENTS")
-            }
+            bottomSheetButton.visibility = View.GONE
+            componentFloatingBottomSheet.show()
         }
 
         gridLabelEnabledSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -319,6 +336,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
 
         drawerLayoutButtonMinimized.setOnClickListener {
             drawerLayout.openDrawer(Gravity.RIGHT)
+        }
+
+        helpLayoutButtonMinimized.setOnClickListener {
+            EnvironmentHelpDialog(this@SimulationActivity).show()
         }
 
         saveLayoutButtonMinimized.setOnClickListener {
@@ -367,11 +388,13 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 drawerLayoutButtonMinimized.visibility = View.GONE
                 exitLayoutButtonMinimized.visibility = View.GONE
                 saveLayoutButtonMinimized.visibility = View.GONE
+                helpLayoutButtonMinimized.visibility = View.GONE
             } else {
                 toolBar.visibility = View.GONE
                 drawerLayoutButtonMinimized.visibility = View.VISIBLE
                 exitLayoutButtonMinimized.visibility = View.VISIBLE
                 saveLayoutButtonMinimized.visibility = View.VISIBLE
+                helpLayoutButtonMinimized.visibility = View.VISIBLE
             }
 
             CoroutineScope(Dispatchers.Main).launch {

@@ -1,0 +1,285 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@color/transparent"
+    tools:context=".android.views.ComponentBottomSheet">
+
+    <LinearLayout
+        android:id="@+id/component_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintWidth_max="700dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bottom_sheet_shape"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMPONENTS"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_gravity="start"
+            />
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gates"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/gates_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Optimization"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/space_optimization_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Clock"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/clock_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Display"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/display_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Memory"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/memory_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Arithmetic Units"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/arithmetic_units_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Combinational Units"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/combinational_units_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="General"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/general_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:background="?attr/colorOutline" />
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Templates"
+                        android:textSize="12dp"
+                        android:textStyle="normal"
+                        android:textColor="?attr/colorOnSurface"/>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/template_component_list"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/dismiss_sheet"
+        android:padding="5dp"
+        android:tint="@color/background"
+        android:background="@drawable/icon_ripple_oval_bg"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/fold"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:translationY="-12dp"
+        app:layout_constraintStart_toStartOf="@+id/component_container"
+        app:layout_constraintEnd_toEndOf="@+id/component_container"
+        app:layout_constraintTop_toTopOf="@+id/component_container"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,6 +44,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventRemoveGroupComman
 import org.engine.simulogic.android.circuits.logic.events.EventRotateCommand
 import org.engine.simulogic.android.circuits.logic.events.EventSRLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventSSDisplayCommand
+import org.engine.simulogic.android.circuits.logic.events.EventSplitConnectionCommand
 import org.engine.simulogic.android.circuits.logic.events.EventTFlipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventUndoCommand
 import org.engine.simulogic.android.circuits.logic.events.EventXnorCommand
@@ -313,6 +314,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
                 eventBridge.insertCommand(EventLabelAnchorCommand(Vector2(coordinates),text, fontSize.toFloat(), font, alignment, connection, gestureListener,scene))
             }
         }
+    }
+
+    fun splitConnectionNode(){
+        eventBridge.insertCommand(EventSplitConnectionCommand(gestureListener))
     }
 
     fun isCAnchorLabelValid(): Boolean{

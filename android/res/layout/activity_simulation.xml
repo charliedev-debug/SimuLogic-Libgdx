@@ -35,28 +35,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:paddingTop="5dp"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="5dp"
-                        android:text="Edit"
-                        app:tint="?attr/colorOnBackground"
-                        android:textColor="?attr/colorOnBackground"
-                        app:srcCompat="@drawable/statistics"/>
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnBackground"
-                        android:text="Simulation Stats"/>
-                </LinearLayout>
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorPrimary"
+                    android:text="Simulation Stats"/>
                 <LinearLayout
                     android:paddingTop="5dp"
                     android:layout_width="match_parent"
@@ -133,28 +118,13 @@
                 android:layout_height=".5dp"
                 android:background="?attr/colorOutline"/>
 
-            <LinearLayout
-                android:paddingTop="5dp"
-                android:gravity="center_vertical"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginRight="5dp"
-                    android:text="Edit"
-                    android:textColor="?attr/colorOnBackground"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/edit"/>
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnBackground"
-                    android:text="Project Metadata"/>
-            </LinearLayout>
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:text="Project Metadata"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -209,26 +179,12 @@
                 android:layout_height=".5dp"
                 android:background="?attr/colorOutline"/>
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="5dp"
-                    android:text="Edit"
-                    android:textColor="?attr/colorOnBackground"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/grid"/>
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnBackground"
-                    android:text="Grid Settings"/>
-            </LinearLayout>
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:text="Grid Settings"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -267,55 +223,66 @@
                     android:checked="true"/>
             </LinearLayout>
 
+
             <RadioGroup
                 android:id="@+id/grid_styles"
+                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="bold"
+                    android:textSize="12dp"
+                    android:textColor="?attr/colorOnBackground"
+                    android:text="Style"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_a"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="1dp"
+                    android:layout_height="32dp"
+                    android:padding="8dp"
+                    android:layout_margin="2dp"
+                    android:textSize="11dp"
                     android:textColor="?attr/colorOnBackground"
-                    android:textStyle="bold"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
-                    android:text="Style A"
+                    android:text="Major Only"
                     android:checked="true"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_b"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="1dp"
+                    android:layout_height="32dp"
+                    android:padding="8dp"
+                    android:layout_margin="2dp"
+                    android:textSize="11dp"
                     android:textColor="?attr/colorOnBackground"
-                    android:textStyle="bold"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
-                    android:text="Style B"
+                    android:text="Major / Minor"
                     android:checked="false"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_c"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="1dp"
+                    android:layout_height="32dp"
+                    android:padding="8dp"
+                    android:layout_margin="2dp"
+                    android:textSize="11dp"
                     android:textColor="?attr/colorOnBackground"
-                    android:textStyle="bold"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
-                    android:text="Style C"
+                    android:text="Minor Only"
                     android:checked="false"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/grid_style_none"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:layout_margin="1dp"
+                    android:layout_height="32dp"
+                    android:padding="8dp"
+                    android:layout_margin="2dp"
+                    android:textSize="11dp"
                     android:textColor="?attr/colorOnBackground"
-                    android:textStyle="bold"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
                     android:text="None"
@@ -328,25 +295,12 @@
                 android:layout_height=".5dp"
                 android:background="?attr/colorOutline"/>
 
-
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="5dp"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/toolbar"/>
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnBackground"
-                    android:text="Toolbar Settings"/>
-            </LinearLayout>
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:text="Toolbar Settings"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -390,25 +344,13 @@
                 android:layout_height=".5dp"
                 android:background="?attr/colorOutline"/>
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginRight="5dp"
-                    android:text="Edit"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/storage"/>
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnBackground"
-                    android:text="Storage"/>
-            </LinearLayout>
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:text="Storage"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

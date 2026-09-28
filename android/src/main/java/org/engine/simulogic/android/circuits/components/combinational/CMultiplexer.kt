@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.Rectangle
 import org.engine.simulogic.android.circuits.components.CDefaults
+import org.engine.simulogic.android.circuits.components.CDefaults.Companion.LINE_MARKER_INACTIVE
+import org.engine.simulogic.android.circuits.components.CDefaults.Companion.SIGNAL_ACTIVE_COLOR
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.gates.CSignal
@@ -290,7 +292,7 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
 
     override fun update() {
         if(selected){
-            updateColor(CDefaults.GATE_SELECTED_COLOR)
+            updateColor(CDefaults.GATE_UNSELECTED_COLOR)
         }else{
             updateColor(CDefaults.LED_INACTIVE_COLOR)
         }
@@ -359,6 +361,10 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
         // right line
         lines[3].updatePosition(getCenter().x + maxWidth,lines[0].y1 - zoomOffset,
             getCenter().x + maxWidth, lines[1].y2  + zoomOffset)
+
+        lines.forEach {
+            it.color = (if(selected) CDefaults.GATE_SELECTED_COLOR else LINE_MARKER_INACTIVE)
+        }
 
         data.forEach {
             it.update()
