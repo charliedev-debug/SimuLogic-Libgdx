@@ -131,6 +131,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="5dp"
                         android:text="Description"
+                        android:textFontWeight="500"
                         android:textSize="11dp"
                         android:textColor="?attr/colorOnBackground"
                         android:textStyle="bold" />
@@ -143,6 +144,7 @@
                 android:maxLines="2"
                 android:text="This is a sample description for this project created!"
                 android:textSize="11dp"
+                android:textFontWeight="300"
                 android:textColor="?attr/colorOnBackground"
                 android:textStyle="italic" />
             </LinearLayout>
