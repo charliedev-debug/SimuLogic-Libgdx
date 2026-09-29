@@ -320,6 +320,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         eventBridge.insertCommand(EventSplitConnectionCommand(gestureListener))
     }
 
+    fun isSplitConnectionValid(): Boolean{
+        return gestureListener.collisionDetector.isNotEmpty()
+    }
+
     fun isCAnchorLabelValid(): Boolean{
         return gestureListener.collisionDetector.isNotEmpty()
     }

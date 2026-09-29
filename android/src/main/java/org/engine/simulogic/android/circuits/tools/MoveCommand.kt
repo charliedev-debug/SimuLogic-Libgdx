@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.tools
 
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.other.CGroup
+import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.logic.ListNode
 
 class MoveCommand : Command() {
@@ -9,13 +10,19 @@ class MoveCommand : Command() {
     val newPosition = Vector2(0f,0f)
     var node: ListNode? = null
     override fun undo() {
-        if (node?.value is CGroup ){
+        if (node?.value is CGroup ) {
             (node?.value as CGroup).apply {
                 val offsetX = oldPosition.x - newPosition.x
-                val offsetY =  oldPosition.y - newPosition.y
+                val offsetY = oldPosition.y - newPosition.y
                 resetPositionBuffers()
-                translate(offsetX,  offsetY)
+                translate(offsetX, offsetY)
                 resetPositionBuffers()
+            }
+        }else if(node?.value is CRangeLine){
+            node?.value?.also { rangeLine->
+                rangeLine.selected = true
+                rangeLine.updatePosition(oldPosition.x, oldPosition.y)
+                rangeLine.selected = false
             }
         }else {
             node?.value?.updatePosition(oldPosition.x, oldPosition.y)
@@ -30,6 +37,12 @@ class MoveCommand : Command() {
                 resetPositionBuffers()
                 translate(offsetX,  offsetY)
                 resetPositionBuffers()
+            }
+        }else if(node?.value is CRangeLine){
+            node?.value?.also { rangeLine->
+                rangeLine.selected = true
+                rangeLine.updatePosition(newPosition.x, newPosition.y)
+                rangeLine.selected = false
             }
         }else {
             node?.value?.updatePosition(newPosition.x,newPosition.y)

@@ -140,7 +140,11 @@ class SimulationFragment : AndroidFragmentApplication() {
                     }
 
                     "Split-Node"->{
-                        simulationLoop.componentManager.splitConnectionNode()
+                        if(simulationLoop.componentManager.isSplitConnectionValid()) {
+                            simulationLoop.componentManager.splitConnectionNode()
+                        }else{
+                            InfoDialog(requireContext(),"You must select a wire node to split!", "Invalid").show()
+                        }
                     }
 
                     "Rotate" -> {

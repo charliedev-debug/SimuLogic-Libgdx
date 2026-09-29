@@ -392,6 +392,35 @@ class LineMarker(
         }
     }
 
+    fun hardResetSignals(values: MutableList<Pair<CSignal, Vector2>>){
+        signals.onEach {
+            it.detachSelf()
+        }
+        lineRect.onEach {
+            it.detachSelf()
+        }
+        lines.onEach {
+            it.detachSelf()
+        }
+        signals.clear()
+        lineRect.clear()
+        lines.clear()
+        values.onEach { value ->
+            value.first.also { signal ->
+                signal.updatePosition(value.second)
+                signals.add(signal)
+            }
+        }
+        scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
+            signals.onEachIndexed {index, signal ->
+                signal.isRemoved = false
+                signal.signalIndex = index
+                layer.attachChild(signal)
+            }
+        }
+       createMarker(scene)
+    }
+
     fun splitNode(startIndex: Int){
         val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
             a = 0.5f
@@ -434,6 +463,7 @@ class LineMarker(
         }
 
     }
+
     override fun update() {
         val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
         val signalTo =  if (isDestinationSignal()) to.value else to.value.signals[signalTo]
