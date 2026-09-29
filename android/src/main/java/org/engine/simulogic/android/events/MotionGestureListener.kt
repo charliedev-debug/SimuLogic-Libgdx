@@ -30,6 +30,7 @@ import org.engine.simulogic.android.circuits.tools.GroupInsertCommand
 import org.engine.simulogic.android.circuits.tools.GroupRemoveCommand
 import org.engine.simulogic.android.circuits.tools.MoveCommand
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.round
 
 
 class MotionGestureListener(val camera:OrthographicCamera, private val connection: Connection, val collisionDetector: CollisionDetector,private val scene: PlayGroundScene): GestureDetector.GestureListener, IUpdate{
@@ -389,10 +390,10 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 collisionDetector.containsRanged(rangeSelect)
 
             } else {
-                camera.position.add(-deltaX * camera.zoom, deltaY * camera.zoom, 0f)
+                camera.position.add(round(-deltaX * camera.zoom), round(deltaY * camera.zoom), 0f)
             }
         } else{
-            camera.position.add(-deltaX*camera.zoom, deltaY*camera.zoom, 0f)
+            camera.position.add(round(-deltaX*camera.zoom), round(deltaY*camera.zoom), 0f)
         }
         return  true
     }

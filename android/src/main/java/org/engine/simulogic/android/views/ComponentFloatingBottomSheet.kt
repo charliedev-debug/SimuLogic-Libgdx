@@ -1,6 +1,8 @@
 package org.engine.simulogic.android.views
 
 import android.app.Activity
+import android.view.GestureDetector
+import android.view.MotionEvent
 import org.engine.simulogic.R
 import android.view.View
 import android.view.animation.Animation
@@ -14,6 +16,7 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.ComponentViewAdapter
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
+import kotlin.math.round
 
 
 class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListener? = null)  {
@@ -169,7 +172,9 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         combinationalUnitAdapter.insert(DEMULTIPLEXER_16_1_COMPONENT,R.drawable.demultiplexer_16_1, isPremium = true)
         combinationalUnitAdapter.showPremiumIndicator = !isPremiumUser
          slideOutAnim.setAnimationListener(object : Animation.AnimationListener {
-             override fun onAnimationStart(animation: Animation?) {}
+             override fun onAnimationStart(animation: Animation?) {
+                 mainView.visibility = View.VISIBLE
+             }
              override fun onAnimationEnd(animation: Animation?) {
                  mainView.clearAnimation()
                  mainView.visibility = View.GONE
@@ -179,7 +184,9 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
          })
 
          slideInAnim.setAnimationListener(object : Animation.AnimationListener {
-             override fun onAnimationStart(animation: Animation?) {}
+             override fun onAnimationStart(animation: Animation?) {
+                 mainView.visibility = View.VISIBLE
+             }
              override fun onAnimationEnd(animation: Animation?) {
                  mainView.clearAnimation()
                  mainView.visibility = View.VISIBLE
@@ -252,6 +259,40 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         arithmeticUnitsRecyclerview.adapter = arithmeticUnitAdapter
         spaceOptimizationRecyclerview.adapter = spaceOptimizationAdapter
         combinationalUnitsRecyclerview.adapter = combinationalUnitAdapter
+
+         GestureDetector(context, object : GestureDetector.OnGestureListener{
+             override fun onDown(p0: MotionEvent): Boolean {
+                 return true
+             }
+
+             override fun onFling(
+                 p0: MotionEvent?,
+                 p1: MotionEvent,
+                 x: Float,
+                 y: Float
+             ): Boolean {
+                 return true
+             }
+             override fun onLongPress(p0: MotionEvent) {}
+             override fun onScroll(
+                 p0: MotionEvent?,
+                 p1: MotionEvent,
+                 x: Float,
+                 y: Float
+             ): Boolean {
+                 if(y  <= -5f) {
+                     mainView.startAnimation(slideOutAnim)
+                 }
+                 return true
+             }
+             override fun onShowPress(p0: MotionEvent) {}
+             override fun onSingleTapUp(p0: MotionEvent): Boolean {
+                 return true
+             }
+
+         }).also { gestureDetector ->
+             mainView.setOnTouchListener { _, event -> gestureDetector.onTouchEvent(event) }
+         }
     }
 
     fun show(){

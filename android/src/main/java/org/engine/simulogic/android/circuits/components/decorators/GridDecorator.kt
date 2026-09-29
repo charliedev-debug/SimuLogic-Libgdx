@@ -81,7 +81,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val originX = camera.position.x - viewPortWidth / 2f
         val originY = camera.position.y - viewPortHeight / 2f
         // prevents flickering
-        val lineWidth = 1.5f
+        val lineWidth = 1.1f
         val endX = originX + viewPortWidth
         val endY = originY + viewPortHeight
 

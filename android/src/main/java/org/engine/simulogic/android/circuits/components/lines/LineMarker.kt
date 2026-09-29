@@ -30,8 +30,8 @@ class LineMarker(
     var signalFrom: Int,
     val signalTo: Int,
     var index: Int = 0,
-    val linePointCountX: Int = CDefaults.linePointCountX,
-    val linePointCountY: Int = CDefaults.linePointCountY
+    var linePointCountX: Int = CDefaults.linePointCountX,
+    var linePointCountY: Int = CDefaults.linePointCountY
 ) : Entity(), ICollidable,
     IUpdate {
     private val lines = mutableListOf<CLine>()
@@ -325,13 +325,9 @@ class LineMarker(
             a = 0.5f
         }
 
-       // lineRect.add(CRangeLine(to.value,signals[signals.size-2],this,colorRect,scene))
         for (i in 1 until signals.size - 2){
             lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
         }
-       // lineRect.add(0,CRangeLine(signals[0],signals[1],this,colorRect,scene))
-       // lineRect.add(CRangeLine(signals[signals.size - 1],signals[signals.size - 2],this,colorRect,scene))
-
         lineRect.onEach {
             it.isVisible = false
             scene.getLayerById(LayerEnums.GATE_LAYER.name).also{ layer ->
@@ -347,7 +343,7 @@ class LineMarker(
 
     }
 
-    fun insertSplitNode(insertIndex:Int, fromIndex:Int,toIndex:Int,colorRect: Color): CSignal{
+    fun insertSplitNodeStartEnd(insertIndex:Int, fromIndex:Int): CSignal{
         val node = signals[fromIndex]
        return CSignal(node.getPosition().x, node.getPosition().y,
             CTypes.SIGNAL_RANGE_POINT,0, scene).also { signal->
@@ -367,39 +363,76 @@ class LineMarker(
                     lines.add(line)
                 }
             }
-            CRangeLine(node,signals[toIndex], this,colorRect, scene).also { rangeLine->
-                rangeLine.isVisible = false
-                scene.getLayerById(LayerEnums.GATE_LAYER.name).also{ layer ->
-                    layer.attachChild(rangeLine)
+            signals.add(insertIndex, signal)
+        }
+    }
+
+    fun insertSplitNodeMiddle(insertIndex:Int, fromIndex:Int): CSignal{
+        val node = signals[fromIndex]
+        return CSignal(node.getPosition().x, node.getPosition().y,
+            CTypes.SIGNAL_RANGE_POINT,0, scene).also { signal->
+            signal.parent = node.parent
+            scene.getLayerById(LayerEnums.CONNECTION_LAYER_INPUTS.name).also { layer ->
+                layer.attachChild(signal)
+            }
+            scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
+                CLine(
+                    node.getPosition().x,
+                    node.getPosition().y,
+                    signal.getPosition().x,
+                    signal.getPosition().y,
+                    CDefaults.lineWeight
+                ).also { line ->
+                    layer.attachChild(line)
+                    lines.add(line)
                 }
-                lineRect.add(rangeLine)
+
             }
             signals.add(insertIndex, signal)
         }
     }
+
     fun splitNode(startIndex: Int){
         val colorRect = Color(EnvironmentTheme.colorPrimary).apply {
             a = 0.5f
         }
         if(startIndex - 1 == 0){
-           insertSplitNode(0 ,0,1,colorRect)
-           insertSplitNode(0,0,1,colorRect)
+           insertSplitNodeStartEnd(0 ,0)
+           insertSplitNodeStartEnd(0,0)
             signals.onEachIndexed { index, signal ->
                 signal.signalIndex = index
             }
         } else if( startIndex + 1 == signals.size - 1){
-            insertSplitNode(signals.size, signals.size - 1,signals.size - 2,colorRect)
-            insertSplitNode(signals.size,signals.size - 1,signals.size - 2,colorRect)
+            insertSplitNodeStartEnd(signals.size, signals.size - 1)
+            insertSplitNodeStartEnd(signals.size,signals.size - 1)
             signals.onEachIndexed { index, signal ->
                 signal.signalIndex = index
             }
         }else{
-            insertSplitNode(startIndex - 1,startIndex,startIndex,colorRect)
-            insertSplitNode(startIndex - 1 ,startIndex,startIndex,colorRect)
+            insertSplitNodeMiddle(startIndex + 1,startIndex)
+            insertSplitNodeMiddle(startIndex + 1,startIndex)
             signals.onEachIndexed { index, signal ->
                 signal.signalIndex = index
             }
         }
+
+        linePointCountX = signals.size / 2
+        linePointCountY = signals.size / 2
+
+        lineRect.forEach {
+            it.detachSelf()
+        }
+        lineRect.clear()
+        for (i in 1 until signals.size - 2){
+            lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
+        }
+        scene.getLayerById(LayerEnums.GATE_LAYER.name).also { layer ->
+            lineRect.onEach {
+                it.isVisible = false
+                layer.attachChild(it)
+            }
+        }
+
     }
     override fun update() {
         val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
@@ -420,7 +453,7 @@ class LineMarker(
         for(i in 1 until signals.size - 1) {
             val a = signals[i - 1]
             val b = signals[i]
-            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y){
+            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y&& !a.selected && !b.selected){
                 val distX = abs(b.getPosition().x - a.getPosition().x)
                 val distY = abs(b.getPosition().y - a.getPosition().y)
                 if( distX < distY){
@@ -428,14 +461,13 @@ class LineMarker(
                 }else{
                     b.updatePosition(b.getPosition().x, a.getPosition().y)
                 }
-
             }
         }
 
         for(i in signals.size - 1 downTo 2) {
             val a = signals[i]
             val b = signals[i - 1]
-            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y){
+            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y && !a.selected && !b.selected){
                 val distX = abs(b.getPosition().x - a.getPosition().x)
                 val distY = abs(b.getPosition().y - a.getPosition().y)
                 if( distX < distY){
