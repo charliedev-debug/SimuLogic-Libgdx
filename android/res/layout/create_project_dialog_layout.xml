@@ -18,7 +18,7 @@
         android:paddingTop="10dp"
         android:paddingLeft="2dp"
         android:paddingBottom="10dp"
-        android:textStyle="bold"
+        android:textFontWeight="500"
         android:textSize="20dp"
         android:textColor="?attr/colorOnSurface"
         android:text="CREATE PROJECT"
@@ -34,12 +34,14 @@
         android:hint="title"
         android:textColor="?attr/colorOnBackground"
         android:textColorHint="?attr/colorOnSurface"
+        android:textFontWeight="300"
         android:padding="10dp" />
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="description"
+        android:textFontWeight="300"
         android:textColor="?attr/colorOnBackground"
         android:textColorHint="?attr/colorOnSurface"
         android:padding="10dp" />
@@ -54,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:textFontWeight="300"
             android:text="Create"
             style="@style/customButtonStyle"/>
         <com.google.android.material.button.MaterialButton
@@ -62,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:textFontWeight="300"
             android:text="Cancel"
             style="@style/customButtonStyle"/>
     </LinearLayout>

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.Menu
+import android.view.View
 import android.view.Window
 import android.view.WindowInsets
 import android.widget.Toast
@@ -67,7 +68,10 @@ private val userSettings = UserSettings()
      reviewManager = ReviewManagerFactory.create(this)
      binding = ActivityLauncherBinding.inflate(layoutInflater)
      setContentView(binding.root)
-
+     val settingsView = findViewById<View>(R.id.settings)
+     val feedbackView = findViewById<View>(R.id.feedback)
+     val whatsNewView = findViewById<View>(R.id.whatsNew)
+     val aboutView = findViewById<View>(R.id.about)
      enableEdgeToEdge(statusBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(scrim = Color.TRANSPARENT))
      ActivityHelpers.setStatusBarColor(window, ActivityHelpers.getThemeResourceID(this, com.google.android.material.R.attr.backgroundColor))
@@ -77,8 +81,7 @@ private val userSettings = UserSettings()
         runBlocking {
             isPremiumUser = userSettings.getDataBoolean(this@LauncherActivity, UserSettings.PREMIUM_USER,false).first()
         }
-     val settingsButtonLauncher = findViewById<MaterialButton>(R.id.settings)
-     val aboutButtonLauncher = findViewById<MaterialButton>(R.id.about)
+
        ReviewHelper.requestReviewFlow(reviewManager).addOnCompleteListener { task->
             if(task.isSuccessful){
                 reviewInfo = task.result
@@ -167,13 +170,21 @@ private val userSettings = UserSettings()
             }
             true
         }
-        settingsButtonLauncher.setOnClickListener {
+        settingsView.setOnClickListener {
             Intent(this@LauncherActivity,SettingsActivity::class.java).also { intent ->
                 startActivity(intent)
             }
         }
 
-        aboutButtonLauncher.setOnClickListener {
+        aboutView.setOnClickListener {
+            AboutDialog(this@LauncherActivity).show()
+        }
+
+        feedbackView.setOnClickListener {
+            AboutDialog(this@LauncherActivity).show()
+        }
+
+        whatsNewView.setOnClickListener {
             AboutDialog(this@LauncherActivity).show()
         }
 

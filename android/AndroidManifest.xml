@@ -74,6 +74,16 @@ xmlns:tools="http://schemas.android.com/tools">
         </intent-filter>
     </activity>
     <activity
+        android:name="org.engine.simulogic.android.WebViewActivity"
+        android:exported="true"
+        android:label="WebView"
+        android:theme="@style/Kanagawa">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.OPENABLE" />
+        </intent-filter>
+    </activity>
+    <activity
         android:name="org.engine.simulogic.android.SettingsActivity"
         android:exported="true"
         android:label="@string/title_activity_settings"

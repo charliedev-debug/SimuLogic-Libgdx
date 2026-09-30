@@ -22,6 +22,7 @@
             android:textSize="20dp"
             android:textColor="@color/success"
             android:text="Purchase Successful"
+            android:textFontWeight="500"
             />
 
         <View
@@ -35,6 +36,7 @@
             android:textColor="?attr/colorOnBackground"
             android:textSize="16dp"
             android:text="message"
+            android:textFontWeight="300"
             android:padding="10dp" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/close"
@@ -44,6 +46,7 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:text="OK"
+            android:textFontWeight="300"
             style="@style/customButtonStyle"/>
     </LinearLayout>
 

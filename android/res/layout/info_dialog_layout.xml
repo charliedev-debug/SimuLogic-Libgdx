@@ -22,6 +22,7 @@
             android:textStyle="bold"
             android:textSize="20dp"
             android:textColor="?attr/colorOnBackground"
+            android:textFontWeight="500"
             android:text="Info"
             />
         <View
@@ -35,6 +36,7 @@
             android:textColor="?attr/colorSecondary"
             android:textSize="16dp"
             android:text="message"
+            android:textFontWeight="300"
             android:padding="10dp" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/close"
@@ -43,6 +45,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:textFontWeight="300"
             android:text="close"
             style="@style/customButtonStyle"/>
     </LinearLayout>

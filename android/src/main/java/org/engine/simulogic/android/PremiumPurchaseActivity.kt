@@ -45,18 +45,38 @@ class PremiumPurchaseActivity : AppCompatActivity() {
     private val purchaseUpdatedListener = PurchasesUpdatedListener{
         billingResult, purchases ->
 
-        if(billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null){
-            purchases.forEach {
-                acknowledgePurchase(it)
+        when (billingResult.responseCode) {
+            BillingClient.BillingResponseCode.OK if purchases != null -> {
+                purchases.forEach {
+                    acknowledgePurchase(it)
+                }
             }
-        }else if(billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED){
-            InfoDialog(this@PremiumPurchaseActivity, "You have cancelled the purchase!").show()
-        }else if(billingResult.responseCode == BillingClient.BillingResponseCode.NETWORK_ERROR){
-            ErrorDialog(this@PremiumPurchaseActivity,"Could not complete purchase due to a network issue!").show()
-        } else if(billingResult.responseCode == BillingClient.BillingResponseCode.BILLING_UNAVAILABLE || billingResult.responseCode == BillingClient.BillingResponseCode.DEVELOPER_ERROR){
-            ErrorDialog(this@PremiumPurchaseActivity,"Billing unavailable for this application!").show()
-        } else{
-            ErrorDialog(this@PremiumPurchaseActivity, "An unknown error occurred!").show()
+            BillingClient.BillingResponseCode.USER_CANCELED -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    InfoDialog(this@PremiumPurchaseActivity, "You have cancelled the purchase!").show()
+                }
+            }
+            BillingClient.BillingResponseCode.NETWORK_ERROR -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    ErrorDialog(
+                        this@PremiumPurchaseActivity,
+                        "Could not complete purchase due to a network issue!"
+                    ).show()
+                }
+            }
+            BillingClient.BillingResponseCode.BILLING_UNAVAILABLE, BillingClient.BillingResponseCode.DEVELOPER_ERROR -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    ErrorDialog(
+                        this@PremiumPurchaseActivity,
+                        "Billing unavailable for this application!"
+                    ).show()
+                }
+            }
+            else -> {
+                CoroutineScope(Dispatchers.Main).launch {
+                    ErrorDialog(this@PremiumPurchaseActivity, "An unknown error occurred!").show()
+                }
+            }
         }
     }
     private lateinit var billingClient : BillingClient
@@ -80,7 +100,6 @@ class PremiumPurchaseActivity : AppCompatActivity() {
 
         billingClient.startConnection(object : BillingClientStateListener{
             override fun onBillingServiceDisconnected() {
-
             }
 
             override fun onBillingSetupFinished(result: BillingResult) {
@@ -91,16 +110,17 @@ class PremiumPurchaseActivity : AppCompatActivity() {
                    billingClient.queryProductDetailsAsync(queryProductsDetailsParams){
                        billingResult, productDetailsResult->
                        if(billingResult.responseCode == BillingClient.BillingResponseCode.OK){
-                           // display product pricing and other details
-                           premiumProductDetails.clear()
-                           productDetailsResult.productDetailsList.forEach {
-                               priceTextView.text = "${it.oneTimePurchaseOfferDetails?.formattedPrice}"
-                               unlockPremiumButton.text = buildString {
-                                   append("Unlock Pro - ")
-                                   append(it.oneTimePurchaseOfferDetails?.formattedPrice) }
-                               premiumProductDetails.add(it)
+                           CoroutineScope(Dispatchers.Main).launch {
+                               // display product pricing and other details
+                               premiumProductDetails.clear()
+                               println("data ${productDetailsResult.productDetailsList.size}")
+                               productDetailsResult.productDetailsList.forEach {
+                                   priceTextView.text = "${it.oneTimePurchaseOfferDetails?.formattedPrice}"
+                                   premiumProductDetails.add(it)
+                               }
+                               priceInfoLoaderProgress.visibility = View.INVISIBLE
+
                            }
-                           priceInfoLoaderProgress.visibility = View.INVISIBLE
                        }
                    }
                }
@@ -119,23 +139,17 @@ class PremiumPurchaseActivity : AppCompatActivity() {
 
         findViewById<MaterialTextView>(R.id.termsOfService).setOnClickListener {
             val url = "https://sites.google.com/view/simulogic/home"
-            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-            try{
+            Intent(this@PremiumPurchaseActivity, WebViewActivity::class.java).also {intent->
+                intent.setData(Uri.parse(url))
                 startActivity(intent)
-            }catch (e: ActivityNotFoundException){
-                Toast.makeText(this@PremiumPurchaseActivity,
-                    "No browser found to open this link!", Toast.LENGTH_LONG).show()
             }
         }
 
         findViewById<MaterialTextView>(R.id.privacyPolicy).setOnClickListener {
             val url = "https://sites.google.com/view/laborisapps/home"
-            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-            try{
+            Intent(this@PremiumPurchaseActivity, WebViewActivity::class.java).also {intent->
+                intent.setData(Uri.parse(url))
                 startActivity(intent)
-            }catch (e: ActivityNotFoundException){
-                Toast.makeText(this@PremiumPurchaseActivity,
-                    "No browser found to open this link!", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -250,4 +264,8 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        if(isFinishing) billingClient.endConnection()
+        super.onDestroy()
+    }
 }

@@ -28,6 +28,7 @@
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"
             android:layout_gravity="start"
+            android:textFontWeight="500"
             />
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -47,6 +48,7 @@
                         android:text="Gates"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -73,6 +75,7 @@
                         android:text="Optimization"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -99,6 +102,7 @@
                         android:text="Clock"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -125,6 +129,7 @@
                         android:text="Display"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -151,6 +156,7 @@
                         android:text="Memory"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -177,6 +183,7 @@
                         android:text="Arithmetic Units"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -203,6 +210,7 @@
                         android:text="Combinational Units"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -229,6 +237,7 @@
                         android:text="General"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -256,6 +265,7 @@
                         android:text="Templates"
                         android:textSize="12dp"
                         android:textStyle="normal"
+                        android:textFontWeight="400"
                         android:textColor="?attr/colorOnSurface"/>
 
                     <androidx.recyclerview.widget.RecyclerView

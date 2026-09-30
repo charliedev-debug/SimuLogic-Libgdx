@@ -14,6 +14,7 @@
         android:padding="10dp"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textFontWeight="500"
         android:textColor="?attr/colorOnBackground"
         android:text=""/>
 
@@ -51,6 +52,7 @@
         android:layout_height="wrap_content"
         android:textColor="?attr/colorOnSurface"
         android:layout_margin="10dp"
+        android:textFontWeight="300"
         android:textSize="15sp"
         android:text=""/>
     </com.google.android.material.card.MaterialCardView>

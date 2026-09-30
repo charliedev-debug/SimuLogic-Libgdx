@@ -21,7 +21,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
         <LinearLayout
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -32,26 +31,199 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="?attr/colorOutline"/>
-            <com.google.android.material.button.MaterialButton
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/settings"
-                style="@style/customButtonStyle"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tint="@color/dividerColor"
-                android:drawableTint="?attr/colorOnSurface"
-                android:drawableLeft="@drawable/settings"
-                android:text="Settings"/>
-            <com.google.android.material.button.MaterialButton
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:padding="5dp"
+                android:layout_marginBottom="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/Widget.App.CardStyle">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/settings"
+                        android:tint="?attr/colorOnSurface"
+                        android:padding="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:text="Settings"
+                            android:textSize="13dp"/>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textFontWeight="300"
+                            android:text="Choose a theme you prefer"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/feedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:padding="5dp"
+                android:layout_marginBottom="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/Widget.App.CardStyle">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/feedback"
+                        android:padding="10dp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:text="Send feedback"
+                            android:textSize="13dp"/>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textFontWeight="300"
+                            android:text="Tell us what you think"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/whatsNew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:padding="5dp"
+                android:layout_marginBottom="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/Widget.App.CardStyle">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/whats_new"
+                        android:padding="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:text="What's New"
+                            android:textSize="13dp"/>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textFontWeight="300"
+                            android:text="What changed in this version"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/about"
-                style="@style/customButtonStyle"
-                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tint="@color/dividerColor"
-                android:drawableTint="?attr/colorOnSurface"
-                android:drawableLeft="@drawable/about"
-                android:text="About"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:padding="5dp"
+                android:layout_marginBottom="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="0dp"
+                android:clickable="true"
+                android:focusable="true"
+                style="@style/Widget.App.CardStyle">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="5dp">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/about"
+                        android:padding="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:text="About"
+                            android:textSize="13dp"/>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textFontWeight="300"
+                            android:text="Our goals and motivations"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

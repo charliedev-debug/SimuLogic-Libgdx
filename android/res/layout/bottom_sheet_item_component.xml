@@ -43,6 +43,7 @@
         android:text="Connect"
         android:textSize="@dimen/bottom_sheet_item_text_size"
         android:textColor="?attr/colorOnSurface"
+        android:textFontWeight="350"
         />
 
 </LinearLayout>

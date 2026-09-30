@@ -28,6 +28,7 @@
             android:gravity="center_horizontal"
             android:textSize="@dimen/menu_item_text_size"
             android:textColor="?attr/colorOnBackground"
+            android:textFontWeight="300"
             />
         <View android:id="@+id/selected"
             android:background="@drawable/background_selected_rounded"

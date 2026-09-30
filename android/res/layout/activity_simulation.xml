@@ -139,6 +139,7 @@
                     android:textStyle="bold"
                     android:textSize="12dp"
                     android:textColor="?attr/colorOnBackground"
+                    android:textFontWeight="500"
                     android:text="Title"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/project_title"
@@ -155,6 +156,7 @@
                     android:textStyle="bold"
                     android:textSize="12dp"
                     android:textColor="?attr/colorOnBackground"
+                    android:textFontWeight="500"
                     android:text="Description"/>
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/project_description"
@@ -226,7 +228,6 @@
 
             <RadioGroup
                 android:id="@+id/grid_styles"
-                android:layout_margin="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -235,7 +236,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:textStyle="bold"
                     android:textSize="12dp"
                     android:textColor="?attr/colorOnBackground"
                     android:text="Grid Styles"/>
@@ -249,6 +249,7 @@
                     android:textColor="?attr/colorOnBackground"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
+                    android:textFontWeight="300"
                     android:text="Major Only"
                     android:checked="true"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -261,6 +262,7 @@
                     android:textColor="?attr/colorOnBackground"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
+                    android:textFontWeight="300"
                     android:text="Major / Minor"
                     android:checked="false"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -273,6 +275,7 @@
                     android:textColor="?attr/colorOnBackground"
                     android:background="@drawable/radio_button_custom"
                     android:button="@null"
+                    android:textFontWeight="300"
                     android:text="Minor Only"
                     android:checked="false"/>
                 <com.google.android.material.radiobutton.MaterialRadioButton
@@ -284,6 +287,7 @@
                     android:textSize="11dp"
                     android:textColor="?attr/colorOnBackground"
                     android:background="@drawable/radio_button_custom"
+                    android:textFontWeight="300"
                     android:button="@null"
                     android:text="None"
                     android:checked="false"/>

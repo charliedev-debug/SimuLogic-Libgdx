@@ -19,9 +19,9 @@
             android:paddingLeft="2dp"
             android:paddingBottom="10dp"
             android:textColor="@color/delete_color"
-            android:textStyle="bold"
             android:textSize="20dp"
             android:text="Alert!"
+            android:textFontWeight="500"
             />
         <View
             android:layout_width="match_parent"
@@ -35,6 +35,7 @@
             android:textSize="13dp"
             android:textColor="?attr/colorOnSurface"
             android:text="message"
+            android:textFontWeight="300"
             android:padding="10dp" />
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,6 +49,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="YES"
+                android:textFontWeight="300"
                 style="@style/customButtonStyle"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/no"
@@ -56,6 +58,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="NO"
+                android:textFontWeight="300"
                 style="@style/customButtonStyle"/>
         </LinearLayout>
 

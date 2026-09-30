@@ -32,6 +32,7 @@
                 android:layout_marginTop="8dp"
                 android:textSize="11sp"
                 android:textColor="?attr/colorOnSurface"
+                android:textFontWeight="350"
                 android:text="Import Project" />
 
         </LinearLayout>
