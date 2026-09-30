@@ -36,7 +36,6 @@ import org.engine.simulogic.android.utilities.FpsCounter
 import org.engine.simulogic.android.utilities.TimerManager
 import org.engine.simulogic.android.views.interfaces.ISimulationListener
 
-
 class SimulationLoop(private val projectOptions: ProjectOptions, private val simulationOptions: SimulationOptions, private val listener:ISimulationListener) : ApplicationAdapter(){
 
     private lateinit var batch: SpriteBatch
@@ -61,6 +60,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
 
     override fun create() {
         camera = OrthographicCamera()
+
         // set camera according to screen orientation
         if (Gdx.graphics.width > Gdx.graphics.height) {
             isPortrait = false
@@ -69,7 +69,6 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
             isPortrait = true
             camera.setToOrtho(false, CAMERA_WIDTH, CAMERA_HEIGHT)
         }
-
         camera.zoom = 1.0f
         batch = SpriteBatch()
 
@@ -187,7 +186,6 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
             connection.update()
             gridDecorator.update()
             gestureListener.update()
-
 
             scene.update()
             scene.draw()

@@ -1,6 +1,7 @@
 package org.engine.simulogic.android.views
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.view.GestureDetector
 import android.view.MotionEvent
 import org.engine.simulogic.R
@@ -96,15 +97,15 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         val spanCount = 4
         val spacing = 5
         val includeEdge = false
-        gatesRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
-        clockRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
-        memoryRecyclerview.layoutManager = GridLayoutManager(context, 3)
-        generalRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
-        templateRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
-        arithmeticUnitsRecyclerview.layoutManager = GridLayoutManager(context, 2)
-        displayRecyclerview.layoutManager = GridLayoutManager(context,3)
-        spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(context, 3)
-        combinationalUnitsRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         gatesRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         clockRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         memoryRecyclerview.layoutManager = GridLayoutManager(context, 3)
+         generalRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         templateRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         arithmeticUnitsRecyclerview.layoutManager = GridLayoutManager(context, 2)
+         displayRecyclerview.layoutManager = GridLayoutManager(context,3)
+         spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(context, 3)
+         combinationalUnitsRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
         val gatesAdapter = ComponentViewAdapter()
         gatesAdapter.insert(AND_COMPONENT, R.drawable.gate_and)
         gatesAdapter.insert(OR_COMPONENT, R.drawable.gate_or)

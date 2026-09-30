@@ -2,6 +2,7 @@ package org.engine.simulogic.android
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -227,8 +228,12 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
-            layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.HORIZONTAL, false)
-          //  layoutManager = LinearLayoutManager(this@SimulationActivity, LinearLayoutManager.HORIZONTAL, false)
+            if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.HORIZONTAL, false)
+            }else{
+                layoutManager =
+                    GridLayoutManager(this.context, 1, GridLayoutManager.HORIZONTAL, false)
+            }
         }
 
         val menuAdapter = MenuViewAdapter().apply {

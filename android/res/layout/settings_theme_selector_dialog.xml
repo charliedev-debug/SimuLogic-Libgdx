@@ -20,6 +20,7 @@
         android:textColor="?attr/colorOnBackground"
         android:text="Select Theme"
         android:textStyle="bold"
+        android:textFontWeight="500"
         android:textSize="18dp"/>
 
     <RadioGroup
@@ -33,30 +34,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="RosePine"
+            android:textFontWeight="300"
             android:textColor="?attr/colorOnSurface"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/tokyonight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TokyoNight"
+            android:textFontWeight="300"
             android:textColor="?attr/colorOnSurface"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/kanagawa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Kanagawa"
+            android:textFontWeight="300"
             android:textColor="?attr/colorOnSurface"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/catppuccin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Catppuccin"
+            android:textFontWeight="300"
             android:textColor="?attr/colorOnSurface"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
             android:id="@+id/gruvbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="GruvBox"
+            android:textFontWeight="300"
             android:textColor="?attr/colorOnSurface"/>
     </RadioGroup>
 
