@@ -99,6 +99,7 @@ class CBCDDisplay (x:Float, y:Float, private val scene: PlayGroundScene) : CNode
     }
 
     override fun update() {
+        super.update()
         updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
         data.forEach {
             it.update()

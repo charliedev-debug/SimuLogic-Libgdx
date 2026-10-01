@@ -109,6 +109,7 @@ class CPulseButton(x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, privat
     }
 
     override fun update() {
+        super.update()
         updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
         when(rotationDirection){
             ROTATE_RIGHT->{

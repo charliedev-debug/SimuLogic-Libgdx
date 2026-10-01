@@ -11,12 +11,13 @@ import org.engine.simulogic.android.circuits.components.lines.CLine
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
+import org.engine.simulogic.android.events.MotionGestureListener
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
 import kotlin.math.sign
 
-class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection: Connection,val scene: PlayGroundScene) : CNode() {
+class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection: Connection,val gestureListener: MotionGestureListener,val scene: PlayGroundScene) : CNode() {
 
     private val linesVertical = mutableListOf<CLine>()
     private val linesHorizontal = mutableListOf<CLine>()
@@ -27,7 +28,9 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
     private var previousX = 0f
     private var previousY = 0f
     private var pSelectedNode: CNode? = null
+    private var quadTreeInstance: QuadTree? = null
     var selectedNode: CNode? = null
+
     init {
 
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
@@ -55,12 +58,7 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
     }
 
     private fun createLineVertical(): CLine{
-      return  CLine(0f,0f,0f,0f,1f).also {
-            scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
-               it.color = Color.RED
-               layer.attachChild(it)
-            }
-      }
+      return  CLine(0f,0f,0f,0f,1f).also { it.color = Color.RED }
     }
 
     override fun execute() {
@@ -83,38 +81,43 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                 collideRangeViewPort.setSize(camera.viewportWidth * camera.zoom, camera.viewportHeight * camera.zoom)
                 collideRangeViewPort.updatePosition(camera.position)
 
-                QuadTree.build(connection, scene, includeSignals = false).also { tree ->
+                if(quadTreeInstance == null || pSelectedNode != selectedNode){
+                    quadTreeInstance = QuadTree.build(connection, scene, includeSignals = false)
+                }
+
+                quadTreeInstance?.also { tree ->
                     // perform acrossY
                     tree.searchMultiple(collideRangeCenterY.getBoundingBox(), collidedItems)
                     // filter out components that are off-screen & exclude origin
                     collidedItems.removeIf { it.value.contains(collideRangeViewPort) == null}
                     if(collidedItems.isNotEmpty()){
                         collidedItems.sortBy { abs( node.getPosition().y - it.value.getPosition().y)  }
-                        for(index in 0 until collidedItems.size - 1){
-                            val first = collidedItems[index].value
-                            val second = collidedItems[index + 1].value
-                            val dirY = sign(first.getPosition().y - second.getPosition().y)
-                            val markerOffset = 30f
-                            if(linesVertical.size <= index){
-                                createLineVertical().also {line->
-                                    scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
-                                        layer.attachChild(line)
+                        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { connectionLayer ->
+                            for (index in 0 until collidedItems.size - 1) {
+                                val first = collidedItems[index].value
+                                val second = collidedItems[index + 1].value
+                                val dirY = sign(first.getPosition().y - second.getPosition().y)
+                                val markerOffset = 30f
+                                if (linesVertical.size <= index) {
+                                    createLineVertical().also { line ->
+                                        connectionLayer.attachChild(line)
+                                        line.isVisible = false
+                                        linesVertical.add(line)
                                     }
-                                    line.isVisible = false
-                                    linesVertical.add(line)
                                 }
-                            }
-                            linesVertical[index].also { line ->
-                                // test center
-                                line.updatePosition(
-                                    first.getPosition().x,
-                                    second.getPosition().y + dirY * second.getHeight() / 2f + markerOffset * dirY,
-                                    first.getPosition().x,
-                                    first.getPosition().y  +  dirY * first.getHeight() / 2f * -1f + dirY * -markerOffset
-                                )
-                                // it must be in relation to the selected node
-                                line.isVisible = abs(node.getPosition().x - second.getPosition().x) <= 2f &&
-                                    abs(node.getPosition().x - first.getPosition().x) <= 2f
+                                linesVertical[index].also { line ->
+                                    // test center
+                                    line.updatePosition(
+                                        first.getPosition().x,
+                                        second.getPosition().y + dirY * second.getHeight() / 2f + markerOffset * dirY,
+                                        first.getPosition().x,
+                                        first.getPosition().y + dirY * first.getHeight() / 2f * -1f + dirY * -markerOffset
+                                    )
+                                    // it must be in relation to the selected node
+                                    line.isVisible =
+                                        abs(node.getPosition().x - second.getPosition().x) <= 2f &&
+                                            abs(node.getPosition().x - first.getPosition().x) <= 2f
+                                }
                             }
                         }
                     }else{
@@ -125,11 +128,12 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
 
                     collidedItems.clear()
                       // perform acrossX
-                    tree.searchMultiple(collideRangeCenterX.getBoundingBox(), collidedItems)
+                   tree.searchMultiple(collideRangeCenterX.getBoundingBox(), collidedItems)
                     // filter out components that are off-screen & exclude origin
                     collidedItems.removeIf { it.value.contains(collideRangeViewPort) == null}
                     if(collidedItems.isNotEmpty()){
                         collidedItems.sortBy { it.value.getPosition().x }
+                        scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { connectionLayer ->
                         for(index in 0 until collidedItems.size -1){
                             val first = collidedItems[index].value
                             val second = collidedItems[index + 1].value
@@ -137,9 +141,8 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                             val markerOffset = 30f
                             if(linesHorizontal.size <= index){
                                 createLineVertical().also {line->
-                                    scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { layer ->
-                                        layer.attachChild(line)
-                                    }
+                                     connectionLayer.attachChild(line)
+                                    line.isVisible = false
                                     linesHorizontal.add(line)
                                 }
                             }
@@ -155,6 +158,7 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                                     abs(node.getPosition().y - first.getPosition().y) <= 2f
                             }
                         }
+                            }
                     }else{
                         linesHorizontal.onEach { line ->
                             line.isVisible = false

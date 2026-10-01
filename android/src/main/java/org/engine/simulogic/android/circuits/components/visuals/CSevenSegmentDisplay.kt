@@ -83,14 +83,8 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
     }
 
     override fun update() {
+        super.update()
         updateColor(if(selected) CDefaults.GATE_SELECTED_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
-        data.forEach {
-            it.update()
-        }
-    }
-
-    override fun draw(spriteBatch: SpriteBatch) {
-        super.draw(spriteBatch)
         val x = getPosition().x
         val y = getPosition().y
         val width = sprite.width
@@ -99,11 +93,11 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
         val segHeight = CDefaults.segmentDisplayHeight
         val offset = CDefaults.segmentDisplayWidth / 2f
         // top center segment
-         segmentList[0].also { segment->
-             segment.updatePosition(x  , y + height / 2f - segHeight / 2f )
-             signals[0].updatePosition(x, y + height/2f + segHeight)
-             segment.updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
-         }
+        segmentList[0].also { segment->
+            segment.updatePosition(x  , y + height / 2f - segHeight / 2f )
+            signals[0].updatePosition(x, y + height/2f + segHeight)
+            segment.updateColor(if(signals[0].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
+        }
 
         // center segment
         segmentList[1].also { segment->
@@ -145,6 +139,9 @@ class CSevenSegmentDisplay(x:Float, y:Float, private val scene: PlayGroundScene)
             segment.updatePosition(x + width /2f - segWidth /2f - offset , y - width / 2f + segHeight / 2f)
             signals[6].updatePosition(x + width /2f + segWidth , y - width / 2f + segHeight / 2f)
             segment.updateColor(if(signals[6].value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else segColorOff)
+        }
+        data.forEach {
+            it.update()
         }
     }
 

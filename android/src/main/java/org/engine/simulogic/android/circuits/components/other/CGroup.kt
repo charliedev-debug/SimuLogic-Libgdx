@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
 import org.engine.simulogic.android.circuits.components.CTypes
+import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.lines.CLine
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.SnapAlign
 import org.engine.simulogic.android.circuits.tools.DataContainer
@@ -33,6 +35,7 @@ class CGroup(
     private val snapAlign = SnapAlign()
     // deletes children more efficiently
     private var deleteCommand = DeleteCommand(scene, connection)
+    private val lineMarkerRefBuffer = mutableListOf<LineMarker>()
     val componentGroupIds = mutableListOf<Int>()
     var gestureListener: MotionGestureListener? = null
     var collectableChildren = true
@@ -122,9 +125,13 @@ class CGroup(
     private fun updateGroup(offsetX: Float, offsetY: Float) {
         if (dataContainer.isNotEmpty()) {
             for (i in 0 until dataContainer.size()) {
-                val p = dataContainer[i].value
-                val ix = p.getPosition().x + offsetX
-                val iy = p.getPosition().y + offsetY
+                val node = dataContainer[i]
+                val p = node.value
+                node.getLineMarkerChildren().forEach {marker ->
+                    lineMarkerRefBuffer.add(marker)
+                    //disable auto position corrections in signals, this prevents false adjustments
+                    marker.autoCorrectNodeEnabled = false
+                }
                 // if it's a group translate it indirectly to apply effect to children
                 if (p is CGroup) {
                     /* reset buffers to prevent unexpected glitches,
@@ -134,19 +141,22 @@ class CGroup(
                     p.translate(offsetX, offsetY)
                     p.resetPositionBuffers()
                 } else {
-                    p.updatePosition(ix, iy)
+                    p.translationVector.set(offsetX, offsetY)
+                    p.update()
                 }
             }
-            dataContainer.forEach { data ->
-                data.getLineMarkerChildren().forEach { marker ->
-                    marker.signals.forEach { point ->
-                        val nx = point.getPosition().x + offsetX
-                        val ny = point.getPosition().y + offsetY
-                        point.updatePosition(nx, ny)
+            lineMarkerRefBuffer.forEach { marker ->
+                for (i in 1 until marker.signals.size -1){
+                    marker.signals[i].also { point ->
+                        point.translationVector.set(offsetX,offsetY)
                     }
-                    marker.update()
                 }
+                marker.update()
             }
+            lineMarkerRefBuffer.forEach { marker ->
+                marker.autoCorrectNodeEnabled = true
+            }
+            lineMarkerRefBuffer.clear()
             previousPosition.set(0f, 0f)
         }
     }
@@ -283,21 +293,6 @@ class CGroup(
         if (parentCollides != null) {
             return parentCollides
         }
-       /* if (collectableChildren) {
-            dataContainer.forEach {
-                it.value.collidable = true
-                val childCollides = it.contains(entity)
-                it.value.collidable = false
-                if (childCollides != null) {
-                    return childCollides
-                }
-            }
-        }
-        val parentCollides = super.contains(entity)
-        if (parentCollides != null) {
-            return parentCollides
-        }*/
-
         return null
     }
 
@@ -316,20 +311,6 @@ class CGroup(
         if (parentCollides != null) {
             return parentCollides
         }
-       /* if (collectableChildren) {
-            dataContainer.forEach {
-                it.value.collidable = true
-                val childCollides = it.contains(rect)
-                it.value.collidable = false
-                if (childCollides != null) {
-                    return childCollides
-                }
-            }
-        }
-        val parentCollides = super.contains(rect)
-        if (parentCollides != null) {
-            return parentCollides
-        }*/
 
         return null
     }

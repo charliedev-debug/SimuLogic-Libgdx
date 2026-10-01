@@ -106,6 +106,7 @@ class CNor(x:Float, y:Float, rotationDirection:Int, private val scene: PlayGroun
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

@@ -68,28 +68,34 @@ class SimulationFragment : AndroidFragmentApplication() {
         runBlocking {
             isPremiumUser = userSettings.getDataBoolean(requireContext(), UserSettings.PREMIUM_USER,false).first()
         }
+
+        val loadingDialog = LoadingDialog(requireContext(), "Loading...",
+                object : LoadingDialog.IDialogLoadingListener {
+                    override fun onLoad() {
+                        ErrorLogs.reset()
+                        simulationLoop.componentManager.loadProject()
+                    }
+                    override fun onCancelled() {
+                        Gdx.app.exit()
+                        requireActivity().finish()
+                    }
+
+                    override fun onFinished() {
+                        simulationLoop.isReady = true
+                        if(ErrorLogs.isNotEmpty()){
+                            LogErrorDialog(requireContext(), ErrorLogs.last()).show()
+                        }
+                    }
+                })
+
+        loadingDialog.show()
+
         simulationLoop = SimulationLoop(projectOptions, simulationOptions, object : ISimulationListener {
+            override fun onPrepare() {}
                 override fun onCreate() {
                     runOnUiThread {
-                        // show a loading dialog
-                        LoadingDialog(requireContext(), "Loading...",
-                            object : LoadingDialog.IDialogLoadingListener {
-                                override fun onLoad() {
-                                    ErrorLogs.reset()
-                                    simulationLoop.componentManager.loadProject()
-                                }
-                                override fun onCancelled() {
-                                    Gdx.app.exit()
-                                    requireActivity().finish()
-                                }
-
-                                override fun onFinished() {
-                                    simulationLoop.isReady = true
-                                    if(ErrorLogs.isNotEmpty()){
-                                        LogErrorDialog(requireContext(), ErrorLogs.last()).show()
-                                    }
-                                }
-                            }).show()
+                        // load data
+                        loadingDialog.executeLoadRoutine()
                     }
                 }
             })

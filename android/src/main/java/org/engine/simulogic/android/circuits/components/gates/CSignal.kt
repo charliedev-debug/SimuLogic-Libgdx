@@ -61,6 +61,7 @@ open class CSignal(x: Float, y: Float, type: CTypes, var signalIndex: Int, priva
     }
 
     override fun update() {
+        super.update()
         updateColor(if(selected) CDefaults.INPUT_SELECTED_COLOR else CDefaults.INPUT_UNSELECTED_COLOR)
 
     }

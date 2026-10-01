@@ -291,6 +291,7 @@ class CMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:Str
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_UNSELECTED_COLOR)
         }else{

@@ -37,7 +37,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     private var initialZoom = 1f
     private val rangeSelect = CRangeSelect(camera.position.x, camera.position.y,camera,Connection(),scene).apply { this@apply.connection.insertNode(ListNode(this@apply)) }
-    val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,camera, connection, scene)
+    val rectPointer = CPointer(SimulationLoop.CAMERA_WIDTH / 2f,SimulationLoop.CAMERA_HEIGHT / 2f,camera, connection, this,scene)
     val movePointer = Rectangle(0f,0f,200f,200f)
     private var touch = Vector3(0f, 0f, 0f)
     val commandHistory = CommandHistory()
@@ -49,6 +49,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     private var moveCommand = MoveCommand()
     private val snapAlign = SnapAlign()
     var gridDecorator:GridDecorator? = null
+    var isPointerMoving = false
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
          const val MAX_ZOOM_FACTOR = 15.5f
@@ -334,7 +335,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 var hasMovement = false
                 collisionDetector.selectedItems.forEach {
                     // to prevent teleportation move the object within a limited range
-                    if (it.subject.contains(rectPointer) != null|| it.subject.getPosition().dst(rectPointer.getPosition()) < 100f) {
+                    if (it.subject.contains(rectPointer) != null|| it.subject.getPosition().dst(rectPointer.getPosition()) < 200f) {
                         it.subject.also { subject ->
                             moveCommand.apply {
                                 node = ListNode(subject)
@@ -399,6 +400,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
+        isPointerMoving = true
         // for better editing experience handle on touch events when the finger is off the element
         if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE||collisionDetector.mode == CONNECTION_MODE) {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
@@ -456,6 +458,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             moveCommand = MoveCommand()
         }
         AutoSave.dataChanged = true
+        isPointerMoving = false
         return false
     }
 

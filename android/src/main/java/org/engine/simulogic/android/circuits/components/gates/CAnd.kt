@@ -106,6 +106,7 @@ class CAnd(x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, private val sc
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

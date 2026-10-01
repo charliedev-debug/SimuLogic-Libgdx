@@ -22,6 +22,7 @@ open class CNode : Entity(), ICollidable,IExecutable{
         val SIGNAL_INACTIVE = 0
     }
     private val centerPosition = Vector2()
+    val translationVector = Vector2()
     var enableRotation = true
     override fun updatePosition(x: Float, y: Float) {
         sprite.apply {
@@ -79,6 +80,13 @@ open class CNode : Entity(), ICollidable,IExecutable{
         value = 0
     }
 
+    override fun update() {
+        if(translationVector.x != 0f || translationVector.y != 0f) {
+            centerPosition.add(translationVector)
+            updatePosition(centerPosition)
+        }
+        translationVector.setZero()
+    }
     override fun draw(spriteBatch: SpriteBatch) {
 
         data.forEach {

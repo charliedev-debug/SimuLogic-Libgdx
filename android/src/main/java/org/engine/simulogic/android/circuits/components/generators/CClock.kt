@@ -108,6 +108,7 @@ class CClock(x:Float, y:Float, var freq:Float = 1/ 60f, rotationDirection:Int, p
 
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

@@ -300,6 +300,7 @@ class CDeMultiplexer(x:Float, y:Float,rotationDirection:Int, private val title:S
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_UNSELECTED_COLOR)
         }else{

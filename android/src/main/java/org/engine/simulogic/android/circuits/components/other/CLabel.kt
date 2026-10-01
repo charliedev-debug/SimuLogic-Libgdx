@@ -50,6 +50,10 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun update() {
+        if(translationVector.x != 0f || translationVector.y != 0f) {
+            position.add(translationVector)
+        }
+        translationVector.setZero()
         anchor?.apply(this)
         // this helps when resolving for collisions
         sprite.setOrigin(position.x , position.y)

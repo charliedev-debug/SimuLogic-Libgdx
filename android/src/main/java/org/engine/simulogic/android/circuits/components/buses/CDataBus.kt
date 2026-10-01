@@ -124,6 +124,7 @@ class CDataBus (x:Float, y:Float, val DATA_SIZE:Int, rotationDirection:Int, priv
     }
 
     override fun update() {
+        super.update()
         val spacingX = CDefaults.GRID_WIDTH * 2
         val spacingY = CDefaults.GRID_HEIGHT * 2
         for((counter, i) in (0 until MAX_POINTS step 2).withIndex()) {

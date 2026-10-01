@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.engine.simulogic.R
 
@@ -17,19 +18,21 @@ class LoadingDialog (context: Context, private val title:String, private val lis
         super.onCreate(savedInstanceState)
         val view = layoutInflater.inflate(R.layout.loading_dialog_layout,null)
         view.findViewById<TextView>(R.id.title).apply { text = title }
+        this.setContentView(view)
+        this.setCancelable(false)
+    }
+
+    fun executeLoadRoutine(){
         // in case the user disabled auto-save or the application did not save user data
         CoroutineScope(Dispatchers.Default).launch {
             launch(Dispatchers.IO) {
-               listener.onLoad()
+                listener.onLoad()
                 launch(Dispatchers.Main){
                     dismiss()
                     listener.onFinished()
                 }
             }
-
         }
-        this.setContentView(view)
-        this.setCancelable(false)
     }
 
     override fun onStart() {
@@ -41,7 +44,6 @@ class LoadingDialog (context: Context, private val title:String, private val lis
     }
 
     interface IDialogLoadingListener{
-
         fun onLoad()
         fun onFinished()
         fun onCancelled()

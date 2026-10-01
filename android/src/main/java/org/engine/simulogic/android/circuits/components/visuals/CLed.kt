@@ -93,6 +93,7 @@ class CLed(x:Float, y:Float,rotationDirection:Int, private val scene: PlayGround
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

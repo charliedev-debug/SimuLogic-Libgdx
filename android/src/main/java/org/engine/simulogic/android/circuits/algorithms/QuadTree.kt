@@ -50,7 +50,7 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
             connection.forEach { node->
                 if(node.value !is CRangeSelect) {
                     values.add(node)
-                }else if(node.value is CGroup){
+                }else if(node.value !is CGroup){
                     values.add(node)
                 }
                 if(includeSignals) {
@@ -89,7 +89,7 @@ class QuadTree(center:Vector2, private val width:Float, private val height:Float
     }
 
     fun insert(data:ListNode){
-        if(!contains(data.value)){
+        if(!contains(data.value.getBoundingBox())){
             return
         }
         if(rect.getWidth() <= 100f || rect.getHeight() <= 100f){

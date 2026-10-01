@@ -102,6 +102,7 @@ class CChannel (x:Float, y:Float, val channelId:String, val channelType:Int,rota
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

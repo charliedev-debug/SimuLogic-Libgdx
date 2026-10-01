@@ -110,6 +110,7 @@ class CAndThreeInput(x:Float, y:Float,rotationDirection:Int = ROTATE_RIGHT, priv
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

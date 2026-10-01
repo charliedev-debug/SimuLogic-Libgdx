@@ -94,6 +94,7 @@ class CDotMatrixDisplay(x:Float, y:Float,rotationDirection:Int, private val scen
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

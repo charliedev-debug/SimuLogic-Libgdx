@@ -121,6 +121,7 @@ class CTFlipFlop(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
     }
 
     override fun update() {
+        super.update()
         if(selected){
             updateColor(CDefaults.GATE_SELECTED_COLOR)
         }else{

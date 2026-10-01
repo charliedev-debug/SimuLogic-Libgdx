@@ -40,6 +40,7 @@ class LineMarker(
     var hasParentMarker = false
     var previousFromPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
     var previousToPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
+    var autoCorrectNodeEnabled = true
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
@@ -478,54 +479,55 @@ class LineMarker(
         for (i in 0 until signals.size) {
             signals[i].update()
         }
-
         // autocorrects the line segments positions
-        for(i in 1 until signals.size - 1) {
-            val a = signals[i - 1]
-            val b = signals[i]
-            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y&& !a.selected && !b.selected){
-                val distX = abs(b.getPosition().x - a.getPosition().x)
-                val distY = abs(b.getPosition().y - a.getPosition().y)
-                if( distX < distY){
-                    b.updatePosition(a.getPosition().x, b.getPosition().y)
-                }else{
-                    b.updatePosition(b.getPosition().x, a.getPosition().y)
+        if(autoCorrectNodeEnabled) {
+            for (i in 1 until signals.size - 1) {
+                val a = signals[i - 1]
+                val b = signals[i]
+                if (a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y && !a.selected && !b.selected) {
+                    val distX = abs(b.getPosition().x - a.getPosition().x)
+                    val distY = abs(b.getPosition().y - a.getPosition().y)
+                    if (distX < distY) {
+                        b.updatePosition(a.getPosition().x, b.getPosition().y)
+                    } else {
+                        b.updatePosition(b.getPosition().x, a.getPosition().y)
+                    }
                 }
             }
-        }
 
-        for(i in signals.size - 1 downTo 2) {
-            val a = signals[i]
-            val b = signals[i - 1]
-            if(a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y && !a.selected && !b.selected){
-                val distX = abs(b.getPosition().x - a.getPosition().x)
-                val distY = abs(b.getPosition().y - a.getPosition().y)
-                if( distX < distY){
-                    b.updatePosition(a.getPosition().x, b.getPosition().y)
-                }else{
-                    b.updatePosition(b.getPosition().x, a.getPosition().y)
+            for (i in signals.size - 1 downTo 2) {
+                val a = signals[i]
+                val b = signals[i - 1]
+                if (a.getPosition().x != b.getPosition().x && a.getPosition().y != b.getPosition().y && !a.selected && !b.selected) {
+                    val distX = abs(b.getPosition().x - a.getPosition().x)
+                    val distY = abs(b.getPosition().y - a.getPosition().y)
+                    if (distX < distY) {
+                        b.updatePosition(a.getPosition().x, b.getPosition().y)
+                    } else {
+                        b.updatePosition(b.getPosition().x, a.getPosition().y)
+                    }
                 }
             }
-        }
 
-        for( i in 0  until signals.size){
-            signals[i].also { a->
-                if(i + 2 < signals.size){
-                   val b = signals[i + 1]
-                   val c = signals[i + 2]
-                   if(a.getPosition().x == b.getPosition().x && a.getPosition().x == c.getPosition().x){
-                       if(b.getPosition().y > a.getPosition().y && b.getPosition().y > c.getPosition().y){
-                           b.updatePosition(b.getPosition().x, a.getPosition().y)
-                       }else if(b.getPosition().y < c.getPosition().y && b.getPosition().y < a.getPosition().y){
-                           b.updatePosition(b.getPosition().x, c.getPosition().y)
-                       }
-                   }else if(a.getPosition().y == b.getPosition().y && a.getPosition().y == c.getPosition().y){
-                       if(b.getPosition().x > a.getPosition().x && b.getPosition().x > c.getPosition().x){
-                           b.updatePosition(a.getPosition().x, b.getPosition().y)
-                       }else if(b.getPosition().x < c.getPosition().x && b.getPosition().x < a.getPosition().x){
-                           b.updatePosition(c.getPosition().x, b.getPosition().y)
-                       }
-                   }
+            for (i in 0 until signals.size) {
+                signals[i].also { a ->
+                    if (i + 2 < signals.size) {
+                        val b = signals[i + 1]
+                        val c = signals[i + 2]
+                        if (a.getPosition().x == b.getPosition().x && a.getPosition().x == c.getPosition().x) {
+                            if (b.getPosition().y > a.getPosition().y && b.getPosition().y > c.getPosition().y) {
+                                b.updatePosition(b.getPosition().x, a.getPosition().y)
+                            } else if (b.getPosition().y < c.getPosition().y && b.getPosition().y < a.getPosition().y) {
+                                b.updatePosition(b.getPosition().x, c.getPosition().y)
+                            }
+                        } else if (a.getPosition().y == b.getPosition().y && a.getPosition().y == c.getPosition().y) {
+                            if (b.getPosition().x > a.getPosition().x && b.getPosition().x > c.getPosition().x) {
+                                b.updatePosition(a.getPosition().x, b.getPosition().y)
+                            } else if (b.getPosition().x < c.getPosition().x && b.getPosition().x < a.getPosition().x) {
+                                b.updatePosition(c.getPosition().x, b.getPosition().y)
+                            }
+                        }
+                    }
                 }
             }
         }
