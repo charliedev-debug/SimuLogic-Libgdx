@@ -132,82 +132,9 @@ private val userSettings = UserSettings()
                     gifView = R.drawable.action_ungroup
                 )
             )
-
-            add(
-                HelpItem(
-                    "Undo & Redo",
-                    description = "Undo/removes the current operation in order. Redo/restores the previous operation in order.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.undo,
-                    gifView = R.drawable.action_undo_redo
-                )
-            )
-
-            add(
-                HelpItem(
-                    "Copy",
-                    description = "Duplicates the selected components, this operation can be finalized by clicking the paste button and only connections of selected children or parents will be duplicated.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.copy,
-                    gifView = R.drawable.action_copy
-                )
-            )
-            add(
-                HelpItem(
-                    "Cut",
-                    description = "Cut items from a certain position.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.cut,
-                    gifView = R.drawable.action_cut
-                )
-            )
-            add(
-                HelpItem(
-                    "Paste",
-                    description = "This operation finalizes the cut and copy operations",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.paste,
-                    gifView = R.drawable.action_cut
-                )
-            )
-            add(
-                HelpItem(
-                    "Delete",
-                    description = "Deletes components form the environment. Any connection associated with the deleted component will also be deleted.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.delete,
-                    gifView = R.drawable.action_delete
-                )
-            )
-
             add(HelpItem("Components", layoutId = R.layout.help_title_view))
-            add(
-                HelpItem(
-                    "CLOCK",
-                    description = "Periodic signaling component that alternates between 0 (LOW) and 1 (HIGH) at a fixed interval. Maximum supported interval is 60Hz.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.clock_custom,
-                    gifView = R.drawable.component_clock
-                )
-            )
-            add(
-                HelpItem(
-                    "D-LATCH",
-                    description = "Level-sensitive  memory component that stores 1 bit of data.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.d_latch,
-                    gifView = R.drawable.component_general_d_latch
-                )
-            )
-            add(
-                HelpItem(
-                    "D-FLIP-FLOP",
-                    description = "Memory component that stores 1 bit of data and can only be updated on clock edge.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.d_flip_flop,
-                    gifView = R.drawable.component_general_d_flip_flop
-                )
-            )
+
+
             add(
                 HelpItem(
                     "LED",
@@ -216,22 +143,22 @@ private val userSettings = UserSettings()
                     layoutIcon = R.drawable.component_led,
                 )
             )
-            add(
-                HelpItem(
-                    "POWER OFF & POWER ON",
-                    description = "Toggles a signal to HIGH(1). Can also be toggled to OFF in interaction mode. Toggles a signal to HIGH(1). Can also be toggled to ON in interaction mode.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.power_off,
-                    gifView = R.drawable.component_clock
+            add(HelpItem(
+                    "POINT",
+                    description = "Creates a point that splits a connection into multiple nodes or passes a value from one component to another like a buffer gate.",
+                    R.layout.help_item_view,
+                    layoutIcon = R.drawable.point_component,
+                    gifView = R.drawable.component_point
                 )
             )
+
             add(
                 HelpItem(
                     "RANDOM",
                     description = "A seeded component that creates a random signal if the incoming signal has changed.",
                     layoutId = R.layout.help_item_view,
                     layoutIcon = R.drawable.random,
-                    gifView = R.drawable.component_general_random
+                    gifView = R.drawable.component_random
                 )
             )
             add(
@@ -244,20 +171,11 @@ private val userSettings = UserSettings()
             )
             add(
                 HelpItem(
-                    "DATA BUS",
-                    description = "A group of parallel wires that carry multi-bit data. This is useful also for space optimization and organization.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.data_bus,
-                    gifView = R.drawable.component_general_data_bus
-                )
-            )
-            add(
-                HelpItem(
                     "CHANNEL",
                     description = "Carries signals from a source to one or more destinations without wires. A channel has an input with a particular ID and one or multiple outputs.",
                     layoutId = R.layout.help_item_view,
                     layoutIcon = R.drawable.channel,
-                    gifView = R.drawable.component_general_channel
+                    gifView = R.drawable.component_channel
                 )
             )
             add(
@@ -266,15 +184,6 @@ private val userSettings = UserSettings()
                     description = "Seven segment display screen with a single output.",
                     layoutId = R.layout.help_item_view,
                     layoutIcon = R.drawable.ss_display,
-                )
-            )
-            add(
-                HelpItem(
-                    "BCD DISPLAY",
-                    description = "Binary Coded Decimal values from 0 - F.",
-                    layoutId = R.layout.help_item_view,
-                    layoutIcon = R.drawable.bcd_display,
-                    gifView = R.drawable.component_general_bcd_display
                 )
             )
         }

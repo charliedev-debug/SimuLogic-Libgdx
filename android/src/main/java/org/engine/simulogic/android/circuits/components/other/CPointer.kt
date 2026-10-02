@@ -91,7 +91,7 @@ class CPointer (x:Float, y:Float, val camera: OrthographicCamera,val connection:
                     // filter out components that are off-screen & exclude origin
                     collidedItems.removeIf { it.value.contains(collideRangeViewPort) == null}
                     if(collidedItems.isNotEmpty()){
-                        collidedItems.sortBy { abs( node.getPosition().y - it.value.getPosition().y)  }
+                        collidedItems.sortBy {  it.value.getPosition().y}
                         scene.getLayerById(LayerEnums.CONNECTION_LAYER.name).also { connectionLayer ->
                             for (index in 0 until collidedItems.size - 1) {
                                 val first = collidedItems[index].value

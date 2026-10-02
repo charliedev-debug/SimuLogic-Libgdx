@@ -35,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                app:tint="?attr/colorOnSurface"
                 app:srcCompat="@drawable/close"/>
         </RelativeLayout>
 
@@ -47,24 +48,37 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:padding="10dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                app:srcCompat="@drawable/ic_launcher"/>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="2dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                style="@style/Widget.App.CardStyle">
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="5dp"
+                    android:background="?attr/colorOnPrimary"
+                    android:tint="?attr/colorPrimary"
+                    app:srcCompat="@drawable/ic_launcher_foreground" />
+            </com.google.android.material.card.MaterialCardView>
             <LinearLayout
                 android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical">
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:textSize="11dp"
+                    android:textSize="12dp"
                     android:text="SimuLogic"
                     android:textColor="?attr/colorOnSurface"
                     />
@@ -85,6 +99,7 @@
             android:textSize="13dp"
             android:textColor="?attr/colorOnSurface"
             android:textFontWeight="300"
+            android:breakStrategy="high_quality"
             android:text="This app was created to help both students and professionals to learn digital logic more efficiently, focusing on both user experience and performance even on low to mid range devices. More features will be added in subsequent updates, also consider leaving us a review."
             />
         <com.google.android.material.button.MaterialButton

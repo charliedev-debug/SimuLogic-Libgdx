@@ -140,7 +140,7 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         findViewById<MaterialTextView>(R.id.termsOfService).setOnClickListener {
             val url = "https://sites.google.com/view/simulogic/home"
             Intent(this@PremiumPurchaseActivity, WebViewActivity::class.java).also {intent->
-                intent.setData(Uri.parse(url))
+                intent.setData(url.toUri())
                 startActivity(intent)
             }
         }
@@ -148,7 +148,7 @@ class PremiumPurchaseActivity : AppCompatActivity() {
         findViewById<MaterialTextView>(R.id.privacyPolicy).setOnClickListener {
             val url = "https://sites.google.com/view/laborisapps/home"
             Intent(this@PremiumPurchaseActivity, WebViewActivity::class.java).also {intent->
-                intent.setData(Uri.parse(url))
+                intent.setData(url.toUri())
                 startActivity(intent)
             }
         }

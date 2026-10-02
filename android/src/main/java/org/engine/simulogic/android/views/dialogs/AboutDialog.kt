@@ -21,6 +21,9 @@ class AboutDialog (context: Context) : Dialog(context) {
         view.findViewById<ImageView>(R.id.close).setOnClickListener {
             dismiss()
         }
+        view.findViewById<MaterialButton>(R.id.review).setOnClickListener {
+
+        }
          try {
             val packageManager = context.packageManager
             val packageName = context.packageName

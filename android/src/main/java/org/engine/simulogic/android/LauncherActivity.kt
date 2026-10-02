@@ -50,6 +50,9 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.review.testing.FakeReviewManager
 import org.engine.simulogic.android.utilities.ReviewHelper
+import org.engine.simulogic.android.views.dialogs.EnvironmentHelpDialog
+import org.engine.simulogic.android.views.dialogs.FeedBackDialog
+import org.engine.simulogic.android.views.dialogs.WhatsNewDialog
 
 
 class LauncherActivity : AppCompatActivity() {
@@ -126,9 +129,10 @@ private val userSettings = UserSettings()
                     }
                 }
                 "help" -> {
-                    Intent(this@LauncherActivity, HelpActivity::class.java).also { intent ->
+                    EnvironmentHelpDialog(this@LauncherActivity).show()
+                    /*Intent(this@LauncherActivity, HelpActivity::class.java).also { intent ->
                         startActivity(intent)
-                    }
+                    }*/
                 }
 
                 "update" ->{
@@ -181,11 +185,13 @@ private val userSettings = UserSettings()
         }
 
         feedbackView.setOnClickListener {
-            AboutDialog(this@LauncherActivity).show()
+            FeedBackDialog(this@LauncherActivity) {
+                ActivityHelpers.copyAndShareEmail(this@LauncherActivity,it, "Simulogic User-FeedBack")
+            }.show()
         }
 
         whatsNewView.setOnClickListener {
-            AboutDialog(this@LauncherActivity).show()
+            WhatsNewDialog(this@LauncherActivity).show()
         }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout

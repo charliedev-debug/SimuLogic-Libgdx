@@ -119,98 +119,37 @@ class EnvironmentHelpViewPagerAdapter :
         )
         addItem(
             1, HelpItem(
-                "Undo/Redo",
-                description = "Undo/removes the current operation in order. Redo/restores the previous operation in order.",
+                "Split Node",
+                description = "Adds new nodes to a wire connection. For a more controlled wire routing.",
                 0,
-                layoutIcon = R.drawable.action_undo_redo
-            )
-        )
-        addItem(
-            1,
-            HelpItem(
-                "Cut",
-                description = "Cut items from a certain position.",
-                0,
-                layoutIcon = R.drawable.action_cut
+                layoutIcon = R.drawable.action_split_node
             )
         )
         addItem(
             1, HelpItem(
-                "Copy",
-                description = "Duplicates the selected components, this operation can be finalized by clicking the paste button and only connections of selected children or parents will be duplicated.",
+                "A-Label",
+                description = "Anchors a label directly to a component. For better a better labelling experience.",
                 0,
-                layoutIcon = R.drawable.action_copy
+                layoutIcon = R.drawable.action_anchor_label
             )
         )
 
-        addItem(
-            1, HelpItem(
-                "Remove Connection",
-                description = "The delete tool can be used to remove established connections.",
-                0,
-                layoutIcon = R.drawable.action_remove_line
-            )
-        )
-
-        addItem(
-            1, HelpItem(
-                "Delete",
-                description = "Deletes components form the environment. Any connection associated with the deleted component will also be deleted.",
-                layoutId = 0,
-                layoutIcon = R.drawable.action_delete
-            )
-        )
-
-        addItem(2, HelpItem("AND GATE", description = "Outputs  HIGH(1) if all Inputs are HIGH(1).", 0, R.drawable.component_gate_and))
-        addItem(2, HelpItem("OR GATE", description = "Outputs HIGH(1) if one of the Inputs is HIGH(1).", 0, R.drawable.component_gate_or))
-        addItem(2, HelpItem("XOR GATE", description = "Outputs HIGH(1) only when the Inputs are different.", 0, R.drawable.component_gate_xor))
-        addItem(2, HelpItem("NOR GATE", description = "Negated OR GATE.", 0, R.drawable.component_gate_nor))
-        addItem(2, HelpItem("NOT GATE", description = "Outputs HIGH(1) only when the input is LOW(1). It negates the Input.", 0, R.drawable.component_gate_not))
-        addItem(2, HelpItem("NAND GATE", description = "Negated AND GATE", 0, R.drawable.component_gate_nand))
-        addItem(2, HelpItem("XNOR GATE", description = "Negated XOR GATE.", 0, R.drawable.component_gate_xnor))
         addItem(
             2, HelpItem(
-                "CLOCK",
-                description = "Periodic signaling component that alternates between 0 (LOW) and 1 (HIGH) at a fixed interval." +
-                    " Maximum supported interval is 60Hz.",
+                "POINT",
+                description = "Creates a point that splits a connection into multiple nodes or passes a value from one component to another like a buffer gate.",
                 0,
-                R.drawable.component_clock
+                R.drawable.component_point
             )
         )
-        addItem(
-            2,
-            HelpItem(
-                "D-LATCH",
-                description = "Level-sensitive  memory component that stores 1 bit of data.",
-                0,
-                R.drawable.component_general_d_latch
-            )
-        )
-        addItem(
-            2,
-            HelpItem(
-                "D-FLIP-FLOP",
-                description = "Memory component that stores 1 bit of data and can only be updated on clock edge.",
-                0,
-                R.drawable.component_general_d_flip_flop
-            )
-        )
+
         addItem(
             2,
             HelpItem(
                 "RANDOM",
                 description = "A seeded component that creates a random signal if the incoming signal has changed.",
                 0,
-                R.drawable.component_general_random
-            )
-        )
-        addItem(
-            2, HelpItem(
-                "DATA-BUS",
-                description = "A group of parallel wires that carry multi-bit data." +
-                    " This is useful also for space optimization and organization.",
-                0,
-                R.drawable.component_general_data_bus
+                R.drawable.component_random
             )
         )
         addItem(
@@ -219,16 +158,7 @@ class EnvironmentHelpViewPagerAdapter :
                 description = "Carries signals from a source to one or more destinations without wires." +
                     " A channel has an input with a particular ID and one or multiple outputs.",
                 0,
-                R.drawable.component_general_channel
-            )
-        )
-        addItem(
-            2,
-            HelpItem(
-                "BCD-DISPLAY",
-                description = "Binary Coded Decimal values from 0 - F.",
-                0,
-                R.drawable.component_general_bcd_display
+                R.drawable.component_random
             )
         )
     }
