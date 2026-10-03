@@ -35,8 +35,8 @@ android {
     applicationId 'org.engine.simulogic'
     minSdkVersion 24
     targetSdkVersion 36
-    versionCode 12544
-    versionName "1.25.44"
+    versionCode 12645
+    versionName "1.26.45"
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_11
