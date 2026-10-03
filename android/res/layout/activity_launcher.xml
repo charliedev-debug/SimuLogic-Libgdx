@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorOnSurface"
                             android:textFontWeight="300"
-                            android:text="Tell us what you think"
+                            android:text="Tell us what you think or suggest feature"
                             android:textSize="10dp"/>
                     </LinearLayout>
 

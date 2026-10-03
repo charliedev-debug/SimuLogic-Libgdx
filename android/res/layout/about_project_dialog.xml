@@ -96,11 +96,20 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textFontWeight="400"
+            android:breakStrategy="high_quality"
+            android:text="Why make this project?"
+            />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:textSize="13dp"
             android:textColor="?attr/colorOnSurface"
             android:textFontWeight="300"
             android:breakStrategy="high_quality"
-            android:text="This app was created to help both students and professionals to learn digital logic more efficiently, focusing on both user experience and performance even on low to mid range devices. More features will be added in subsequent updates, also consider leaving us a review."
+            android:text="Digital logic is the first step if you want to understand how hardware works at a conceptual level, digital logic will provide you with a solid foundation especially if you desire to start learning FPGA(Field Programmable Gate Array) or maybe CPU design. This app provides a more approachable way to learn especially for people with no electrical engineering background."
             />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/review"

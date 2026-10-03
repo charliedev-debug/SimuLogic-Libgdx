@@ -33,8 +33,8 @@ class CDefaults {
         val SIGNAL_ACTIVE_COLOR = EnvironmentTheme.colorSecondary
         val LED_INACTIVE_COLOR = EnvironmentTheme.colorOutline
         val LABEL_SELECTED_COLOR = Color(EnvironmentTheme.colorPrimary.r, EnvironmentTheme.colorPrimary.g, EnvironmentTheme.colorPrimary.b,0.75f)//Color(165f/255f, 66f/255f, 66f/255f,0.75f)
-        val GRID_WIDTH = 50f
-        val GRID_HEIGHT = 50f
+        const val GRID_WIDTH = 25f
+        val GRID_HEIGHT = 25f
         val SNAP_GRID_WIDTH = 30f
         val SNAP_GRID_HEIGHT = 30f
         val GRID_LINE_COLOR_B = Color(0.411f,0.411f,0.411f ,1f)

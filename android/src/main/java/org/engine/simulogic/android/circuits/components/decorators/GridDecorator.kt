@@ -64,18 +64,17 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
     }
 
     override fun update() {
-
         val factor = (1f/ camera.zoom)
         val viewPortWidth = (camera.viewportWidth / factor)
         val viewPortHeight = (camera.viewportHeight / factor)
-        val spacingX = (CDefaults.GRID_WIDTH * 2)
-        val spacingY = (CDefaults.GRID_HEIGHT * 2)
+        val spacingX = (CDefaults.GRID_WIDTH ) * camera.zoom
+        val spacingY = (CDefaults.GRID_HEIGHT) * camera.zoom
         val labelSpacingX = (spacingX * 4).toInt()
         val labelSpacingY = (spacingY * 4).toInt()
         val labelOffsetY = 0f
         val labelOffsetXTop = -(SimulationLoop.offsetTop * viewPortHeight / Gdx.graphics.height)
         val labelFontSize = 20f
-        val labelFontSizeMax = 50f
+        val labelFontSizeMax = 200f
         val lineCountX = round(viewPortWidth / spacingX).toInt()
         val lineCountY = round(viewPortHeight / spacingY).toInt()
         val originX = camera.position.x - viewPortWidth / 2f
@@ -117,6 +116,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                         lineLayer.attachChild(lineHeader)
                         lineHeader.isVisible = labelHeaderVisible && gridVisible
                         isVisible = labelsVisible
+
                 })
             }
 

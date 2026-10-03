@@ -96,58 +96,6 @@ class Executor(private val connection: Connection) : IExecutable {
             }
 
         }
-       /* while (executableNodes.isNotEmpty()){
-
-            executableNodes.poll()?.also {node ->
-                node.getLineMarkerChildren().forEach { marker ->
-                    if (marker.from.value !is CSignal && marker.to.value !is CSignal) {
-                        marker.to.value.signals[marker.signalTo].value =
-                            node.value.signals[marker.signalFrom].value
-                        if (!marker.to.visited) {
-                            executableNodes.offer(marker.to)
-                        } else {
-                            marker.to.value.execute()
-                        }
-                    } else {
-                        marker.getNodeOriginFrom(marker.from).also { originFrom ->
-                            marker.to.value.signals[marker.signalTo].value =
-                                originFrom.from.value.signals[originFrom.signalFrom].value
-
-                            if (!marker.to.visited) {
-                                executableNodes.offer(marker.to)
-                            } else {
-                                marker.to.value.execute()
-                            }
-                        }
-                    }
-                }
-                if(node.value is CClock){
-                    var timeElapsed = accumulator
-                    var iterValue = accumulator - node.value.freq
-                    if(iterValue > 0f){
-                        while (iterValue > 0f){
-                            node.value.execute()
-                            iterValue--
-                            node.value.timer.dt = timeElapsed
-                            timerManager.update()
-                            node.value.timer.dt = 0f
-                            timeElapsed += timerManager.STEP
-                        }
-                    }else{
-                        node.value.execute()
-                        node.value.timer.dt = timeElapsed
-                        timerManager.update()
-                        node.value.timer.dt = 0f
-                    }
-
-
-                }else {
-                    node.value.execute()
-                }
-                visitedNodes.add(node.apply { visited = true })
-            }
-
-        }*/
         visitedNodes.forEach {
             it.visited = false
         }
