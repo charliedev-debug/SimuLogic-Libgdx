@@ -6,15 +6,9 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.GestureDetector
 import android.view.Gravity
 import android.view.Menu
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowInsets
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.SystemBarStyle
@@ -25,39 +19,27 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.AppCompatToggleButton
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnPreDraw
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.internal.EdgeToEdgeUtils
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.testing.FakeReviewManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.engine.simulogic.R
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.circuits.storage.DataTransferObject
@@ -66,7 +48,6 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.helpers.ActivityHelpers
 import org.engine.simulogic.android.options.SimulationOptions
 import org.engine.simulogic.android.utilities.ReviewHelper
-import org.engine.simulogic.android.views.ComponentBottomSheet
 import org.engine.simulogic.android.views.ComponentFloatingBottomSheet
 import org.engine.simulogic.android.views.SimulationFragment
 import org.engine.simulogic.android.views.adapters.ComponentItem
@@ -139,7 +120,6 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         CoroutineScope(Dispatchers.Default).launch(Dispatchers.Main){
-
             userSettings.getDataBoolean(this@SimulationActivity,UserSettings.GRID_ENABLED).asLiveData().observe(this@SimulationActivity){
                 gridEnabledSwitch.isChecked = it
                 simulationOptions.showGrid = it
@@ -182,6 +162,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                 bundle.putSerializable("simulationOptions", simulationOptions)
             }
         }
+
         toolBar.setOnMenuItemClickListener { item ->
             when (item.title) {
                 "Save" -> {
@@ -245,6 +226,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect2", "Connect", true, R.drawable.connect_2_node)
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
+            insert("LineColor", "Line-Color", false, R.drawable.line_pallete)
             insert("Split-Node","Split-Node",false, R.drawable.split, true)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
             insert("EditClock","Edit-Clock",false, R.drawable.edit_clock, true)

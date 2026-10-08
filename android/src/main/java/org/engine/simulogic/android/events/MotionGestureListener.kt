@@ -50,6 +50,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
     private val snapAlign = SnapAlign()
     var gridDecorator:GridDecorator? = null
     var isPointerMoving = false
+    var isZooming = false
     companion object {
          const val MIN_ZOOM_FACTOR = 0.6f
          const val MAX_ZOOM_FACTOR = 15.5f
@@ -289,6 +290,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
          val ratio = initialDistance / currentDistance
             camera.zoom  = initialZoom * ratio
             camera.zoom = MathUtils.clamp(camera.zoom, MIN_ZOOM_FACTOR, MAX_ZOOM_FACTOR)
+            isZooming = true
         return true
     }
 
@@ -322,6 +324,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun pinchStop() {
        initialZoom = camera.zoom
+       isZooming = false
     }
 
     override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float): Boolean {

@@ -137,7 +137,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
        // connection.insertNode(ListNode(CAnd(200f,200f,scene)))
        // connection.insertNode(ListNode(CAnd(400f,300f,scene)))
         gestureListener = MotionGestureListener(camera, connection,collisionDetector,scene)
-        gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, camera)
+        gridDecorator = GridDecorator(assetManager.get("RobotoMono-SemiBold.ttf"),scene, gestureListener,camera)
         gestureListener.gridDecorator = gridDecorator
         executor = Executor(connection)
         AutoSave.initialize(projectOptions, gestureListener, connection)

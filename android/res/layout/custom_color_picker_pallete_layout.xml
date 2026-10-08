@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:padding="10dp"
+    android:gravity="center_vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/radio_button_custom"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Pallete"
+        android:textSize="14dp"
+        android:textFontWeight="300"
+        android:textColor="?attr/colorOnSurface" />
+
+    <View
+        android:id="@+id/pallete"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:layout_marginEnd="10dp"
+        android:background="@color/delete_color" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/icon_ripple_oval_normal"
+        app:tint="?attr/colorOnSurface"
+        app:srcCompat="@drawable/trash_bin"
+        android:layout_marginStart="5dp"
+        />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package org.engine.simulogic.android.views
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,10 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
+import com.skydoves.colorpickerview.ColorEnvelope
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
+import com.skydoves.colorpickerview.listeners.ColorPickerViewListener
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.android.PremiumPurchaseActivity
@@ -26,6 +31,7 @@ import org.engine.simulogic.android.views.dialogs.AutoSaveDialog
 import org.engine.simulogic.android.views.dialogs.ChannelDialog
 import org.engine.simulogic.android.views.dialogs.CustomBroadCastBusDialog
 import org.engine.simulogic.android.views.dialogs.CustomClockDialog
+import org.engine.simulogic.android.views.dialogs.CustomColorPickerDialog
 import org.engine.simulogic.android.views.dialogs.CustomDataBusDialog
 import org.engine.simulogic.android.views.dialogs.InfoDialog
 import org.engine.simulogic.android.views.dialogs.LabelAnchorDialog
@@ -143,6 +149,28 @@ class SimulationFragment : AndroidFragmentApplication() {
                     "Connect6" -> {
                         CDefaults.setLinePointCount(3, 3)
                         simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
+                    }
+
+                    "LineColor"->{
+                        CustomColorPickerDialog(requireContext()).show()
+                       /* ColorPickerDialog.Builder(requireContext()).also {colorPicker->
+                            colorPicker.setTitle("Line Color")
+                            colorPicker.setPositiveButton("Accept", object: ColorEnvelopeListener{
+                                override fun onColorSelected(
+                                    colorEvelope: ColorEnvelope?,
+                                    fromUser: Boolean
+                                ) {
+
+                                }
+
+                            })
+                            colorPicker.setNegativeButton("Cancel"
+                            ) { dialogInterface, i -> dialogInterface.dismiss() }
+                            colorPicker.attachAlphaSlideBar(true)
+                            colorPicker.attachBrightnessSlideBar(true)
+                            colorPicker.setBottomSpace(12)
+                            colorPicker.show()
+                        }*/
                     }
 
                     "Split-Node"->{
