@@ -230,6 +230,7 @@
                 android:id="@+id/grid_styles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical">
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="match_parent"

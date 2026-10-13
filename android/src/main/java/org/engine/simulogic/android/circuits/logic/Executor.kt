@@ -1,18 +1,15 @@
 package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.Gdx
-import org.engine.simulogic.android.circuits.components.arithmetic.CHalfAdder
 import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.generators.CClock
 import org.engine.simulogic.android.circuits.components.interfaces.IExecutable
-import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.utilities.TimerManager
 import java.util.LinkedList
 import java.util.Queue
-import kotlin.concurrent.timer
-import kotlin.math.abs
-
 class Executor(private val connection: Connection) : IExecutable {
+    private val propagationQueue : Queue<ListNode> = LinkedList()
+    private val propagationVisited = mutableListOf<ListNode>()
     var isActive = true
     override fun execute() {
         if (connection.executionPoints.isEmpty() || !isActive) {
@@ -27,8 +24,8 @@ class Executor(private val connection: Connection) : IExecutable {
             executableNodes.add(it)
         }
         while (executableNodes.isNotEmpty()){
-            val propagationQueue: Queue<ListNode> = LinkedList()
-            val propagationVisited = mutableListOf<ListNode>()
+            propagationVisited.clear()
+            propagationQueue.clear()
             executableNodes.poll()?.also {node ->
                 propagationQueue.offer(node)
                 while (propagationQueue.isNotEmpty()){
@@ -83,6 +80,7 @@ class Executor(private val connection: Connection) : IExecutable {
                             timeElapsed += timerManager.STEP
                         }
                     }else{
+
                       /*  propagationVisited.forEach {
                             it.value.execute()
                         }
@@ -91,7 +89,6 @@ class Executor(private val connection: Connection) : IExecutable {
                         propNode.value.timer.dt = 0f*/
                     }
                 }
-
               //  visitedNodes.add(node.apply { visited = true })
             }
 
@@ -100,8 +97,5 @@ class Executor(private val connection: Connection) : IExecutable {
             it.visited = false
         }
         visitedNodes.clear()
-
     }
-
-
 }

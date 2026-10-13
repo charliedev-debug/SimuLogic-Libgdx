@@ -1,6 +1,8 @@
 package org.engine.simulogic.android.circuits.logic
+import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.storage.AutoSave
 import org.engine.simulogic.android.scene.PlayGroundScene
 import java.util.Collections
@@ -9,7 +11,12 @@ import java.util.LinkedList
 class Connection : Iterable<ListNode>, IUpdate {
 
     private var nodes: MutableList<ListNode> =Collections.synchronizedList(LinkedList())
+    var colorPalleteList = mutableMapOf<String, Pallete>()
     var executionPoints:MutableList<ListNode> = Collections.synchronizedList(LinkedList())
+    init {
+      //  colorPalleteList["defaultLineColorOff"] = Pallete("defaultLineColorOff",CDefaults.LINE_MARKER_INACTIVE)
+       // colorPalleteList["defaultLineColorOn"] = Pallete("defaultLineColorOn",CDefaults.SIGNAL_ACTIVE_COLOR)
+    }
     fun insertExecutionPoint(node:ListNode){
         synchronized(nodes) {
             nodes.add(node)

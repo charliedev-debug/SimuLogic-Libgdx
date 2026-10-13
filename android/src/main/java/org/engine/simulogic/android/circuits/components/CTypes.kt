@@ -57,7 +57,11 @@ enum class CTypes {
     DEMULTIPLEXER_1_4,
     DEMULTIPLEXER_1_8,
     DEMULTIPLEXER_1_16,
-    ENCODER,
-    DECODER,
+    ENCODER_2_3,
+    ENCODER_3_8,
+    ENCODER_4_16,
+    DECODER_3_2,
+    DECODER_8_3,
+    DECODER_16_4,
     NONE
 }

@@ -3,6 +3,7 @@ package org.engine.simulogic.android.circuits.logic
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
+import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
 import org.engine.simulogic.android.circuits.logic.events.EventAndThreeInputCommand
 import org.engine.simulogic.android.circuits.logic.events.EventBcdDisplayCommand
@@ -80,6 +81,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             counter += it.getLineMarkerChildren().size
         }
         return counter
+    }
+
+    fun getColorPalleteList(): Map<String,Pallete>{
+        return connection.colorPalleteList
     }
 
     fun setMode(mode:Int){

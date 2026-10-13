@@ -309,6 +309,8 @@ class SimulationFragment : AndroidFragmentApplication() {
                 return@observe
             }
             ReviewHelper.seedReviewFlow()
+            // reset it to touch mode automatically
+            simulationLoop.componentManager.setMode(MotionGestureListener.TOUCH_MODE)
             when (item.title) {
                 ComponentBottomSheet.AND_COMPONENT -> {
                     simulationLoop.componentManager.insertAND()

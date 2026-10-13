@@ -14,6 +14,7 @@ import org.engine.simulogic.android.circuits.components.gates.CSignal
 import org.engine.simulogic.android.circuits.components.interfaces.ICollidable
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.other.CRangeLine
+import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
@@ -36,6 +37,8 @@ class LineMarker(
     IUpdate {
     private val lines = mutableListOf<CLine>()
     private val lineRect = mutableListOf<CRangeLine>()
+    private lateinit var colorSignalOnPallete: Pallete
+    private lateinit var colorSignalOffPallete: Pallete
     var markerActive = false
     var hasParentMarker = false
     var previousFromPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
@@ -66,7 +69,6 @@ class LineMarker(
     * 2. Through already established connection nodes. Acting like an extension.
     * */
     fun initialize(scene: PlayGroundScene) {
-
         val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
         val signalTo = if(isDestinationSignal()) to.value else to.value.signals[signalTo]
         val pFrom = signalFrom.getPosition()
@@ -344,6 +346,14 @@ class LineMarker(
 
     }
 
+    fun setColorPalleteOn(pallete: Pallete){
+        colorSignalOnPallete = pallete
+    }
+
+    fun setColorPalleteOff(pallete: Pallete){
+        colorSignalOffPallete = pallete
+    }
+
     fun insertSplitNodeStartEnd(insertIndex:Int, fromIndex:Int): CSignal{
         val node = signals[fromIndex]
        return CSignal(node.getPosition().x, node.getPosition().y,
@@ -564,7 +574,7 @@ class LineMarker(
             val next = nextSignal.getPosition()
             lines[i].also { line ->
                 line.color =
-                    if (parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE
+                    if (parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE //colorSignalOnPallete.color else colorSignalOffPallete.color
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
             markerActive = markerActive || nextSignal.selected || prevSignal.selected || origin.markerActive || parentMarker.markerActive

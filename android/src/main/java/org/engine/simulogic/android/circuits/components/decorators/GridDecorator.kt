@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
@@ -17,7 +16,6 @@ import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.ceil
 import kotlin.math.floor
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
@@ -37,7 +35,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
     private var labelHeaderVisible = true
     private var positionGridLine = false
     var refresh = false
-    private var inititialized = false
+    private var initialized = false
     class GridLabel(font: BitmapFont, text:String,x:Float, y:Float, scene: PlayGroundScene): CLabel(font,25f, text, x, y, scene)
 
     fun toggleLabels(value:Boolean){
@@ -75,17 +73,17 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
         val labelOffsetXTop = -(SimulationLoop.offsetTop * viewPortHeight / Gdx.graphics.height)
         val labelFontSizeMax = 200f
         val labelFontSize =  min(15f * camera.zoom, labelFontSizeMax)
-        val lineCountX = round(viewPortWidth / spacingX).toInt() + 1
-        val lineCountY = round(viewPortHeight / spacingY).toInt() + 1
+        val lineCountX = round(viewPortWidth / spacingX).toInt() + 2
+        val lineCountY = round(viewPortHeight / spacingY).toInt() + 2
         val originX = camera.position.x - viewPortWidth / 2f
         val originY = camera.position.y - viewPortHeight / 2f
         // prevents flickering
         val lineWidth = 1.1f
         val endX = originX + viewPortWidth
         val endY = originY + viewPortHeight
-        if(!inititialized){
+        if(!initialized){
             lastCameraPosition.set(camera.position.x, camera.position.y)
-            inititialized = true
+            initialized = true
             linesAxisX.forEach { it.detachSelf() }
             linesAxisX.clear()
             linesAxisY.forEach { it.detachSelf() }
@@ -101,10 +99,6 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                     linesAxisX.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible =  gridVisible
-                    if(i % 2 == 0){
-                        line.color = EnvironmentTheme.colorOutline
-                    }else
-                        line.color = EnvironmentTheme.colorOutline2
                 }
 
                 labelsX.add(GridLabel(font, "$i", x, originY + viewPortHeight + labelOffsetXTop, scene).apply {
@@ -121,10 +115,6 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
                     linesAxisY.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible = gridVisible
-                    if(i % 2 == 0){
-                        line.color = EnvironmentTheme.colorOutline
-                    }else
-                        line.color = EnvironmentTheme.colorOutline2
                 }
                 val approximateY = floor(y / CDefaults.GRID_WIDTH) * CDefaults.GRID_WIDTH
                 labelsY.add(GridLabel(font, "${approximateY.toInt()}", originX + labelOffsetY, y, scene).apply {
