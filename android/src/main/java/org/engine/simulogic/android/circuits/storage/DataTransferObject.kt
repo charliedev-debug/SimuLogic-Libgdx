@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.net.Uri
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
@@ -15,6 +14,8 @@ import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.buttons.CPower
 import org.engine.simulogic.android.circuits.components.buttons.CPulseButton
 import org.engine.simulogic.android.circuits.components.combinational.CDeMultiplexer
+import org.engine.simulogic.android.circuits.components.combinational.CDecoder
+import org.engine.simulogic.android.circuits.components.combinational.CEncoder
 import org.engine.simulogic.android.circuits.components.combinational.CMultiplexer
 import org.engine.simulogic.android.circuits.components.flipflops.CDFlipFlop
 import org.engine.simulogic.android.circuits.components.flipflops.CJKFlipFlop
@@ -40,7 +41,6 @@ import org.engine.simulogic.android.circuits.components.other.CAnchor
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.other.CPoint
-import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
@@ -615,6 +615,24 @@ class DataTransferObject {
                     }
                     CTypes.DEMULTIPLEXER_1_16->{
                         connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-16", font,connection,scene)))
+                    }
+                    CTypes.ENCODER_3_2->{
+                        connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 3-2", font,connection,scene)))
+                    }
+                    CTypes.ENCODER_8_3->{
+                        connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 8-3", font,connection,scene)))
+                    }
+                    CTypes.ENCODER_16_4->{
+                        connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 16-4", font,connection,scene)))
+                    }
+                    CTypes.DECODER_2_3->{
+                        connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 2-3", font,connection,scene)))
+                    }
+                    CTypes.DECODER_3_8->{
+                        connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 3-8", font,connection,scene)))
+                    }
+                    CTypes.DECODER_4_16->{
+                        connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 4-16", font,connection,scene)))
                     }
                     else -> {
                         throw IOException("Unknown component exception $type")

@@ -544,6 +544,24 @@ class SimulationFragment : AndroidFragmentApplication() {
                 ComponentBottomSheet.DEMULTIPLEXER_16_1_COMPONENT->{
                     simulationLoop.componentManager.insertCDeMultiplexer116()
                 }
+                ComponentFloatingBottomSheet.ENCODER_16_4_COMPONENT ->{
+                    simulationLoop.componentManager.insertCEncoder164()
+                }
+                ComponentFloatingBottomSheet.ENCODER_8_3_COMPONENT ->{
+                    simulationLoop.componentManager.insertCEncoder83()
+                }
+                ComponentFloatingBottomSheet.ENCODER_3_2_COMPONENT ->{
+                    simulationLoop.componentManager.insertCEncoder32()
+                }
+                ComponentFloatingBottomSheet.DECODER_4_16_COMPONENT ->{
+                    simulationLoop.componentManager.insertCDecoder416()
+                }
+                ComponentFloatingBottomSheet.DECODER_3_8_COMPONENT ->{
+                    simulationLoop.componentManager.insertCDecoder38()
+                }
+                ComponentFloatingBottomSheet.DECODER_2_3_COMPONENT ->{
+                    simulationLoop.componentManager.insertCDecoder23()
+                }
             }
         }
         return initializeForView(simulationLoop, configuration)

@@ -1,7 +1,6 @@
 package org.engine.simulogic.android.views
 
 import android.app.Activity
-import android.content.res.Configuration
 import android.view.GestureDetector
 import android.view.MotionEvent
 import org.engine.simulogic.R
@@ -17,7 +16,6 @@ import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.views.adapters.ComponentItem
 import org.engine.simulogic.android.views.adapters.ComponentViewAdapter
 import org.engine.simulogic.android.views.interfaces.IComponentAdapterListener
-import kotlin.math.round
 
 
 class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListener? = null)  {
@@ -69,6 +67,12 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         const val DEMULTIPLEXER_8_1_COMPONENT = "DEMUXER 8-1"
         const val MULTIPLEXER_1_16_COMPONENT = "MUXER 1-16"
         const val DEMULTIPLEXER_16_1_COMPONENT = "DEMUXER 16-1"
+        const val DECODER_2_3_COMPONENT = "DECODE 2-3"
+        const val DECODER_3_8_COMPONENT = "DECODE 3-8"
+        const val DECODER_4_16_COMPONENT = "DECODE 4-16"
+        const val ENCODER_3_2_COMPONENT = "ENCODE 3-2"
+        const val ENCODER_8_3_COMPONENT = "ENCODE 8-3"
+        const val ENCODER_16_4_COMPONENT = "ENCODE 16-4"
     }
     private var isPremiumUser = false
     private val userSettings = UserSettings()
@@ -105,7 +109,7 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
          arithmeticUnitsRecyclerview.layoutManager = GridLayoutManager(context, 2)
          displayRecyclerview.layoutManager = GridLayoutManager(context,3)
          spaceOptimizationRecyclerview.layoutManager = GridLayoutManager(context, 3)
-         combinationalUnitsRecyclerview.layoutManager = GridLayoutManager(context,spanCount)
+         combinationalUnitsRecyclerview.layoutManager = GridLayoutManager(context,8)
         val gatesAdapter = ComponentViewAdapter()
         gatesAdapter.insert(AND_COMPONENT, R.drawable.gate_and)
         gatesAdapter.insert(OR_COMPONENT, R.drawable.gate_or)
@@ -171,6 +175,13 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         combinationalUnitAdapter.insert(DEMULTIPLEXER_4_1_COMPONENT,R.drawable.demultiplexer_4_1, isPremium = true)
         combinationalUnitAdapter.insert(DEMULTIPLEXER_8_1_COMPONENT,R.drawable.demultiplexer_8_1, isPremium = true)
         combinationalUnitAdapter.insert(DEMULTIPLEXER_16_1_COMPONENT,R.drawable.demultiplexer_16_1, isPremium = true)
+
+        combinationalUnitAdapter.insert(ENCODER_3_2_COMPONENT,R.drawable.encoder_3_2, isPremium = true)
+        combinationalUnitAdapter.insert(ENCODER_8_3_COMPONENT,R.drawable.encoder_8_3, isPremium = true)
+        combinationalUnitAdapter.insert(ENCODER_16_4_COMPONENT,R.drawable.encoder_16_4, isPremium = true)
+        combinationalUnitAdapter.insert(DECODER_2_3_COMPONENT,R.drawable.decoder_2_3, isPremium = true)
+        combinationalUnitAdapter.insert(DECODER_3_8_COMPONENT,R.drawable.decoder_3_8, isPremium = true)
+        combinationalUnitAdapter.insert(DECODER_4_16_COMPONENT,R.drawable.decoder_4_16, isPremium = true)
         combinationalUnitAdapter.showPremiumIndicator = !isPremiumUser
          slideOutAnim.setAnimationListener(object : Animation.AnimationListener {
              override fun onAnimationStart(animation: Animation?) {
@@ -242,7 +253,7 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
             combinationalUnitAdapter.addListener(onDismissListener)
         }
 
-        generalRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
+        /*generalRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         clockRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
         gatesRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         templateRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing, includeEdge))
@@ -250,7 +261,7 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         displayRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, spacing, includeEdge))
         spaceOptimizationRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount, spacing, includeEdge))
         arithmeticUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(2,spacing,includeEdge))
-        combinationalUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing,includeEdge))
+        combinationalUnitsRecyclerview.addItemDecoration(GridSpacingItemDecoration(spanCount,spacing,includeEdge))*/
         generalRecyclerview.adapter = generalAdapter
         clockRecyclerview.adapter = clockAdapter
         gatesRecyclerview.adapter = gatesAdapter

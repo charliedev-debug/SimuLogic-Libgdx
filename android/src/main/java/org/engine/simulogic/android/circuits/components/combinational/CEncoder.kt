@@ -18,6 +18,7 @@ import org.engine.simulogic.android.circuits.logic.ListNode
 import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 import org.engine.simulogic.android.scene.LayerEnums
 import org.engine.simulogic.android.scene.PlayGroundScene
+import kotlin.math.max
 import kotlin.math.pow
 
 class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String, private val font: BitmapFont, private val connection: Connection, private val scene: PlayGroundScene) :CNode(){
@@ -36,30 +37,30 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         val lineWidth = 2f
-        type = CTypes.MULTIPLEXER_2_1
+        type = CTypes.ENCODER_3_2
         when(title){
-            "ENCODE 4-16"->{
-                inputDataCount = 16
-                inputSelectorCount = 4
-                outputDataCount = 1
-                centerLabelTexture = "4-16"
-                type = CTypes.ENCODER_4_16
+            "ENCODE 16-4"->{
+                inputDataCount = 0
+                inputSelectorCount = 16
+                outputDataCount = 4
+                centerLabelTexture = "16-4"
+                type = CTypes.ENCODER_16_4
             }
 
-            "ENCODE 3-8"->{
-                inputDataCount = 8
+            "ENCODE 8-3"->{
+                inputDataCount = 0
+                inputSelectorCount = 8
+                outputDataCount = 3
+                centerLabelTexture = "8-3"
+                type = CTypes.ENCODER_8_3
+            }
+
+            "ENCODE 3-2"->{
+                inputDataCount = 0
                 inputSelectorCount = 3
-                outputDataCount = 1
-                centerLabelTexture = "3-8"
-                type = CTypes.ENCODER_3_8
-            }
-
-            "ENCODE 2-3"->{
-                inputDataCount = 4
-                inputSelectorCount = 2
-                outputDataCount = 1
-                centerLabelTexture = "2-3"
-                type = CTypes.DECODER_3_2
+                outputDataCount = 2
+                centerLabelTexture = "3-2"
+                type = CTypes.ENCODER_3_2
             }
 
             "ENCODE 2-1"->{
@@ -75,20 +76,20 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         this.rotationDirection = rotationDirection
         when(rotationDirection){
             ROTATE_RIGHT->{
-                maxWidth = inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = outputDataCount * CDefaults.muxerSignalSpacing
                 maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
             }
             ROTATE_LEFT->{
-                maxWidth = inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
                 maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
             }
             ROTATE_TOP->{
-                maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
-                maxHeight =inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = max(inputSelectorCount * CDefaults.muxerSignalSpacing , inputDataCount * CDefaults.muxerSignalSpacing)
+                maxHeight = outputDataCount * CDefaults.muxerSignalSpacing
             }
             ROTATE_BOTTOM->{
                 maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
-                maxHeight =inputDataCount * CDefaults.muxerSignalSpacing
+                maxHeight = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
             }
         }
         // change the rotation direction for later processing but don't transform the sprite
@@ -219,7 +220,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
                 layer.attachChild(it)
             }
         }
-        ListNode(CLabel(font, 50f, "MUXER", x, y, scene).also {
+        ListNode(CLabel(font, 50f, "ENCODE", x, y, scene).also {
             it.color = EnvironmentTheme.colorOnBackground
             it.anchor = CAnchor(this, CAnchor.ALIGN_TOP_LEFT)
         }).also { node ->
@@ -300,7 +301,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         val zoomOffset = lines[0].zoomFactor * lines[0].lineWidth / 2f
         when(rotationDirection){
             ROTATE_RIGHT->{
-                maxWidth = inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
                 maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
                 resizeLayout(maxWidth,maxHeight)
                 // update input data input
@@ -312,7 +313,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             }
 
             ROTATE_LEFT->{
-                maxWidth = inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
                 maxHeight = inputSelectorCount * CDefaults.muxerSignalSpacing
                 resizeLayout(maxWidth,maxHeight)
                 // update input data input
@@ -324,8 +325,8 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             }
 
             ROTATE_TOP->{
-                maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
-                maxHeight =inputDataCount * CDefaults.muxerSignalSpacing
+                maxWidth = max(inputSelectorCount * CDefaults.muxerSignalSpacing , inputDataCount * CDefaults.muxerSignalSpacing)
+                maxHeight = outputDataCount * CDefaults.muxerSignalSpacing
                 resizeLayout(maxWidth,maxHeight)
                 // update input data input
                 arrangeIORight(signalLineMarkers, 0, inputDataCount)
@@ -338,7 +339,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
 
             ROTATE_BOTTOM->{
                 maxWidth = inputSelectorCount * CDefaults.muxerSignalSpacing
-                maxHeight =inputDataCount * CDefaults.muxerSignalSpacing
+                maxHeight = max(outputDataCount * CDefaults.muxerSignalSpacing,inputDataCount * CDefaults.muxerSignalSpacing)
                 resizeLayout(maxWidth,maxHeight)
                 // update input data input
                 arrangeIOLeft(signalLineMarkers, 0, inputDataCount)

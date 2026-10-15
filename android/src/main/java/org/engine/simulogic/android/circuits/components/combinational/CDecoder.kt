@@ -38,34 +38,34 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         val lineWidth = 2f
-        type = CTypes.DEMULTIPLEXER_1_2
+        type = CTypes.DECODER_2_3
         when(title){
-            "DECODE 16-4"->{
-                inputDataCount = 1
+            "DECODE 4-16"->{
+                inputDataCount = 0
                 inputSelectorCount = 4
                 outputDataCount = 16
-                centerLabelTexture = "16-4"
-                type = CTypes.DECODER_16_4
+                centerLabelTexture = "4-16"
+                type = CTypes.DECODER_4_16
             }
 
-            "DECODE 8-3"->{
-                inputDataCount = 1
+            "DECODE 3-8"->{
+                inputDataCount = 0
                 inputSelectorCount = 3
                 outputDataCount = 8
-                centerLabelTexture = "8-3"
-                type = CTypes.DECODER_8_3
+                centerLabelTexture = "3-8"
+                type = CTypes.DECODER_3_8
             }
 
-            "DECODE 3-2"->{
-                inputDataCount = 1
-                inputSelectorCount = 2
-                outputDataCount = 4
-                centerLabelTexture = "3-2"
-                type = CTypes.DECODER_3_2
+            "DECODE 2-3"->{
+                inputDataCount = 0
+                inputSelectorCount = 3
+                outputDataCount = 3
+                centerLabelTexture = "2-3"
+                type = CTypes.DECODER_2_3
             }
 
             "DECODE 1-2"->{
-                inputDataCount = 1
+                inputDataCount = 0
                 inputSelectorCount = 1
                 outputDataCount = 2
                 centerLabelTexture = "1-2"
@@ -222,7 +222,7 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
                 layer.attachChild(it)
             }
         }
-        ListNode(CLabel(font, 50f, "DEMUXER", x, y, scene).also {
+        ListNode(CLabel(font, 50f, "DECODE", x, y, scene).also {
             it.color = EnvironmentTheme.colorOnBackground
             it.anchor = CAnchor(this, CAnchor.ALIGN_TOP_LEFT)
         }).also { node ->

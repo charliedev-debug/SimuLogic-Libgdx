@@ -2,6 +2,7 @@ package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
+import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
 import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
@@ -14,9 +15,11 @@ import org.engine.simulogic.android.circuits.logic.events.EventCopyCommand
 import org.engine.simulogic.android.circuits.logic.events.EventCutCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDataBusCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeMultiplexerCommand
+import org.engine.simulogic.android.circuits.logic.events.EventDecoderCommand
 import org.engine.simulogic.android.circuits.logic.events.EventDeleteCommand
 import org.engine.simulogic.android.circuits.logic.events.EventEditClockCommand
 import org.engine.simulogic.android.circuits.logic.events.EventEditTextCommand
+import org.engine.simulogic.android.circuits.logic.events.EventEncoderCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFipFlopCommand
 import org.engine.simulogic.android.circuits.logic.events.EventFullAdderCommand
 import org.engine.simulogic.android.circuits.logic.events.EventHalfAdderCommand
@@ -467,6 +470,57 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
+
+    fun insertCDecoder416(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDecoderCommand(Vector2(coordinates),font,
+                    "DECODE 4-16",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDecoder38(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDecoderCommand(Vector2(coordinates),font,
+                    "DECODE 3-8",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCDecoder23(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventDecoderCommand(Vector2(coordinates),font,
+                    "DECODE 2-3",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+
+    fun insertCEncoder164(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventEncoderCommand(Vector2(coordinates),font,
+                    "ENCODE 16-4",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCEncoder83(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventEncoderCommand(Vector2(coordinates),font,
+                    "ENCODE 8-3",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+    fun insertCEncoder32(){
+        gestureListener.rectPointer.getPosition().also { position ->
+            snapAlign.getSnapCoordinates(position).also { coordinates ->
+                eventBridge.insertCommand(EventEncoderCommand(Vector2(coordinates),font,
+                    "ENCODE 3-2",connection, gestureListener.commandHistory, scene))
+            }
+        }
+    }
+
     fun setStyleA(){
         gestureListener.gridDecorator?.showLabelHeader()
         gestureListener.gridDecorator?.hidePositionGridLine()
