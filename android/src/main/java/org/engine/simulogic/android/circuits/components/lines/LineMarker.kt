@@ -489,8 +489,19 @@ class LineMarker(
         for (i in 0 until signals.size) {
             signals[i].update()
         }
+
         // autocorrects the line segments positions
         if(autoCorrectNodeEnabled) {
+            val offsetXA = from.value.getPosition().x - previousFromPosition.x
+            val offsetYA = from.value.getPosition().y - previousFromPosition.y
+            val offsetXB = to.value.getPosition().x - previousToPosition.x
+            val offsetYB = to.value.getPosition().y - previousToPosition.y
+            for(i in 1 until signals.size - 1){
+                signals[i].also {
+                    it.updatePosition(it.getPosition().x + offsetXA + offsetXB,
+                        it.getPosition().y + offsetYA + offsetYB)
+                }
+            }
             for (i in 1 until signals.size - 1) {
                 val a = signals[i - 1]
                 val b = signals[i]
@@ -540,6 +551,8 @@ class LineMarker(
                     }
                 }
             }
+            //TODO: prevent the points from complete obfuscation
+
         }
 
         previousFromPosition.set(from.value.getPosition())

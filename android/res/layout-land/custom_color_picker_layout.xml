@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardCornerRadius="20dp"
+    style="@style/Widget.App.CardStyle">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Color Pallete"
+                android:textSize="15dp"
+                android:textFontWeight="500"
+                android:textColor="?attr/colorOnBackground" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addPallete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="ADD Pallete"
+                android:textFontWeight="300"
+                android:textSize="11dp"
+                style="@style/customButtonStyle"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/colorPalleteList"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_margin="5dp"
+                android:scrollbars="vertical"
+                android:scrollbarThumbHorizontal="@drawable/scroll_bar_thumb"
+                android:scrollbarTrackHorizontal="@drawable/scroll_bar_track"
+                android:fadeScrollbars="false"
+                android:scrollbarSize="2dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbarAlwaysDrawVerticalTrack="true" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="?attr/colorOutline"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="SIGNAL ON"
+                android:textSize="12dp"
+                android:textFontWeight="300"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurface" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/radio_button_custom">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/selectedPalleteTitle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Pallete"
+                    android:textSize="14dp"
+                    android:textFontWeight="300"
+                    android:maxLines="1"
+                    android:textColor="?attr/colorOnSurface" />
+                <View
+                    android:id="@+id/selectedPallete"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/delete_color" />
+            </LinearLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="SIGNAL OFF"
+                android:textSize="12dp"
+                android:textFontWeight="300"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurface" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/radio_button_custom">
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/selectedPalleteSignalOffText"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="Pallete"
+                    android:textSize="14dp"
+                    android:textFontWeight="300"
+                    android:maxLines="1"
+                    android:textColor="?attr/colorOnSurface" />
+                <View
+                    android:id="@+id/selectedPalleteSignalOff"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/delete_color" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/applyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:orientation="horizontal">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="Apply"
+                    android:textFontWeight="300"
+                    style="@style/customButtonStyle"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="Cancel"
+                    android:textFontWeight="300"
+                    style="@style/customButtonStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
