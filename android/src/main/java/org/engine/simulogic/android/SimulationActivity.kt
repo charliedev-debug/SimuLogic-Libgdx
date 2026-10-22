@@ -209,11 +209,10 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
         }
 
         val menuRecyclerView = findViewById<RecyclerView>(R.id.menu_list).apply {
-            if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                layoutManager = GridLayoutManager(this.context, 2, GridLayoutManager.HORIZONTAL, false)
+            layoutManager = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                GridLayoutManager(this.context, 2, GridLayoutManager.HORIZONTAL, false)
             }else{
-                layoutManager =
-                    GridLayoutManager(this.context, 1, GridLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(this.context, 1, GridLayoutManager.HORIZONTAL, false)
             }
         }
 
@@ -272,8 +271,6 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
                    }
                }
             }
-
-
 
         bottomSheetButton.setOnClickListener {
             bottomSheetButton.visibility = View.GONE

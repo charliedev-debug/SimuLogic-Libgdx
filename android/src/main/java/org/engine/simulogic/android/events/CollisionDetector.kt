@@ -79,8 +79,10 @@ class CollisionDetector(private val connection: Connection) {
         }
         rangeSelect.rangeItems.clear()
         connection.forEach { node ->
-            val collidedObject = node.contains(rangeSelect)
-            if (collidedObject != null && collidedObject !is CRangePoint && collidedObject != rangeSelect) {
+            val collidedObject = node.value.contains(rangeSelect)
+            if (collidedObject != null &&
+                collidedObject !is CRangePoint &&
+                collidedObject != rangeSelect && node.value !is CSignal && node.value !is CRangeLine) {
                 node.value.selected = true
                 rangeSelect.rangeItems.add(CollisionItem(node, node.value))
             }
