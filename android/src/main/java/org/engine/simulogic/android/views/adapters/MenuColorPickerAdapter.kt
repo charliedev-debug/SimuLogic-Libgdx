@@ -25,6 +25,7 @@ class MenuColorPickerAdapter(private val listener: OnColorSelectedListener): Rec
                 listener.onSelected(dataList[position])
             }
             itemView.findViewById<AppCompatImageView>(R.id.delete).setOnClickListener {
+                listener.onDelete(dataList[position])
                 remove(position)
             }
             itemView.findViewById<MaterialTextView>(R.id.title).also{titleTextView->
@@ -102,5 +103,6 @@ class MenuColorPickerAdapter(private val listener: OnColorSelectedListener): Rec
     }
     interface OnColorSelectedListener{
         fun onSelected(item: ColorPickerItem)
+        fun onDelete(item: ColorPickerItem)
     }
 }

@@ -30,12 +30,17 @@ class CustomColorPickerDialog(private val connection: Connection,context: Contex
         val selectedPallete = findViewById<View>(R.id.selectedPallete)
         val addPallete = findViewById<MaterialButton>(R.id.addPallete)
         val recyclerViewColor = findViewById<RecyclerView>(R.id.colorPalleteList)
+        val deleteBuffer = mutableListOf<ColorPickerItem>()
         val colorPickerAdapter = MenuColorPickerAdapter(object : MenuColorPickerAdapter.OnColorSelectedListener{
             override fun onSelected(item: ColorPickerItem) {
                 val color = item.color
                 selectedPalleteTitle.text = item.title
                 selectedPallete.setBackgroundColor(android.graphics.Color.argb((color.a * 255f).toInt(),(color.r * 255f).toInt(),
                     (color.g * 255f).toInt(),(color.b * 255f).toInt()))
+            }
+
+            override fun onDelete(item: ColorPickerItem) {
+                deleteBuffer.add(item)
             }
         })
 
@@ -80,6 +85,10 @@ class CustomColorPickerDialog(private val connection: Connection,context: Contex
                 colorPickerAdapter[index].also { item ->
                     connection.colorPalleteList[item.title] = Pallete(item.title,item.color)
                 }
+            }
+
+            deleteBuffer.onEach {
+                connection.colorPalleteList.remove(it.title)
             }
             dismiss()
         }
