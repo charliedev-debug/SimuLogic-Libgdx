@@ -52,15 +52,16 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="?attr/colorOutline"/>
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/signalOn"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:checked="true"
         android:text="SIGNAL ON"
         android:textSize="11dp"
         android:textFontWeight="300"
         android:maxLines="1"
-        android:textColor="?attr/colorOnSurface" />
+        android:textColor="?attr/colorOnSurface"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -68,11 +69,11 @@
         android:layout_margin="5dp"
         android:padding="5dp"
         android:gravity="center_vertical"
-        android:clickable="true"
-        android:focusable="true"
+        android:clickable="false"
+        android:focusable="false"
         android:background="@drawable/radio_button_custom">
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/selectedPalleteTitle"
+            android:id="@+id/selectedPalleteSignalOnText"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
@@ -82,30 +83,31 @@
             android:maxLines="1"
             android:textColor="?attr/colorOnSurface" />
         <View
-            android:id="@+id/selectedPallete"
+            android:id="@+id/selectedPalleteSignalOn"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:layout_marginEnd="10dp"
             android:background="@color/delete_color" />
     </LinearLayout>
-    <com.google.android.material.textview.MaterialTextView
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/signalOff"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
         android:text="SIGNAL OFF"
+        android:checked="false"
         android:textSize="11dp"
         android:textFontWeight="300"
         android:maxLines="1"
-        android:textColor="?attr/colorOnSurface" />
+        android:textColor="?attr/colorOnSurface"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5dp"
         android:gravity="center_vertical"
-        android:clickable="true"
-        android:focusable="true"
+        android:clickable="false"
+        android:focusable="false"
         android:background="@drawable/radio_button_custom">
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/selectedPalleteSignalOffText"

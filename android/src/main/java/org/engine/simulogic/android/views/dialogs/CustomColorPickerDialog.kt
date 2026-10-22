@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.badlogic.gdx.graphics.Color
@@ -26,17 +27,35 @@ class CustomColorPickerDialog(private val connection: Connection,context: Contex
         setContentView(R.layout.custom_color_picker_layout)
         val apply = findViewById<MaterialButton>(R.id.apply)
         val cancel = findViewById<MaterialButton>(R.id.cancel)
-        val selectedPalleteTitle = findViewById<MaterialTextView>(R.id.selectedPalleteTitle)
-        val selectedPallete = findViewById<View>(R.id.selectedPallete)
+        val selectedPalleteSignalOnText = findViewById<MaterialTextView>(R.id.selectedPalleteSignalOnText)
+        val selectedPalleteSignalOn = findViewById<View>(R.id.selectedPalleteSignalOn)
+        val selectedPalleteSignalOffText = findViewById<MaterialTextView>(R.id.selectedPalleteSignalOffText)
+        val selectedPalleteSignalOff = findViewById<View>(R.id.selectedPalleteSignalOff)
         val addPallete = findViewById<MaterialButton>(R.id.addPallete)
         val recyclerViewColor = findViewById<RecyclerView>(R.id.colorPalleteList)
+        val signalOn = findViewById<AppCompatCheckBox>(R.id.signalOn)
+        val signalOff = findViewById<AppCompatCheckBox>(R.id.signalOff)
         val deleteBuffer = mutableListOf<ColorPickerItem>()
         val colorPickerAdapter = MenuColorPickerAdapter(object : MenuColorPickerAdapter.OnColorSelectedListener{
             override fun onSelected(item: ColorPickerItem) {
                 val color = item.color
-                selectedPalleteTitle.text = item.title
-                selectedPallete.setBackgroundColor(android.graphics.Color.argb((color.a * 255f).toInt(),(color.r * 255f).toInt(),
-                    (color.g * 255f).toInt(),(color.b * 255f).toInt()))
+                if(signalOn.isChecked) {
+                    selectedPalleteSignalOnText.text = item.title
+                    selectedPalleteSignalOn.setBackgroundColor(
+                        android.graphics.Color.argb(
+                            (color.a * 255f).toInt(), (color.r * 255f).toInt(),
+                            (color.g * 255f).toInt(), (color.b * 255f).toInt()
+                        )
+                    )
+                }else{
+                    selectedPalleteSignalOffText.text = item.title
+                    selectedPalleteSignalOff.setBackgroundColor(
+                        android.graphics.Color.argb(
+                            (color.a * 255f).toInt(), (color.r * 255f).toInt(),
+                            (color.g * 255f).toInt(), (color.b * 255f).toInt()
+                        )
+                    )
+                }
             }
 
             override fun onDelete(item: ColorPickerItem) {
@@ -54,6 +73,14 @@ class CustomColorPickerDialog(private val connection: Connection,context: Contex
 
         recyclerViewColor.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerViewColor.adapter = colorPickerAdapter
+
+        signalOn.setOnClickListener {
+            signalOff.isChecked = !signalOn.isChecked
+        }
+
+        signalOff.setOnClickListener {
+            signalOn.isChecked = !signalOff.isChecked
+        }
 
         addPallete.setOnClickListener {
             PalleteTitleDialog(context) { title->
