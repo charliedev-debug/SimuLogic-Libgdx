@@ -14,10 +14,12 @@ import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.engine.simulogic.R
+import org.engine.simulogic.android.circuits.components.other.Pallete
+import org.engine.simulogic.android.circuits.logic.Connection
 import org.engine.simulogic.android.views.adapters.ColorPickerItem
 import org.engine.simulogic.android.views.adapters.MenuColorPickerAdapter
 
-class CustomColorPickerDialog(context: Context): Dialog(context) {
+class CustomColorPickerDialog(private val connection: Connection,context: Context): Dialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +38,15 @@ class CustomColorPickerDialog(context: Context): Dialog(context) {
                     (color.g * 255f).toInt(),(color.b * 255f).toInt()))
             }
         })
-        colorPickerAdapter.insert("Pallete",Color.WHITE)
-        colorPickerAdapter.insert("Pallete",Color.WHITE)
-        colorPickerAdapter.insert("Pallete",Color.WHITE)
-        colorPickerAdapter.insert("Pallete",Color.WHITE)
-        colorPickerAdapter.insert("Pallete",Color.WHITE)
+
+        connection.colorPalleteList.onEach {
+            colorPickerAdapter.insert(it.key,it.value.color)
+        }
+
+        if(colorPickerAdapter.isEmpty()){
+           recyclerViewColor.visibility = View.GONE
+        }
+
         recyclerViewColor.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerViewColor.adapter = colorPickerAdapter
 
@@ -54,8 +60,10 @@ class CustomColorPickerDialog(context: Context): Dialog(context) {
                             fromUser: Boolean
                         ) {
                             val argb = colorEvelope.argb
-                            colorPickerAdapter.insert(title, Color( argb[1] / 255f, argb[2] / 255f, argb[3] / 255f,argb[0] / 255f))
+                            val color = Color( argb[1] / 255f, argb[2] / 255f, argb[3] / 255f,argb[0] / 255f)
+                            colorPickerAdapter.insert(title, color)
                             colorPickerAdapter.notifyItemRangeChanged(0,colorPickerAdapter.itemCount)
+                            recyclerViewColor.visibility = View.VISIBLE
                         }
                     })
                     colorPicker.setNegativeButton("Cancel"
@@ -68,6 +76,11 @@ class CustomColorPickerDialog(context: Context): Dialog(context) {
             }.show()
         }
         apply.setOnClickListener {
+            for(index in 0 until colorPickerAdapter.itemCount){
+                colorPickerAdapter[index].also { item ->
+                    connection.colorPalleteList[item.title] = Pallete(item.title,item.color)
+                }
+            }
             dismiss()
         }
 

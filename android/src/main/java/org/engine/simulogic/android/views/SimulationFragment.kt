@@ -152,7 +152,7 @@ class SimulationFragment : AndroidFragmentApplication() {
                     }
 
                     "LineColor"->{
-                        CustomColorPickerDialog(requireContext()).show()
+                        CustomColorPickerDialog(simulationLoop.connection,requireContext()).show()
                        /* ColorPickerDialog.Builder(requireContext()).also {colorPicker->
                             colorPicker.setTitle("Line Color")
                             colorPicker.setPositiveButton("Accept", object: ColorEnvelopeListener{

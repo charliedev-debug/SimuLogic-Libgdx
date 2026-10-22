@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.net.Uri
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CTypes
@@ -41,6 +42,7 @@ import org.engine.simulogic.android.circuits.components.other.CAnchor
 import org.engine.simulogic.android.circuits.components.other.CGroup
 import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.other.CPoint
+import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.components.visuals.CBCDDisplay
 import org.engine.simulogic.android.circuits.components.visuals.CLed
 import org.engine.simulogic.android.circuits.components.visuals.CSevenSegmentDisplay
@@ -124,7 +126,7 @@ class DataTransferObject {
         val stream = DataOutputStream(temp.write(false))
         val descriptionLength = min(description.length,DESCRIPTION_LENGTH_MAX_CHARACTERS)
         stream.writeInt(IDENTIFIER)
-        stream.writeInt(VERSION_3)
+        stream.writeInt(VERSION_4)
         stream.writeInt(title.length)
         stream.write(title.toByteArray(Charsets.UTF_8))
         stream.writeInt(descriptionLength)
@@ -136,19 +138,16 @@ class DataTransferObject {
         // component size
         stream.writeInt(connection.size())
         // save color pallete list
-        /*
         stream.writeInt(connection.colorPalleteList.size)
         connection.colorPalleteList.forEach { (key, pallete) ->
-            // remove the defaults since they will be changing with the theme
-            if(key != "defaultLineColorOff" && key != "defaultLineColorOn") {
-                stream.writeInt(key.length)
-                stream.write(key.toByteArray(Charsets.UTF_8))
-                stream.writeFloat(pallete.color.a)
-                stream.writeFloat(pallete.color.r)
-                stream.writeFloat(pallete.color.g)
-                stream.writeFloat(pallete.color.b)
-            }
-        }*/
+            stream.writeInt(key.length)
+            stream.write(key.toByteArray(Charsets.UTF_8))
+            stream.writeFloat(pallete.color.a)
+            stream.writeFloat(pallete.color.r)
+            stream.writeFloat(pallete.color.g)
+            stream.writeFloat(pallete.color.b)
+
+        }
         synchronized(connection) {
             // assign indices first for later processing
             connection.forEachIndexed { index, listNode ->
@@ -307,7 +306,7 @@ class DataTransferObject {
             gestureListener.setCameraZoom(cameraZoom)
             val componentSize = stream.readInt()
             // load color pallete list
-           /* if(version == VERSION_4) {
+            if(version == VERSION_4) {
                 val palleteCount = stream.readInt()
                 for (index in 0 until palleteCount) {
                     val keyLength = stream.readInt()
@@ -320,7 +319,7 @@ class DataTransferObject {
                     val b = stream.readFloat()
                     connection.colorPalleteList[keyStr] = Pallete(keyStr, Color(r, g, b, a))
                 }
-            }*/
+            }
             for (i in 0 until componentSize) {
                 val typeLength = stream.readInt()
                 val typeBytes = ByteArray(typeLength)

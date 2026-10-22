@@ -43,7 +43,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     lateinit var gestureListener: MotionGestureListener
     lateinit var componentManager:ComponentManager
     private val assetManager = AssetManager()
-    private val connection = Connection()
+     val connection = Connection()
     private val collisionDetector = CollisionDetector(connection)
     private lateinit var scene:PlayGroundScene
     private lateinit var gridDecorator: GridDecorator

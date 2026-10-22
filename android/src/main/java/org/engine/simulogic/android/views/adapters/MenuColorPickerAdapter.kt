@@ -67,6 +67,14 @@ class MenuColorPickerAdapter(private val listener: OnColorSelectedListener): Rec
         }
     }
 
+    fun isEmpty(): Boolean{
+        return dataList.isEmpty()
+    }
+
+    operator fun get(index: Int): ColorPickerItem{
+        return dataList[index]
+    }
+
     fun insert(title:String,color: Color){
         dataList.add(ColorPickerItem(title,color))
     }
