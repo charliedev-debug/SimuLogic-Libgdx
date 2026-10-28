@@ -12,7 +12,7 @@ import kotlin.math.sign
 class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  color: Color, private val scene: PlayGroundScene)
     : CRect(0f,0f, CDefaults.signalIconRadius, CDefaults.signalIconRadius,color,scene) {
     var direction = 0
-
+    var isMovable = true
     fun setVisibility(visible: Boolean){
         isVisible = visible
         start.selected = visible
@@ -62,7 +62,7 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
     }
 
     override fun updatePosition(x: Float, y: Float) {
-        if(selected){
+        if(selected && isMovable){
             when(direction){
                 0 ->{
                     super.updatePosition(x, getPosition().y)

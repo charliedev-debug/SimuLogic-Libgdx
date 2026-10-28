@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
 import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
+import org.engine.simulogic.android.circuits.components.gates.CSignal
+import org.engine.simulogic.android.circuits.components.lines.LineMarker
+import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
 import org.engine.simulogic.android.circuits.logic.events.EventAndThreeInputCommand
@@ -29,6 +32,7 @@ import org.engine.simulogic.android.circuits.logic.events.EventLabelAnchorComman
 import org.engine.simulogic.android.circuits.logic.events.EventLabelCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLatchCommand
 import org.engine.simulogic.android.circuits.logic.events.EventLedCommand
+import org.engine.simulogic.android.circuits.logic.events.EventLineColorCommand
 import org.engine.simulogic.android.circuits.logic.events.EventModeCommand
 import org.engine.simulogic.android.circuits.logic.events.EventMultiplexerCommand
 import org.engine.simulogic.android.circuits.logic.events.EventNandCommand
@@ -344,6 +348,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         return gestureListener.collisionDetector.isNotEmpty()
     }
 
+    fun isLineMarkerSelected(): Boolean{
+        return gestureListener.collisionDetector.isNotEmpty()
+    }
+
     fun insertCDataBus(size:Int) {
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
@@ -519,6 +527,10 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
                     "ENCODE 3-2",connection, gestureListener.commandHistory, scene))
             }
         }
+    }
+
+    fun setLineColor(colorOn: Pallete?, colorOff: Pallete?){
+      eventBridge.insertCommand(EventLineColorCommand(gestureListener,colorOn,colorOff))
     }
 
     fun setStyleA(){

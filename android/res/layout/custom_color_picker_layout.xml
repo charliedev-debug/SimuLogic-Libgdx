@@ -52,6 +52,11 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="?attr/colorOutline"/>
+    <LinearLayout
+        android:id="@+id/selectedPalleteSignalsView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/signalOn"
         android:layout_width="120dp"
@@ -77,18 +82,28 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Pallete"
+            android:text="default"
             android:textSize="14dp"
             android:textFontWeight="300"
             android:maxLines="1"
             android:textColor="?attr/colorOnSurface" />
-        <View
-            android:id="@+id/selectedPalleteSignalOn"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:background="@color/delete_color" />
+            android:layout_marginEnd="10dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/transparency_board" />
+            <View
+                android:id="@+id/selectedPalleteSignalOn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/delete_color" />
+        </RelativeLayout>
+
     </LinearLayout>
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/signalOff"
@@ -114,18 +129,28 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Pallete"
+            android:text="default"
             android:textSize="14dp"
             android:textFontWeight="300"
             android:maxLines="1"
             android:textColor="?attr/colorOnSurface" />
-        <View
-            android:id="@+id/selectedPalleteSignalOff"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:layout_marginEnd="10dp"
-            android:background="@color/delete_color" />
+            android:layout_marginEnd="10dp">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/transparency_board" />
+            <View
+                android:id="@+id/selectedPalleteSignalOff"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/delete_color" />
+        </RelativeLayout>
+    </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/applyLayout"

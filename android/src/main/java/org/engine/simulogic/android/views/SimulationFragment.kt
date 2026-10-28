@@ -21,6 +21,7 @@ import org.engine.simulogic.android.PremiumPurchaseActivity
 import org.engine.simulogic.android.SimulationLoop
 import org.engine.simulogic.android.circuits.components.CDefaults
 import org.engine.simulogic.android.circuits.components.CNode
+import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.storage.ProjectOptions
 import org.engine.simulogic.android.circuits.storage.UserSettings
 import org.engine.simulogic.android.events.MotionGestureListener
@@ -151,26 +152,16 @@ class SimulationFragment : AndroidFragmentApplication() {
                         simulationLoop.componentManager.setMode(MotionGestureListener.CONNECTION_MODE)
                     }
 
-                    "LineColor"->{
-                        CustomColorPickerDialog(simulationLoop.connection,requireContext()).show()
-                       /* ColorPickerDialog.Builder(requireContext()).also {colorPicker->
-                            colorPicker.setTitle("Line Color")
-                            colorPicker.setPositiveButton("Accept", object: ColorEnvelopeListener{
-                                override fun onColorSelected(
-                                    colorEvelope: ColorEnvelope?,
-                                    fromUser: Boolean
-                                ) {
-
-                                }
-
-                            })
-                            colorPicker.setNegativeButton("Cancel"
-                            ) { dialogInterface, i -> dialogInterface.dismiss() }
-                            colorPicker.attachAlphaSlideBar(true)
-                            colorPicker.attachBrightnessSlideBar(true)
-                            colorPicker.setBottomSpace(12)
-                            colorPicker.show()
-                        }*/
+                    "WireColor"->{
+                        CustomColorPickerDialog(simulationLoop.connection,simulationLoop.componentManager.isLineMarkerSelected(),requireContext(),object :
+                            CustomColorPickerDialog.ColorPickerDialogListener{
+                            override fun apply(
+                                colorPalleteOn: Pallete?,
+                                colorPalleteOff: Pallete?
+                            ) {
+                                simulationLoop.componentManager.setLineColor(colorPalleteOn,colorPalleteOff)
+                            }
+                            }).show()
                     }
 
                     "Split-Node"->{

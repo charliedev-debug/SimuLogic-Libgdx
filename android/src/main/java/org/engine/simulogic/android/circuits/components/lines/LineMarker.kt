@@ -37,8 +37,8 @@ class LineMarker(
     IUpdate {
     private val lines = mutableListOf<CLine>()
     private val lineRect = mutableListOf<CRangeLine>()
-    private lateinit var colorSignalOnPallete: Pallete
-    private lateinit var colorSignalOffPallete: Pallete
+     var colorSignalOnPallete: Pallete? = null
+     var colorSignalOffPallete: Pallete? = null
     var markerActive = false
     var hasParentMarker = false
     var previousFromPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
@@ -328,8 +328,10 @@ class LineMarker(
             a = 0.5f
         }
 
-        for (i in 1 until signals.size - 2){
-            lineRect.add(CRangeLine(signals[i], signals[i + 1],this,colorRect, scene))
+        for (i in 0 until signals.size - 1){
+            lineRect.add(CRangeLine( signals[i] , signals[i + 1],this,colorRect, scene).also {
+                it.isMovable = i != 0
+            })
         }
         lineRect.onEach {
             it.isVisible = false
@@ -344,14 +346,6 @@ class LineMarker(
             }
         }
 
-    }
-
-    fun setColorPalleteOn(pallete: Pallete){
-        colorSignalOnPallete = pallete
-    }
-
-    fun setColorPalleteOff(pallete: Pallete){
-        colorSignalOffPallete = pallete
     }
 
     fun insertSplitNodeStartEnd(insertIndex:Int, fromIndex:Int): CSignal{
@@ -586,8 +580,9 @@ class LineMarker(
             val prev = prevSignal.getPosition()
             val next = nextSignal.getPosition()
             lines[i].also { line ->
-                line.color =
-                    if (parentNodeMarker.value == CNode.SIGNAL_ACTIVE) SIGNAL_ACTIVE_COLOR else LINE_MARKER_INACTIVE //colorSignalOnPallete.color else colorSignalOffPallete.color
+                val lineColorOn = if(colorSignalOnPallete == null) SIGNAL_ACTIVE_COLOR else colorSignalOnPallete!!.color
+                val lineColorOff = if(colorSignalOffPallete == null) LINE_MARKER_INACTIVE else colorSignalOffPallete!!.color
+                line.color = if (parentNodeMarker.value == CNode.SIGNAL_ACTIVE) lineColorOn else lineColorOff
                 line.updatePosition(prev.x, prev.y, next.x, next.y)
             }
             markerActive = markerActive || nextSignal.selected || prevSignal.selected || origin.markerActive || parentMarker.markerActive
@@ -599,6 +594,17 @@ class LineMarker(
             it.update()
         }
 
+        // efficient way to remove deleted pallete
+        colorSignalOnPallete?.also {
+            if(!it.isActive){
+                colorSignalOnPallete = null
+            }
+        }
+        colorSignalOffPallete?.also {
+            if(!it.isActive){
+                colorSignalOffPallete = null
+            }
+        }
     }
 
     fun isSourceSignal(): Boolean{
@@ -624,9 +630,6 @@ class LineMarker(
                 return obj
             }
         }
-        lineRect.onEach {
-            it.setVisibility(false)
-        }
         for(i in 0 until lineRect.size){
             val rect = lineRect[i]
             val obj = lineRect[i].contains(entity)
@@ -644,9 +647,6 @@ class LineMarker(
             if (obj != null) {
                 return obj
             }
-        }
-        lineRect.onEach {
-           it.setVisibility(false)
         }
         for(i in 0 until lineRect.size){
             val rect = lineRect[i]

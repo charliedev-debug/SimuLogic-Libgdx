@@ -84,7 +84,7 @@ class CollisionDetector(private val connection: Connection) {
                 collidedObject !is CRangePoint &&
                 collidedObject != rangeSelect && node.value !is CSignal && node.value !is CRangeLine) {
                 node.value.selected = true
-                rangeSelect.rangeItems.add(CollisionItem(node, node.value))
+                rangeSelect.rangeItems.add(CollisionItem(node, collidedObject))
             }
         }
 

@@ -102,6 +102,8 @@ class DataTransferObject {
         val fromSourceNode: Int,
         val fromLineMarker: Int,
         val sourceSignalIndex: Int,
+        val signalColorOnKey:String,
+        val signalColorOffKey:String,
         val signals: MutableList<NestedCSignalHelper> = mutableListOf()
     )
 
@@ -234,6 +236,21 @@ class DataTransferObject {
                     stream.writeInt(marker.signals.size)
                     stream.writeInt(marker.linePointCountX)
                     stream.writeInt(marker.linePointCountY)
+                    // save signal color
+                    if(marker.colorSignalOnPallete != null){
+                        stream.writeInt(marker.colorSignalOnPallete!!.name.length)
+                        stream.write(marker.colorSignalOnPallete!!.name.toByteArray(Charsets.UTF_8))
+                    }else{
+                        stream.writeInt("default".length)
+                        stream.write("default".toByteArray(Charsets.UTF_8))
+                    }
+                    if(marker.colorSignalOffPallete != null){
+                        stream.writeInt(marker.colorSignalOffPallete!!.name.length)
+                        stream.write(marker.colorSignalOffPallete!!.name.toByteArray(Charsets.UTF_8))
+                    }else{
+                        stream.writeInt("default".length)
+                        stream.write("default".toByteArray(Charsets.UTF_8))
+                    }
                     stream.writeInt(marker.getNodeOriginDepth())
                     // in case the connection is connected to another connection joint
                     if (marker.isSourceSignal()) {
@@ -658,11 +675,19 @@ class DataTransferObject {
                         val signalSize = stream.readInt()
                         val linePointCountX = stream.readInt()
                         val linePointCountY = stream.readInt()
-                        /*val lineSignalOnColorKeyLength = if(version == VERSION_4) stream.readInt() else 0
-                        val lineSignalOnColorKey = if(version == VERSION_4) ByteArray(lineSignalOnColorKeyLength) else null
-                        lineSignalOnColorKey?.let {
-                            stream.readFully(lineSignalOnColorKey)
-                        }*/
+                        var signalColorOnKey  = "default"
+                        var signalColorOffKey = "default"
+                        if(version == VERSION_4){
+                            val signalColorOnStringLength = stream.readInt()
+                            val signalColorOnString = ByteArray(signalColorOnStringLength)
+                            stream.readFully(signalColorOnString)
+                            val signalColorOffStringLength = stream.readInt()
+                            val signalColorOffString = ByteArray(signalColorOffStringLength)
+                            stream.readFully(signalColorOffString)
+                            signalColorOnKey = signalColorOnString.toString(Charsets.UTF_8)
+                            signalColorOffKey = signalColorOffString.toString(Charsets.UTF_8)
+                        }
+
                         if (version >= VERSION_2) {
                             val originDepth = stream.readInt()
                             val sourceID = stream.readInt()
@@ -684,7 +709,9 @@ class DataTransferObject {
                                   originDepth = originDepth,
                                   fromSourceNode = fromSourceNode,
                                   fromLineMarker = fromLineMarker,
-                                  sourceSignalIndex = sourceSignalIndex
+                                  sourceSignalIndex = sourceSignalIndex,
+                                  signalColorOnKey = signalColorOnKey,
+                                  signalColorOffKey = signalColorOffKey
                               ).also {
                                   nestedLineMarkerList.add(it)
                               }.signals.also {
@@ -724,9 +751,12 @@ class DataTransferObject {
                                     linePointCountY
                                 ).also { marker ->
                                     marker.initialize(scene)
-                                    /*if(version == VERSION_4){
-                                        marker.setColorPalleteOff(connection.colorPalleteList[lineSignalOnColorKey.toString()]!!)
-                                    }*/
+                                    if(signalColorOnKey != "default"){
+                                        marker.colorSignalOnPallete = connection.colorPalleteList[signalColorOnKey]
+                                    }
+                                    if(signalColorOffKey != "default"){
+                                        marker.colorSignalOffPallete = connection.colorPalleteList[signalColorOffKey]
+                                    }
                                     for (j in 0 until signalSize) {
                                         val signalIndex = stream.readInt()
                                         val x = stream.readFloat()
@@ -761,6 +791,12 @@ class DataTransferObject {
                                     linePointCountY
                                 ).also { marker ->
                                     marker.initialize(scene)
+                                    if(signalColorOnKey != "default"){
+                                        marker.colorSignalOnPallete = connection.colorPalleteList[signalColorOnKey]
+                                    }
+                                    if(signalColorOffKey != "default"){
+                                        marker.colorSignalOffPallete = connection.colorPalleteList[signalColorOffKey]
+                                    }
                                     for (j in 0 until signalSize) {
                                         val signalIndex = stream.readInt()
                                         val x = stream.readFloat()
@@ -807,6 +843,12 @@ class DataTransferObject {
                             signalTo = it.signalToIndex,
                             scene = scene, pathFind = false
                         ).also { marker ->
+                            if(it.signalColorOnKey != "default"){
+                                marker.colorSignalOnPallete = connection.colorPalleteList[it.signalColorOnKey]
+                            }
+                            if(it.signalColorOffKey != "default"){
+                                marker.colorSignalOffPallete = connection.colorPalleteList[it.signalColorOffKey]
+                            }
                             for (j in 0 until it.signalSize) {
                                 val signalHelper = it.signals[j]
                                 val signalIndex = signalHelper.signalIndex

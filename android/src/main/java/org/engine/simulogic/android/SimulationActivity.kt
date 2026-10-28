@@ -225,7 +225,7 @@ class SimulationActivity : AppCompatActivity(), AndroidFragmentApplication.Callb
             insert("Connect2", "Connect", true, R.drawable.connect_2_node)
             insert("Connect4", "Connect", true, R.drawable.connect_4_node)
             insert("Connect6", "Connect", true, R.drawable.connect_6_node)
-            insert("LineColor", "Line-Color", false, R.drawable.line_pallete)
+            insert("WireColor", "Wire-Color", false, R.drawable.line_pallete)
             insert("Split-Node","Split-Node",false, R.drawable.split, true)
             insert("Rotate", "Rotate", false, R.drawable.rotate_right)
             insert("EditClock","Edit-Clock",false, R.drawable.edit_clock, true)
