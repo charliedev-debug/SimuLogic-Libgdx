@@ -38,7 +38,7 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         val lineWidth = 2f
-        type = CTypes.DECODER_2_3
+        type = CTypes.DECODER_2_4
         when(title){
             "DECODE 4-16"->{
                 inputDataCount = 0
@@ -56,12 +56,12 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
                 type = CTypes.DECODER_3_8
             }
 
-            "DECODE 2-3"->{
+            "DECODE 2-4"->{
                 inputDataCount = 0
-                inputSelectorCount = 3
-                outputDataCount = 3
+                inputSelectorCount = 2
+                outputDataCount = 4
                 centerLabelTexture = "2-3"
-                type = CTypes.DECODER_2_3
+                type = CTypes.DECODER_2_4
             }
 
             "DECODE 1-2"->{
@@ -146,7 +146,7 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             CSignal(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + i * sprite.height / inputSelectorCount + offsetTop,
                 CTypes.SIGNAL_IN,inputDataCount + i,scene).also { signal->
                 signals.add(signal)
-                ListNode(CLabel(font, 25f, "S${i+1}", x, y, scene).also {
+                ListNode(CLabel(font, 25f, "S${i}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
                     it.anchor = CAnchor(signal, CAnchor.ALIGN_TOP_RIGHT)
                 }).also { node ->
@@ -162,7 +162,7 @@ class CDecoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             CSignal(getCenter().x + i * CDefaults.muxerSignalSpacing + offsetCenterX,
                 getCenter().y - CDefaults.muxerSignalSpacing, CTypes.SIGNAL_OUT,inputDataCount + inputSelectorCount + i,scene).also { signal ->
                 signals.add(signal)
-                ListNode(CLabel(font, 25f, "${i+1}", x, y, scene).also {
+                ListNode(CLabel(font, 25f, "${i}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
                     it.anchor = CAnchor(signal, CAnchor.ALIGN_TOP_RIGHT)
                 }).also { node ->

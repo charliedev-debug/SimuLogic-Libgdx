@@ -32,12 +32,13 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
     private var textTitleLabel: ListNode?= null
     private var centerLabelBanner : CSprite? = null
     private var centerLabelTexture = "2-1"
+    private var conversionTable = arrayOf("0000","0001","0010","0011","0100","0101","0110","0111","1000","1001","1010","1011","1100","1101","1110","1111")
     constructor(x:Float, y:Float, title:String,font: BitmapFont,connection: Connection, scene: PlayGroundScene):this(x, y, ROTATE_RIGHT, title, font,connection, scene)
     init {
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = textureAtlas.findRegion("TRANSPARENT")
         val lineWidth = 2f
-        type = CTypes.ENCODER_3_2
+        type = CTypes.ENCODER_4_2
         when(title){
             "ENCODE 16-4"->{
                 inputDataCount = 0
@@ -55,12 +56,12 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
                 type = CTypes.ENCODER_8_3
             }
 
-            "ENCODE 3-2"->{
+            "ENCODE 4-2"->{
                 inputDataCount = 0
-                inputSelectorCount = 3
+                inputSelectorCount = 4
                 outputDataCount = 2
                 centerLabelTexture = "3-2"
-                type = CTypes.ENCODER_3_2
+                type = CTypes.ENCODER_4_2
             }
 
             "ENCODE 2-1"->{
@@ -129,7 +130,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             CSignal(getCenter().x + i * sprite.width / inputDataCount + offsetLeft / 2f,
                 getCenter().y + maxHeight + CDefaults.muxerSignalSpacing, CTypes.SIGNAL_IN,i,scene).also { signal ->
                 signals.add(signal)
-                ListNode(CLabel(font, 25f, "${i+1}", x, y, scene).also {
+                ListNode(CLabel(font, 25f, "$i", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
                     it.anchor = CAnchor(signal, CAnchor.ALIGN_BOTTOM_RIGHT)
                 }).also { node ->
@@ -144,7 +145,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             CSignal(getCenter().x  - CDefaults.muxerSignalSpacing,getCenter().y + i * sprite.height / inputSelectorCount + offsetTop / 2f,
                 CTypes.SIGNAL_IN,inputDataCount + i,scene).also { signal->
                 signals.add(signal)
-                ListNode(CLabel(font, 25f, "S${i+1}", x, y, scene).also {
+                ListNode(CLabel(font, 25f, "S${i}", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
                     it.anchor = CAnchor(signal, CAnchor.ALIGN_TOP_RIGHT)
                 }).also { node ->
@@ -159,7 +160,7 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
             CSignal(getCenter().x + i * CDefaults.muxerSignalSpacing + offsetCenterX,
                 getCenter().y - CDefaults.muxerSignalSpacing, CTypes.SIGNAL_OUT,inputDataCount + inputSelectorCount + i,scene).also { signal ->
                 signals.add(signal)
-                ListNode(CLabel(font, 25f, "${i+1}", x, y, scene).also {
+                ListNode(CLabel(font, 25f, "$i", x, y, scene).also {
                     it.color = EnvironmentTheme.colorOnBackground
                     it.anchor = CAnchor(signal, CAnchor.ALIGN_TOP_RIGHT)
                 }).also { node ->
@@ -246,10 +247,19 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
     }
 
     override fun execute() {
-        val output = signals[inputDataCount + inputSelectorCount]
-        getActiveIndex().also { activeIndex->
-            output.value = signals[activeIndex].value
+        val startOutputIndex = inputDataCount + inputSelectorCount
+        val endOutputIndex = inputDataCount + inputSelectorCount + outputDataCount
+        for(i in (inputDataCount until inputDataCount + inputSelectorCount)){
+            signals[i].also{value->
+                if(value.value == SIGNAL_ACTIVE){
+                    for((counter, signalIndex) in (startOutputIndex until endOutputIndex).withIndex() ){
+                        val bitCount = conversionTable[i].length - 1
+                        signals[signalIndex].value = if(conversionTable[i][bitCount - counter] == '0') SIGNAL_INACTIVE else SIGNAL_ACTIVE
+                    }
+                }
+            }
         }
+
     }
 
 
@@ -374,9 +384,12 @@ class CEncoder (x:Float, y:Float,rotationDirection:Int, private val title:String
         signalSignalLabelMarker.onEach {
             it.update()
         }
+
         // output signal color
-        signals[inputDataCount + inputSelectorCount].also { output ->
-            if (!output.selected) {
+        val startOutputIndex = inputDataCount + inputSelectorCount
+        val endOutputIndex = inputDataCount + inputSelectorCount + outputDataCount
+        for (index in startOutputIndex until endOutputIndex){
+            signals[index].also { output->
                 output.updateColor(if (output.value == SIGNAL_ACTIVE) CDefaults.SIGNAL_ACTIVE_COLOR else CDefaults.GATE_UNSELECTED_COLOR)
             }
         }

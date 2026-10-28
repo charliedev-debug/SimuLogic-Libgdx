@@ -67,10 +67,10 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         const val DEMULTIPLEXER_8_1_COMPONENT = "DEMUXER 8-1"
         const val MULTIPLEXER_1_16_COMPONENT = "MUXER 1-16"
         const val DEMULTIPLEXER_16_1_COMPONENT = "DEMUXER 16-1"
-        const val DECODER_2_3_COMPONENT = "DECODE 2-3"
+        const val DECODER_2_4_COMPONENT = "DECODE 2-4"
         const val DECODER_3_8_COMPONENT = "DECODE 3-8"
         const val DECODER_4_16_COMPONENT = "DECODE 4-16"
-        const val ENCODER_3_2_COMPONENT = "ENCODE 3-2"
+        const val ENCODER_4_2_COMPONENT = "ENCODE 4-2"
         const val ENCODER_8_3_COMPONENT = "ENCODE 8-3"
         const val ENCODER_16_4_COMPONENT = "ENCODE 16-4"
     }
@@ -176,10 +176,10 @@ class ComponentFloatingBottomSheet(private val listener: IComponentAdapterListen
         combinationalUnitAdapter.insert(DEMULTIPLEXER_8_1_COMPONENT,R.drawable.demultiplexer_8_1, isPremium = true)
         combinationalUnitAdapter.insert(DEMULTIPLEXER_16_1_COMPONENT,R.drawable.demultiplexer_16_1, isPremium = true)
 
-        combinationalUnitAdapter.insert(ENCODER_3_2_COMPONENT,R.drawable.encoder_3_2, isPremium = true)
+        combinationalUnitAdapter.insert(ENCODER_4_2_COMPONENT,R.drawable.encoder_3_2, isPremium = true)
         combinationalUnitAdapter.insert(ENCODER_8_3_COMPONENT,R.drawable.encoder_8_3, isPremium = true)
         combinationalUnitAdapter.insert(ENCODER_16_4_COMPONENT,R.drawable.encoder_16_4, isPremium = true)
-        combinationalUnitAdapter.insert(DECODER_2_3_COMPONENT,R.drawable.decoder_2_3, isPremium = true)
+        combinationalUnitAdapter.insert(DECODER_2_4_COMPONENT,R.drawable.decoder_2_3, isPremium = true)
         combinationalUnitAdapter.insert(DECODER_3_8_COMPONENT,R.drawable.decoder_3_8, isPremium = true)
         combinationalUnitAdapter.insert(DECODER_4_16_COMPONENT,R.drawable.decoder_4_16, isPremium = true)
         combinationalUnitAdapter.showPremiumIndicator = !isPremiumUser

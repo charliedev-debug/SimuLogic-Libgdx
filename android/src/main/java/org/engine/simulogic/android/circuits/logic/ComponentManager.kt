@@ -2,11 +2,7 @@ package org.engine.simulogic.android.circuits.logic
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.math.Vector2
-import org.engine.simulogic.android.circuits.components.CTypes
 import org.engine.simulogic.android.circuits.components.buses.CFanOutBus
-import org.engine.simulogic.android.circuits.components.gates.CSignal
-import org.engine.simulogic.android.circuits.components.lines.LineMarker
-import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.components.other.Pallete
 import org.engine.simulogic.android.circuits.logic.events.EventAndCommand
 import org.engine.simulogic.android.circuits.logic.events.EventAndThreeInputCommand
@@ -499,7 +495,7 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                 eventBridge.insertCommand(EventDecoderCommand(Vector2(coordinates),font,
-                    "DECODE 2-3",connection, gestureListener.commandHistory, scene))
+                    "DECODE 2-4",connection, gestureListener.commandHistory, scene))
             }
         }
     }
@@ -520,11 +516,11 @@ class ComponentManager(private val projectOptions: ProjectOptions,private val fo
             }
         }
     }
-    fun insertCEncoder32(){
+    fun insertCEncoder42(){
         gestureListener.rectPointer.getPosition().also { position ->
             snapAlign.getSnapCoordinates(position).also { coordinates ->
                 eventBridge.insertCommand(EventEncoderCommand(Vector2(coordinates),font,
-                    "ENCODE 3-2",connection, gestureListener.commandHistory, scene))
+                    "ENCODE 4-2",connection, gestureListener.commandHistory, scene))
             }
         }
     }

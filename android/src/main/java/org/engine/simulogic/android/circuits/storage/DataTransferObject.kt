@@ -632,8 +632,8 @@ class DataTransferObject {
                     CTypes.DEMULTIPLEXER_1_16->{
                         connection.insertNode(ListNode(CDeMultiplexer(x, y, rotation, "DEMUXER 1-16", font,connection,scene)))
                     }
-                    CTypes.ENCODER_3_2->{
-                        connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 3-2", font,connection,scene)))
+                    CTypes.ENCODER_4_2->{
+                        connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 4-2", font,connection,scene)))
                     }
                     CTypes.ENCODER_8_3->{
                         connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 8-3", font,connection,scene)))
@@ -641,8 +641,8 @@ class DataTransferObject {
                     CTypes.ENCODER_16_4->{
                         connection.insertNode(ListNode(CEncoder(x, y, rotation, "ENCODE 16-4", font,connection,scene)))
                     }
-                    CTypes.DECODER_2_3->{
-                        connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 2-3", font,connection,scene)))
+                    CTypes.DECODER_2_4->{
+                        connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 2-4", font,connection,scene)))
                     }
                     CTypes.DECODER_3_8->{
                         connection.insertNode(ListNode(CDecoder(x, y, rotation, "DECODE 3-8", font,connection,scene)))

@@ -1,6 +1,5 @@
 package org.engine.simulogic.android.views
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,10 +10,6 @@ import androidx.fragment.app.activityViewModels
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication
-import com.skydoves.colorpickerview.ColorEnvelope
-import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import com.skydoves.colorpickerview.listeners.ColorPickerViewListener
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.engine.simulogic.android.PremiumPurchaseActivity
@@ -541,8 +536,8 @@ class SimulationFragment : AndroidFragmentApplication() {
                 ComponentFloatingBottomSheet.ENCODER_8_3_COMPONENT ->{
                     simulationLoop.componentManager.insertCEncoder83()
                 }
-                ComponentFloatingBottomSheet.ENCODER_3_2_COMPONENT ->{
-                    simulationLoop.componentManager.insertCEncoder32()
+                ComponentFloatingBottomSheet.ENCODER_4_2_COMPONENT ->{
+                    simulationLoop.componentManager.insertCEncoder42()
                 }
                 ComponentFloatingBottomSheet.DECODER_4_16_COMPONENT ->{
                     simulationLoop.componentManager.insertCDecoder416()
@@ -550,7 +545,7 @@ class SimulationFragment : AndroidFragmentApplication() {
                 ComponentFloatingBottomSheet.DECODER_3_8_COMPONENT ->{
                     simulationLoop.componentManager.insertCDecoder38()
                 }
-                ComponentFloatingBottomSheet.DECODER_2_3_COMPONENT ->{
+                ComponentFloatingBottomSheet.DECODER_2_4_COMPONENT ->{
                     simulationLoop.componentManager.insertCDecoder23()
                 }
             }
