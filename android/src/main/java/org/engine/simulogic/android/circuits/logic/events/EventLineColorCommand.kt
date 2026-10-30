@@ -15,20 +15,20 @@ class EventLineColorCommand(private val gestureListener: MotionGestureListener,
 
     override fun execute() {
         // this lineCommandList class prevents us from filling the undo/redo buffer
-        val lineColorCommand = LineColorCommandList()
+        val lineColorCommandList = LineColorCommandList()
         gestureListener.collisionDetector.selectedItems.onEach {
             if(it.subject is CSignal && it.subject.parent is LineMarker){
                 (it.subject.parent as LineMarker).also { marker ->
                     marker.getNodeOriginFrom(marker.from).from.getLineMarkerChildren().onEach {childMarker->
-                        if(childMarker.markerActive){
-                            lineColorCommand.insert(LineColorCommand(childMarker,
+                        if(childMarker.markerActive && childMarker != marker){
+                            lineColorCommandList.insert(LineColorCommand(childMarker,
                                 childMarker.colorSignalOnPallete,
                                 childMarker.colorSignalOffPallete,colorOn,colorOff))
                             childMarker.colorSignalOnPallete = colorOn
                             childMarker.colorSignalOffPallete = colorOff
                         }
                     }
-                    lineColorCommand.insert(LineColorCommand(marker,
+                    lineColorCommandList.insert(LineColorCommand(marker,
                         marker.colorSignalOnPallete,
                         marker.colorSignalOffPallete,colorOn,colorOff))
                     marker.colorSignalOnPallete = colorOn
@@ -38,15 +38,15 @@ class EventLineColorCommand(private val gestureListener: MotionGestureListener,
             }else if(it.subject is CRangeLine){
                 it.subject.parentLine.also{marker ->
                     marker.getNodeOriginFrom(marker.from).from.getLineMarkerChildren().onEach {childMarker->
-                        if(childMarker.markerActive){
-                            lineColorCommand.insert(LineColorCommand(childMarker,
+                        if(childMarker.markerActive && childMarker != marker){
+                            lineColorCommandList.insert(LineColorCommand(childMarker,
                                 childMarker.colorSignalOnPallete,
                                 childMarker.colorSignalOffPallete,colorOn,colorOff))
                             childMarker.colorSignalOnPallete = colorOn
                             childMarker.colorSignalOffPallete = colorOff
                         }
                     }
-                    lineColorCommand.insert(LineColorCommand(marker,
+                    lineColorCommandList.insert(LineColorCommand(marker,
                         marker.colorSignalOnPallete,
                         marker.colorSignalOffPallete,colorOn,colorOff))
                     marker.colorSignalOnPallete = colorOn
@@ -54,8 +54,8 @@ class EventLineColorCommand(private val gestureListener: MotionGestureListener,
                 }
             }
         }
-        if(lineColorCommand.isNotEmpty()) {
-            gestureListener.commandHistory.execute(lineColorCommand)
+        if(lineColorCommandList.isNotEmpty()) {
+            gestureListener.commandHistory.execute(lineColorCommandList)
         }
         gestureListener.collisionDetector.reset()
     }
