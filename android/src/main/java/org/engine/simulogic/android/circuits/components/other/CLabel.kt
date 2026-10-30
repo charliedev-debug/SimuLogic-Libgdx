@@ -43,7 +43,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
                 spriteBatch,
                 text,
                 position.x - layout.width / 2f,
-                position.y - layout.height / 2f
+                position.y + layout.height / 2f
             )
         }
         font.data.setScale(1f)
@@ -60,7 +60,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
         sprite.setSize(layout.width * 1.1f , layout.height * 2f )
         sprite.setOriginCenter()
         sprite.color = CDefaults.LABEL_SELECTED_COLOR
-        sprite.setPosition(position.x - sprite.width /2f,position.y - sprite.height)
+        sprite.setPosition(position.x - sprite.width /2f,position.y - sprite.height / 2f)
         // to make things easier self detach or attach if the anchor is available on delete, undo or redo
         anchor?.also {
             if(it.anchorEntity.isRemoved){
@@ -79,9 +79,12 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun contains(entity: CNode): CNode? {
-        val parentCollides = super.contains(entity)
+      val parentCollides = super.contains(entity)
         if(parentCollides != null){
             return parentCollides
+        }
+        if(sprite.boundingRectangle.overlaps(entity.getBoundingBox())){
+            return this
         }
         data.forEach {
             if(it is CNode){
@@ -95,7 +98,7 @@ open class CLabel(private val font:BitmapFont, var fontSize:Float, var text:Stri
     }
 
     override fun contains(rect: Rectangle): CNode? {
-        val parentCollides = super.contains(rect)
+       val parentCollides = super.contains(rect)
         if(parentCollides != null){
             return parentCollides
         }

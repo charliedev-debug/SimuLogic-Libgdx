@@ -13,6 +13,7 @@ import org.engine.simulogic.android.circuits.components.interfaces.IUpdate
 import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.circuits.components.other.CAnchor
 import org.engine.simulogic.android.circuits.components.other.CGroup
+import org.engine.simulogic.android.circuits.components.other.CLabel
 import org.engine.simulogic.android.circuits.components.other.CPointer
 import org.engine.simulogic.android.circuits.components.other.CRangeLine
 import org.engine.simulogic.android.circuits.components.other.CRangeSelect
@@ -338,7 +339,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 var hasMovement = false
                 collisionDetector.selectedItems.forEach {
                     // to prevent teleportation move the object within a limited range
-                    if (it.subject.contains(rectPointer) != null|| it.subject.getPosition().dst(rectPointer.getPosition()) < 200f) {
+                    if (it.subject.contains(rectPointer) != null) {
                         it.subject.also { subject ->
                             moveCommand.apply {
                                 node = ListNode(subject)
@@ -350,6 +351,13 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                                         )
                                         subject.translate(snapCoordinates.x, snapCoordinates.y)
                                         newPosition.set(subject.getPosition())
+                                        subject.update()
+                                    }
+
+                                    is CLabel -> {
+                                        newPosition.set(snapCoordinates.x, snapCoordinates.y)
+                                        subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
+                                        subject.update()
                                     }
 
                                     is CSignal -> {

@@ -546,7 +546,6 @@ class LineMarker(
                 }
             }
             //TODO: prevent the points from complete obfuscation
-
         }
 
         previousFromPosition.set(from.value.getPosition())
@@ -605,6 +604,10 @@ class LineMarker(
                 colorSignalOffPallete = null
             }
         }
+    }
+
+    fun areNodePositionEqual(a: CNode,b: CNode): Boolean{
+        return a.getPosition().x == b.getPosition().x && a.getPosition().y == b.getPosition().y
     }
 
     fun isSourceSignal(): Boolean{
