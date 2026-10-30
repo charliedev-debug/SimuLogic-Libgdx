@@ -5,17 +5,17 @@ import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 
 class CDefaults {
     companion object{
-        val signalIconRadius = 30f
-        val gateWidth = 90f
-        val gateHeight = 70f
-        val clockWidth = 70f
-        val clockHeight = 70f
-        val latchWidth = 70f
-        val latchHeight = 70f
-        val ledHeight = 70f
-        val ledWidth = 70f
-        val randomWidth = 70f
-        val randomHeight = 70f
+        val signalIconRadius = 60f
+        val gateWidth = 180f
+        val gateHeight = 160f
+        val clockWidth = 160f
+        val clockHeight = 160f
+        val latchWidth = 160f
+        val latchHeight = 160f
+        val ledHeight = 160f
+        val ledWidth = 160f
+        val randomWidth = 160f
+        val randomHeight = 160f
         val segmentDisplayWidth = 42f
         val segmentDisplayHeight = 72f
         val muxerSignalSpacing = 100f

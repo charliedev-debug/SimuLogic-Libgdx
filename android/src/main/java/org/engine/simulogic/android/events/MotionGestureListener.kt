@@ -339,7 +339,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 var hasMovement = false
                 collisionDetector.selectedItems.forEach {
                     // to prevent teleportation move the object within a limited range
-                    if (it.subject.contains(rectPointer) != null) {
+                    if (it.subject.contains(rectPointer) != null || it.subject.getPosition().dst(rectPointer.getPosition()) < 200f && it.subject.selected) {
                         it.subject.also { subject ->
                             moveCommand.apply {
                                 node = ListNode(subject)
@@ -354,7 +354,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                                         subject.update()
                                     }
 
-                                    is CLabel -> {
+                                    is CLabel, is CRangeLine -> {
                                         newPosition.set(snapCoordinates.x, snapCoordinates.y)
                                         subject.updatePosition(snapCoordinates.x, snapCoordinates.y)
                                         subject.update()

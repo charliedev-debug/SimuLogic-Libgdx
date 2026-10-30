@@ -330,7 +330,7 @@ class LineMarker(
 
         for (i in 0 until signals.size - 1){
             lineRect.add(CRangeLine( signals[i] , signals[i + 1],this,colorRect, scene).also {
-                it.isMovable = i != 0
+                it.isMovable = i != 0 && i != signals.size - 2
             })
         }
         lineRect.onEach {

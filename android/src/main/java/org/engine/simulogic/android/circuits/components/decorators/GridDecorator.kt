@@ -95,7 +95,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0 until lineCountX){
                 val x = originX + i * spacingX
                 CLine(x,originY,x,originY+ viewPortHeight, lineWidth).also { line->
-                    line.color = EnvironmentTheme.colorOutline2//lineColor
+                    line.color = EnvironmentTheme.colorOutline//lineColor
                     linesAxisX.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible =  gridVisible
@@ -111,7 +111,7 @@ class GridDecorator(private val font:BitmapFont,private val scene:PlayGroundScen
             for(i in 0 .. lineCountY){
                 val y = originY + i * spacingY
                 CLine(originX, y, originX + viewPortWidth,y, lineWidth).also { line->
-                    line.color = EnvironmentTheme.colorOutline2
+                    line.color = EnvironmentTheme.colorOutline
                     linesAxisY.add(line)
                     lineLayer.attachChild(line)
                     line.isVisible = gridVisible

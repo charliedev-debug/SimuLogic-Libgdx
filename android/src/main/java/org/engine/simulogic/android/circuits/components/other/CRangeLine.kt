@@ -7,6 +7,7 @@ import org.engine.simulogic.android.circuits.components.lines.LineMarker
 import org.engine.simulogic.android.scene.Entity
 import org.engine.simulogic.android.scene.PlayGroundScene
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.sign
 
 class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  color: Color, private val scene: PlayGroundScene)
@@ -31,7 +32,7 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
         when (direction) {
             0 -> {
                 val distanceY = abs(start.getPosition().y - end.getPosition().y )
-                val offsetY = abs(start.getHeight() / 2f + end.getHeight() / 2f)
+                val offsetY = max(start.getHeight() + end.getHeight(),0f)
                 if(distanceY > offsetY) {
                     setSize(
                         CDefaults.signalIconRadius,
@@ -43,7 +44,7 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
             }
             1 -> {
                 val distanceX = abs(start.getPosition().x - end.getPosition().x)
-                val offsetX= abs(start.getWidth() / 2f + end.getWidth() / 2f)
+                val offsetX= max(start.getWidth() + end.getWidth(), 0f)
                 if(distanceX > offsetX){
                     setSize(distanceX - offsetX, CDefaults.signalIconRadius)
                 }else {
@@ -129,7 +130,10 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
 
             }
         }else{
-            super.updatePosition(x, y)
+            super.updatePosition(
+                start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
+                start.getPosition().y + (end.getPosition().y - start.getPosition().y ) / 2f
+            )
         }
        /* when(direction){
             0 ->{
