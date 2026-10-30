@@ -70,15 +70,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="SIGNAL ON"
-                android:textSize="12dp"
-                android:textFontWeight="300"
-                android:maxLines="1"
-                android:textColor="?attr/colorOnSurface" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/signalOn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="SIGNAL ON"
+                        android:textSize="11dp"
+                        android:textFontWeight="300"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:textColor="?attr/colorOnSurface"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/signalOnDefault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11dp"
+                        android:text="RESTORE DEFAULT"/>
+                </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,15 +129,28 @@
                         android:background="@color/delete_color" />
                 </RelativeLayout>
             </LinearLayout>
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="SIGNAL OFF"
-                android:textSize="12dp"
-                android:textFontWeight="300"
-                android:maxLines="1"
-                android:textColor="?attr/colorOnSurface" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/signalOff"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="SIGNAL OFF"
+                        android:checked="false"
+                        android:textSize="11dp"
+                        android:textFontWeight="300"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:textColor="?attr/colorOnSurface"/>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/signalOffDefault"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11dp"
+                        android:text="RESTORE DEFAULT"/>
+                </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

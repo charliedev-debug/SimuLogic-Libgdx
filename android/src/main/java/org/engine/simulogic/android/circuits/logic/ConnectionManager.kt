@@ -109,6 +109,10 @@ class ConnectionManager(
                         a.subject.signalIndex,
                         scene
                     ).also { marker->
+                        if(b.subject.parent is LineMarker){
+                            marker.colorSignalOnPallete = (b.subject.parent as LineMarker).colorSignalOnPallete
+                            marker.colorSignalOffPallete = (b.subject.parent as LineMarker).colorSignalOffPallete
+                        }
                         commandHistory.execute(ConnectionCommand(marker))
                     }
                 }else if(a.subject.type == CTypes.SIGNAL_RANGE_POINT){
@@ -120,6 +124,10 @@ class ConnectionManager(
                         b.subject.signalIndex,
                         scene
                     ).also { marker->
+                        if(a.subject.parent is LineMarker){
+                            marker.colorSignalOnPallete = (a.subject.parent as LineMarker).colorSignalOnPallete
+                            marker.colorSignalOffPallete = (a.subject.parent as LineMarker).colorSignalOffPallete
+                        }
                         commandHistory.execute(ConnectionCommand(marker))
                     }
                 }else{

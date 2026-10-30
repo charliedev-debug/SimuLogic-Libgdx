@@ -130,10 +130,14 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
 
             }
         }else{
-            super.updatePosition(
-                start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
-                start.getPosition().y + (end.getPosition().y - start.getPosition().y ) / 2f
-            )
+            if(isMovable){
+                super.updatePosition(x,y)
+            }else {
+                super.updatePosition(
+                    start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
+                    start.getPosition().y + (end.getPosition().y - start.getPosition().y) / 2f
+                )
+            }
         }
        /* when(direction){
             0 ->{

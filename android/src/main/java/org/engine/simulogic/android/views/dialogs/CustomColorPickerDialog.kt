@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +40,17 @@ class CustomColorPickerDialog(private val connection: Connection, private val is
         val recyclerViewColor = findViewById<RecyclerView>(R.id.colorPalleteList)
         val signalOn = findViewById<AppCompatCheckBox>(R.id.signalOn)
         val signalOff = findViewById<AppCompatCheckBox>(R.id.signalOff)
+        val signalOnDefault = findViewById<AppCompatButton>(R.id.signalOnDefault)
+        val signalOffDefault = findViewById<AppCompatButton>(R.id.signalOffDefault)
         val deleteBuffer = mutableListOf<ColorPickerItem>()
+        val signalOnColorDefault =  android.graphics.Color.argb(
+            (SIGNAL_ACTIVE_COLOR.a * 255f).toInt(), (SIGNAL_ACTIVE_COLOR.r * 255f).toInt(),
+            (SIGNAL_ACTIVE_COLOR.g * 255f).toInt(), (SIGNAL_ACTIVE_COLOR.b * 255f).toInt()
+        )
+        val signalOffColorDefault = android.graphics.Color.argb(
+            (LINE_MARKER_INACTIVE.a * 255f).toInt(), (LINE_MARKER_INACTIVE.r * 255f).toInt(),
+            (LINE_MARKER_INACTIVE.g * 255f).toInt(), (LINE_MARKER_INACTIVE.b * 255f).toInt()
+        )
         val colorPickerAdapter = MenuColorPickerAdapter(object : MenuColorPickerAdapter.OnColorSelectedListener{
             override fun onSelected(item: ColorPickerItem) {
                 val color = item.color
@@ -66,18 +77,8 @@ class CustomColorPickerDialog(private val connection: Connection, private val is
                 deleteBuffer.add(item)
             }
         })
-        selectedPalleteSignalOn.setBackgroundColor(
-            android.graphics.Color.argb(
-                (SIGNAL_ACTIVE_COLOR.a * 255f).toInt(), (SIGNAL_ACTIVE_COLOR.r * 255f).toInt(),
-                (SIGNAL_ACTIVE_COLOR.g * 255f).toInt(), (SIGNAL_ACTIVE_COLOR.b * 255f).toInt()
-            )
-        )
-        selectedPalleteSignalOff.setBackgroundColor(
-            android.graphics.Color.argb(
-                (LINE_MARKER_INACTIVE.a * 255f).toInt(), (LINE_MARKER_INACTIVE.r * 255f).toInt(),
-                (LINE_MARKER_INACTIVE.g * 255f).toInt(), (LINE_MARKER_INACTIVE.b * 255f).toInt()
-            )
-        )
+        selectedPalleteSignalOn.setBackgroundColor(signalOnColorDefault)
+        selectedPalleteSignalOff.setBackgroundColor(signalOffColorDefault)
 
         selectedPalleteSignalsView.visibility = if(isLineMarkerSelected) View.VISIBLE else View.GONE
         connection.colorPalleteList.onEach {
@@ -97,6 +98,16 @@ class CustomColorPickerDialog(private val connection: Connection, private val is
 
         signalOff.setOnClickListener {
             signalOn.isChecked = !signalOff.isChecked
+        }
+
+        signalOnDefault.setOnClickListener {
+            selectedPalleteSignalOn.setBackgroundColor(signalOnColorDefault)
+            selectedPalleteSignalOnText.text = "default"
+        }
+
+        signalOffDefault.setOnClickListener {
+            selectedPalleteSignalOff.setBackgroundColor(signalOffColorDefault)
+            selectedPalleteSignalOffText.text = "default"
         }
 
         addPallete.setOnClickListener {
