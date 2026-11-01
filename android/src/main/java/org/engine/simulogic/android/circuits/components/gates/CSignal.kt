@@ -12,6 +12,8 @@ import org.engine.simulogic.android.circuits.theme.EnvironmentTheme
 open class CSignal(x: Float, y: Float, type: CTypes, var signalIndex: Int, private val scene: PlayGroundScene) :
     CNode() {
     var parent: Entity? = null
+    var child: Entity? = null
+    var isLineMarkerSource = false
     init {
         val textureAtlas = scene.assetManager.get("${EnvironmentTheme.name}.atlas", TextureAtlas::class.java)
         val spriteRegion = when (type) {

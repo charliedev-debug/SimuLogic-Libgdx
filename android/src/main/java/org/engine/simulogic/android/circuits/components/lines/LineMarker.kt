@@ -44,6 +44,14 @@ class LineMarker(
     var previousFromPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
     var previousToPosition = Vector2(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY)
     var autoCorrectNodeEnabled = true
+    init {
+        if(from.value is CSignal){
+            from.value.isLineMarkerSource = true
+        }
+        if(to.value is CSignal){
+            to.value.isLineMarkerSource = true
+        }
+    }
     companion object{
         const val FROM_SIGNAL = 0
         const val FROM_COMPONENT = 1
@@ -270,6 +278,12 @@ class LineMarker(
         lineRect.forEach {
             it.detachSelf()
         }
+        if(from.value is CSignal){
+            from.value.isLineMarkerSource = false
+        }
+        if(to.value is CSignal){
+            to.value.isLineMarkerSource = false
+        }
     }
 
     // removes marker for the parent node
@@ -304,6 +318,12 @@ class LineMarker(
 
         getNodeOriginFrom(from).also { marker ->
             marker.from.insertChildUnmarked(to, this,!marker.hasParentMarker)
+        }
+        if(from.value is CSignal){
+            from.value.isLineMarkerSource = true
+        }
+        if(to.value is CSignal){
+            to.value.isLineMarkerSource = true
         }
     }
 
@@ -486,14 +506,61 @@ class LineMarker(
 
         // autocorrects the line segments positions
         if(autoCorrectNodeEnabled) {
-            val offsetXA = from.value.getPosition().x - previousFromPosition.x
-            val offsetYA = from.value.getPosition().y - previousFromPosition.y
+            val offsetXA =  from.value.getPosition().x - previousFromPosition.x
+            val offsetYA =  from.value.getPosition().y - previousFromPosition.y
             val offsetXB = to.value.getPosition().x - previousToPosition.x
             val offsetYB = to.value.getPosition().y - previousToPosition.y
             for(i in 1 until signals.size - 1){
-                signals[i].also {
-                    it.updatePosition(it.getPosition().x + offsetXA + offsetXB,
-                        it.getPosition().y + offsetYA + offsetYB)
+                signals[i].also {signal->
+                    if(offsetXA != 0f || offsetYA != 0f) {
+                        signal.updatePosition(
+                            signal.getPosition().x + offsetXA,
+                            signal.getPosition().y + offsetYA
+                        )
+                    }else{
+                        signal.updatePosition(
+                            signal.getPosition().x + offsetXB,
+                            signal.getPosition().y + offsetYB
+                        )
+                    }
+                }
+            }
+
+            // all points should be at a right angle from an origin point
+            for(i in 1 until signals.size / 2){
+                 val a  = signals[i - 1]
+                 val b = signals[i]
+                 val c = signals[i + 1]
+                if(a.getPosition().x != b.getPosition().x){
+                    if(b.getPosition().y == c.getPosition().y){
+                        b.updatePosition(a.getPosition().x,b.getPosition().y)
+                    }else if(b.getPosition().x == c.getPosition().x){
+                        b.updatePosition(b.getPosition().x,a.getPosition().y)
+                    }
+                }else if(a.getPosition().y != b.getPosition().y){
+                    if(b.getPosition().x == c.getPosition().x){
+                        b.updatePosition(b.getPosition().x,a.getPosition().y)
+                    }else if(b.getPosition().y == c.getPosition().y){
+                        b.updatePosition(a.getPosition().x,b.getPosition().y)
+                    }
+                }
+            }
+            for(i in  signals.size - 1 downTo signals.size / 2 + 1){
+                val a  = signals[i]
+                val b = signals[i - 1]
+                val c = signals[i - 2]
+                if(a.getPosition().x != b.getPosition().x){
+                    if(b.getPosition().y == c.getPosition().y){
+                        b.updatePosition(a.getPosition().x,b.getPosition().y)
+                    }else if(b.getPosition().x == c.getPosition().x){
+                        b.updatePosition(b.getPosition().x,a.getPosition().y)
+                    }
+                }else if(a.getPosition().y != b.getPosition().y){
+                    if(b.getPosition().x == c.getPosition().x){
+                        b.updatePosition(b.getPosition().x,a.getPosition().y)
+                    }else if(b.getPosition().y == c.getPosition().y){
+                        b.updatePosition(a.getPosition().x,b.getPosition().y)
+                    }
                 }
             }
             for (i in 1 until signals.size - 1) {
@@ -524,7 +591,7 @@ class LineMarker(
                 }
             }
 
-            for (i in 0 until signals.size) {
+           /* for (i in 0 until signals.size) {
                 signals[i].also { a ->
                     if (i + 2 < signals.size) {
                         val b = signals[i + 1]
@@ -544,7 +611,7 @@ class LineMarker(
                         }
                     }
                 }
-            }
+            }*/
             //TODO: prevent the points from complete obfuscation
         }
 
