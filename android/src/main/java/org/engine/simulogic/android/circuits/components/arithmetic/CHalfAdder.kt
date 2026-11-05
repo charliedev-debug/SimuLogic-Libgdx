@@ -22,7 +22,7 @@ class CHalfAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
         this.rotationDirection = rotationDirection
         sprite = Sprite(spriteRegion).apply {
             setOrigin(x , y)
-            setSize(CDefaults.latchWidth* 1.5f , CDefaults.latchHeight* 1.5f )
+            setSize(CDefaults.latchWidth* 2.0f , CDefaults.latchHeight* 2.0f )
             setOriginCenter()
             type = CTypes.ARITHMETIC_HALF_ADDER
             when(rotationDirection){
@@ -39,7 +39,7 @@ class CHalfAdder(x:Float, y:Float, rotationDirection:Int, private val scene: Pla
                     rotation = 0f
                 }
             }
-            setPosition(x - CDefaults.latchWidth * 1.5f / 2f,y - CDefaults.latchHeight * 1.5f / 2f)
+            setPosition(x - CDefaults.latchWidth * 2.0f / 2f,y - CDefaults.latchHeight * 2.0f / 2f)
         }
 
         signals.add(CSignal(x + sprite.width * 0.8125f, y + CDefaults.gateHeight / 2f - CDefaults.gateHeight * 0.1875f ,CTypes.S_SIGNAL_OUT,0, scene))

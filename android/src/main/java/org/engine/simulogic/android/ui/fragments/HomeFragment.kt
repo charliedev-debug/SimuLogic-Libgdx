@@ -10,12 +10,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.engine.simulogic.R
 import org.engine.simulogic.android.PremiumPurchaseActivity
 import org.engine.simulogic.android.SimulationActivity
@@ -146,11 +151,6 @@ class HomeFragment : Fragment() {
         recentProjectRecyclerView.apply {
             layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL,false)
             adapter = recentProjectAdapter
-            if(recentProjectAdapter.isEmpty()){
-                recentProjectAlert.visibility = View.VISIBLE
-            }else {
-                recentProjectAlert.visibility = View.GONE
-            }
         }
 
         val sampleProjectAdapter = RecentAdapter().apply {
@@ -285,21 +285,29 @@ class HomeFragment : Fragment() {
     }
 
 
+
     override fun onResume() {
         super.onResume()
-        recentProjectAdapter.apply {
-            clear()
-            DataTransferObject().listProjects(requireContext()).also { data->
-                data.subList(0, minOf(data.size, MAX_RECENT_ITEMS)).onEach {
-                    add(it.title,it.path, it.description, it.lastModified)
+            lifecycleScope.launch{
+                launch(Dispatchers.IO) {
+                    recentProjectAdapter.clear()
+                    DataTransferObject().listProjects(requireContext()).also { data->
+                        data.subList(0, minOf(data.size, MAX_RECENT_ITEMS)).onEach {
+                            recentProjectAdapter.add(it.title,it.path, it.description, it.lastModified)
+                        }
+                    }
+                    launch(Dispatchers.Main){
+                        recentProjectAdapter.notifyItemRangeChanged(0, recentProjectAdapter.itemCount)
+                        if(recentProjectAdapter.isEmpty()){
+                            recentProjectAlert.visibility = View.VISIBLE
+                        }else {
+                            recentProjectAlert.visibility = View.GONE
+                        }
+                    }
                 }
+
+
             }
-            if(recentProjectAdapter.isEmpty()){
-                recentProjectAlert.visibility = View.VISIBLE
-            }else {
-                recentProjectAlert.visibility = View.GONE
-            }
-            notifyItemRangeChanged(0, recentProjectAdapter.itemCount)
-        }
+
     }
 }

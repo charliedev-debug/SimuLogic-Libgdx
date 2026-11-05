@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 class PlayGroundScene (private val spriteBatch: SpriteBatch,
                        private val camera: OrthographicCamera, val assetManager:AssetManager) : Layer(LayerEnums.SCENE.name){
 
-    private val shapeRenderer by lazy { ShapeRenderer(10000) }
+    private val shapeRenderer = ShapeRenderer(10000)
    //private  val profiler = GLProfiler(Gdx.graphics).apply { enable() }
     init {
         addLayer(LayerLines(LayerEnums.GRID_LAYER.name))
@@ -34,6 +34,9 @@ class PlayGroundScene (private val spriteBatch: SpriteBatch,
             data.forEach {
                 it.update()
             }
+    }
+    fun dispose(){
+        shapeRenderer.dispose()
     }
     override fun draw() {
         //profiler.reset()

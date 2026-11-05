@@ -16,8 +16,6 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
     var isMovable = true
     fun setVisibility(visible: Boolean){
         isVisible = visible
-        start.selected = visible
-        end.selected = visible
     }
 
     override fun reset() {
@@ -81,13 +79,12 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
                         }
                         parentLine.signals.last() -> {
                             parentLine.to.value.also {
-                                start.updatePosition(
-                                    it.getPosition().x + (x - start.getPosition().x),
+                                it.updatePosition(it.getCenter().x + (getCenter().x - it.getCenter().x),
                                     it.getPosition().y
                                 )
-                                it.updatePosition(start.getPosition())
+                                isVisible = false
                             }
-                            end.updatePosition(x, end.getPosition().y)
+                            //end.updatePosition(start.getPosition().x, end.getPosition().y)
                         }
                         else -> {
                             start.updatePosition(x, start.getPosition().y)
@@ -112,13 +109,10 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
                         }
                         parentLine.signals.last() -> {
                             parentLine.to.value.also {
-                                start.updatePosition(
-                                    it.getPosition().x,
-                                    it.getPosition().y + (y - start.getPosition().y)
-                                )
-                                it.updatePosition(start.getPosition())
+                                it.updatePosition(it.getPosition().x,it.getCenter().y +
+                                    (getCenter().y - it.getCenter().y))
                             }
-                            end.updatePosition(end.getPosition().x, y)
+                            isVisible = false
                         }
                         else -> {
                             start.updatePosition(start.getPosition().x, y)
@@ -137,6 +131,38 @@ class CRangeLine(val start: CNode, val end: CNode, val parentLine: LineMarker,  
                     start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
                     start.getPosition().y + (end.getPosition().y - start.getPosition().y) / 2f
                 )
+               /* when(direction){
+                    0->{
+                        super.updatePosition(
+                            start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
+                            start.getPosition().y + (end.getPosition().y - start.getPosition().y) / 2f
+                        )
+                        if(start is CSignal){
+                            if(start.parent == parentLine){
+                                parentLine.from.also {
+                                    it.value.updatePosition((x - it.value.getPosition().x),it.value.getPosition().y)
+                                }
+
+                            }
+                        }
+                    }
+
+                    1->{
+                        super.updatePosition(
+                            start.getPosition().x + (end.getPosition().x - start.getPosition().x) / 2f,
+                            start.getPosition().y + (end.getPosition().y - start.getPosition().y) / 2f
+                        )
+                        if(start is CSignal){
+                            if(start.parent == parentLine){
+                                parentLine.from.also {
+                                    it.value.updatePosition(it.value.getPosition().x,(y - it.value.getPosition().y))
+                                }
+
+                            }
+                        }
+                    }
+                }*/
+
             }
         }
        /* when(direction){

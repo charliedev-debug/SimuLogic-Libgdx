@@ -43,8 +43,9 @@ class WhatsNewDialog(context: Context) : Dialog(context) {
             WhatsNewAdapter().also { adapter ->
                 //adapter.insert("User-interface and experience",R.drawable.whats_new_ui, isHeader = true)
                 adapter.insert("Improved Simulation environment",R.drawable.whats_new_simulation_icon, isHeader = true)
-                adapter.insert("Increased Component sizes",R.drawable.text_edit)
+                adapter.insert("Increased component sizes",R.drawable.text_edit)
                 adapter.insert("Better gesture events",R.drawable.text_edit)
+                adapter.insert("Better wiring system events",R.drawable.text_edit)
                 adapter.insert("Performance & new features",R.drawable.whats_new_performance_icon, isHeader = true)
                 adapter.insert("Added Encoders & Decoders",R.drawable.text_edit)
                 adapter.insert("Added Wire-Coloring",R.drawable.text_edit)

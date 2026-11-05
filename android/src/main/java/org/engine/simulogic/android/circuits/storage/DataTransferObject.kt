@@ -64,6 +64,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.security.MessageDigest
 import java.util.UUID
+import kotlin.math.max
 import kotlin.math.min
 
 class DataTransferObject {
@@ -915,7 +916,7 @@ class DataTransferObject {
             val title = ByteArray(titleLen)
             stream.readFully(title)
             val descrLen = stream.readInt()
-            val description = ByteArray(descrLen)
+            val description = ByteArray(min(descrLen,DESCRIPTION_LENGTH_MAX_CHARACTERS))
             stream.readFully(description)
             inputStream.close()
             stream.close()
@@ -929,6 +930,8 @@ class DataTransferObject {
             )
         } catch (eof: EOFException) {
             eof.printStackTrace()
+        } catch (io: IOException){
+            io.printStackTrace()
         }
         inputStream.close()
         stream.close()

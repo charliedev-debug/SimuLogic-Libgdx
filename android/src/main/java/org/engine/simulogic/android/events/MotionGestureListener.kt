@@ -314,6 +314,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
             TOUCH_MODE -> {
                 rectPointer.selectedNode?.also { node ->
                     if (node.contains(rectPointer) == null) {
+                        rectPointer.selectedNode?.selected = false
                         rectPointer.selectedNode = null
                     }
                 }
@@ -339,7 +340,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 var hasMovement = false
                 collisionDetector.selectedItems.forEach {
                     // to prevent teleportation move the object within a limited range
-                    if (it.subject.contains(rectPointer) != null || it.subject.getPosition().dst(rectPointer.getPosition()) < 200f && it.subject.selected) {
+                    if (it.subject.selected) {
                         it.subject.also { subject ->
                             moveCommand.apply {
                                 node = ListNode(subject)
@@ -412,6 +413,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
         isPointerMoving = true
+        collisionDetector.reset()
         // for better editing experience handle on touch events when the finger is off the element
         if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE||collisionDetector.mode == CONNECTION_MODE) {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
@@ -434,6 +436,7 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
                 }
             }
         }
+
 
         //touch up event
         collisionDetector.selectedItems.forEach {

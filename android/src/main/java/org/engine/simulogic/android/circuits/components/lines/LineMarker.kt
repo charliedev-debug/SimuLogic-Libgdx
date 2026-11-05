@@ -349,8 +349,12 @@ class LineMarker(
         }
 
         for (i in 0 until signals.size - 1){
-            lineRect.add(CRangeLine( signals[i] , signals[i + 1],this,colorRect, scene).also {
-                it.isMovable = i != 0 && i != signals.size - 2
+            val a = signals[i]
+            val b = signals[i + 1]
+            val start = if(i + 1 != signals.size - 1) a else b
+            val end =  if((i + 1) == signals.size - 1)  a else b
+            lineRect.add(CRangeLine(  start, end,this,colorRect, scene).also {
+                //it.isMovable = i != 0 && i != signals.size - 2
             })
         }
         lineRect.onEach {
@@ -489,6 +493,18 @@ class LineMarker(
 
     }
 
+    fun updateConnectorPositions(){
+        val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
+        val signalTo =  if (isDestinationSignal()) to.value else to.value.signals[signalTo]
+        val pFrom = signalFrom.getPosition()
+        val pTo = signalTo.getPosition()
+        // the first and last marker come from the origin node
+        if (signals.isNotEmpty()) {
+            signals[0].updatePosition(pFrom.x, pFrom.y)
+            signals[signals.size - 1].updatePosition(pTo.x, pTo.y)
+        }
+    }
+
     override fun update() {
         val signalFrom = if(isSourceSignal()) from.value else from.value.signals[signalFrom]
         val signalTo =  if (isDestinationSignal()) to.value else to.value.signals[signalTo]
@@ -531,13 +547,13 @@ class LineMarker(
                  val a  = signals[i - 1]
                  val b = signals[i]
                  val c = signals[i + 1]
-                if(a.getPosition().x != b.getPosition().x){
+                if(a.getPosition().x != b.getPosition().x && !a.selected && !b.selected){
                     if(b.getPosition().y == c.getPosition().y){
                         b.updatePosition(a.getPosition().x,b.getPosition().y)
                     }else if(b.getPosition().x == c.getPosition().x){
                         b.updatePosition(b.getPosition().x,a.getPosition().y)
                     }
-                }else if(a.getPosition().y != b.getPosition().y){
+                }else if(a.getPosition().y != b.getPosition().y && !a.selected && !b.selected){
                     if(b.getPosition().x == c.getPosition().x){
                         b.updatePosition(b.getPosition().x,a.getPosition().y)
                     }else if(b.getPosition().y == c.getPosition().y){
@@ -549,13 +565,13 @@ class LineMarker(
                 val a  = signals[i]
                 val b = signals[i - 1]
                 val c = signals[i - 2]
-                if(a.getPosition().x != b.getPosition().x){
+                if(a.getPosition().x != b.getPosition().x&& !a.selected && !b.selected){
                     if(b.getPosition().y == c.getPosition().y){
                         b.updatePosition(a.getPosition().x,b.getPosition().y)
                     }else if(b.getPosition().x == c.getPosition().x){
                         b.updatePosition(b.getPosition().x,a.getPosition().y)
                     }
-                }else if(a.getPosition().y != b.getPosition().y){
+                }else if(a.getPosition().y != b.getPosition().y&& !a.selected && !b.selected){
                     if(b.getPosition().x == c.getPosition().x){
                         b.updatePosition(b.getPosition().x,a.getPosition().y)
                     }else if(b.getPosition().y == c.getPosition().y){
@@ -745,7 +761,11 @@ class LineMarker(
             index,
             linePointCountX,
             linePointCountY
-        ).also { it.initialize(scene) }
+        ).also {
+            it.colorSignalOnPallete = colorSignalOnPallete
+            it.colorSignalOffPallete = colorSignalOffPallete
+            it.initialize(scene)
+        }
     }
 
 }

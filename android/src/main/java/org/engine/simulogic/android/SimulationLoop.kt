@@ -206,6 +206,7 @@ class SimulationLoop(private val projectOptions: ProjectOptions, private val sim
     override fun dispose() {
         batch.dispose()
         assetManager.dispose()
+        scene.dispose()
         ChannelBuffer.clear()
         TimerManager.reset()
     }

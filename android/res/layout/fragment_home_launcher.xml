@@ -94,6 +94,7 @@
                     android:layout_marginStart="10dp"
                     android:gravity="center"
                     android:textColor="?attr/colorOnBackground"
+                    android:visibility="invisible"
                     android:text="No Data Available!"
                     android:textSize="18dp"
                     android:textStyle="bold" />
