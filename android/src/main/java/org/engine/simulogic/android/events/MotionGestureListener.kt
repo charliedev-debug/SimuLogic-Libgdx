@@ -413,7 +413,9 @@ class MotionGestureListener(val camera:OrthographicCamera, private val connectio
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
         isPointerMoving = true
-        collisionDetector.reset()
+        if(collisionDetector.mode == TOUCH_MODE) {
+            collisionDetector.reset()
+        }
         // for better editing experience handle on touch events when the finger is off the element
         if(collisionDetector.mode == TOUCH_MODE|| collisionDetector.mode == SELECTION_MODE||collisionDetector.mode == CONNECTION_MODE) {
             collisionDetector.contains(rectPointer)?.also { collisionItem ->
